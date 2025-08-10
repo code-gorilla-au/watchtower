@@ -4,15 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="boilerplate">
+      <change afterPath="$PROJECT_DIR$/.local_dev/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sqlc.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
@@ -50,7 +58,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feat-sql",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -89,6 +97,10 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="boilerplate" />
+    <option name="LAST_COMMIT_MESSAGE" value="boilerplate" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
