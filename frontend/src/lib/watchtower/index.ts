@@ -1,1 +1,1 @@
-export * from "./orgs";
+export * from "./orgs.svelte";

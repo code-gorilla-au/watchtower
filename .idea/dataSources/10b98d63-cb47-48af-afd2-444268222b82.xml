@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2025-08-10.02:47:59</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-08-10.11:27:44</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1648,7 +1648,7 @@
     </key>
     <column id="572" parent="556" name="product_id">
       <Position>1</Position>
-      <StoredType>TEXT|0s</StoredType>
+      <StoredType>INTEGER|0s</StoredType>
     </column>
     <column id="573" parent="556" name="organisation_id">
       <Position>2</Position>
