@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="boilerplate">
-      <change afterPath="$PROJECT_DIR$/.local_dev/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sqlc.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.junie/guidelines.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/database/schemas/schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +38,9 @@
     &quot;accountId&quot;: &quot;96e8ba8e-aa40-4f88-95b7-27f1c146a9c2&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
