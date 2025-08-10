@@ -10,17 +10,16 @@ import (
 )
 
 const createOrganisation = `-- name: CreateOrganisation :one
-INSERT INTO organisations (
-  friendly_name,
-  namespace,
-  created_at,
-  updated_at
-) VALUES (
-  ?,
-  ?,
-  unixepoch('now'),
-  unixepoch('now')
-)
+INSERT INTO organisations (friendly_name,
+                           namespace,
+                           default_org,
+                           created_at,
+                           updated_at)
+VALUES (?,
+        ?,
+        true,
+        unixepoch('now'),
+        unixepoch('now'))
 RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 `
 
@@ -44,7 +43,8 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 }
 
 const getDefaultOrganisation = `-- name: GetDefaultOrganisation :one
-SELECT id, friendly_name, namespace, default_org, created_at, updated_at FROM organisations
+SELECT id, friendly_name, namespace, default_org, created_at, updated_at
+FROM organisations
 WHERE default_org = 1
 ORDER BY updated_at DESC, id DESC
 LIMIT 1
@@ -65,7 +65,8 @@ func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, err
 }
 
 const listOrganisations = `-- name: ListOrganisations :many
-SELECT id, friendly_name, namespace, default_org, created_at, updated_at FROM organisations
+SELECT id, friendly_name, namespace, default_org, created_at, updated_at
+FROM organisations
 ORDER BY friendly_name
 `
 
@@ -101,11 +102,10 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 
 const updateOrganisation = `-- name: UpdateOrganisation :one
 UPDATE organisations
-SET
-  friendly_name = ?,
-  namespace = ?,
-  default_org = ?,
-  updated_at = unixepoch('now')
+SET friendly_name = ?,
+    namespace     = ?,
+    default_org   = ?,
+    updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 `
