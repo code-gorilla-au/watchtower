@@ -1,12 +1,14 @@
 package watchtower
 
 import (
+	"context"
 	"time"
 	"watchtower/internal/database"
 )
 
 type Service struct {
-	db database.Queries
+	ctx context.Context
+	db  *database.Queries
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps

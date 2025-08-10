@@ -4,12 +4,15 @@ go 1.24.4
 
 toolchain go1.24.5
 
-require github.com/wailsapp/wails/v2 v2.10.2
+require (
+	github.com/code-gorilla-au/env v1.1.1
+	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f
+	github.com/wailsapp/wails/v2 v2.10.2
+	modernc.org/sqlite v1.38.2
+)
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect
-	github.com/code-gorilla-au/env v1.1.1 // indirect
-	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
@@ -44,7 +47,6 @@ require (
 	modernc.org/libc v1.66.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.38.2 // indirect
 )
 
 // replace github.com/wailsapp/wails/v2 v2.10.2 => /Users/mauricioriquelme/go/pkg/mod

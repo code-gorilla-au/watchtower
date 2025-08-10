@@ -3,16 +3,20 @@ package main
 import (
 	"context"
 	"fmt"
+	"watchtower/internal/watchtower"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
+	wt  *watchtower.Service
 }
 
 // NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
+func NewApp(wt *watchtower.Service) *App {
+	return &App{
+		wt: wt,
+	}
 }
 
 // startup is called when the app starts. The context is saved

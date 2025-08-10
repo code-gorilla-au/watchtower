@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
 	"embed"
+	"os"
+	"watchtower/internal/database"
+	"watchtower/internal/watchtower"
 
+	"github.com/code-gorilla-au/go-toolbox/logging"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -12,11 +17,33 @@ import (
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
-	app := NewApp()
+	appConfig := LoadConfig()
+	logger := logging.New(appConfig.LogLevel, logging.LoggerJSON)
 
-	// Create application with options
-	err := wails.Run(&options.App{
+	logger.Info("Starting watchtower", "config", appConfig)
+
+	migrator, err := database.NewMigrator(appConfig.DbFilePath)
+	if err != nil {
+		logger.Error("Error creating database migrator", "error", err)
+		os.Exit(1)
+	}
+
+	if err = migrator.Init(); err != nil {
+		logger.Error("Error running migrations", "error", err)
+		os.Exit(1)
+	}
+
+	db, err := database.NewDBFromProvider(appConfig.DbFilePath)
+	if err != nil {
+		logger.Error("Error creating database", "error", err)
+		os.Exit(1)
+	}
+
+	wt := watchtower.NewService(context.Background(), db)
+
+	app := NewApp(wt)
+
+	err = wails.Run(&options.App{
 		Title:  "watchtower",
 		Width:  1024,
 		Height: 768,
@@ -27,6 +54,7 @@ func main() {
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
+			wt,
 		},
 	})
 

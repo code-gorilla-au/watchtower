@@ -9,19 +9,24 @@ import (
 )
 
 // NewService creates and returns a new Service instance with the provided database queries.
-func NewService(db database.Queries) *Service {
+func NewService(ctx context.Context, db *database.Queries) *Service {
 	return &Service{
-		db: db,
+		ctx: ctx,
+		db:  db,
 	}
+}
+
+func (s *Service) Startup(ctx context.Context) {
+	s.ctx = ctx
 }
 
 // CreateOrganisation creates a new organisation in the database using the specified friendly name and namespace.
 // It logs the creation process and returns the created organisation DTO or an error if the operation fails.
-func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, namespace string) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) CreateOrganisation(friendlyName string, namespace string) (OrganisationDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating organisation")
 
-	model, err := s.db.CreateOrganisation(ctx, database.CreateOrganisationParams{
+	model, err := s.db.CreateOrganisation(s.ctx, database.CreateOrganisationParams{
 		FriendlyName: friendlyName,
 		Namespace:    namespace,
 	})
@@ -35,11 +40,11 @@ func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, n
 }
 
 // GetDefaultOrganisation returns the default organisation (marked as default_org = 1)
-func (s *Service) GetDefaultOrganisation(ctx context.Context) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Fetching default organisation")
 
-	model, err := s.db.GetDefaultOrganisation(ctx)
+	model, err := s.db.GetDefaultOrganisation(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching default organisation", err)
 		return OrganisationDTO{}, err
@@ -48,11 +53,11 @@ func (s *Service) GetDefaultOrganisation(ctx context.Context) (OrganisationDTO, 
 }
 
 // GetAllOrganisations returns all organisations ordered by friendly_name
-func (s *Service) GetAllOrganisations(ctx context.Context) ([]OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Listing all organisations")
 
-	models, err := s.db.ListOrganisations(ctx)
+	models, err := s.db.ListOrganisations(s.ctx)
 	if err != nil {
 		logger.Error("Error listing organisations", err)
 		return nil, err
@@ -67,8 +72,8 @@ func (s *Service) GetAllOrganisations(ctx context.Context) ([]OrganisationDTO, e
 }
 
 // CreateProduct creates a new product and associates it with an organisation
-func (s *Service) CreateProduct(ctx context.Context, name string, tags *string, organisationID int64) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) CreateProduct(name string, tags *string, organisationID int64) (ProductDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating product")
 
 	var tagsNS sql.NullString
@@ -76,7 +81,7 @@ func (s *Service) CreateProduct(ctx context.Context, name string, tags *string, 
 		tagsNS = sql.NullString{String: *tags, Valid: true}
 	}
 
-	prod, err := s.db.CreateProduct(ctx, database.CreateProductParams{
+	prod, err := s.db.CreateProduct(s.ctx, database.CreateProductParams{
 		Name: name,
 		Tags: tagsNS,
 	})
@@ -85,7 +90,7 @@ func (s *Service) CreateProduct(ctx context.Context, name string, tags *string, 
 		return ProductDTO{}, err
 	}
 
-	err = s.db.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+	err = s.db.AddProductToOrganisation(s.ctx, database.AddProductToOrganisationParams{
 		ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
 		OrganisationID: sql.NullInt64{Int64: organisationID, Valid: true},
 	})
@@ -98,11 +103,11 @@ func (s *Service) CreateProduct(ctx context.Context, name string, tags *string, 
 }
 
 // GetProductByID fetches a product by its ID
-func (s *Service) GetProductByID(ctx context.Context, id int64) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Fetching product by ID")
 
-	prod, err := s.db.GetProductByID(ctx, id)
+	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching product by ID", err)
 		return ProductDTO{}, err
@@ -112,11 +117,11 @@ func (s *Service) GetProductByID(ctx context.Context, id int64) (ProductDTO, err
 }
 
 // GetAllProductsForOrganisation lists products linked to the given organisation
-func (s *Service) GetAllProductsForOrganisation(ctx context.Context, organisationID int64) ([]ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]ProductDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Listing products for organisation")
 
-	models, err := s.db.ListProductsByOrganisation(ctx, sql.NullInt64{Int64: organisationID, Valid: true})
+	models, err := s.db.ListProductsByOrganisation(s.ctx, sql.NullInt64{Int64: organisationID, Valid: true})
 	if err != nil {
 		logger.Error("Error listing products for organisation", err)
 		return nil, err
@@ -131,8 +136,8 @@ func (s *Service) GetAllProductsForOrganisation(ctx context.Context, organisatio
 }
 
 // UpdateProduct updates a product and returns the updated entity
-func (s *Service) UpdateProduct(ctx context.Context, id int64, name string, tags *string) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO, error) {
+	logger := logging.FromContext(s.ctx)
 	logger.Info("Updating product")
 
 	var tagsNS sql.NullString
@@ -140,7 +145,7 @@ func (s *Service) UpdateProduct(ctx context.Context, id int64, name string, tags
 		tagsNS = sql.NullString{String: *tags, Valid: true}
 	}
 
-	err := s.db.UpdateProduct(ctx, database.UpdateProductParams{
+	err := s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
 		Name: name,
 		Tags: tagsNS,
 		ID:   id,
@@ -150,7 +155,7 @@ func (s *Service) UpdateProduct(ctx context.Context, id int64, name string, tags
 		return ProductDTO{}, err
 	}
 
-	prod, err := s.db.GetProductByID(ctx, id)
+	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching updated product", err)
 		return ProductDTO{}, err
