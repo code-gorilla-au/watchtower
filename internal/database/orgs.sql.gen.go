@@ -18,8 +18,8 @@ INSERT INTO organisations (
 ) VALUES (
   ?,
   ?,
-  ?,
-  ?
+  unixepoch('now'),
+  unixepoch('now')
 )
 RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 `
@@ -27,17 +27,10 @@ RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 type CreateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
-	CreatedAt    int64
-	UpdatedAt    int64
 }
 
 func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisationParams) (Organisation, error) {
-	row := q.db.QueryRowContext(ctx, createOrganisation,
-		arg.FriendlyName,
-		arg.Namespace,
-		arg.CreatedAt,
-		arg.UpdatedAt,
-	)
+	row := q.db.QueryRowContext(ctx, createOrganisation, arg.FriendlyName, arg.Namespace)
 	var i Organisation
 	err := row.Scan(
 		&i.ID,

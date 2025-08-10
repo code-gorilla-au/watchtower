@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"database/sql"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
@@ -31,4 +32,129 @@ func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, n
 	}
 
 	return ToOrganisationDTO(model), nil
+}
+
+// GetDefaultOrganisation returns the default organisation (marked as default_org = 1)
+func (s *Service) GetDefaultOrganisation(ctx context.Context) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Fetching default organisation")
+
+	model, err := s.db.GetDefaultOrganisation(ctx)
+	if err != nil {
+		logger.Error("Error fetching default organisation", err)
+		return OrganisationDTO{}, err
+	}
+	return ToOrganisationDTO(model), nil
+}
+
+// GetAllOrganisations returns all organisations ordered by friendly_name
+func (s *Service) GetAllOrganisations(ctx context.Context) ([]OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Listing all organisations")
+
+	models, err := s.db.ListOrganisations(ctx)
+	if err != nil {
+		logger.Error("Error listing organisations", err)
+		return nil, err
+	}
+
+	result := make([]OrganisationDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToOrganisationDTO(m))
+	}
+
+	return result, nil
+}
+
+// CreateProduct creates a new product and associates it with an organisation
+func (s *Service) CreateProduct(ctx context.Context, name string, tags *string, organisationID int64) (ProductDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Creating product")
+
+	var tagsNS sql.NullString
+	if tags != nil {
+		tagsNS = sql.NullString{String: *tags, Valid: true}
+	}
+
+	prod, err := s.db.CreateProduct(ctx, database.CreateProductParams{
+		Name: name,
+		Tags: tagsNS,
+	})
+	if err != nil {
+		logger.Error("Error creating product", err)
+		return ProductDTO{}, err
+	}
+
+	err = s.db.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+		ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
+		OrganisationID: sql.NullInt64{Int64: organisationID, Valid: true},
+	})
+	if err != nil {
+		logger.Error("Error linking product to organisation", err)
+		return ProductDTO{}, err
+	}
+
+	return ToProductDTO(prod), nil
+}
+
+// GetProductByID fetches a product by its ID
+func (s *Service) GetProductByID(ctx context.Context, id int64) (ProductDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Fetching product by ID")
+
+	prod, err := s.db.GetProductByID(ctx, id)
+	if err != nil {
+		logger.Error("Error fetching product by ID", err)
+		return ProductDTO{}, err
+	}
+
+	return ToProductDTO(prod), nil
+}
+
+// GetAllProductsForOrganisation lists products linked to the given organisation
+func (s *Service) GetAllProductsForOrganisation(ctx context.Context, organisationID int64) ([]ProductDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Listing products for organisation")
+
+	models, err := s.db.ListProductsByOrganisation(ctx, sql.NullInt64{Int64: organisationID, Valid: true})
+	if err != nil {
+		logger.Error("Error listing products for organisation", err)
+		return nil, err
+	}
+
+	result := make([]ProductDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToProductDTO(m))
+	}
+
+	return result, nil
+}
+
+// UpdateProduct updates a product and returns the updated entity
+func (s *Service) UpdateProduct(ctx context.Context, id int64, name string, tags *string) (ProductDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Updating product")
+
+	var tagsNS sql.NullString
+	if tags != nil {
+		tagsNS = sql.NullString{String: *tags, Valid: true}
+	}
+
+	err := s.db.UpdateProduct(ctx, database.UpdateProductParams{
+		Name: name,
+		Tags: tagsNS,
+		ID:   id,
+	})
+	if err != nil {
+		logger.Error("Error updating product", err)
+		return ProductDTO{}, err
+	}
+
+	prod, err := s.db.GetProductByID(ctx, id)
+	if err != nil {
+		logger.Error("Error fetching updated product", err)
+		return ProductDTO{}, err
+	}
+
+	return ToProductDTO(prod), nil
 }

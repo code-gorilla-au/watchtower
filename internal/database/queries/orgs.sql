@@ -7,8 +7,8 @@ INSERT INTO organisations (
 ) VALUES (
   ?,
   ?,
-  ?,
-  ?
+  unixepoch('now'),
+  unixepoch('now')
 )
 RETURNING *;
 
