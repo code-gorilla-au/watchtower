@@ -22,11 +22,12 @@ WHERE default_org = 1
 ORDER BY updated_at DESC, id DESC
 LIMIT 1;
 
--- name: UpdateOrganisation :exec
+-- name: UpdateOrganisation :one
 UPDATE organisations
 SET
   friendly_name = ?,
   namespace = ?,
   default_org = ?,
   updated_at = unixepoch('now')
-WHERE id = ?;
+WHERE id = ?
+RETURNING *;

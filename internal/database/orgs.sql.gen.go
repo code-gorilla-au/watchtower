@@ -106,7 +106,7 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 	return items, nil
 }
 
-const updateOrganisation = `-- name: UpdateOrganisation :exec
+const updateOrganisation = `-- name: UpdateOrganisation :one
 UPDATE organisations
 SET
   friendly_name = ?,
@@ -114,6 +114,7 @@ SET
   default_org = ?,
   updated_at = unixepoch('now')
 WHERE id = ?
+RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 `
 
 type UpdateOrganisationParams struct {
@@ -123,12 +124,21 @@ type UpdateOrganisationParams struct {
 	ID           int64
 }
 
-func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisationParams) error {
-	_, err := q.db.ExecContext(ctx, updateOrganisation,
+func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisationParams) (Organisation, error) {
+	row := q.db.QueryRowContext(ctx, updateOrganisation,
 		arg.FriendlyName,
 		arg.Namespace,
 		arg.DefaultOrg,
 		arg.ID,
 	)
-	return err
+	var i Organisation
+	err := row.Scan(
+		&i.ID,
+		&i.FriendlyName,
+		&i.Namespace,
+		&i.DefaultOrg,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
