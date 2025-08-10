@@ -21,7 +21,7 @@ INSERT INTO organisations (
   ?,
   ?
 )
-RETURNING id, friendly_name, namespace, created_at, updated_at
+RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
 `
 
 type CreateOrganisationParams struct {
@@ -43,8 +43,92 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 		&i.ID,
 		&i.FriendlyName,
 		&i.Namespace,
+		&i.DefaultOrg,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const getDefaultOrganisation = `-- name: GetDefaultOrganisation :one
+SELECT id, friendly_name, namespace, default_org, created_at, updated_at FROM organisations
+WHERE default_org = 1
+ORDER BY updated_at DESC, id DESC
+LIMIT 1
+`
+
+func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, error) {
+	row := q.db.QueryRowContext(ctx, getDefaultOrganisation)
+	var i Organisation
+	err := row.Scan(
+		&i.ID,
+		&i.FriendlyName,
+		&i.Namespace,
+		&i.DefaultOrg,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const listOrganisations = `-- name: ListOrganisations :many
+SELECT id, friendly_name, namespace, default_org, created_at, updated_at FROM organisations
+ORDER BY friendly_name
+`
+
+func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error) {
+	rows, err := q.db.QueryContext(ctx, listOrganisations)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Organisation
+	for rows.Next() {
+		var i Organisation
+		if err := rows.Scan(
+			&i.ID,
+			&i.FriendlyName,
+			&i.Namespace,
+			&i.DefaultOrg,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateOrganisation = `-- name: UpdateOrganisation :exec
+UPDATE organisations
+SET
+  friendly_name = ?,
+  namespace = ?,
+  default_org = ?,
+  updated_at = unixepoch('now')
+WHERE id = ?
+`
+
+type UpdateOrganisationParams struct {
+	FriendlyName string
+	Namespace    string
+	DefaultOrg   bool
+	ID           int64
+}
+
+func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisationParams) error {
+	_, err := q.db.ExecContext(ctx, updateOrganisation,
+		arg.FriendlyName,
+		arg.Namespace,
+		arg.DefaultOrg,
+		arg.ID,
+	)
+	return err
 }

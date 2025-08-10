@@ -11,3 +11,22 @@ INSERT INTO organisations (
   ?
 )
 RETURNING *;
+
+-- name: ListOrganisations :many
+SELECT * FROM organisations
+ORDER BY friendly_name;
+
+-- name: GetDefaultOrganisation :one
+SELECT * FROM organisations
+WHERE default_org = 1
+ORDER BY updated_at DESC, id DESC
+LIMIT 1;
+
+-- name: UpdateOrganisation :exec
+UPDATE organisations
+SET
+  friendly_name = ?,
+  namespace = ?,
+  default_org = ?,
+  updated_at = unixepoch('now')
+WHERE id = ?;

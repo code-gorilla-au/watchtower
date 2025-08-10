@@ -12,6 +12,7 @@ type Organisation struct {
 	ID           int64
 	FriendlyName string
 	Namespace    string
+	DefaultOrg   bool
 	CreatedAt    int64
 	UpdatedAt    int64
 }

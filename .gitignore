@@ -1,4 +1,6 @@
 build/bin
 node_modules
 frontend/build
+.local_dev/*
+!.local_dev/.gitkeep
 .env.*
