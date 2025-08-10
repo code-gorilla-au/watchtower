@@ -15,8 +15,8 @@ func NewService(db database.Queries) *Service {
 }
 
 // CreateOrganisation creates a new organisation in the database using the specified friendly name and namespace.
-// It logs the creation process and returns the created organisation or an error if the operation fails.
-func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, namespace string) (database.Organisation, error) {
+// It logs the creation process and returns the created organisation DTO or an error if the operation fails.
+func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, namespace string) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Creating organisation")
 
@@ -27,8 +27,8 @@ func (s *Service) CreateOrganisation(ctx context.Context, friendlyName string, n
 
 	if err != nil {
 		logger.Error("Error creating organisation", err)
-		return database.Organisation{}, err
+		return OrganisationDTO{}, err
 	}
 
-	return model, nil
+	return ToOrganisationDTO(model), nil
 }
