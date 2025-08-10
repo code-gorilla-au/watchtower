@@ -1,6 +1,6 @@
 module watchtower
 
-go 1.23.0
+go 1.24.4
 
 toolchain go1.24.5
 
@@ -9,6 +9,7 @@ require github.com/wailsapp/wails/v2 v2.10.2
 require (
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/code-gorilla-au/env v1.1.1 // indirect
+	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect

@@ -18,49 +18,49 @@ type Organisation struct {
 }
 
 type Product struct {
-	ID        string
-	Name      sql.NullString
+	ID        int64
+	Name      string
 	Tags      sql.NullString
-	CreatedAt sql.NullInt64
-	UpdatedAt sql.NullInt64
+	CreatedAt int64
+	UpdatedAt int64
 }
 
 type ProductOrganisation struct {
-	ProductID      sql.NullString
+	ProductID      sql.NullInt64
 	OrganisationID sql.NullInt64
 }
 
 type PullRequest struct {
-	ID             string
-	ExternalID     sql.NullString
-	Title          sql.NullString
-	RepositoryName sql.NullString
-	Url            sql.NullString
-	State          sql.NullString
-	Author         sql.NullString
-	MergedAt       sql.NullInt64
-	CreatedAt      sql.NullInt64
-	UpdatedAt      sql.NullInt64
+	ID             int64
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       int64
+	CreatedAt      int64
+	UpdatedAt      int64
 }
 
 type Repository struct {
-	ID        string
-	Name      sql.NullString
-	Url       sql.NullString
-	Topic     sql.NullString
-	Owner     sql.NullString
-	CreatedAt sql.NullInt64
-	UpdatedAt sql.NullInt64
+	ID        int64
+	Name      string
+	Url       string
+	Topic     string
+	Owner     string
+	CreatedAt int64
+	UpdatedAt int64
 }
 
 type Security struct {
-	ID             string
-	ExternalID     sql.NullString
-	RepositoryName sql.NullString
-	PackageName    sql.NullString
-	State          sql.NullString
-	Severity       sql.NullString
-	PatchedVersion sql.NullString
-	CreatedAt      sql.NullInt64
-	UpdatedAt      sql.NullInt64
+	ID             int64
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	CreatedAt      int64
+	UpdatedAt      int64
 }
