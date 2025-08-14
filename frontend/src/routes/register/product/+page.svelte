@@ -23,7 +23,7 @@
 </script>
 
 <div class="p-3">
-	<h1 class="text-4xl">Add Product</h1>
+	<h1 class="text-4xl">Register - Product</h1>
 	<div class="mb-10">Add a product to an organisation {organisation.friendly_name}</div>
 	<form
 		method="POST"

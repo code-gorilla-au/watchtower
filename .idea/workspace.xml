@@ -4,17 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/+error.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip adding more methods">
+      <change afterPath="$PROJECT_DIR$/frontend/src/hooks.client.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/sync/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+error.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+page.svelte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/schemas/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/schemas/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,11 +26,11 @@
       <list>
         <option value="Go File" />
         <option value="+page.ts" />
-        <option value="+page" />
         <option value="button" />
         <option value="+layout.svelte" />
         <option value="TypeScript File" />
         <option value="+error" />
+        <option value="+page" />
       </list>
     </option>
   </component>
@@ -134,7 +134,8 @@
     <MESSAGE value="adding components" />
     <MESSAGE value="refactoring" />
     <MESSAGE value="wip" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip" />
+    <MESSAGE value="wip adding more methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip adding more methods" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

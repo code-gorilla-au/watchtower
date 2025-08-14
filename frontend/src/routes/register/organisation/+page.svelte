@@ -25,7 +25,7 @@
 			state.error = null;
 
 			await orgs.create(state.name, state.owner);
-			await goto("/dashboard");
+			await goto("/register/product");
 		} catch (e) {
 			const err = e as Error;
 			state.error = err.message;
@@ -34,7 +34,7 @@
 </script>
 
 <div class="p-3">
-	<h1 class="text-4xl">Register</h1>
+	<h1 class="text-4xl">Register - Organisation</h1>
 	<div class="mb-10">Create a new organisation</div>
 	<form
 		method="POST"
@@ -56,8 +56,15 @@
 			bind:value={state.owner}
 		/>
 
-		<div class="flex w-full justify-end">
-			<Button type="submit">Submit</Button>
+		<BaseInput
+			id="pat-token"
+			label="Personal access token"
+			description=" Readonly personal access token for the organisation"
+			bind:value={state.patToken}
+		/>
+
+		<div class="my-10 flex w-full justify-end">
+			<Button type="submit">Add product</Button>
 		</div>
 	</form>
 </div>

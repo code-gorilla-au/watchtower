@@ -6,9 +6,9 @@
 
 <div class="flex">
 	<aside class="flex min-h-screen min-w-24 flex-col bg-muted p-2 shadow-sm">
-		<div class="flex-1">
-			<p>products</p>
-			<p>organisations</p>
+		<div class="flex flex-1 flex-col gap-2">
+			<a href="/products">products</a>
+			<a href="/organisations">organisations</a>
 		</div>
 		<p>settings</p>
 	</aside>
