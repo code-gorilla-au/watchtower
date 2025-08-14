@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { OrgService } from "$lib/watchtower/orgs";
+	import { OrgService } from "$lib/watchtower";
+	import { Button } from "$components/ui/button";
 
 	const orgs = new OrgService();
 	let state = $state({
@@ -25,7 +26,7 @@
 		<input required id="org-owner" bind:value={state.owner} />
 	</label>
 
-	<button type="submit">Submit</button>
+	<Button type="submit">Submit</Button>
 	<div>
 		{JSON.stringify(state)}
 	</div>
