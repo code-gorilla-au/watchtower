@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/user_session/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/user_session/user_session.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+error.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json.md5" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json.md5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/user_session/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/user_session/user_session.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +28,9 @@
         <option value="+page.ts" />
         <option value="+page" />
         <option value="button" />
-        <option value="TypeScript File" />
         <option value="+layout.svelte" />
+        <option value="TypeScript File" />
+        <option value="+error" />
       </list>
     </option>
   </component>
@@ -126,7 +131,8 @@
     <MESSAGE value="wip fixing" />
     <MESSAGE value="adding components" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

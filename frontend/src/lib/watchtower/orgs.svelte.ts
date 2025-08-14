@@ -40,7 +40,7 @@ export class OrgService {
 		return this.defaultOrg;
 	}
 
-	defaultOrgStale() {
+	private defaultOrgStale() {
 		if (!this.#internal.defaultLastSync) {
 			return true;
 		}

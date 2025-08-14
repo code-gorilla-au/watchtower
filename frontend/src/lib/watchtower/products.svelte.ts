@@ -1,0 +1,44 @@
+import { watchtower } from "$lib/wailsjs/go/models";
+import ProductDTO = watchtower.ProductDTO;
+import type { SvelteDate } from "svelte/reactivity";
+import {
+	CreateProduct,
+	GetAllProductsForOrganisation,
+	UpdateProduct
+} from "$lib/wailsjs/go/watchtower/Service";
+
+export class ProductsService {
+	#internal: {
+		products: ProductDTO[];
+		lastSync?: SvelteDate;
+	};
+
+	readonly products: ProductDTO[];
+
+	constructor() {
+		this.#internal = $state({
+			products: [],
+			lastSync: undefined
+		});
+
+		this.products = $derived(this.#internal.products);
+	}
+
+	async create(name: string, orgId: number, tags: string[]) {
+		return CreateProduct(name, tags, orgId);
+	}
+
+	async update(id: number, name: string, tags: string[]) {
+		return UpdateProduct(id, name, tags);
+	}
+
+	async getById(id: number) {
+		return GetAllProductsForOrganisation(id);
+	}
+
+	async getAllByOrgId(orgId: number) {
+		const products = await GetAllProductsForOrganisation(orgId);
+		this.#internal.products.splice(0, this.#internal.products.length, ...products);
+		return products;
+	}
+}
