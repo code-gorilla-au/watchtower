@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { OrgService } from "$lib/watchtower";
 	import { Button } from "$components/ui/button";
+	import { BaseInput } from "$components/base_input/index.js";
 
 	const orgs = new OrgService();
 	let state = $state({
@@ -17,14 +18,14 @@
 <h1 class="text-4xl">Register</h1>
 <form onsubmit={onSubmit} class="flex flex-col">
 	<div class="mb-4">Create new org</div>
-	<label for="org-name">
-		Org friendly name
-		<input required id="org-name" bind:value={state.name} />
-	</label>
-	<label for="org-name">
-		Org name space (Github owner)
-		<input required id="org-owner" bind:value={state.owner} />
-	</label>
+	<BaseInput
+		class=""
+		id="friendly-name"
+		label="Organisation name"
+		description="Organisation's friendly name"
+		bind:value={state.name}
+	/>
+	<BaseInput id="namespace" label="Github owner" description="Github's unique identifier" />
 
 	<Button type="submit">Submit</Button>
 	<div>

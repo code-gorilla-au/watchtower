@@ -14,14 +14,14 @@
 			)
 	>;
 
-	let { id, label, description, ...restProps }: Props = $props();
+	let { id, label, description, value = $bindable(), ...restProps }: Props = $props();
 </script>
 
-<div class="flex w-full max-w-sm flex-col gap-1.5">
+<div class="my-1.5 flex w-full max-w-sm flex-col gap-1.5">
 	{#if label}
 		<Label for={id}>{label}</Label>
 	{/if}
-	<Input {id} {...restProps} />
+	<Input {id} bind:value {...restProps} />
 	{#if description}
 		<p class="text-sm text-muted-foreground">{description}</p>
 	{/if}
