@@ -17,7 +17,7 @@
 	let { id, label, description, value = $bindable(), ...restProps }: Props = $props();
 </script>
 
-<div class="my-1.5 flex w-full max-w-sm flex-col gap-1.5">
+<div class="my-1.5 flex w-full flex-col gap-1.5">
 	{#if label}
 		<Label for={id}>{label}</Label>
 	{/if}

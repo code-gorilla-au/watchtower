@@ -32,7 +32,7 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string) (Org
 	})
 
 	if err != nil {
-		logger.Error("Error creating organisation", err)
+		logger.Error("Error creating organisation", "error", err)
 		return OrganisationDTO{}, err
 	}
 
