@@ -3,7 +3,7 @@
 import {watchtower} from '../models';
 import {context} from '../models';
 
-export function CreateOrganisation(arg1:string,arg2:string):Promise<watchtower.OrganisationDTO>;
+export function CreateOrganisation(arg1:string,arg2:string,arg3:string):Promise<watchtower.OrganisationDTO>;
 
 export function CreateProduct(arg1:string,arg2:any,arg3:number):Promise<watchtower.ProductDTO>;
 
@@ -14,6 +14,8 @@ export function GetAllProductsForOrganisation(arg1:number):Promise<Array<watchto
 export function GetDefaultOrganisation():Promise<watchtower.OrganisationDTO>;
 
 export function GetProductByID(arg1:number):Promise<watchtower.ProductDTO>;
+
+export function SetDefaultOrg(arg1:number):Promise<watchtower.OrganisationDTO>;
 
 export function Startup(arg1:context.Context):Promise<void>;
 

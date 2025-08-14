@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS organisations
     friendly_name TEXT    NOT NULL,
     namespace     TEXT    NOT NULL UNIQUE,
     default_org   BOOLEAN NOT NULL DEFAULT 0,
+    token         TEXT    NOT NULL,
     created_at    INTEGER NOT NULL,
     updated_at    INTEGER NOT NULL
 );

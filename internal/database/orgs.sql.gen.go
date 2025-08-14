@@ -13,29 +13,33 @@ const createOrganisation = `-- name: CreateOrganisation :one
 INSERT INTO organisations (friendly_name,
                            namespace,
                            default_org,
+                           token,
                            created_at,
                            updated_at)
 VALUES (?,
         ?,
         true,
+        ?,
         unixepoch('now'),
         unixepoch('now'))
-RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
+RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
 `
 
 type CreateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
+	Token        string
 }
 
 func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisationParams) (Organisation, error) {
-	row := q.db.QueryRowContext(ctx, createOrganisation, arg.FriendlyName, arg.Namespace)
+	row := q.db.QueryRowContext(ctx, createOrganisation, arg.FriendlyName, arg.Namespace, arg.Token)
 	var i Organisation
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
 		&i.Namespace,
 		&i.DefaultOrg,
+		&i.Token,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -43,7 +47,7 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 }
 
 const getDefaultOrganisation = `-- name: GetDefaultOrganisation :one
-SELECT id, friendly_name, namespace, default_org, created_at, updated_at
+SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
 FROM organisations
 WHERE default_org = 1
 ORDER BY updated_at DESC, id DESC
@@ -58,6 +62,7 @@ func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, err
 		&i.FriendlyName,
 		&i.Namespace,
 		&i.DefaultOrg,
+		&i.Token,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -65,7 +70,7 @@ func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, err
 }
 
 const listOrganisations = `-- name: ListOrganisations :many
-SELECT id, friendly_name, namespace, default_org, created_at, updated_at
+SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
 FROM organisations
 ORDER BY friendly_name
 `
@@ -84,6 +89,7 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 			&i.FriendlyName,
 			&i.Namespace,
 			&i.DefaultOrg,
+			&i.Token,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -100,20 +106,55 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 	return items, nil
 }
 
+const setDefaultOrg = `-- name: SetDefaultOrg :one
+UPDATE organisations
+SET default_org = true
+WHERE id = ?
+RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
+`
+
+func (q *Queries) SetDefaultOrg(ctx context.Context, id int64) (Organisation, error) {
+	row := q.db.QueryRowContext(ctx, setDefaultOrg, id)
+	var i Organisation
+	err := row.Scan(
+		&i.ID,
+		&i.FriendlyName,
+		&i.Namespace,
+		&i.DefaultOrg,
+		&i.Token,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const setOrgsDefaultFalse = `-- name: SetOrgsDefaultFalse :exec
+UPDATE organisations
+SET default_org = false
+WHERE default_org = true
+`
+
+func (q *Queries) SetOrgsDefaultFalse(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, setOrgsDefaultFalse)
+	return err
+}
+
 const updateOrganisation = `-- name: UpdateOrganisation :one
 UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
+    token         = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
-RETURNING id, friendly_name, namespace, default_org, created_at, updated_at
+RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
 `
 
 type UpdateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
 	DefaultOrg   bool
+	Token        string
 	ID           int64
 }
 
@@ -122,6 +163,7 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 		arg.FriendlyName,
 		arg.Namespace,
 		arg.DefaultOrg,
+		arg.Token,
 		arg.ID,
 	)
 	var i Organisation
@@ -130,6 +172,7 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 		&i.FriendlyName,
 		&i.Namespace,
 		&i.DefaultOrg,
+		&i.Token,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

@@ -2,11 +2,13 @@
 INSERT INTO organisations (friendly_name,
                            namespace,
                            default_org,
+                           token,
                            created_at,
                            updated_at)
 VALUES (?,
         ?,
         true,
+        ?,
         unixepoch('now'),
         unixepoch('now'))
 RETURNING *;
@@ -28,6 +30,18 @@ UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
+    token         = ?,
     updated_at    = unixepoch('now')
+WHERE id = ?
+RETURNING *;
+
+-- name: SetOrgsDefaultFalse :exec
+UPDATE organisations
+SET default_org = false
+WHERE default_org = true;
+
+-- name: SetDefaultOrg :one
+UPDATE organisations
+SET default_org = true
 WHERE id = ?
 RETURNING *;

@@ -13,6 +13,7 @@ type Organisation struct {
 	FriendlyName string
 	Namespace    string
 	DefaultOrg   bool
+	Token        string
 	CreatedAt    int64
 	UpdatedAt    int64
 }

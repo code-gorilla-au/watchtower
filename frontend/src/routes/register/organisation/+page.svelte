@@ -9,12 +9,14 @@
 	type FormData = {
 		name: string;
 		owner: string;
+		patToken: string;
 		error: string | null;
 	};
 
 	let state = $state<FormData>({
 		name: "",
 		owner: "",
+		patToken: "",
 		error: null
 	});
 	async function onSubmit(e: Event) {

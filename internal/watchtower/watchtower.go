@@ -22,13 +22,14 @@ func (s *Service) Startup(ctx context.Context) {
 
 // CreateOrganisation creates a new organisation in the database using the specified friendly name and namespace.
 // It logs the creation process and returns the created organisation DTO or an error if the operation fails.
-func (s *Service) CreateOrganisation(friendlyName string, namespace string) (OrganisationDTO, error) {
+func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string) (OrganisationDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating organisation")
 
 	model, err := s.db.CreateOrganisation(s.ctx, database.CreateOrganisationParams{
 		FriendlyName: friendlyName,
 		Namespace:    namespace,
+		Token:        token,
 	})
 
 	if err != nil {
@@ -49,6 +50,24 @@ func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
 		logger.Error("Error fetching default organisation", err)
 		return OrganisationDTO{}, err
 	}
+	return ToOrganisationDTO(model), nil
+}
+
+func (s *Service) SetDefaultOrg(id int64) (OrganisationDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Info("setting default org", "org", id)
+
+	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
+		logger.Error("Error setting default org", err)
+		return OrganisationDTO{}, err
+	}
+
+	model, err := s.db.SetDefaultOrg(s.ctx, id)
+	if err != nil {
+		logger.Error("Error setting default org", err)
+		return OrganisationDTO{}, err
+	}
+
 	return ToOrganisationDTO(model), nil
 }
 

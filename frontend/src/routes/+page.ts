@@ -9,6 +9,6 @@ export const load: PageLoad = async () => {
 		await orgs.getDefault();
 		await goto("/dashboard");
 	} catch {
-		await goto("/register");
+		await goto("/register/organisation");
 	}
 };
