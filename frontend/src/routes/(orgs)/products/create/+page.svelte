@@ -24,7 +24,7 @@
 
 <div class="p-3">
 	<h1 class="text-4xl">Add Product</h1>
-	<div class="mb-10">Add a product to an organisation {organisation.friendly_name}</div>
+	<div class="mb-10">Add a product to an organisation {organisation?.friendly_name}</div>
 	<form
 		method="POST"
 		onsubmit={onSubmit}
@@ -41,12 +41,12 @@
 		<BaseInput
 			id="tags"
 			label="Tags"
-			description="comma separated list of tags"
+			description="Comma separated list of tags"
 			bind:value={form.tags}
 		/>
 
 		<div class="my-10 flex w-full justify-end">
-			<Button type="submit">Sync product</Button>
+			<Button type="submit">Add product</Button>
 		</div>
 	</form>
 </div>
