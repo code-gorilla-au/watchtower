@@ -15,7 +15,9 @@
 <div class="flex justify-between">
 	<div class="flex items-center gap-2">
 		{#if backAction}
-			<Button size="icon" variant="ghost"><ChevronLeft /></Button>
+			<Button onclick={backAction} size="icon" variant="ghost">
+				<ChevronLeft />
+			</Button>
 		{/if}
 		<div>
 			<h1 class="text-2xl">{title}</h1>

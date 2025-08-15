@@ -3,6 +3,8 @@
 	import { BaseInput } from "$components/base_input/index.js";
 	import type { PageProps } from "./$types";
 	import { productSvc } from "$lib/watchtower";
+	import { PageTitle } from "$components/page_title/index.js";
+	import { goto } from "$app/navigation";
 
 	let { data }: PageProps = $props();
 
@@ -35,9 +37,15 @@
 	}
 </script>
 
-<div class="p-3">
-	<h1 class="text-4xl">Add Product</h1>
-	<div class="mb-10">Add a product to an organisation {organisation?.friendly_name}</div>
+<div class="w-full p-2">
+	<PageTitle
+		title="Add product"
+		backAction={async () => {
+			await goto("/");
+		}}
+		subtitle="Add a product to an organisation {organisation?.friendly_name}"
+	/>
+	<div class="mb-10"></div>
 	<form
 		method="POST"
 		onsubmit={onSubmit}
