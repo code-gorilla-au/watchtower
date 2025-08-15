@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
+	import { PageTitle } from "$components/page_title";
 
 	let { data }: PageProps = $props();
 </script>
 
-<div>
-	<h1>Dashboard</h1>
-	<span>{data?.organisation?.friendly_name}</span>
+<div class="p-2">
+	<PageTitle title="Dashboard" subtitle={data?.organisation?.friendly_name} />
+	<p>{JSON.stringify(data)}</p>
 </div>
-
-<p>{JSON.stringify(data)}</p>

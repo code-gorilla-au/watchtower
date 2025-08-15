@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing copy">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding product creation">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/page_title/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/page_title/page_title.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +27,7 @@
         <option value="grid" />
         <option value="empty_slate" />
         <option value="TypeScript File" />
+        <option value="page_title" />
       </list>
     </option>
   </component>
@@ -133,7 +134,8 @@
     <MESSAGE value="wip adding more methods" />
     <MESSAGE value="adding pages" />
     <MESSAGE value="fixing copy" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing copy" />
+    <MESSAGE value="adding product creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding product creation" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
