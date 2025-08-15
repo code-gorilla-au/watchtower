@@ -3,6 +3,8 @@
 	import { PageTitle } from "$components/page_title";
 	import { onMount } from "svelte";
 	import { productSvc } from "$lib/watchtower";
+	import { goto } from "$app/navigation";
+	import { EmptySlate } from "$components/empty_slate/index.js";
 
 	let { data }: PageProps = $props();
 
@@ -27,11 +29,28 @@
 </script>
 
 <div class="w-full p-2">
-	<PageTitle title="Sync Product {product.name}" subtitle="Sync pull request from GitHub" />
+	<PageTitle
+		backAction={async () => {
+			await goto(`/products`);
+		}}
+		title="Sync Product {product.name}"
+		subtitle="Sync pull request from GitHub"
+	/>
 
 	{#if syncState.loading}
 		<div>
 			<h3>Loading...</h3>
+		</div>
+	{:else if syncState.error}
+		<div>
+			<h3>Error</h3>
+			<p>{syncState.error}</p>
+		</div>
+	{:else}
+		<div>
+			<EmptySlate title="Product sync complete">
+				<a href={`/products/${product.id}/details`}>View product details</a>
+			</EmptySlate>
 		</div>
 	{/if}
 </div>

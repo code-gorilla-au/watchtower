@@ -62,7 +62,14 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
-        CAST(strftime('%s', 'now') AS INTEGER)) RETURNING *;
+        CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (name) DO UPDATE SET
+    name = excluded.name,
+    url = excluded.url,
+    topic = excluded.topic,
+    owner = excluded.owner,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+RETURNING *;
 
 
 -- name: GetReposByProductID :many

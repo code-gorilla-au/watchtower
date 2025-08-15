@@ -73,7 +73,14 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
-        CAST(strftime('%s', 'now') AS INTEGER)) RETURNING id, name, url, topic, owner, created_at, updated_at
+        CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (name) DO UPDATE SET
+    name = excluded.name,
+    url = excluded.url,
+    topic = excluded.topic,
+    owner = excluded.owner,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+RETURNING id, name, url, topic, owner, created_at, updated_at
 `
 
 type CreateRepoParams struct {
