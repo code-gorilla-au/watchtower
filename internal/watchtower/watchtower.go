@@ -210,10 +210,10 @@ func (s *Service) SyncProduct(id int64) error {
 	for _, tag := range tags {
 		logger.Info("Searching for repo with tag", "tag", tag)
 
-		repos, err := s.ghClient.SearchRepos(org.Namespace, strings.TrimSpace(tag), org.Token)
-		if err != nil {
-			logger.Error("Error searching for repos", "error", err)
-			return err
+		repos, apiErr := s.ghClient.SearchRepos(org.Namespace, strings.TrimSpace(tag), org.Token)
+		if apiErr != nil {
+			logger.Error("Error searching for repos", "error", apiErr)
+			return apiErr
 		}
 
 		for _, repo := range repos.Data.Search.Edges {

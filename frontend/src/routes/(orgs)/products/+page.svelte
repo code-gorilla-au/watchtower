@@ -20,7 +20,7 @@
 		await goto("/products/create");
 	}
 	async function syncProduct(id: number) {
-		await goto(`/products/sync/${id}`);
+		await goto(`/products/${id}/sync`);
 	}
 </script>
 

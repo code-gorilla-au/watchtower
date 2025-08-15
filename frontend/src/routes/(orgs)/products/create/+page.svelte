@@ -22,7 +22,7 @@
 		error: undefined
 	});
 
-	function onSubmit(e: Event) {
+	async function onSubmit(e: Event) {
 		try {
 			e.preventDefault();
 			if (!organisation) {
@@ -30,9 +30,12 @@
 				return;
 			}
 
-			productSvc.create(form.name, organisation?.id, form.tags);
+			const product = await productSvc.create(form.name, organisation?.id, form.tags);
+			await goto(`/products/${product.id}/sync`);
+			return;
 		} catch (e) {
-			form.error = e.message;
+			const err = e as Error;
+			form.error = err.message;
 		}
 	}
 </script>
