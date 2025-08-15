@@ -3,6 +3,7 @@
 	import { type PageProps } from "./$types";
 	import { goto } from "$app/navigation";
 	import { Grid } from "$components/grid";
+	import { RepoCard } from "$components/repo_card";
 
 	let { data }: PageProps = $props();
 
@@ -21,7 +22,7 @@
 
 	<Grid>
 		{#each repos as repo (repo.id)}
-			{JSON.stringify(repo)}
+			<RepoCard {repo} />
 		{/each}
 	</Grid>
 </div>

@@ -15,10 +15,6 @@
 
 	let { product }: Props = $props();
 
-	async function productDetails(id: number) {
-		await goto(`/products/${id}/details`);
-	}
-
 	async function syncProduct(id: number) {
 		await goto(`/products/${id}/sync`);
 	}
@@ -29,45 +25,41 @@
 	}
 </script>
 
-<Card
-	onclick={(e) => {
-		e.preventDefault();
-		productDetails(product.id);
-	}}
-	class="w-full cursor-pointer hover:bg-muted/30"
->
-	<CardTitle class="flex items-center justify-between px-2">
-		<span>{product.name}</span>
-		<div>
-			<Button
-				onclick={async (e: Event) => {
-					e.preventDefault();
-					await syncProduct(product.id);
-				}}
-				size="icon"
-				variant="ghost"
-			>
-				<RefreshCw />
-			</Button>
-			<Button
-				onclick={async (e: Event) => {
-					e.preventDefault();
-					await deleteProduct(product.id);
-				}}
-				size="icon"
-				variant="ghost"
-			>
-				<Trash />
-			</Button>
-		</div>
-	</CardTitle>
-	<CardContent>
-		<div class="mb-2 flex justify-between text-sm">
-			<p class="text-muted-foreground">Last updated:</p>
-			<p>{formatDate(product.updated_at)}</p>
-		</div>
-		{#each product?.tags ?? [] as tag (tag)}
-			<Badge variant="secondary" class="">{tag}</Badge>
-		{/each}
-	</CardContent>
-</Card>
+<a href={`/products/${product.id}/details`}>
+	<Card class="w-full cursor-pointer hover:bg-muted/30">
+		<CardTitle class="flex items-center justify-between px-2">
+			<span>{product.name}</span>
+			<div>
+				<Button
+					onclick={async (e: Event) => {
+						e.preventDefault();
+						await syncProduct(product.id);
+					}}
+					size="icon"
+					variant="ghost"
+				>
+					<RefreshCw />
+				</Button>
+				<Button
+					onclick={async (e: Event) => {
+						e.preventDefault();
+						await deleteProduct(product.id);
+					}}
+					size="icon"
+					variant="ghost"
+				>
+					<Trash />
+				</Button>
+			</div>
+		</CardTitle>
+		<CardContent>
+			<div class="mb-2 flex justify-between text-sm">
+				<p class="text-muted-foreground">Last updated:</p>
+				<p>{formatDate(product.updated_at)}</p>
+			</div>
+			{#each product?.tags ?? [] as tag (tag)}
+				<Badge variant="secondary" class="">{tag}</Badge>
+			{/each}
+		</CardContent>
+	</Card>
+</a>
