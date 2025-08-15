@@ -251,10 +251,12 @@ func (s *Service) SyncProduct(id int64) error {
 				Topic: tag,
 				Owner: repo.Node.Owner.Login,
 			})
+
 			if err != nil {
 				logger.Error("Error creating repo", "error", err)
 				return err
 			}
+
 		}
 
 	}
