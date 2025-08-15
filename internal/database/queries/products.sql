@@ -7,6 +7,10 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (name) DO UPDATE SET
+    name = excluded.name,
+    tags = excluded.tags,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
 
 -- name: AddProductToOrganisation :exec
