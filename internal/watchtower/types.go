@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 	"watchtower/internal/database"
 
@@ -28,7 +29,7 @@ type OrganisationDTO struct {
 type ProductDTO struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
-	Tags      *string   `json:"tags,omitempty"`
+	Tags      []string  `json:"tags"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -91,15 +92,21 @@ func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
 }
 
 func ToProductDTO(m database.Product) ProductDTO {
-	var tagsPtr *string
+	var tagList []string
+
 	if m.Tags.Valid {
 		val := m.Tags.String
-		tagsPtr = &val
+
+		err := json.Unmarshal([]byte(val), &tagList)
+		if err != nil {
+			val = ""
+		}
+
 	}
 	return ProductDTO{
 		ID:        m.ID,
 		Name:      m.Name,
-		Tags:      tagsPtr,
+		Tags:      tagList,
 		CreatedAt: toTime(m.CreatedAt),
 		UpdatedAt: toTime(m.UpdatedAt),
 	}

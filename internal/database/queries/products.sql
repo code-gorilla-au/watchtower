@@ -28,6 +28,10 @@ FROM products
 WHERE id = ?
 LIMIT 1;
 
+
+-- name: DeleteProduct :exec
+DELETE FROM products where id = ?;
+
 -- name: ListProductsByOrganisation :many
 SELECT p.*
 FROM products p
@@ -56,3 +60,13 @@ VALUES (?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER)) RETURNING *;
 
+
+-- name: GetReposByProductID :many
+SELECT r.*, p.*
+FROM repositories r
+LEFT JOIN products p ON JSON_VALID(p.tags) AND EXISTS (
+    SELECT 1 
+    FROM JSON_EACH(p.tags) 
+    WHERE JSON_EACH.value = r.topic
+)
+WHERE p.id = ?;

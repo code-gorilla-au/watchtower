@@ -10,6 +10,10 @@ export function CreateProduct(arg1, arg2, arg3) {
   return window['go']['watchtower']['Service']['CreateProduct'](arg1, arg2, arg3);
 }
 
+export function DeleteProduct(arg1) {
+  return window['go']['watchtower']['Service']['DeleteProduct'](arg1);
+}
+
 export function GetAllOrganisations() {
   return window['go']['watchtower']['Service']['GetAllOrganisations']();
 }

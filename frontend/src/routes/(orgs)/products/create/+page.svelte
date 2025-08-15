@@ -30,7 +30,7 @@
 				return;
 			}
 
-			const product = await productSvc.create(form.name, organisation?.id, form.tags);
+			const product = await productSvc.create(form.name, organisation?.id, form.tags.split(","));
 			await goto(`/products/${product.id}/sync`);
 			return;
 		} catch (e) {

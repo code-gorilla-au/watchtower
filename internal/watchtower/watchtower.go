@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"strings"
 	"watchtower/internal/database"
 
@@ -13,7 +14,7 @@ import (
 // NewService creates and returns a new Service instance with the provided database queries.
 func NewService(ctx context.Context, db *database.Queries) *Service {
 	return &Service{
-		ghClient: github.New("", logging.FromContext(ctx)),
+		ghClient: github.New(logging.FromContext(ctx)),
 		ctx:      ctx,
 		db:       db,
 	}
@@ -99,14 +100,19 @@ func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
 }
 
 // CreateProduct creates a new product and associates it with an organisation
-func (s *Service) CreateProduct(name string, tags *string, organisationID int64) (ProductDTO, error) {
+func (s *Service) CreateProduct(name string, tags []string, organisationID int64) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating product")
 
 	var tagsNS sql.NullString
-	if tags != nil {
-		tagsNS = sql.NullString{String: *tags, Valid: true}
+
+	tagJson, err := json.Marshal(tags)
+	if err != nil {
+		logger.Error("Error marshalling tags", err)
+		return ProductDTO{}, err
 	}
+
+	tagsNS = sql.NullString{String: string(tagJson), Valid: true}
 
 	prod, err := s.db.CreateProduct(s.ctx, database.CreateProductParams{
 		Name: name,
@@ -189,6 +195,12 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 	}
 
 	return ToProductDTO(prod), nil
+}
+
+func (s *Service) DeleteProduct(id int64) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Info("Deleting product")
+	return s.db.DeleteProduct(s.ctx, id)
 }
 
 func (s *Service) SyncProduct(id int64) error {

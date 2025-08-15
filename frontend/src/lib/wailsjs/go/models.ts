@@ -45,7 +45,7 @@ export namespace watchtower {
 	export class ProductDTO {
 	    id: number;
 	    name: string;
-	    tags?: string;
+	    tags: string[];
 	    // Go type: time
 	    created_at: any;
 	    // Go type: time

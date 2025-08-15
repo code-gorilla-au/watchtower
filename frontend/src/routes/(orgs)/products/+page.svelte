@@ -9,8 +9,9 @@
 	import { Card } from "$components/ui/card";
 	import { CardContent, CardTitle } from "$components/ui/card/index.js";
 	import { Badge } from "$components/ui/badge/index.js";
-	import { RefreshCw } from "@lucide/svelte";
+	import { RefreshCw, Trash } from "@lucide/svelte";
 	import { formatDate } from "$design/formats";
+	import { productSvc } from "$lib/watchtower";
 
 	let { data }: PageProps = $props();
 	const products = $derived(data.products ?? []);
@@ -19,8 +20,14 @@
 	async function createProduct() {
 		await goto("/products/create");
 	}
+
 	async function syncProduct(id: number) {
 		await goto(`/products/${id}/sync`);
+	}
+
+	async function deleteProduct(id: number) {
+		await productSvc.delete(id);
+		await goto("/dashboard");
 	}
 </script>
 
@@ -53,15 +60,27 @@
 									await syncProduct(product.id);
 								}}
 								size="icon"
-								variant="ghost"><RefreshCw /></Button
+								variant="ghost"
 							>
+								<RefreshCw />
+							</Button>
+							<Button
+								onclick={async (e: Event) => {
+									e.preventDefault();
+									await deleteProduct(product.id);
+								}}
+								size="icon"
+								variant="ghost"
+							>
+								<Trash />
+							</Button>
 						</CardTitle>
 						<CardContent>
 							<div class="mb-2 flex justify-between text-sm">
 								<p class="text-muted-foreground">Last updated:</p>
 								<p>{formatDate(product.updated_at)}</p>
 							</div>
-							{#each product?.tags?.split(",") ?? [] as tag (tag)}
+							{#each product?.tags ?? [] as tag (tag)}
 								<Badge variant="secondary" class="">{tag}</Badge>
 							{/each}
 						</CardContent>

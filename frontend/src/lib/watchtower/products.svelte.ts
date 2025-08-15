@@ -3,6 +3,7 @@ import ProductDTO = watchtower.ProductDTO;
 import type { SvelteDate } from "svelte/reactivity";
 import {
 	CreateProduct,
+	DeleteProduct,
 	GetAllProductsForOrganisation,
 	GetProductByID,
 	SyncProduct,
@@ -26,12 +27,16 @@ export class ProductsService {
 		this.products = $derived(this.#internal.products);
 	}
 
-	async create(name: string, orgId: number, tags: string) {
+	async create(name: string, orgId: number, tags: string[]) {
 		return CreateProduct(name, tags, orgId);
 	}
 
 	async update(id: number, name: string, tags: string[]) {
 		return UpdateProduct(id, name, tags);
+	}
+
+	async delete(id: number) {
+		return DeleteProduct(id);
 	}
 
 	async getById(id: number) {
