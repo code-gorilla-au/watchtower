@@ -4,6 +4,8 @@ import type { SvelteDate } from "svelte/reactivity";
 import {
 	CreateProduct,
 	GetAllProductsForOrganisation,
+	GetProductByID,
+	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
 
@@ -33,12 +35,16 @@ export class ProductsService {
 	}
 
 	async getById(id: number) {
-		return GetAllProductsForOrganisation(id);
+		return GetProductByID(id);
 	}
 
 	async getAllByOrgId(orgId: number) {
 		const products = await GetAllProductsForOrganisation(orgId);
 		this.#internal.products.splice(0, this.#internal.products.length, ...products);
 		return products;
+	}
+
+	async syncProduct(id: number) {
+		SyncProduct;
 	}
 }
