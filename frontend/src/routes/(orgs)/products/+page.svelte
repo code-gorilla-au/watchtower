@@ -27,9 +27,9 @@
 	<div class="p-2">
 		{#if products.length === 0}
 			<EmptySlate caution={true} title="No products">
-				<a href="/products/create" class="text-xs text-muted-foreground underline"
-					>Create a product to get started</a
-				>
+				<a href="/products/create" class="text-xs text-muted-foreground underline">
+					Create a product to get started
+				</a>
 			</EmptySlate>
 		{:else}
 			<Grid>

@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
@@ -181,4 +182,47 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 	}
 
 	return ToProductDTO(prod), nil
+}
+
+func (s *Service) SyncProduct(id int64) error {
+	logger := logging.FromContext(s.ctx)
+
+	product, err := s.db.GetProductByID(s.ctx, id)
+	if err != nil {
+		logger.Error("Error fetching product", err)
+		return err
+	}
+
+	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: product.ID, Valid: true})
+	if err != nil {
+		logger.Error("Error fetching organisation for product", err)
+		return err
+	}
+
+	tags := strings.Split(product.Tags.String, ",")
+	for _, tag := range tags {
+		logger.Info("Searching for repo with tag", "tag", tag)
+
+		repos, err := s.ghClient.SearchRepos(org.Namespace, tag)
+		if err != nil {
+			logger.Error("Error searching for repos", "error", err)
+			return err
+		}
+
+		for _, repo := range repos.Data.Search.Edges {
+			_, err = s.db.CreateRepo(s.ctx, database.CreateRepoParams{
+				Name:  repo.Node.Name,
+				Url:   repo.Node.Url,
+				Topic: tag,
+				Owner: repo.Node.Owner.Login,
+			})
+			if err != nil {
+				logger.Error("Error creating repo", "error", err)
+				return err
+			}
+		}
+
+	}
+
+	return nil
 }

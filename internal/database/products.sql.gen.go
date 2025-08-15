@@ -11,13 +11,10 @@ import (
 )
 
 const addProductToOrganisation = `-- name: AddProductToOrganisation :exec
-INSERT INTO product_organisations (
-  product_id,
-  organisation_id
-) VALUES (
-  ?,
-  ?
-)
+INSERT INTO product_organisations (product_id,
+                                   organisation_id)
+VALUES (?,
+        ?)
 `
 
 type AddProductToOrganisationParams struct {
@@ -31,17 +28,14 @@ func (q *Queries) AddProductToOrganisation(ctx context.Context, arg AddProductTo
 }
 
 const createProduct = `-- name: CreateProduct :one
-INSERT INTO products (
-  name,
-  tags,
-  created_at,
-  updated_at
-) VALUES (
-  ?,
-  ?,
-  CAST(strftime('%s','now') AS INTEGER),
-  CAST(strftime('%s','now') AS INTEGER)
-)
+INSERT INTO products (name,
+                      tags,
+                      created_at,
+                      updated_at)
+VALUES (?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER))
 RETURNING id, name, tags, created_at, updated_at
 `
 
@@ -57,6 +51,85 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (P
 		&i.ID,
 		&i.Name,
 		&i.Tags,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const createRepo = `-- name: CreateRepo :one
+INSERT INTO repositories (name,
+                          url,
+                          topic,
+                          owner,
+                          created_at,
+                          updated_at)
+VALUES (?,
+        ?,
+        ?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER)) RETURNING id, name, url, topic, owner, created_at, updated_at
+`
+
+type CreateRepoParams struct {
+	Name  string
+	Url   string
+	Topic string
+	Owner string
+}
+
+func (q *Queries) CreateRepo(ctx context.Context, arg CreateRepoParams) (Repository, error) {
+	row := q.db.QueryRowContext(ctx, createRepo,
+		arg.Name,
+		arg.Url,
+		arg.Topic,
+		arg.Owner,
+	)
+	var i Repository
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Url,
+		&i.Topic,
+		&i.Owner,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getOrganisationForProduct = `-- name: GetOrganisationForProduct :one
+SELECT product_id, organisation_id, id, friendly_name, namespace, default_org, token, created_at, updated_at
+FROM product_organisations po
+         JOIN organisations o ON o.id = po.organisation_id
+WHERE po.product_id = ?
+LIMIT 1
+`
+
+type GetOrganisationForProductRow struct {
+	ProductID      sql.NullInt64
+	OrganisationID sql.NullInt64
+	ID             int64
+	FriendlyName   string
+	Namespace      string
+	DefaultOrg     bool
+	Token          string
+	CreatedAt      int64
+	UpdatedAt      int64
+}
+
+func (q *Queries) GetOrganisationForProduct(ctx context.Context, productID sql.NullInt64) (GetOrganisationForProductRow, error) {
+	row := q.db.QueryRowContext(ctx, getOrganisationForProduct, productID)
+	var i GetOrganisationForProductRow
+	err := row.Scan(
+		&i.ProductID,
+		&i.OrganisationID,
+		&i.ID,
+		&i.FriendlyName,
+		&i.Namespace,
+		&i.DefaultOrg,
+		&i.Token,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -86,7 +159,7 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 const listProductsByOrganisation = `-- name: ListProductsByOrganisation :many
 SELECT p.id, p.name, p.tags, p.created_at, p.updated_at
 FROM products p
-JOIN product_organisations po ON po.product_id = p.id
+         JOIN product_organisations po ON po.product_id = p.id
 WHERE po.organisation_id = ?
 ORDER BY p.name
 `
@@ -122,10 +195,9 @@ func (q *Queries) ListProductsByOrganisation(ctx context.Context, organisationID
 
 const updateProduct = `-- name: UpdateProduct :exec
 UPDATE products
-SET
-  name = ?,
-  tags = ?,
-  updated_at = CAST(strftime('%s','now') AS INTEGER)
+SET name       = ?,
+    tags       = ?,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 `
 

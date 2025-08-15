@@ -19,4 +19,6 @@ export function SetDefaultOrg(arg1:number):Promise<watchtower.OrganisationDTO>;
 
 export function Startup(arg1:context.Context):Promise<void>;
 
+export function SyncProduct(arg1:number):Promise<void>;
+
 export function UpdateProduct(arg1:number,arg2:string,arg3:any):Promise<watchtower.ProductDTO>;

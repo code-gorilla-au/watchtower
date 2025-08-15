@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding sync page">
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/svelte.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/svelte.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,11 +103,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]" />
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/register/organisation" />
       <recent name="$PROJECT_DIR$/frontend/src/lib" />
       <recent name="$PROJECT_DIR$/frontend/src/lib/watchtower" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -133,7 +143,8 @@
     <MESSAGE value="fixing copy" />
     <MESSAGE value="adding product creation" />
     <MESSAGE value="wip" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip" />
+    <MESSAGE value="adding sync page" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding sync page" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

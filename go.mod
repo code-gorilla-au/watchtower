@@ -6,6 +6,7 @@ toolchain go1.24.5
 
 require (
 	github.com/code-gorilla-au/env v1.1.1
+	github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250809105705-2913a586911f
 	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f
 	github.com/wailsapp/wails/v2 v2.10.2
 	modernc.org/sqlite v1.38.2
@@ -13,6 +14,7 @@ require (
 
 require (
 	github.com/bep/debounce v1.2.1 // indirect
+	github.com/code-gorilla-au/fetch v1.0.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect

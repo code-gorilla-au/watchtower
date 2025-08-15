@@ -34,6 +34,10 @@ export function Startup(arg1) {
   return window['go']['watchtower']['Service']['Startup'](arg1);
 }
 
+export function SyncProduct(arg1) {
+  return window['go']['watchtower']['Service']['SyncProduct'](arg1);
+}
+
 export function UpdateProduct(arg1, arg2, arg3) {
   return window['go']['watchtower']['Service']['UpdateProduct'](arg1, arg2, arg3);
 }

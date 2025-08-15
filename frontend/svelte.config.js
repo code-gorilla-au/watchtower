@@ -11,6 +11,16 @@ const config = {
 		alias: {
 			$design: "./src/lib/design",
 			$components: "./src/lib/components"
+		},
+		prerender: {
+			entries: [
+				"*",
+				"/register/organisation",
+				"/register/product",
+				"/products",
+				"/products/create",
+				"/products/sync/[product_id]"
+			]
 		}
 	}
 };
