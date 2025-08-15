@@ -19,7 +19,8 @@ const config = {
 				"/register/product",
 				"/products",
 				"/products/create",
-				"/products/[product_id]/sync"
+				"/products/[product_id]/sync",
+				"/products/[product_id]/details"
 			]
 		}
 	}
