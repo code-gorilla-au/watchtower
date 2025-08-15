@@ -37,7 +37,10 @@ export class ProductsService {
 	}
 
 	async create(name: string, orgId: number, tags: string[]) {
-		return CreateProduct(name, tags, orgId);
+		const product = await CreateProduct(name, tags, orgId);
+		this.#internal.products.push(product);
+
+		return product;
 	}
 
 	async update(id: number, name: string, tags: string[]) {
