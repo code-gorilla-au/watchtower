@@ -54,26 +54,28 @@
 					<Card class="w-full">
 						<CardTitle class="flex items-center justify-between px-2">
 							<span>{product.name}</span>
-							<Button
-								onclick={async (e: Event) => {
-									e.preventDefault();
-									await syncProduct(product.id);
-								}}
-								size="icon"
-								variant="ghost"
-							>
-								<RefreshCw />
-							</Button>
-							<Button
-								onclick={async (e: Event) => {
-									e.preventDefault();
-									await deleteProduct(product.id);
-								}}
-								size="icon"
-								variant="ghost"
-							>
-								<Trash />
-							</Button>
+							<div>
+								<Button
+									onclick={async (e: Event) => {
+										e.preventDefault();
+										await syncProduct(product.id);
+									}}
+									size="icon"
+									variant="ghost"
+								>
+									<RefreshCw />
+								</Button>
+								<Button
+									onclick={async (e: Event) => {
+										e.preventDefault();
+										await deleteProduct(product.id);
+									}}
+									size="icon"
+									variant="ghost"
+								>
+									<Trash />
+								</Button>
+							</div>
 						</CardTitle>
 						<CardContent>
 							<div class="mb-2 flex justify-between text-sm">
