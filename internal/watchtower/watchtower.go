@@ -203,6 +203,23 @@ func (s *Service) DeleteProduct(id int64) error {
 	return s.db.DeleteProduct(s.ctx, id)
 }
 
+func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Info("Fetching repos for product")
+	repos, err := s.db.GetReposByProductID(s.ctx, id)
+	if err != nil {
+		logger.Error("Error fetching repos for product", err)
+		return nil, err
+	}
+
+	result := make([]RepositoryDTO, 0, len(repos))
+	for _, r := range repos {
+		result = append(result, ToRepositoryDTO(r))
+	}
+
+	return result, nil
+}
+
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 

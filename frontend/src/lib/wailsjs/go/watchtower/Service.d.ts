@@ -17,6 +17,8 @@ export function GetDefaultOrganisation():Promise<watchtower.OrganisationDTO>;
 
 export function GetProductByID(arg1:number):Promise<watchtower.ProductDTO>;
 
+export function GetProductRepos(arg1:number):Promise<Array<watchtower.RepositoryDTO>>;
+
 export function SetDefaultOrg(arg1:number):Promise<watchtower.OrganisationDTO>;
 
 export function Startup(arg1:context.Context):Promise<void>;

@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding conflict clause">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/product_card/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/product_card/product_card.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.ts" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding pages">
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +138,6 @@
     <MESSAGE value="wip fixing" />
     <MESSAGE value="adding components" />
     <MESSAGE value="wip adding more methods" />
-    <MESSAGE value="adding pages" />
     <MESSAGE value="fixing copy" />
     <MESSAGE value="adding product creation" />
     <MESSAGE value="wip" />
@@ -150,7 +149,8 @@
     <MESSAGE value="WIP api call" />
     <MESSAGE value="refactoring" />
     <MESSAGE value="adding conflict clause" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding conflict clause" />
+    <MESSAGE value="adding pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding pages" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

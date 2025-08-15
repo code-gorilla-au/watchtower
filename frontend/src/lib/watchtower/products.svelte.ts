@@ -6,6 +6,7 @@ import {
 	DeleteProduct,
 	GetAllProductsForOrganisation,
 	GetProductByID,
+	GetProductRepos,
 	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
@@ -54,6 +55,10 @@ export class ProductsService {
 
 	async getById(id: number) {
 		return GetProductByID(id);
+	}
+
+	async getProductRepos(productId: number) {
+		return GetProductRepos(productId);
 	}
 
 	async getAllByOrgId(orgId: number) {

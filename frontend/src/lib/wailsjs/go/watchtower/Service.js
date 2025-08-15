@@ -30,6 +30,10 @@ export function GetProductByID(arg1) {
   return window['go']['watchtower']['Service']['GetProductByID'](arg1);
 }
 
+export function GetProductRepos(arg1) {
+  return window['go']['watchtower']['Service']['GetProductRepos'](arg1);
+}
+
 export function SetDefaultOrg(arg1) {
   return window['go']['watchtower']['Service']['SetDefaultOrg'](arg1);
 }
