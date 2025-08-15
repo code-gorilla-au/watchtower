@@ -62,11 +62,12 @@ VALUES (?,
 
 
 -- name: GetReposByProductID :many
-SELECT r.*, p.*
+SELECT r.*
 FROM repositories r
-LEFT JOIN products p ON JSON_VALID(p.tags) AND EXISTS (
-    SELECT 1 
-    FROM JSON_EACH(p.tags) 
-    WHERE JSON_EACH.value = r.topic
-)
-WHERE p.id = ?;
+JOIN products p ON p.id = ? 
+    AND JSON_VALID(p.tags) 
+    AND EXISTS (
+        SELECT 1 
+        FROM JSON_EACH(p.tags) 
+        WHERE JSON_EACH.value = r.topic
+    );
