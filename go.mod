@@ -6,7 +6,7 @@ toolchain go1.24.5
 
 require (
 	github.com/code-gorilla-au/env v1.1.1
-	github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250809105705-2913a586911f
+	github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250815064452-1a8fc0b0dd08
 	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f
 	github.com/wailsapp/wails/v2 v2.10.2
 	modernc.org/sqlite v1.38.2
@@ -41,11 +41,11 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.19 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
-	golang.org/x/net v0.35.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	modernc.org/libc v1.66.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
