@@ -166,40 +166,26 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 }
 
 const getReposByProductID = `-- name: GetReposByProductID :many
-SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at, p.id, p.name, p.tags, p.created_at, p.updated_at
+SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at
 FROM repositories r
-LEFT JOIN products p ON JSON_VALID(p.tags) AND EXISTS (
-    SELECT 1 
-    FROM JSON_EACH(p.tags) 
-    WHERE JSON_EACH.value = r.topic
-)
-WHERE p.id = ?
+JOIN products p ON p.id = ? 
+    AND JSON_VALID(p.tags) 
+    AND EXISTS (
+        SELECT 1 
+        FROM JSON_EACH(p.tags) 
+        WHERE JSON_EACH.value = r.topic
+    )
 `
 
-type GetReposByProductIDRow struct {
-	ID          int64
-	Name        string
-	Url         string
-	Topic       string
-	Owner       string
-	CreatedAt   int64
-	UpdatedAt   int64
-	ID_2        sql.NullInt64
-	Name_2      sql.NullString
-	Tags        sql.NullString
-	CreatedAt_2 sql.NullInt64
-	UpdatedAt_2 sql.NullInt64
-}
-
-func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetReposByProductIDRow, error) {
+func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Repository, error) {
 	rows, err := q.db.QueryContext(ctx, getReposByProductID, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetReposByProductIDRow
+	var items []Repository
 	for rows.Next() {
-		var i GetReposByProductIDRow
+		var i Repository
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -208,11 +194,6 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetRepos
 			&i.Owner,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.Name_2,
-			&i.Tags,
-			&i.CreatedAt_2,
-			&i.UpdatedAt_2,
 		); err != nil {
 			return nil, err
 		}
