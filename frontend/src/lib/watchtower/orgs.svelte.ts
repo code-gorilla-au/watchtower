@@ -25,8 +25,8 @@ export class OrgService {
 		this.defaultOrg = $derived(this.#internal.defaultOrg);
 	}
 
-	async create(name: string, owner: string) {
-		return await CreateOrganisation(name, owner);
+	async create(name: string, owner: string, token: string) {
+		return await CreateOrganisation(name, owner, token);
 	}
 
 	async getDefault() {

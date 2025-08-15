@@ -6,14 +6,16 @@ import (
 	"strings"
 	"watchtower/internal/database"
 
+	"github.com/code-gorilla-au/go-toolbox/github"
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
 
 // NewService creates and returns a new Service instance with the provided database queries.
 func NewService(ctx context.Context, db *database.Queries) *Service {
 	return &Service{
-		ctx: ctx,
-		db:  db,
+		ghClient: github.New("", logging.FromContext(ctx)),
+		ctx:      ctx,
+		db:       db,
 	}
 }
 
@@ -26,6 +28,11 @@ func (s *Service) Startup(ctx context.Context) {
 func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string) (OrganisationDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating organisation")
+
+	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
+		logger.Error("Error setting default org", err)
+		return OrganisationDTO{}, err
+	}
 
 	model, err := s.db.CreateOrganisation(s.ctx, database.CreateOrganisationParams{
 		FriendlyName: friendlyName,

@@ -2,6 +2,7 @@
 	import { Button } from "$components/ui/button/index.js";
 	import { BaseInput } from "$components/base_input/index.js";
 	import type { PageProps } from "./$types";
+	import { productSvc } from "$lib/watchtower";
 
 	let { data }: PageProps = $props();
 
@@ -17,8 +18,9 @@
 		tags: ""
 	});
 
-	function onSubmit(e: Event) {
+	async function onSubmit(e: Event) {
 		e.preventDefault();
+		await productSvc.create(form.name, organisation.id, form.tags);
 	}
 </script>
 

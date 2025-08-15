@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding more stuff">
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring to handle token calls per org">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +51,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -138,7 +141,8 @@
     <MESSAGE value="adding sync page" />
     <MESSAGE value="adding method" />
     <MESSAGE value="adding more stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding more stuff" />
+    <MESSAGE value="refactoring to handle token calls per org" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring to handle token calls per org" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

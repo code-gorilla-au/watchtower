@@ -24,7 +24,7 @@
 			e.preventDefault();
 			state.error = null;
 
-			await orgs.create(state.name, state.owner);
+			await orgs.create(state.name, state.owner, state.patToken);
 			await goto("/register/product");
 		} catch (e) {
 			const err = e as Error;

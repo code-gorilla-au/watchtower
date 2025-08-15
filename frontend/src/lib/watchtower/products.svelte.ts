@@ -45,6 +45,6 @@ export class ProductsService {
 	}
 
 	async syncProduct(id: number) {
-		SyncProduct;
+		return await SyncProduct(id);
 	}
 }

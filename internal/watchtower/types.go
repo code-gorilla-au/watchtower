@@ -11,7 +11,7 @@ import (
 type Service struct {
 	ctx      context.Context
 	db       *database.Queries
-	ghClient github.Client
+	ghClient *github.Client
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps
