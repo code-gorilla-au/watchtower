@@ -3,6 +3,8 @@
 	import { watchtower } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
 	import { formatDate } from "$design/formats";
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
+	import { Button } from "$components/ui/button";
 
 	type Props = {
 		repo: watchtower.RepositoryDTO;
@@ -12,8 +14,11 @@
 </script>
 
 <Card>
-	<CardTitle class="px-3">
+	<CardTitle class="flex items-center justify-between px-3">
 		<span class="capitalize">{repo.name}</span>
+		<Button href={repo.url} target="_blank" size="icon" variant="ghost"
+			><SquareArrowOutUpRight /></Button
+		>
 	</CardTitle>
 	<div class="px-3">
 		<div class="mb-2 flex items-center justify-between">

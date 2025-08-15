@@ -1,4 +1,8 @@
-import { CreateOrganisation, GetDefaultOrganisation } from "$lib/wailsjs/go/watchtower/Service";
+import {
+	CreateOrganisation,
+	GetAllOrganisations,
+	GetDefaultOrganisation
+} from "$lib/wailsjs/go/watchtower/Service";
 import { watchtower } from "$lib/wailsjs/go/models";
 import { differenceInMinutes } from "date-fns";
 import OrganisationDTO = watchtower.OrganisationDTO;
@@ -29,6 +33,13 @@ export class OrgService {
 		return await CreateOrganisation(name, owner, token);
 	}
 
+	async getAll() {
+		const orgs = await GetAllOrganisations();
+		this.internalUpdateOrgs(orgs);
+
+		return orgs;
+	}
+
 	async getDefault() {
 		if (!this.defaultOrgStale()) {
 			return this.defaultOrg;
@@ -38,6 +49,11 @@ export class OrgService {
 		this.#internal.defaultLastSync = new SvelteDate();
 		this.#internal.defaultOrg = org;
 		return this.defaultOrg;
+	}
+
+	private internalUpdateOrgs(orgs: OrganisationDTO[]) {
+		this.#internal.orgs?.splice(0, this.#internal.orgs?.length, ...orgs);
+		this.#internal.orgsLastSync = new SvelteDate();
 	}
 
 	private defaultOrgStale() {
