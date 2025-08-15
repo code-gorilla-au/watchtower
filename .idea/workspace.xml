@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="WIP api call">
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

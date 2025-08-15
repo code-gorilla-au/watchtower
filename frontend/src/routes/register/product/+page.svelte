@@ -20,7 +20,7 @@
 
 	async function onSubmit(e: Event) {
 		e.preventDefault();
-		await productSvc.create(form.name, organisation.id, form.tags);
+		await productSvc.create(form.name, organisation.id, form.tags.split(","));
 	}
 </script>
 

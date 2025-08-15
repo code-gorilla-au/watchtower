@@ -206,7 +206,7 @@ func (s *Service) DeleteProduct(id int64) error {
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 
-	product, err := s.db.GetProductByID(s.ctx, id)
+	product, err := s.GetProductByID(id)
 	if err != nil {
 		logger.Error("Error fetching product", err)
 		return err
@@ -218,8 +218,7 @@ func (s *Service) SyncProduct(id int64) error {
 		return err
 	}
 
-	tags := strings.Split(product.Tags.String, ",")
-	for _, tag := range tags {
+	for _, tag := range product.Tags {
 		logger.Info("Searching for repo with tag", "tag", tag)
 
 		repos, apiErr := s.ghClient.SearchRepos(org.Namespace, strings.TrimSpace(tag), org.Token)

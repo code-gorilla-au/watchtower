@@ -32,11 +32,24 @@ export class ProductsService {
 	}
 
 	async update(id: number, name: string, tags: string[]) {
-		return UpdateProduct(id, name, tags);
+		const product = await UpdateProduct(id, name, tags);
+		const idx = this.#internal.products.findIndex((p) => p.id === id);
+		if (idx < 0) {
+			return;
+		}
+
+		this.#internal.products[idx] = product;
+		return product;
 	}
 
 	async delete(id: number) {
-		return DeleteProduct(id);
+		await DeleteProduct(id);
+		const idx = this.#internal.products.findIndex((p) => p.id === id);
+		if (idx < 0) {
+			return;
+		}
+
+		this.#internal.products.splice(idx, 1);
 	}
 
 	async getById(id: number) {
