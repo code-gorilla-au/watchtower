@@ -24,7 +24,7 @@ export class ProductsService {
 		this.products = $derived(this.#internal.products);
 	}
 
-	async create(name: string, orgId: number, tags: string[]) {
+	async create(name: string, orgId: number, tags: string) {
 		return CreateProduct(name, tags, orgId);
 	}
 

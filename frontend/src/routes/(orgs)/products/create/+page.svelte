@@ -2,6 +2,7 @@
 	import { Button } from "$components/ui/button/index.js";
 	import { BaseInput } from "$components/base_input/index.js";
 	import type { PageProps } from "./$types";
+	import { productSvc } from "$lib/watchtower";
 
 	let { data }: PageProps = $props();
 
@@ -10,15 +11,27 @@
 	type FormData = {
 		name: string;
 		tags: string;
+		error?: string;
 	};
 
 	const form = $state<FormData>({
 		name: "",
-		tags: ""
+		tags: "",
+		error: undefined
 	});
 
 	function onSubmit(e: Event) {
-		e.preventDefault();
+		try {
+			e.preventDefault();
+			if (!organisation) {
+				form.error = "Organisation not found";
+				return;
+			}
+
+			productSvc.create(form.name, organisation?.id, form.tags);
+		} catch (e) {
+			form.error = e.message;
+		}
 	}
 </script>
 
@@ -44,7 +57,12 @@
 			description="Comma separated list of tags"
 			bind:value={form.tags}
 		/>
-
+		{#if form.error}
+			<div class="rounded-md border border-destructive p-4">
+				<h3>Error submitting form</h3>
+				<p class="text-destructive">{form.error}</p>
+			</div>
+		{/if}
 		<div class="my-10 flex w-full justify-end">
 			<Button type="submit">Add product</Button>
 		</div>
