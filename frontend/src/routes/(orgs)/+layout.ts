@@ -1,15 +1,13 @@
 import type { LayoutLoad } from "./$types";
-import { OrgService } from "$lib/watchtower";
 import { goto } from "$app/navigation";
-
-const org = new OrgService();
+import { orgSvc } from "$lib/watchtower";
 
 export const load: LayoutLoad = async () => {
-	const organisation = await org.getDefault();
-	if (!organisation) {
+	await orgSvc.getDefault();
+	if (!orgSvc.defaultOrg) {
 		await goto("/register");
 		return;
 	}
 
-	return { organisation };
+	return { organisation: orgSvc.defaultOrg };
 };
