@@ -4,21 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding org list">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/orgs.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding models">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.junie/guidelines.md" beforeDir="false" afterPath="$PROJECT_DIR$/.junie/guidelines.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/org_card/org_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/org_card/org_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/BaseButton.svelte" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/svelte.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/svelte.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,8 +34,9 @@
         <option value="page_title" />
         <option value="product_card" />
         <option value="repo_card" />
-        <option value="+page" />
         <option value="Go File" />
+        <option value="org_update_form" />
+        <option value="+page" />
       </list>
     </option>
   </component>
@@ -161,7 +158,8 @@
     <MESSAGE value="product workflow + repo sync added" />
     <MESSAGE value="wip adding link" />
     <MESSAGE value="adding org list" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding org list" />
+    <MESSAGE value="adding models" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding models" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
