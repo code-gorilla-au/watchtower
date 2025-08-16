@@ -49,6 +49,10 @@ export class OrgService {
 
 		this.internalUpdateOrg(updated);
 
+		if (updated.default_org) {
+			this.updateDefaultOrg(updated);
+		}
+
 		return updated;
 	}
 
