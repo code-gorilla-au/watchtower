@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="product workflow + repo sync added">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.ts" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip adding link">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/org_card/org_card.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/repo_card/repo_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/repo_card/repo_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/svelte.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/svelte.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/org_card/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +149,8 @@
     <MESSAGE value="adding pages" />
     <MESSAGE value="adding method to fetch repos" />
     <MESSAGE value="product workflow + repo sync added" />
-    <option name="LAST_COMMIT_MESSAGE" value="product workflow + repo sync added" />
+    <MESSAGE value="wip adding link" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip adding link" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
