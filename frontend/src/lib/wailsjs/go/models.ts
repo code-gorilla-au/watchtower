@@ -126,6 +126,24 @@ export namespace watchtower {
 		    return a;
 		}
 	}
+	export class UpdateOrgParams {
+	    ID: number;
+	    DefaultOrg: boolean;
+	    FriendlyName: string;
+	    Namespace: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new UpdateOrgParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ID = source["ID"];
+	        this.DefaultOrg = source["DefaultOrg"];
+	        this.FriendlyName = source["FriendlyName"];
+	        this.Namespace = source["Namespace"];
+	    }
+	}
 
 }
 

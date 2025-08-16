@@ -30,7 +30,6 @@ UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
-    token         = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING *;
@@ -45,3 +44,12 @@ UPDATE organisations
 SET default_org = true
 WHERE id = ?
 RETURNING *;
+
+-- name: DeleteOrg :exec
+DELETE FROM organisations
+WHERE id = ?;
+
+-- name: GetOrganisationByID :one
+SELECT *
+FROM organisations
+WHERE id = ?;

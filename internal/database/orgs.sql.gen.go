@@ -46,6 +46,16 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 	return i, err
 }
 
+const deleteOrg = `-- name: DeleteOrg :exec
+DELETE FROM organisations
+WHERE id = ?
+`
+
+func (q *Queries) DeleteOrg(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteOrg, id)
+	return err
+}
+
 const getDefaultOrganisation = `-- name: GetDefaultOrganisation :one
 SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
 FROM organisations
@@ -56,6 +66,27 @@ LIMIT 1
 
 func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, error) {
 	row := q.db.QueryRowContext(ctx, getDefaultOrganisation)
+	var i Organisation
+	err := row.Scan(
+		&i.ID,
+		&i.FriendlyName,
+		&i.Namespace,
+		&i.DefaultOrg,
+		&i.Token,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getOrganisationByID = `-- name: GetOrganisationByID :one
+SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
+FROM organisations
+WHERE id = ?
+`
+
+func (q *Queries) GetOrganisationByID(ctx context.Context, id int64) (Organisation, error) {
+	row := q.db.QueryRowContext(ctx, getOrganisationByID, id)
 	var i Organisation
 	err := row.Scan(
 		&i.ID,
@@ -144,7 +175,6 @@ UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
-    token         = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
@@ -154,7 +184,6 @@ type UpdateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
 	DefaultOrg   bool
-	Token        string
 	ID           int64
 }
 
@@ -163,7 +192,6 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 		arg.FriendlyName,
 		arg.Namespace,
 		arg.DefaultOrg,
-		arg.Token,
 		arg.ID,
 	)
 	var i Organisation

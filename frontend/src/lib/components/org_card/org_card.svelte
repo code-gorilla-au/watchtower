@@ -15,17 +15,13 @@
 
 	let { org }: Props = $props();
 
-	async function syncProduct(id: number) {
-		await goto(`/organisations/${id}/edit`);
-	}
-
 	async function deleteOrg(id: number) {
 		await orgSvc.delete(id);
 		await goto("/dashboard");
 	}
 </script>
 
-<a href={`/products/${org.id}/details`}>
+<a href={`/organisations/${org.id}`}>
 	<Card class="w-full cursor-pointer hover:bg-muted/30">
 		<CardTitle class="flex items-center justify-between px-2">
 			<span>{org.friendly_name}</span>

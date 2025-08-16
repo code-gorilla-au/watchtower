@@ -10,6 +10,10 @@ export function CreateProduct(arg1, arg2, arg3) {
   return window['go']['watchtower']['Service']['CreateProduct'](arg1, arg2, arg3);
 }
 
+export function DeleteOrganisation(arg1) {
+  return window['go']['watchtower']['Service']['DeleteOrganisation'](arg1);
+}
+
 export function DeleteProduct(arg1) {
   return window['go']['watchtower']['Service']['DeleteProduct'](arg1);
 }
@@ -24,6 +28,10 @@ export function GetAllProductsForOrganisation(arg1) {
 
 export function GetDefaultOrganisation() {
   return window['go']['watchtower']['Service']['GetDefaultOrganisation']();
+}
+
+export function GetOrganisationByID(arg1) {
+  return window['go']['watchtower']['Service']['GetOrganisationByID'](arg1);
 }
 
 export function GetProductByID(arg1) {
@@ -44,6 +52,10 @@ export function Startup(arg1) {
 
 export function SyncProduct(arg1) {
   return window['go']['watchtower']['Service']['SyncProduct'](arg1);
+}
+
+export function UpdateOrganisation(arg1) {
+  return window['go']['watchtower']['Service']['UpdateOrganisation'](arg1);
 }
 
 export function UpdateProduct(arg1, arg2, arg3) {

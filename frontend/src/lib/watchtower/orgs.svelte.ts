@@ -1,7 +1,11 @@
 import {
 	CreateOrganisation,
+	DeleteOrganisation,
 	GetAllOrganisations,
-	GetDefaultOrganisation
+	GetDefaultOrganisation,
+	GetOrganisationByID,
+	SetDefaultOrg,
+	UpdateOrganisation
 } from "$lib/wailsjs/go/watchtower/Service";
 import { watchtower } from "$lib/wailsjs/go/models";
 import { differenceInMinutes } from "date-fns";
@@ -12,7 +16,7 @@ export class OrgService {
 	#internal: {
 		defaultOrg?: OrganisationDTO;
 		defaultLastSync?: Date;
-		orgs?: OrganisationDTO[];
+		orgs: OrganisationDTO[];
 		orgsLastSync?: Date;
 	};
 
@@ -33,6 +37,25 @@ export class OrgService {
 		return await CreateOrganisation(name, owner, token);
 	}
 
+	async update(params: { id: number; friendlyName: string; owner: string; defaultOrg: boolean }) {
+		const updated = await UpdateOrganisation(
+			new watchtower.UpdateOrgParams({
+				ID: params.id,
+				DefaultOrg: params.defaultOrg,
+				FriendlyName: params.friendlyName,
+				Namespace: params.owner
+			})
+		);
+
+		this.internalUpdateOrg(updated);
+
+		return updated;
+	}
+
+	async getById(id: number) {
+		return GetOrganisationByID(id);
+	}
+
 	async getAll() {
 		const orgs = await GetAllOrganisations();
 		this.internalUpdateOrgs(orgs);
@@ -40,15 +63,43 @@ export class OrgService {
 		return orgs;
 	}
 
+	async delete(id: number) {
+		return DeleteOrganisation(id);
+	}
+
 	async getDefault() {
 		if (!this.defaultOrgStale()) {
 			return this.defaultOrg;
 		}
 
+		return this.getDefaultForce();
+	}
+
+	async setDefault(id: number) {
+		const defaultOrg = await SetDefaultOrg(id);
+		this.updateDefaultOrg(defaultOrg);
+		return this.defaultOrg;
+	}
+
+	private async getDefaultForce() {
 		const org = await GetDefaultOrganisation();
+		this.updateDefaultOrg(org);
+
+		return this.defaultOrg;
+	}
+
+	private updateDefaultOrg(org: OrganisationDTO) {
 		this.#internal.defaultLastSync = new SvelteDate();
 		this.#internal.defaultOrg = org;
-		return this.defaultOrg;
+	}
+
+	private internalUpdateOrg(org: OrganisationDTO) {
+		const idx = this.#internal.orgs?.findIndex((o) => o.id === org.id);
+		if (idx < 0) {
+			return;
+		}
+
+		this.#internal.orgs.splice(idx, 1, org);
 	}
 
 	private internalUpdateOrgs(orgs: OrganisationDTO[]) {

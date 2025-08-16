@@ -33,3 +33,6 @@ WHERE id = ?;
 DELETE FROM authors
 WHERE id = ?;
 ```
+
+## Frontend
+
