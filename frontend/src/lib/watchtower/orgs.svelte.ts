@@ -34,7 +34,13 @@ export class OrgService {
 	}
 
 	async create(name: string, owner: string, token: string) {
-		return await CreateOrganisation(name, owner, token);
+		const org = await CreateOrganisation(name, owner, token);
+		this.internalUpdateOrg(org);
+		if (org.default_org) {
+			this.updateDefaultOrg(org);
+		}
+
+		return this.defaultOrg;
 	}
 
 	async update(params: { id: number; friendlyName: string; owner: string; defaultOrg: boolean }) {
