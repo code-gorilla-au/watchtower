@@ -1,9 +1,11 @@
 -- name: CreateProduct :one
 INSERT INTO products (name,
                       tags,
+                      description,
                       created_at,
                       updated_at)
 VALUES (?,
+        ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))

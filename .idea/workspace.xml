@@ -4,16 +4,24 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing cards">
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="working build tool">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/models.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/models.gen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/schemas/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/schemas/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/orgs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +143,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding transforms" />
     <MESSAGE value="wip fixing" />
     <MESSAGE value="adding components" />
     <MESSAGE value="wip adding more methods" />
@@ -160,7 +167,8 @@
     <MESSAGE value="removing default org from root layout" />
     <MESSAGE value="fixing card for org" />
     <MESSAGE value="fixing cards" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing cards" />
+    <MESSAGE value="working build tool" />
+    <option name="LAST_COMMIT_MESSAGE" value="working build tool" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

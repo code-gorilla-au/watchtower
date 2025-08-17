@@ -3,11 +3,13 @@ INSERT INTO organisations (friendly_name,
                            namespace,
                            default_org,
                            token,
+                           description,
                            created_at,
                            updated_at)
 VALUES (?,
         ?,
         true,
+        ?,
         ?,
         unixepoch('now'),
         unixepoch('now'))
@@ -30,6 +32,7 @@ UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
+    description   = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING *;
@@ -46,7 +49,8 @@ WHERE id = ?
 RETURNING *;
 
 -- name: DeleteOrg :exec
-DELETE FROM organisations
+DELETE
+FROM organisations
 WHERE id = ?;
 
 -- name: GetOrganisationByID :one

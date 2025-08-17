@@ -11,7 +11,7 @@ import (
 )
 
 // CreateProduct creates a new product and associates it with an organisation
-func (s *Service) CreateProduct(name string, tags []string, organisationID int64) (ProductDTO, error) {
+func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating product")
 
@@ -26,8 +26,9 @@ func (s *Service) CreateProduct(name string, tags []string, organisationID int64
 	tagsNS = sql.NullString{String: string(tagJson), Valid: true}
 
 	prod, err := s.db.CreateProduct(s.ctx, database.CreateProductParams{
-		Name: name,
-		Tags: tagsNS,
+		Name:        name,
+		Tags:        tagsNS,
+		Description: description,
 	})
 	if err != nil {
 		logger.Error("Error creating product", err)

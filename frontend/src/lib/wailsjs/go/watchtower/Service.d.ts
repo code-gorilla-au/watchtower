@@ -3,9 +3,9 @@
 import {watchtower} from '../models';
 import {context} from '../models';
 
-export function CreateOrganisation(arg1:string,arg2:string,arg3:string):Promise<watchtower.OrganisationDTO>;
+export function CreateOrganisation(arg1:string,arg2:string,arg3:string,arg4:string):Promise<watchtower.OrganisationDTO>;
 
-export function CreateProduct(arg1:string,arg2:Array<string>,arg3:number):Promise<watchtower.ProductDTO>;
+export function CreateProduct(arg1:string,arg2:string,arg3:Array<string>,arg4:number):Promise<watchtower.ProductDTO>;
 
 export function DeleteOrganisation(arg1:number):Promise<void>;
 

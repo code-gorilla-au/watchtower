@@ -3,6 +3,7 @@ export namespace watchtower {
 	export class OrganisationDTO {
 	    id: number;
 	    friendly_name: string;
+	    description: string;
 	    namespace: string;
 	    default_org: boolean;
 	    // Go type: time
@@ -18,6 +19,7 @@ export namespace watchtower {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.friendly_name = source["friendly_name"];
+	        this.description = source["description"];
 	        this.namespace = source["namespace"];
 	        this.default_org = source["default_org"];
 	        this.created_at = this.convertValues(source["created_at"], null);
@@ -45,6 +47,7 @@ export namespace watchtower {
 	export class ProductDTO {
 	    id: number;
 	    name: string;
+	    description: string;
 	    tags: string[];
 	    // Go type: time
 	    created_at: any;
@@ -59,6 +62,7 @@ export namespace watchtower {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.name = source["name"];
+	        this.description = source["description"];
 	        this.tags = source["tags"];
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);

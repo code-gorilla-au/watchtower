@@ -8,7 +8,7 @@ import (
 
 // CreateOrganisation creates a new organisation in the database using the specified friendly name and namespace.
 // It logs the creation process and returns the created organisation DTO or an error if the operation fails.
-func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string) (OrganisationDTO, error) {
+func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string, description string) (OrganisationDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating organisation")
 
@@ -21,6 +21,7 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string, toke
 		FriendlyName: friendlyName,
 		Namespace:    namespace,
 		Token:        token,
+		Description:  description,
 	})
 
 	if err != nil {

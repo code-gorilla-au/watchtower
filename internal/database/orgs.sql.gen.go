@@ -14,11 +14,13 @@ INSERT INTO organisations (friendly_name,
                            namespace,
                            default_org,
                            token,
+                           description,
                            created_at,
                            updated_at)
 VALUES (?,
         ?,
         true,
+        ?,
         ?,
         unixepoch('now'),
         unixepoch('now'))
@@ -29,10 +31,16 @@ type CreateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
 	Token        string
+	Description  string
 }
 
 func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisationParams) (Organisation, error) {
-	row := q.db.QueryRowContext(ctx, createOrganisation, arg.FriendlyName, arg.Namespace, arg.Token)
+	row := q.db.QueryRowContext(ctx, createOrganisation,
+		arg.FriendlyName,
+		arg.Namespace,
+		arg.Token,
+		arg.Description,
+	)
 	var i Organisation
 	err := row.Scan(
 		&i.ID,
@@ -48,7 +56,8 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 }
 
 const deleteOrg = `-- name: DeleteOrg :exec
-DELETE FROM organisations
+DELETE
+FROM organisations
 WHERE id = ?
 `
 
@@ -180,6 +189,7 @@ UPDATE organisations
 SET friendly_name = ?,
     namespace     = ?,
     default_org   = ?,
+    description   = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING id, friendly_name, description, namespace, default_org, token, created_at, updated_at
@@ -189,6 +199,7 @@ type UpdateOrganisationParams struct {
 	FriendlyName string
 	Namespace    string
 	DefaultOrg   bool
+	Description  string
 	ID           int64
 }
 
@@ -197,6 +208,7 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 		arg.FriendlyName,
 		arg.Namespace,
 		arg.DefaultOrg,
+		arg.Description,
 		arg.ID,
 	)
 	var i Organisation

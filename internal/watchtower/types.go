@@ -20,6 +20,7 @@ type Service struct {
 type OrganisationDTO struct {
 	ID           int64     `json:"id"`
 	FriendlyName string    `json:"friendly_name"`
+	Description  string    `json:"description"`
 	Namespace    string    `json:"namespace"`
 	DefaultOrg   bool      `json:"default_org"`
 	CreatedAt    time.Time `json:"created_at"`
@@ -27,11 +28,12 @@ type OrganisationDTO struct {
 }
 
 type ProductDTO struct {
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	Tags      []string  `json:"tags"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Tags        []string  `json:"tags"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type ProductOrganisationDTO struct {
@@ -84,6 +86,7 @@ func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
 	return OrganisationDTO{
 		ID:           m.ID,
 		FriendlyName: m.FriendlyName,
+		Description:  m.Description,
 		Namespace:    m.Namespace,
 		DefaultOrg:   m.DefaultOrg,
 		CreatedAt:    toTime(m.CreatedAt),
@@ -104,11 +107,12 @@ func ToProductDTO(m database.Product) ProductDTO {
 
 	}
 	return ProductDTO{
-		ID:        m.ID,
-		Name:      m.Name,
-		Tags:      tagList,
-		CreatedAt: toTime(m.CreatedAt),
-		UpdatedAt: toTime(m.UpdatedAt),
+		ID:          m.ID,
+		Name:        m.Name,
+		Description: m.Description,
+		Tags:        tagList,
+		CreatedAt:   toTime(m.CreatedAt),
+		UpdatedAt:   toTime(m.UpdatedAt),
 	}
 }
 

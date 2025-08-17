@@ -33,8 +33,8 @@ export class OrgService {
 		this.defaultOrg = $derived(this.#internal.defaultOrg);
 	}
 
-	async create(name: string, owner: string, token: string) {
-		const org = await CreateOrganisation(name, owner, token);
+	async create(name: string, owner: string, token: string, description: string) {
+		const org = await CreateOrganisation(name, owner, token, description);
 		this.internalUpdateOrg(org);
 		if (org.default_org) {
 			this.updateDefaultOrg(org);

@@ -30,9 +30,11 @@ func (q *Queries) AddProductToOrganisation(ctx context.Context, arg AddProductTo
 const createProduct = `-- name: CreateProduct :one
 INSERT INTO products (name,
                       tags,
+                      description,
                       created_at,
                       updated_at)
 VALUES (?,
+        ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
@@ -44,12 +46,13 @@ RETURNING id, name, description, tags, created_at, updated_at
 `
 
 type CreateProductParams struct {
-	Name string
-	Tags sql.NullString
+	Name        string
+	Tags        sql.NullString
+	Description string
 }
 
 func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, createProduct, arg.Name, arg.Tags)
+	row := q.db.QueryRowContext(ctx, createProduct, arg.Name, arg.Tags, arg.Description)
 	var i Product
 	err := row.Scan(
 		&i.ID,

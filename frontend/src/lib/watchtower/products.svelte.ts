@@ -36,8 +36,8 @@ export class ProductsService {
 		this.products = $derived(this.#internal.products);
 	}
 
-	async create(name: string, orgId: number, tags: string[]) {
-		const product = await CreateProduct(name, tags, orgId);
+	async create(name: string, description: string, orgId: number, tags: string[]) {
+		const product = await CreateProduct(name, description, tags, orgId);
 		this.#internal.products.push(product);
 
 		return product;
