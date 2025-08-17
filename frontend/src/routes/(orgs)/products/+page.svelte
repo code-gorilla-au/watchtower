@@ -6,7 +6,7 @@
 	import { PageTitle } from "$components/page_title/index.js";
 	import { goto, invalidateAll } from "$app/navigation";
 	import { Button } from "$components/ui/button";
-	import { ProductCard } from "$components/product_card";
+	import { ProductCard } from "$components/products";
 	import { productSvc } from "$lib/watchtower";
 
 	let { data }: PageProps = $props();

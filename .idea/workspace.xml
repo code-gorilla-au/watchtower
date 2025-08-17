@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding nav bar">
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing nav" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -129,7 +127,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactoring to handle token calls per org" />
     <MESSAGE value="wip building, adding column" />
     <MESSAGE value="WIP api call" />
     <MESSAGE value="refactoring" />
@@ -154,7 +151,8 @@
     <MESSAGE value="adding theming" />
     <MESSAGE value="side bar" />
     <MESSAGE value="adding nav bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding nav bar" />
+    <MESSAGE value="fixing nav" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing nav" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
