@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring to re-use form">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +131,6 @@
     <MESSAGE value="wip adding more methods" />
     <MESSAGE value="fixing copy" />
     <MESSAGE value="adding product creation" />
-    <MESSAGE value="wip" />
     <MESSAGE value="adding sync page" />
     <MESSAGE value="adding method" />
     <MESSAGE value="adding more stuff" />
@@ -154,7 +152,8 @@
     <MESSAGE value="working build tool" />
     <MESSAGE value="adding more properties" />
     <MESSAGE value="refactoring to re-use form" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring to re-use form" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

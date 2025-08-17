@@ -5,7 +5,12 @@
 	import { goto } from "$app/navigation";
 
 	async function createOrg(formData: OrgUpdateFormData) {
-		await orgSvc.create(formData.friendly_name, formData.namespace, formData.token);
+		await orgSvc.create(
+			formData.friendly_name,
+			formData.namespace,
+			formData.token,
+			formData.description
+		);
 		await goto("/");
 	}
 </script>
