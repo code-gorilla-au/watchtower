@@ -1,0 +1,23 @@
+version: '3'
+
+dotenv: ['.env.local']
+
+tasks:
+  dev:
+    cmds:
+      - task: gen
+      - wails dev
+
+  clean-db:
+    cmds:
+      - rm -f $LOCAL_DEV_DIR/watchtower.db
+
+  gen:
+    cmds:
+      - sqlc generate
+      - go generate ./...
+
+  reset:
+    cmds:
+      - task: clean-db
+      - task: dev

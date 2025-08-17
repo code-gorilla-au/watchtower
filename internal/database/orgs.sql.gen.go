@@ -22,7 +22,7 @@ VALUES (?,
         ?,
         unixepoch('now'),
         unixepoch('now'))
-RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
+RETURNING id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 `
 
 type CreateOrganisationParams struct {
@@ -37,6 +37,7 @@ func (q *Queries) CreateOrganisation(ctx context.Context, arg CreateOrganisation
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,
@@ -57,7 +58,7 @@ func (q *Queries) DeleteOrg(ctx context.Context, id int64) error {
 }
 
 const getDefaultOrganisation = `-- name: GetDefaultOrganisation :one
-SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
+SELECT id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 FROM organisations
 WHERE default_org = 1
 ORDER BY updated_at DESC, id DESC
@@ -70,6 +71,7 @@ func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, err
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,
@@ -80,7 +82,7 @@ func (q *Queries) GetDefaultOrganisation(ctx context.Context) (Organisation, err
 }
 
 const getOrganisationByID = `-- name: GetOrganisationByID :one
-SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
+SELECT id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 FROM organisations
 WHERE id = ?
 `
@@ -91,6 +93,7 @@ func (q *Queries) GetOrganisationByID(ctx context.Context, id int64) (Organisati
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,
@@ -101,7 +104,7 @@ func (q *Queries) GetOrganisationByID(ctx context.Context, id int64) (Organisati
 }
 
 const listOrganisations = `-- name: ListOrganisations :many
-SELECT id, friendly_name, namespace, default_org, token, created_at, updated_at
+SELECT id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 FROM organisations
 ORDER BY friendly_name
 `
@@ -118,6 +121,7 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 		if err := rows.Scan(
 			&i.ID,
 			&i.FriendlyName,
+			&i.Description,
 			&i.Namespace,
 			&i.DefaultOrg,
 			&i.Token,
@@ -141,7 +145,7 @@ const setDefaultOrg = `-- name: SetDefaultOrg :one
 UPDATE organisations
 SET default_org = true
 WHERE id = ?
-RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
+RETURNING id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 `
 
 func (q *Queries) SetDefaultOrg(ctx context.Context, id int64) (Organisation, error) {
@@ -150,6 +154,7 @@ func (q *Queries) SetDefaultOrg(ctx context.Context, id int64) (Organisation, er
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,
@@ -177,7 +182,7 @@ SET friendly_name = ?,
     default_org   = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
-RETURNING id, friendly_name, namespace, default_org, token, created_at, updated_at
+RETURNING id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 `
 
 type UpdateOrganisationParams struct {
@@ -198,6 +203,7 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 	err := row.Scan(
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,

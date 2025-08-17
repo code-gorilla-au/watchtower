@@ -11,6 +11,7 @@ import (
 type Organisation struct {
 	ID           int64
 	FriendlyName string
+	Description  string
 	Namespace    string
 	DefaultOrg   bool
 	Token        string
@@ -19,11 +20,12 @@ type Organisation struct {
 }
 
 type Product struct {
-	ID        int64
-	Name      string
-	Tags      sql.NullString
-	CreatedAt int64
-	UpdatedAt int64
+	ID          int64
+	Name        string
+	Description string
+	Tags        sql.NullString
+	CreatedAt   int64
+	UpdatedAt   int64
 }
 
 type ProductOrganisation struct {

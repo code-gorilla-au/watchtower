@@ -40,7 +40,7 @@ ON CONFLICT (name) DO UPDATE SET
     name = excluded.name,
     tags = excluded.tags,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
-RETURNING id, name, tags, created_at, updated_at
+RETURNING id, name, description, tags, created_at, updated_at
 `
 
 type CreateProductParams struct {
@@ -54,6 +54,7 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (P
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
+		&i.Description,
 		&i.Tags,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -120,7 +121,7 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 }
 
 const getOrganisationForProduct = `-- name: GetOrganisationForProduct :one
-SELECT product_id, organisation_id, id, friendly_name, namespace, default_org, token, created_at, updated_at
+SELECT product_id, organisation_id, id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 FROM product_organisations po
          JOIN organisations o ON o.id = po.organisation_id
 WHERE po.product_id = ?
@@ -132,6 +133,7 @@ type GetOrganisationForProductRow struct {
 	OrganisationID sql.NullInt64
 	ID             int64
 	FriendlyName   string
+	Description    string
 	Namespace      string
 	DefaultOrg     bool
 	Token          string
@@ -147,6 +149,7 @@ func (q *Queries) GetOrganisationForProduct(ctx context.Context, productID sql.N
 		&i.OrganisationID,
 		&i.ID,
 		&i.FriendlyName,
+		&i.Description,
 		&i.Namespace,
 		&i.DefaultOrg,
 		&i.Token,
@@ -157,7 +160,7 @@ func (q *Queries) GetOrganisationForProduct(ctx context.Context, productID sql.N
 }
 
 const getProductByID = `-- name: GetProductByID :one
-SELECT id, name, tags, created_at, updated_at
+SELECT id, name, description, tags, created_at, updated_at
 FROM products
 WHERE id = ?
 LIMIT 1
@@ -169,6 +172,7 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 	err := row.Scan(
 		&i.ID,
 		&i.Name,
+		&i.Description,
 		&i.Tags,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -220,7 +224,7 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Reposito
 }
 
 const listProductsByOrganisation = `-- name: ListProductsByOrganisation :many
-SELECT p.id, p.name, p.tags, p.created_at, p.updated_at
+SELECT p.id, p.name, p.description, p.tags, p.created_at, p.updated_at
 FROM products p
          JOIN product_organisations po ON po.product_id = p.id
 WHERE po.organisation_id = ?
@@ -239,6 +243,7 @@ func (q *Queries) ListProductsByOrganisation(ctx context.Context, organisationID
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
+			&i.Description,
 			&i.Tags,
 			&i.CreatedAt,
 			&i.UpdatedAt,
