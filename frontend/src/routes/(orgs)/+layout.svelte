@@ -11,7 +11,7 @@
 			<a href="/products">products</a>
 			<a href="/organisations">organisations</a>
 		</div>
-		<p>settings</p>
+		<a href="/settings">settings</a>
 	</aside>
 	{@render children?.()}
 </div>

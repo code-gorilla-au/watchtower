@@ -4,12 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update card">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update products + add clean up methods">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/settings/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/svelte.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/svelte.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +34,8 @@
         <option value="repo_card" />
         <option value="Go File" />
         <option value="org_update_form" />
-        <option value="+page" />
         <option value="update_product_form" />
+        <option value="+page" />
       </list>
     </option>
   </component>
@@ -132,7 +135,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding product creation" />
     <MESSAGE value="adding sync page" />
     <MESSAGE value="adding method" />
     <MESSAGE value="adding more stuff" />
@@ -157,7 +159,8 @@
     <MESSAGE value="wip" />
     <MESSAGE value="cleanup, adding redirect" />
     <MESSAGE value="update card" />
-    <option name="LAST_COMMIT_MESSAGE" value="update card" />
+    <MESSAGE value="update products + add clean up methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="update products + add clean up methods" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
