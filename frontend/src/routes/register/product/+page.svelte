@@ -2,6 +2,7 @@
 	import type { PageProps } from "./$types";
 	import { productSvc } from "$lib/watchtower";
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
+	import { goto } from "$app/navigation";
 
 	let { data }: PageProps = $props();
 
@@ -25,6 +26,8 @@
 				organisation.id,
 				formData.tags.split(",")
 			);
+
+			await goto("/");
 		} catch (e) {
 			const err = e as Error;
 			pageState.error = err.message;
