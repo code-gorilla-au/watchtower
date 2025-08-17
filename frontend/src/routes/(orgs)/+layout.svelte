@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { type LayoutProps } from "./$types";
-	import { Settings, Package } from "@lucide/svelte";
+	import { Settings, Package, Castle, LayoutDashboard } from "@lucide/svelte";
 	import { cn } from "$lib/utils";
+	import { NavItem } from "$components/nav/index.js";
 
 	let { children }: LayoutProps = $props();
 	let expand = $state(true);
@@ -16,21 +17,27 @@
 		)}
 	>
 		<div class="flex flex-1 flex-col gap-2">
-			<a href="/dashboard">dashboard</a>
-			<a href="/products" class="flex gap-2">
-				<Package size={24} />
-				{#if expand}
-					<span>Products</span>
-				{/if}
-			</a>
-			<a href="/organisations">organisations</a>
+			<NavItem to="/" {expand} label="Dashboard">
+				{#snippet icon()}
+					<LayoutDashboard size={24} />
+				{/snippet}
+			</NavItem>
+			<NavItem to="/products" {expand} label="Products">
+				{#snippet icon()}
+					<Package size={24} />
+				{/snippet}
+			</NavItem>
+			<NavItem to="/organisations" {expand} label="Organisations">
+				{#snippet icon()}
+					<Castle size={24} />
+				{/snippet}
+			</NavItem>
 		</div>
-		<a href="/settings" class="flex justify-center gap-2 pb-2">
-			<Settings size={24} />
-			{#if expand}
-				<span>Settings</span>
-			{/if}
-		</a>
+		<NavItem {expand} to="/settings" label="Settings">
+			{#snippet icon()}
+				<Settings size={24} />
+			{/snippet}
+		</NavItem>
 	</aside>
 	{@render children?.()}
 </div>
