@@ -8,6 +8,7 @@
 
 	import { goto } from "$app/navigation";
 	import { orgSvc } from "$lib/watchtower";
+	import { CardAction, CardHeader } from "$components/ui/card/index.js";
 
 	type Props = {
 		org: watchtower.OrganisationDTO;
@@ -23,9 +24,11 @@
 
 <a href={`/organisations/${org.id}`}>
 	<Card class="w-full cursor-pointer hover:bg-muted/30">
-		<CardTitle class="flex items-center justify-between px-2">
-			<span>{org.friendly_name}</span>
-			<div>
+		<CardHeader class="flex items-center justify-between">
+			<CardTitle>
+				<span>{org.friendly_name}</span>
+			</CardTitle>
+			<CardAction>
 				<Button
 					onclick={async (e: Event) => {
 						e.preventDefault();
@@ -36,8 +39,9 @@
 				>
 					<Trash />
 				</Button>
-			</div>
-		</CardTitle>
+			</CardAction>
+		</CardHeader>
+
 		<CardContent>
 			<div class="mb-2 flex justify-between text-sm">
 				<p class="text-muted-foreground">Last updated:</p>
