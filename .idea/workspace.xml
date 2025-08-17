@@ -4,24 +4,16 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="working build tool">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding more properties">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/product_update_form.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/orgs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/org_card/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/org_card/org_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/org_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +36,7 @@
         <option value="Go File" />
         <option value="org_update_form" />
         <option value="+page" />
+        <option value="update_product_form" />
       </list>
     </option>
   </component>
@@ -114,11 +107,11 @@
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/lib/components/orgs" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]" />
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/register/organisation" />
-      <recent name="$PROJECT_DIR$/frontend/src/lib" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -143,7 +136,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip fixing" />
     <MESSAGE value="adding components" />
     <MESSAGE value="wip adding more methods" />
     <MESSAGE value="fixing copy" />
@@ -168,7 +160,8 @@
     <MESSAGE value="fixing card for org" />
     <MESSAGE value="fixing cards" />
     <MESSAGE value="working build tool" />
-    <option name="LAST_COMMIT_MESSAGE" value="working build tool" />
+    <MESSAGE value="adding more properties" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding more properties" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

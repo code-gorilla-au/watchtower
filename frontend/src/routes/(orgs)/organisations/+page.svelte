@@ -3,7 +3,7 @@
 	import { goto } from "$app/navigation";
 	import { Grid } from "$components/grid/index.js";
 	import type { PageProps } from "./$types";
-	import { OrgCard } from "$components/org_card";
+	import { OrgCard } from "$components/orgs";
 	import { Button } from "$components/ui/button";
 	import { Plus } from "@lucide/svelte";
 
