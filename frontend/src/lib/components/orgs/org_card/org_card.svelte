@@ -43,7 +43,8 @@
 		</CardHeader>
 
 		<CardContent>
-			<div class="mb-2 flex justify-between text-sm">
+			<p class="text-sm">{org.description}</p>
+			<div class="my-2 flex justify-between text-sm">
 				<p class="text-muted-foreground">Last updated:</p>
 				<p>{formatDate(org.updated_at)}</p>
 			</div>

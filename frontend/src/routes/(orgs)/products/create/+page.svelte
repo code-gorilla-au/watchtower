@@ -1,36 +1,37 @@
 <script lang="ts">
-	import { Button } from "$components/ui/button/index.js";
-	import { BaseInput } from "$components/base_input/index.js";
 	import type { PageProps } from "./$types";
 	import { productSvc } from "$lib/watchtower";
 	import { PageTitle } from "$components/page_title/index.js";
 	import { goto } from "$app/navigation";
+	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
 
 	let { data }: PageProps = $props();
 
-	let organisation = $derived(data.organisation);
+	let organisation = $derived(data.org);
 
 	type FormData = {
-		name: string;
-		tags: string;
 		error?: string;
+		loading: boolean;
 	};
 
 	const form = $state<FormData>({
-		name: "",
-		tags: "",
-		error: undefined
+		error: undefined,
+		loading: false
 	});
 
-	async function onSubmit(e: Event) {
+	async function onSubmit(formData: ProductUpdateFormData) {
 		try {
-			e.preventDefault();
 			if (!organisation) {
 				form.error = "Organisation not found";
 				return;
 			}
 
-			const product = await productSvc.create(form.name, organisation?.id, form.tags.split(","));
+			const product = await productSvc.create(
+				formData.name,
+				formData.description,
+				organisation?.id,
+				formData.tags.split(",")
+			);
 			await goto(`/products/${product.id}/sync`);
 			return;
 		} catch (e) {
@@ -44,38 +45,10 @@
 	<PageTitle
 		title="Add product"
 		backAction={async () => {
-			await goto("/");
+			await goto("/products");
 		}}
 		subtitle="Add a product to an organisation {organisation?.friendly_name}"
 	/>
-	<div class="mb-10"></div>
-	<form
-		method="POST"
-		onsubmit={onSubmit}
-		class="mx-auto flex max-w-sm flex-col items-center justify-center"
-	>
-		<BaseInput
-			class=""
-			id="name"
-			label="Product name"
-			description="Product friendly name"
-			bind:value={form.name}
-		/>
 
-		<BaseInput
-			id="tags"
-			label="Tags"
-			description="Comma separated list of tags"
-			bind:value={form.tags}
-		/>
-		{#if form.error}
-			<div class="rounded-md border border-destructive p-4">
-				<h3>Error submitting form</h3>
-				<p class="text-destructive">{form.error}</p>
-			</div>
-		{/if}
-		<div class="my-10 flex w-full justify-end">
-			<Button type="submit">Add product</Button>
-		</div>
-	</form>
+	<ProductUpdateForm mode="create" error={form.error} loading={form.loading} onCreate={onSubmit} />
 </div>

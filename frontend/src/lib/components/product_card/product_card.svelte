@@ -57,7 +57,8 @@
 		</CardHeader>
 
 		<CardContent>
-			<div class="mb-2 flex justify-between text-sm">
+			<p>{product.description}</p>
+			<div class="my-2 flex justify-between text-sm">
 				<p class="text-muted-foreground">Last updated:</p>
 				<p>{formatDate(product.updated_at)}</p>
 			</div>
