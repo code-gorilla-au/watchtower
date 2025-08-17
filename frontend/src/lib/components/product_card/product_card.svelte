@@ -5,24 +5,18 @@
 	import { Badge } from "$components/ui/badge";
 	import { RefreshCw, Trash } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
-
 	import { goto } from "$app/navigation";
-	import { productSvc } from "$lib/watchtower";
 	import { CardAction, CardHeader } from "$components/ui/card/index.js";
 
 	type Props = {
 		product: watchtower.ProductDTO;
+		onDelete?: () => void;
 	};
 
-	let { product }: Props = $props();
+	let { product, onDelete }: Props = $props();
 
 	async function syncProduct(id: number) {
 		await goto(`/products/${id}/sync`);
-	}
-
-	async function deleteProduct(id: number) {
-		await productSvc.delete(id);
-		await goto("/dashboard");
 	}
 </script>
 
@@ -46,7 +40,7 @@
 				<Button
 					onclick={async (e: Event) => {
 						e.preventDefault();
-						await deleteProduct(product.id);
+						onDelete?.();
 					}}
 					size="icon"
 					variant="ghost"

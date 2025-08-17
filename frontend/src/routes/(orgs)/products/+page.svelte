@@ -7,6 +7,7 @@
 	import { goto } from "$app/navigation";
 	import { Button } from "$components/ui/button";
 	import { ProductCard } from "$components/product_card";
+	import { productSvc } from "$lib/watchtower";
 
 	let { data }: PageProps = $props();
 	const products = $derived(data.products ?? []);
@@ -14,6 +15,13 @@
 
 	async function createProduct() {
 		await goto("/products/create");
+	}
+	async function deleteProduct(id: number) {
+		try {
+			await productSvc.delete(id);
+		} catch (e) {
+			console.error(e);
+		}
 	}
 </script>
 
@@ -37,7 +45,7 @@
 		{:else}
 			<Grid>
 				{#each products as product (product.id)}
-					<ProductCard {product} />
+					<ProductCard {product} onDelete={() => deleteProduct(product.id)} />
 				{/each}
 			</Grid>
 		{/if}
