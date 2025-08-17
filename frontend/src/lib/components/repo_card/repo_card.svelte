@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, CardTitle } from "$components/ui/card/index.js";
+	import { Card, CardAction, CardHeader, CardTitle } from "$components/ui/card/index.js";
 	import { watchtower } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
 	import { formatDate } from "$design/formats";
@@ -14,12 +14,17 @@
 </script>
 
 <Card>
-	<CardTitle class="flex items-center justify-between px-3">
-		<span class="capitalize">{repo.name}</span>
-		<Button href={repo.url} target="_blank" size="icon" variant="ghost"
-			><SquareArrowOutUpRight /></Button
-		>
-	</CardTitle>
+	<CardHeader class="flex items-center justify-between">
+		<CardTitle>
+			<span class="capitalize">{repo.name}</span>
+		</CardTitle>
+		<CardAction>
+			<Button href={repo.url} target="_blank" size="icon" variant="ghost">
+				<SquareArrowOutUpRight />
+			</Button>
+		</CardAction>
+	</CardHeader>
+
 	<div class="px-3">
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Last updated</p>

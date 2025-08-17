@@ -8,6 +8,7 @@
 
 	import { goto } from "$app/navigation";
 	import { productSvc } from "$lib/watchtower";
+	import { CardAction, CardHeader } from "$components/ui/card/index.js";
 
 	type Props = {
 		product: watchtower.ProductDTO;
@@ -27,9 +28,11 @@
 
 <a href={`/products/${product.id}/details`}>
 	<Card class="w-full cursor-pointer hover:bg-muted/30">
-		<CardTitle class="flex items-center justify-between px-2">
-			<span>{product.name}</span>
-			<div>
+		<CardHeader class="flex items-center justify-between">
+			<CardTitle>
+				{product.name}
+			</CardTitle>
+			<CardAction>
 				<Button
 					onclick={async (e: Event) => {
 						e.preventDefault();
@@ -50,15 +53,16 @@
 				>
 					<Trash />
 				</Button>
-			</div>
-		</CardTitle>
+			</CardAction>
+		</CardHeader>
+
 		<CardContent>
 			<div class="mb-2 flex justify-between text-sm">
 				<p class="text-muted-foreground">Last updated:</p>
 				<p>{formatDate(product.updated_at)}</p>
 			</div>
 			{#each product?.tags ?? [] as tag (tag)}
-				<Badge variant="secondary" class="">{tag}</Badge>
+				<Badge class="">{tag}</Badge>
 			{/each}
 		</CardContent>
 	</Card>
