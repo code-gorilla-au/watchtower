@@ -4,7 +4,7 @@
 	import { Grid } from "$components/grid";
 	import { EmptySlate } from "$components/empty_slate";
 	import { PageTitle } from "$components/page_title/index.js";
-	import { goto } from "$app/navigation";
+	import { goto, invalidateAll } from "$app/navigation";
 	import { Button } from "$components/ui/button";
 	import { ProductCard } from "$components/product_card";
 	import { productSvc } from "$lib/watchtower";
@@ -19,6 +19,7 @@
 	async function deleteProduct(id: number) {
 		try {
 			await productSvc.delete(id);
+			await invalidateAll();
 		} catch (e) {
 			console.error(e);
 		}

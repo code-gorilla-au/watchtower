@@ -111,13 +111,22 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 
 func (s *Service) DeleteProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
-	logger.Info("Deleting product")
-	return s.db.DeleteProduct(s.ctx, id)
+	logger.Debug("Deleting product")
+	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
+		logger.Error("Error deleting product", err)
+	}
+
+	if err := s.deleteReposByProductID(id); err != nil {
+		logger.Error("Error deleting repos for product", err)
+	}
+
+	return nil
 }
 
 func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
 	logger := logging.FromContext(s.ctx)
-	logger.Info("Fetching repos for product")
+	logger.Debug("Fetching repos for product")
+
 	repos, err := s.db.GetReposByProductID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching repos for product", err)
@@ -148,19 +157,30 @@ func (s *Service) SyncProduct(id int64) error {
 	}
 
 	for _, tag := range product.Tags {
-		logger.Info("Searching for repo with tag", "tag", tag)
-
-		repos, apiErr := s.ghClient.SearchRepos(org.Namespace, strings.TrimSpace(tag), org.Token)
-		if apiErr != nil {
-			logger.Error("Error searching for repos", "error", apiErr)
-			return apiErr
-		}
-
-		if err = s.bulkInsertRepos(repos.Data.Search.Edges, tag); err != nil {
-			logger.Error("Error bulk inserting repos", "error", err)
+		if err = s.syncByTag(tag, org.Namespace, org.Token); err != nil {
+			logger.Error("Error syncing repos", "error", err)
 			return err
 		}
 
+	}
+
+	return nil
+}
+
+func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
+	logger := logging.FromContext(s.ctx)
+
+	logger.Debug("Searching for repo with tag", "tag", tag)
+
+	repos, apiErr := s.ghClient.SearchRepos(owner, strings.TrimSpace(tag), ghToken)
+	if apiErr != nil {
+		logger.Error("Error searching for repos", "error", apiErr)
+		return apiErr
+	}
+
+	if err := s.bulkInsertRepos(repos.Data.Search.Edges, tag); err != nil {
+		logger.Error("Error bulk inserting repos", "error", err)
+		return err
 	}
 
 	return nil
@@ -185,4 +205,10 @@ func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag st
 	}
 
 	return nil
+}
+
+func (s *Service) deleteReposByProductID(id int64) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Deleting repos for product")
+	return s.db.DeleteReposByProductID(s.ctx, id)
 }

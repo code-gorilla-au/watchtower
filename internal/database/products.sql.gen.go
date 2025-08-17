@@ -123,6 +123,21 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 	return err
 }
 
+const deleteReposByProductID = `-- name: DeleteReposByProductID :exec
+DELETE FROM repositories 
+WHERE topic IN (
+    SELECT JSON_EACH.value
+    FROM products p, JSON_EACH(p.tags)
+    WHERE p.id = ? 
+        AND JSON_VALID(p.tags)
+)
+`
+
+func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteReposByProductID, id)
+	return err
+}
+
 const getOrganisationForProduct = `-- name: GetOrganisationForProduct :one
 SELECT product_id, organisation_id, id, friendly_name, description, namespace, default_org, token, created_at, updated_at
 FROM product_organisations po

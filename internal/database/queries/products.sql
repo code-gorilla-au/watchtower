@@ -84,3 +84,14 @@ JOIN products p ON p.id = ?
         FROM JSON_EACH(p.tags) 
         WHERE JSON_EACH.value = r.topic
     );
+
+
+-- name: DeleteReposByProductID :exec
+DELETE FROM repositories 
+WHERE topic IN (
+    SELECT JSON_EACH.value
+    FROM products p, JSON_EACH(p.tags)
+    WHERE p.id = ? 
+        AND JSON_VALID(p.tags)
+);
+
