@@ -5,6 +5,6 @@
 	let { children, class: className }: { children: Snippet; class?: string } = $props();
 </script>
 
-<div class={cn("grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4", className)}>
+<div class={cn("grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4", className)}>
 	{@render children()}
 </div>

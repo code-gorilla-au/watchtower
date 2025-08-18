@@ -11,7 +11,7 @@
 	let repos = $derived(data.repos);
 </script>
 
-<div class="w-full p-2">
+<div class="page-container">
 	<PageTitle
 		backAction={async () => {
 			await goto(`/products`);
