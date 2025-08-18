@@ -2,6 +2,8 @@
   <dictionary name="project">
     <words>
       <w>cmds</w>
+      <w>coverprofile</w>
+      <w>failfast</w>
       <w>gitkeep</w>
       <w>orgs</w>
       <w>querier</w>

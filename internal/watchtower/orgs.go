@@ -39,7 +39,7 @@ func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
 
 	model, err := s.db.GetDefaultOrganisation(s.ctx)
 	if err != nil {
-		logger.Error("Error fetching default organisation", err)
+		logger.Error("Error fetching default organisation", "error", err)
 		return OrganisationDTO{}, err
 	}
 	return ToOrganisationDTO(model), nil
@@ -50,7 +50,7 @@ func (s *Service) SetDefaultOrg(id int64) (OrganisationDTO, error) {
 	logger.Info("setting default org", "org", id)
 
 	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
-		logger.Error("Error setting default org", err)
+		logger.Error("Error setting default org", "error", err)
 		return OrganisationDTO{}, err
 	}
 
@@ -69,7 +69,7 @@ func (s *Service) GetOrganisationByID(id int64) (OrganisationDTO, error) {
 	model, err := s.db.GetOrganisationByID(s.ctx, id)
 
 	if err != nil {
-		logger.Error("Error fetching organisation", err)
+		logger.Error("Error fetching organisation", "error", err)
 		return OrganisationDTO{}, err
 	}
 	return ToOrganisationDTO(model), nil
@@ -82,7 +82,7 @@ func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
 
 	models, err := s.db.ListOrganisations(s.ctx)
 	if err != nil {
-		logger.Error("Error listing organisations", err)
+		logger.Error("Error listing organisations", "error", err)
 		return nil, err
 	}
 

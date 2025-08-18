@@ -50,7 +50,7 @@
 				</Button>
 			</div>
 			<Separator class="mb-2" />
-			<NavItem to="/" {expand} label="Dashboard">
+			<NavItem to="/dashboard" {expand} label="Dashboard">
 				{#snippet icon()}
 					<LayoutDashboard size={24} />
 				{/snippet}
