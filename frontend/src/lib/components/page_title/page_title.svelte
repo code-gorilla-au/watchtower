@@ -12,7 +12,7 @@
 	let { backAction, title, subtitle, children }: Props = $props();
 </script>
 
-<div class="flex justify-between">
+<div class="mb-10 flex items-center justify-between">
 	<div class="flex items-center gap-2">
 		{#if backAction}
 			<Button onclick={backAction} size="icon" variant="ghost">
@@ -20,9 +20,9 @@
 			</Button>
 		{/if}
 		<div>
-			<h1 class="text-2xl">{title}</h1>
+			<h1 class="mb-2 text-3xl">{title}</h1>
 			{#if subtitle}
-				<p class="text-xs">{subtitle}</p>
+				<p class="text-sm">{subtitle}</p>
 			{/if}
 		</div>
 	</div>

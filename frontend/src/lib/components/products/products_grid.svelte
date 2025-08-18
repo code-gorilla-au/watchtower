@@ -24,7 +24,7 @@
 	}
 </script>
 
-<div class={cn("p-2", className)}>
+<div class={cn(className)}>
 	{#if products.length === 0}
 		<EmptySlate caution={true} title="No products">
 			<a href="/products/create" class="text-xs text-muted-foreground underline">
