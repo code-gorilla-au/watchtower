@@ -8,6 +8,7 @@
 	import { PRCard } from "$components/products";
 	import { EmptySlate } from "$components/empty_slate/index.js";
 	import { Button } from "$components/ui/button";
+	import { PRGrid } from "$components/products/index.js";
 
 	let { data }: PageProps = $props();
 
@@ -38,15 +39,7 @@
 	<div class="my-4">
 		<h2 class="text-xl text-muted-foreground">Pull Requests</h2>
 	</div>
-	{#if prs.length === 0}
-		<EmptySlate title="No open PRs"></EmptySlate>
-	{:else}
-		<Grid>
-			{#each prs as pr (pr.id)}
-				<PRCard {pr} />
-			{/each}
-		</Grid>
-	{/if}
+	<PRGrid {prs} />
 
 	<div class="my-4">
 		<h2 class="text-xl text-muted-foreground">Repositories</h2>
