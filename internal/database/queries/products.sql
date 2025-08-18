@@ -132,3 +132,16 @@ FROM pull_requests pr
 WHERE pr.state = ?
 ORDER BY pr.created_at DESC;
 
+-- name: GetPullRequestsByOrganisationAndState :many
+SELECT pr.*
+FROM pull_requests pr
+         JOIN repositories r ON r.name = pr.repository_name
+         JOIN product_organisations po
+         JOIN products p ON p.id = po.product_id
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE po.organisation_id = ?
+AND pr.state = ?
+ORDER BY pr.created_at DESC;

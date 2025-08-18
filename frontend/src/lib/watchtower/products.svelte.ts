@@ -8,6 +8,7 @@ import {
 	GetProductByID,
 	GetProductPullRequests,
 	GetProductRepos,
+	GetPullRequestByOrganisation,
 	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
@@ -87,6 +88,10 @@ export class ProductsService {
 
 	async getOpenPrsByProduct(productId: number) {
 		return await GetProductPullRequests(productId);
+	}
+
+	async getPullRequestsByOrganisation(orgId: number) {
+		return await GetPullRequestByOrganisation(orgId);
 	}
 
 	async getAllByOrgId(orgId: number) {

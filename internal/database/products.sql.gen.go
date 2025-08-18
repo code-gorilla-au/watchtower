@@ -314,6 +314,60 @@ func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg Get
 	return items, nil
 }
 
+const getPullRequestsByOrganisationAndState = `-- name: GetPullRequestsByOrganisationAndState :many
+SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at
+FROM pull_requests pr
+         JOIN repositories r ON r.name = pr.repository_name
+         JOIN product_organisations po
+         JOIN products p ON p.id = po.product_id
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE po.organisation_id = ?
+AND pr.state = ?
+ORDER BY pr.created_at DESC
+`
+
+type GetPullRequestsByOrganisationAndStateParams struct {
+	OrganisationID sql.NullInt64
+	State          string
+}
+
+func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg GetPullRequestsByOrganisationAndStateParams) ([]PullRequest, error) {
+	rows, err := q.db.QueryContext(ctx, getPullRequestsByOrganisationAndState, arg.OrganisationID, arg.State)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PullRequest
+	for rows.Next() {
+		var i PullRequest
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.Title,
+			&i.RepositoryName,
+			&i.Url,
+			&i.State,
+			&i.Author,
+			&i.MergedAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getReposByProductID = `-- name: GetReposByProductID :many
 SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at
 FROM repositories r

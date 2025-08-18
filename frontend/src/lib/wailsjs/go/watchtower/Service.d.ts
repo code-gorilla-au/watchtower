@@ -25,6 +25,8 @@ export function GetProductPullRequests(arg1:number):Promise<Array<watchtower.Pul
 
 export function GetProductRepos(arg1:number):Promise<Array<watchtower.RepositoryDTO>>;
 
+export function GetPullRequestByOrganisation(arg1:number):Promise<Array<watchtower.PullRequestDTO>>;
+
 export function SetDefaultOrg(arg1:number):Promise<watchtower.OrganisationDTO>;
 
 export function Startup(arg1:context.Context):Promise<void>;

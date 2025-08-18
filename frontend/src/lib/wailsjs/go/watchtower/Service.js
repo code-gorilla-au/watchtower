@@ -46,6 +46,10 @@ export function GetProductRepos(arg1) {
   return window['go']['watchtower']['Service']['GetProductRepos'](arg1);
 }
 
+export function GetPullRequestByOrganisation(arg1) {
+  return window['go']['watchtower']['Service']['GetPullRequestByOrganisation'](arg1);
+}
+
 export function SetDefaultOrg(arg1) {
   return window['go']['watchtower']['Service']['SetDefaultOrg'](arg1);
 }

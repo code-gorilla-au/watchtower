@@ -156,6 +156,21 @@ func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
 	return toPullRequestDTOs(models), nil
 }
 
+func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Fetching pull requests for product")
+	models, err := s.db.GetPullRequestByProductIDAndState(s.ctx, database.GetPullRequestByProductIDAndStateParams{
+		ID:    id,
+		State: string(github.PrOpen),
+	})
+	if err != nil {
+		logger.Error("Error fetching pull requests for product", err)
+		return nil, err
+	}
+
+	return toPullRequestDTOs(models), nil
+}
+
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 
