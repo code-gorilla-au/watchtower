@@ -26,10 +26,10 @@
 	}
 </script>
 
-<div class="flex">
+<div class="flex h-screen">
 	<aside
 		class={cn(
-			"flex max-h-screen min-h-screen max-w-40 flex-1 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
+			"flex h-full max-w-40 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
 			expandedStyle
 		)}
 	>
@@ -72,5 +72,7 @@
 			{/snippet}
 		</NavItem>
 	</aside>
-	{@render children?.()}
+	<main class="flex-1 overflow-auto">
+		{@render children?.()}
+	</main>
 </div>
