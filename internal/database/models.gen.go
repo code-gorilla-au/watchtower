@@ -41,7 +41,7 @@ type PullRequest struct {
 	Url            string
 	State          string
 	Author         string
-	MergedAt       int64
+	MergedAt       sql.NullInt64
 	CreatedAt      int64
 	UpdatedAt      int64
 }

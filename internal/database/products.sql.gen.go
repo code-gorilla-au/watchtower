@@ -38,10 +38,9 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET
-    name = excluded.name,
-    tags = excluded.tags,
-    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
+                                 tags       = excluded.tags,
+                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, name, description, tags, created_at, updated_at
 `
 
@@ -65,6 +64,71 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (P
 	return i, err
 }
 
+const createPullRequest = `-- name: CreatePullRequest :one
+INSERT INTO pull_requests (external_id,
+                           title,
+                           repository_name,
+                           url,
+                           state,
+                           author,
+                           merged_at,
+                           created_at,
+                           updated_at)
+VALUES (?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
+                                        repository_name = excluded.repository_name,
+                                        url             = excluded.url,
+                                        state           = excluded.state,
+                                        author          = excluded.author,
+                                        merged_at       = excluded.merged_at,
+                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+RETURNING id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+`
+
+type CreatePullRequestParams struct {
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       sql.NullInt64
+}
+
+func (q *Queries) CreatePullRequest(ctx context.Context, arg CreatePullRequestParams) (PullRequest, error) {
+	row := q.db.QueryRowContext(ctx, createPullRequest,
+		arg.ExternalID,
+		arg.Title,
+		arg.RepositoryName,
+		arg.Url,
+		arg.State,
+		arg.Author,
+		arg.MergedAt,
+	)
+	var i PullRequest
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.Title,
+		&i.RepositoryName,
+		&i.Url,
+		&i.State,
+		&i.Author,
+		&i.MergedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const createRepo = `-- name: CreateRepo :one
 INSERT INTO repositories (name,
                           url,
@@ -78,12 +142,11 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET
-    name = excluded.name,
-    url = excluded.url,
-    topic = excluded.topic,
-    owner = excluded.owner,
-    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
+                                 url        = excluded.url,
+                                 topic      = excluded.topic,
+                                 owner      = excluded.owner,
+                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, name, url, topic, owner, created_at, updated_at
 `
 
@@ -115,7 +178,9 @@ func (q *Queries) CreateRepo(ctx context.Context, arg CreateRepoParams) (Reposit
 }
 
 const deleteProduct = `-- name: DeleteProduct :exec
-DELETE FROM products where id = ?
+DELETE
+FROM products
+where id = ?
 `
 
 func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
@@ -124,13 +189,12 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 }
 
 const deleteReposByProductID = `-- name: DeleteReposByProductID :exec
-DELETE FROM repositories 
-WHERE topic IN (
-    SELECT JSON_EACH.value
-    FROM products p, JSON_EACH(p.tags)
-    WHERE p.id = ? 
-        AND JSON_VALID(p.tags)
-)
+DELETE
+FROM repositories
+WHERE topic IN (SELECT JSON_EACH.value
+                FROM products p, JSON_EACH(p.tags)
+                WHERE p.id = ?
+                  AND JSON_VALID(p.tags))
 `
 
 func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
@@ -198,16 +262,66 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 	return i, err
 }
 
+const getPullRequestByProductIDAndState = `-- name: GetPullRequestByProductIDAndState :many
+SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at
+FROM pull_requests pr
+         JOIN repositories r ON r.name = pr.repository_name
+         JOIN products p ON p.id = ?
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE pr.state = ?
+ORDER BY pr.created_at DESC
+`
+
+type GetPullRequestByProductIDAndStateParams struct {
+	ID    int64
+	State string
+}
+
+func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg GetPullRequestByProductIDAndStateParams) ([]PullRequest, error) {
+	rows, err := q.db.QueryContext(ctx, getPullRequestByProductIDAndState, arg.ID, arg.State)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PullRequest
+	for rows.Next() {
+		var i PullRequest
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.Title,
+			&i.RepositoryName,
+			&i.Url,
+			&i.State,
+			&i.Author,
+			&i.MergedAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getReposByProductID = `-- name: GetReposByProductID :many
 SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at
 FROM repositories r
-JOIN products p ON p.id = ? 
-    AND JSON_VALID(p.tags) 
-    AND EXISTS (
-        SELECT 1 
-        FROM JSON_EACH(p.tags) 
-        WHERE JSON_EACH.value = r.topic
-    )
+         JOIN products p ON p.id = ?
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
 `
 
 func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Repository, error) {

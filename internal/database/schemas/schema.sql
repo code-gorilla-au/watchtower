@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS pull_requests
     url             TEXT        NOT NULL,
     state           TEXT        NOT NULL,
     author          TEXT        NOT NULL,
-    merged_at       INTEGER     NOT NULL,
+    merged_at       INTEGER,
     created_at      INTEGER     NOT NULL,
     updated_at      INTEGER     NOT NULL
 );

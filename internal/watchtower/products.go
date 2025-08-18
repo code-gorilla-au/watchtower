@@ -141,6 +141,21 @@ func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
 	return result, nil
 }
 
+func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Fetching pull requests for product")
+	models, err := s.db.GetPullRequestByProductIDAndState(s.ctx, database.GetPullRequestByProductIDAndStateParams{
+		ID:    id,
+		State: string(github.PrOpen),
+	})
+	if err != nil {
+		logger.Error("Error fetching pull requests for product", err)
+		return nil, err
+	}
+
+	return toPullRequestDTOs(models), nil
+}
+
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 
@@ -183,6 +198,18 @@ func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
 		return err
 	}
 
+	for _, repo := range repos.Data.Search.Edges {
+		dd, err := s.ghClient.GetRepoDetails(owner, repo.Node.Name, ghToken)
+		if err != nil {
+			logger.Error("Error getting repo details", "repo", repo.Node.Name, "error", err)
+		}
+
+		if err = s.bulkInsertPullRequests(dd.Data.Repository.PullRequests, repo.Node.Name); err != nil {
+			logger.Error("Error bulk inserting pull requests", "error", err)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -196,12 +223,36 @@ func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag st
 			Topic: tag,
 			Owner: repo.Node.Owner.Login,
 		})
-
 		if err != nil {
 			logger.Error("Error creating repo", "error", err)
 			return err
 		}
 
+	}
+
+	return nil
+}
+
+func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest], repoName string) error {
+	logger := logging.FromContext(s.ctx)
+
+	for _, pr := range prs.Nodes {
+		_, err := s.db.CreatePullRequest(s.ctx, database.CreatePullRequestParams{
+			ExternalID:     pr.ID,
+			Title:          pr.Title,
+			RepositoryName: repoName,
+			Url:            pr.Permalink,
+			State:          string(pr.State),
+			Author:         pr.Author.Login,
+			MergedAt: sql.NullInt64{
+				Int64: pr.MergedAt.Unix(),
+				Valid: true,
+			},
+		})
+		if err != nil {
+			logger.Error("Error creating pull request", "error", err)
+			return err
+		}
 	}
 
 	return nil

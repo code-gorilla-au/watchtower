@@ -38,6 +38,10 @@ export function GetProductByID(arg1) {
   return window['go']['watchtower']['Service']['GetProductByID'](arg1);
 }
 
+export function GetProductPullRequests(arg1) {
+  return window['go']['watchtower']['Service']['GetProductPullRequests'](arg1);
+}
+
 export function GetProductRepos(arg1) {
   return window['go']['watchtower']['Service']['GetProductRepos'](arg1);
 }
