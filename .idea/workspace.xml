@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing nav" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/products_grid.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,6 +33,7 @@
         <option value="update_product_form" />
         <option value="+page" />
         <option value="nav_item" />
+        <option value="products_summary" />
       </list>
     </option>
   </component>
@@ -98,11 +104,11 @@
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/lib/components/products" />
       <recent name="$PROJECT_DIR$/frontend/src/lib/components/orgs" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard" />
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]" />
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
-      <recent name="$PROJECT_DIR$/frontend/src/routes/register/organisation" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -129,7 +135,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="wip building, adding column" />
     <MESSAGE value="WIP api call" />
-    <MESSAGE value="refactoring" />
     <MESSAGE value="adding conflict clause" />
     <MESSAGE value="adding pages" />
     <MESSAGE value="adding method to fetch repos" />
@@ -152,7 +157,8 @@
     <MESSAGE value="side bar" />
     <MESSAGE value="adding nav bar" />
     <MESSAGE value="fixing nav" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing nav" />
+    <MESSAGE value="refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
