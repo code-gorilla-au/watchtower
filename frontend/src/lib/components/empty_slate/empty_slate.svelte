@@ -1,6 +1,5 @@
 <script lang="ts">
-	import CircleCheckBig from "@lucide/svelte/icons/circle-check-big";
-	import ShieldAlert from "@lucide/svelte/icons/shield-alert";
+	import { CircleCheckBig, ShieldAlert } from "@lucide/svelte";
 	import type { Snippet } from "svelte";
 
 	type EmptySlateProps = {
@@ -13,16 +12,16 @@
 	const { title, description, caution = false, children }: EmptySlateProps = $props();
 </script>
 
-<div class=" flex flex-col items-center justify-center rounded-md bg-muted p-4 text-sm">
+<div class=" flex flex-col items-center justify-center rounded-md bg-muted p-10 text-sm">
 	{#if caution}
-		<ShieldAlert class="text-muted-foreground" size="32" />
+		<ShieldAlert class="text-muted-foreground" size={62} />
 	{:else}
-		<CircleCheckBig class="text-green-700" size="32" />
+		<CircleCheckBig class="text-green-700" size={62} />
 	{/if}
 
-	<h3 class="my-2">{title}</h3>
+	<h3 class="my-2 text-lg">{title}</h3>
 	{#if description}
-		<p class="text-xs text-muted-foreground">{description}</p>
+		<p class=" text-muted-foreground">{description}</p>
 	{/if}
 	{@render children?.()}
 </div>

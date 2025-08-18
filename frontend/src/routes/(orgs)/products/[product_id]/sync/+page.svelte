@@ -49,7 +49,7 @@
 	{:else}
 		<div>
 			<EmptySlate title="Product sync complete">
-				<a href={`/products/${product.id}/details`}>View product details</a>
+				<a class="underline" href={`/products/${product.id}/details`}>View product details</a>
 			</EmptySlate>
 		</div>
 	{/if}
