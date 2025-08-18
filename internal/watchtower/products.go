@@ -237,6 +237,13 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 	logger := logging.FromContext(s.ctx)
 
 	for _, pr := range prs.Nodes {
+		mergedAt := sql.NullInt64{}
+
+		if pr.MergedAt != nil {
+			mergedAt.Int64 = pr.MergedAt.Unix()
+			mergedAt.Valid = true
+		}
+
 		_, err := s.db.CreatePullRequest(s.ctx, database.CreatePullRequestParams{
 			ExternalID:     pr.ID,
 			Title:          pr.Title,
@@ -244,10 +251,7 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 			Url:            pr.Permalink,
 			State:          string(pr.State),
 			Author:         pr.Author.Login,
-			MergedAt: sql.NullInt64{
-				Int64: pr.MergedAt.Unix(),
-				Valid: true,
-			},
+			MergedAt:       mergedAt,
 		})
 		if err != nil {
 			logger.Error("Error creating pull request", "error", err)

@@ -6,6 +6,7 @@ import {
 	DeleteProduct,
 	GetAllProductsForOrganisation,
 	GetProductByID,
+	GetProductPullRequests,
 	GetProductRepos,
 	SyncProduct,
 	UpdateProduct
@@ -82,6 +83,10 @@ export class ProductsService {
 		this.#internal.repos[productId] = { data: repos, lastSync: new SvelteDate() };
 
 		return repos;
+	}
+
+	async getOpenPrsByProduct(productId: number) {
+		return await GetProductPullRequests(productId);
 	}
 
 	async getAllByOrgId(orgId: number) {
