@@ -30,6 +30,10 @@
 			<p class="text-sm text-muted-foreground">Last updated</p>
 			<p>{formatDate(pr.updated_at)}</p>
 		</div>
+		<div class="mb-2 flex items-center justify-between">
+			<p class="text-sm text-muted-foreground">Author</p>
+			<p>{pr.author}</p>
+		</div>
 		<div>
 			<Badge>{pr.repository_name}</Badge>
 			<Badge>{pr.state}</Badge>

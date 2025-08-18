@@ -40,7 +40,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 		OrganisationID: sql.NullInt64{Int64: organisationID, Valid: true},
 	})
 	if err != nil {
-		logger.Error("Error linking product to organisation", err)
+		logger.Error("Error linking product to organisation", "error", err)
 		return ProductDTO{}, err
 	}
 
@@ -54,7 +54,7 @@ func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
 
 	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
-		logger.Error("Error fetching product by ID", err)
+		logger.Error("Error fetching product by ID", "error", err)
 		return ProductDTO{}, err
 	}
 
@@ -68,7 +68,7 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 
 	models, err := s.db.ListProductsByOrganisation(s.ctx, sql.NullInt64{Int64: organisationID, Valid: true})
 	if err != nil {
-		logger.Error("Error listing products for organisation", err)
+		logger.Error("Error listing products for organisation", "error", err)
 		return nil, err
 	}
 
@@ -96,7 +96,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 		ID:   id,
 	})
 	if err != nil {
-		logger.Error("Error updating product", err)
+		logger.Error("Error updating product", "error", err)
 		return ProductDTO{}, err
 	}
 

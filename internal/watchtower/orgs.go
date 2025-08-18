@@ -135,7 +135,7 @@ func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, e
 		Namespace:    params.Namespace,
 	})
 	if err != nil {
-		logger.Error("Error updating organisation", err)
+		logger.Error("Error updating organisation", "error", err)
 		return OrganisationDTO{}, err
 	}
 
