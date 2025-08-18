@@ -29,7 +29,7 @@
 <div class="flex">
 	<aside
 		class={cn(
-			"flex min-h-screen max-w-40 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
+			"flex min-h-screen max-w-40 flex-1 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
 			expandedStyle
 		)}
 	>

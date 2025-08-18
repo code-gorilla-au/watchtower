@@ -5,6 +5,7 @@
 	import { productSvc } from "$lib/watchtower";
 	import { goto } from "$app/navigation";
 	import { EmptySlate } from "$components/empty_slate/index.js";
+	import { LoaderSquare } from "$components/loaders";
 
 	let { data }: PageProps = $props();
 
@@ -38,8 +39,9 @@
 	/>
 
 	{#if syncState.loading}
-		<div>
-			<h3>Loading...</h3>
+		<div class="flex flex-col items-center justify-center">
+			<LoaderSquare />
+			<h2 class="heading-2">Syncing product please wait</h2>
 		</div>
 	{:else if syncState.error}
 		<div>
@@ -47,8 +49,8 @@
 			<p>{syncState.error}</p>
 		</div>
 	{:else}
-		<div>
-			<EmptySlate title="Product sync complete">
+		<div class="flex flex-col items-center justify-center">
+			<EmptySlate class="w-full" title="Product sync complete">
 				<a class="underline" href={`/products/${product.id}/details`}>View product details</a>
 			</EmptySlate>
 		</div>

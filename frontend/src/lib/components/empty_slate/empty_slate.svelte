@@ -1,18 +1,31 @@
 <script lang="ts">
 	import { CircleCheckBig, ShieldAlert } from "@lucide/svelte";
 	import type { Snippet } from "svelte";
+	import { cn } from "$lib/utils";
 
 	type EmptySlateProps = {
+		class?: string;
 		title: string;
 		description?: string;
 		caution?: boolean;
 		children?: Snippet;
 	};
 
-	const { title, description, caution = false, children }: EmptySlateProps = $props();
+	const {
+		title,
+		description,
+		caution = false,
+		children,
+		class: className
+	}: EmptySlateProps = $props();
 </script>
 
-<div class=" flex flex-col items-center justify-center rounded-md bg-muted p-10 text-sm">
+<div
+	class={cn(
+		"flex flex-col items-center justify-center rounded-md bg-muted p-10 text-sm",
+		className
+	)}
+>
 	{#if caution}
 		<ShieldAlert class="text-muted-foreground" size={62} />
 	{:else}

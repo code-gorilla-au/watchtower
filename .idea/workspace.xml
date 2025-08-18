@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding pull requests to dashboard">
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/repo_card/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/repo_card/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/repo_card/repo_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/repo_card/repo_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/orgs.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small updates">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/loaders/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/loaders/loaders_square.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/empty_slate/empty_slate.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/empty_slate/empty_slate.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,7 @@
         <option value="TypeScript File" />
         <option value="prs_grid" />
         <option value="repo_card" />
+        <option value="loaders_square" />
       </list>
     </option>
   </component>
@@ -135,7 +136,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="product workflow + repo sync added" />
     <MESSAGE value="wip adding link" />
     <MESSAGE value="adding org list" />
     <MESSAGE value="adding models" />
@@ -160,7 +160,8 @@
     <MESSAGE value="refactoring" />
     <MESSAGE value="adding reusable grid" />
     <MESSAGE value="adding pull requests to dashboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding pull requests to dashboard" />
+    <MESSAGE value="small updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="small updates" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
