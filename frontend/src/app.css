@@ -122,6 +122,6 @@
 
 @layer components {
 	.page-container {
-		@apply w-full p-2;
+		@apply w-full p-2 overflow-y-scroll;
 	}
 }
