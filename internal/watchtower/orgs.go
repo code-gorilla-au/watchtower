@@ -13,7 +13,7 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string, toke
 	logger.Info("Creating organisation")
 
 	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
-		logger.Error("Error setting default org", err)
+		logger.Error("Error setting default org", "error", err)
 		return OrganisationDTO{}, err
 	}
 
@@ -56,7 +56,7 @@ func (s *Service) SetDefaultOrg(id int64) (OrganisationDTO, error) {
 
 	model, err := s.db.SetDefaultOrg(s.ctx, id)
 	if err != nil {
-		logger.Error("Error setting default org", err)
+		logger.Error("Error setting default org", "error", err)
 		return OrganisationDTO{}, err
 	}
 
@@ -100,7 +100,7 @@ func (s *Service) DeleteOrganisation(id int64) error {
 	logger.Info("Fetching organisation", "id", id)
 
 	if err := s.db.DeleteOrg(s.ctx, id); err != nil {
-		logger.Error("Error deleting organisation", err)
+		logger.Error("Error deleting organisation", "error", err)
 		return err
 	}
 
@@ -123,7 +123,7 @@ func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, e
 
 	if params.DefaultOrg {
 		if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
-			logger.Error("Error setting default org", err)
+			logger.Error("Error setting default org", "error", err)
 			return OrganisationDTO{}, err
 		}
 	}

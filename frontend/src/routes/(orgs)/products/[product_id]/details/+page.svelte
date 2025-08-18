@@ -4,9 +4,7 @@
 	import { type PageProps } from "./$types";
 	import { goto } from "$app/navigation";
 	import { Grid } from "$components/grid";
-	import { RepoCard } from "$components/repo_card";
-	import { PRCard } from "$components/products";
-	import { EmptySlate } from "$components/empty_slate/index.js";
+	import { RepoCard } from "$components/products";
 	import { Button } from "$components/ui/button";
 	import { PRGrid } from "$components/products/index.js";
 
