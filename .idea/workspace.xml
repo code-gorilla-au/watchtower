@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update sources">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding reactive settings" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -135,7 +130,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="removing default org from root layout" />
     <MESSAGE value="fixing card for org" />
     <MESSAGE value="fixing cards" />
     <MESSAGE value="working build tool" />
@@ -160,7 +154,8 @@
     <MESSAGE value="working with scrollers" />
     <MESSAGE value="fixing" />
     <MESSAGE value="update sources" />
-    <option name="LAST_COMMIT_MESSAGE" value="update sources" />
+    <MESSAGE value="adding reactive settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding reactive settings" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
