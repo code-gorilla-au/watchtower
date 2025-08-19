@@ -30,12 +30,7 @@
 </script>
 
 <div class="flex h-screen">
-	<aside
-		class={cn(
-			"flex h-full max-w-40 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
-			expandedStyle
-		)}
-	>
+	<aside class={cn("flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl ", expandedStyle)}>
 		<div class="flex flex-1 flex-col gap-2">
 			<div class="py-2">
 				{#if expand}
