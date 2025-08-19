@@ -5,8 +5,8 @@
 		Package,
 		Castle,
 		LayoutDashboard,
-		ChevronLeft,
-		ChevronRight
+		PanelLeftClose,
+		PanelLeftOpen
 	} from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { NavItem } from "$components/nav/index.js";
@@ -44,11 +44,11 @@
 					</span>
 				{/if}
 
-				<Button onclick={toggleExpand} size="sm" variant="ghost" class="ml-auto">
+				<Button onclick={toggleExpand} size="sm" variant="ghost">
 					{#if expand}
-						<ChevronLeft />
+						<PanelLeftClose />
 					{:else}
-						<ChevronRight />
+						<PanelLeftOpen />
 					{/if}
 				</Button>
 			</div>

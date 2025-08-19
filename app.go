@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"watchtower/internal/watchtower"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -28,4 +30,8 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) OpenExternalURL(url string) {
+	runtime.BrowserOpenURL(a.ctx, url)
 }
