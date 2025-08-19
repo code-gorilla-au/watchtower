@@ -4,14 +4,17 @@ const SETTINGS_KEY = "--app-settings";
 
 type AppSettings = {
 	theme: "light" | "dark";
+	sidebarExpanded: boolean;
 };
 
 export class Settings {
 	#internal: AppSettings = $state({
-		theme: "dark"
+		theme: "dark",
+		sidebarExpanded: false
 	});
 
 	readonly theme = $derived(this.#internal.theme);
+	readonly sidebarExpanded = $derived(this.#internal.sidebarExpanded);
 
 	constructor() {
 		this.init();
@@ -28,6 +31,11 @@ export class Settings {
 		this.applyTheme(theme);
 	}
 
+	setSidebarExpanded(expanded: AppSettings["sidebarExpanded"]) {
+		this.#internal.sidebarExpanded = expanded;
+		this.save();
+	}
+
 	private applyTheme(theme: AppSettings["theme"]) {
 		if (!browser) {
 			return;
@@ -38,7 +46,7 @@ export class Settings {
 			return;
 		}
 
-		document.documentElement.classList.remove(theme);
+		document.documentElement.classList.remove("dark");
 	}
 
 	private init() {

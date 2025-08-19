@@ -13,16 +13,19 @@
 	import { orgSvc } from "$lib/watchtower";
 	import { Button } from "$components/ui/button";
 	import { Separator } from "$components/ui/separator";
+	import { settingsSvc } from "$lib/settings";
 
 	let { children }: LayoutProps = $props();
 
 	const organisation = $derived(orgSvc.defaultOrg);
 
-	let expand = $state(true);
+	let expand = $state(settingsSvc.sidebarExpanded);
 	let expandedStyle = $derived(expand ? "min-w-40" : "w-14");
+
 	function toggleExpand(e: Event) {
 		e.preventDefault();
 		expand = !expand;
+		settingsSvc.setSidebarExpanded(expand);
 	}
 </script>
 
