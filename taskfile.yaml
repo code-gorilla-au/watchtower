@@ -1,0 +1,33 @@
+version: '3'
+
+dotenv: ['.env.local']
+
+vars:
+  GOLANG_WORKSPACES: ./internal/... ./cmd/...
+  GOLANG_COVERAGE: coverage.out
+
+
+tasks:
+  dev:
+    deps: [gen]
+    cmds:
+      - wails dev
+
+  clean-db:
+    cmds:
+      - rm -f $LOCAL_DEV_DIR/watchtower.db
+
+  gen:
+    cmds:
+      - sqlc generate
+      - go generate ./...
+
+
+  test-go:
+    cmds:
+      - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast  {{ .GOLANG_WORKSPACES }}
+
+  reset:
+    deps: [clean-db]
+    cmds:
+      - task: dev

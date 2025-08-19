@@ -1,0 +1,57 @@
+<script lang="ts">
+	import { watchtower } from "$lib/wailsjs/go/models";
+	import { formatDate } from "$design/formats";
+	import { Card, CardContent, CardTitle } from "$components/ui/card";
+	import { Badge } from "$components/ui/badge";
+	import { Trash } from "@lucide/svelte";
+	import { Button } from "$components/ui/button";
+
+	import { goto } from "$app/navigation";
+	import { orgSvc } from "$lib/watchtower";
+	import { CardAction, CardHeader } from "$components/ui/card/index.js";
+
+	type Props = {
+		org: watchtower.OrganisationDTO;
+	};
+
+	let { org }: Props = $props();
+
+	async function deleteOrg(id: number) {
+		await orgSvc.delete(id);
+		await goto("/dashboard");
+	}
+</script>
+
+<a href={`/organisations/${org.id}`}>
+	<Card class="w-full cursor-pointer hover:bg-muted/30">
+		<CardHeader class="flex items-center justify-between">
+			<CardTitle>
+				<span>{org.friendly_name}</span>
+			</CardTitle>
+			<CardAction>
+				<Button
+					onclick={async (e: Event) => {
+						e.preventDefault();
+						await deleteOrg(org.id);
+					}}
+					size="icon"
+					variant="ghost"
+				>
+					<Trash />
+				</Button>
+			</CardAction>
+		</CardHeader>
+
+		<CardContent>
+			<p class="text-sm">{org.description}</p>
+			<div class="my-2 flex justify-between text-sm">
+				<p class="text-muted-foreground">Last updated:</p>
+				<p>{formatDate(org.updated_at)}</p>
+			</div>
+			{#if org.default_org}
+				<Badge>current</Badge>
+			{/if}
+			<Badge>{org.namespace}</Badge>
+		</CardContent>
+	</Card>
+</a>

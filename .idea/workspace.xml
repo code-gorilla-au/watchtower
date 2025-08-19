@@ -4,15 +4,35 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding reactive settings" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="+page.ts" />
+        <option value="button" />
+        <option value="+layout.svelte" />
+        <option value="+error" />
+        <option value="grid" />
+        <option value="empty_slate" />
+        <option value="page_title" />
+        <option value="product_card" />
+        <option value="org_update_form" />
+        <option value="update_product_form" />
+        <option value="+page" />
+        <option value="nav_item" />
+        <option value="products_summary" />
+        <option value="Go File" />
+        <option value="TypeScript File" />
+        <option value="prs_grid" />
+        <option value="repo_card" />
+        <option value="loaders_square" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
@@ -30,6 +50,9 @@
     &quot;accountId&quot;: &quot;96e8ba8e-aa40-4f88-95b7-27f1c146a9c2&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -41,6 +64,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultGoTemplateProperty": "Go File",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.GoLinterPluginOnboarding": "true",
     "RunOnceActivity.GoLinterPluginStorageMigration": "true",
@@ -50,30 +74,45 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feat-sql",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower",
+    "last_opened_file_path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/src/routes/(orgs)/products/[product_id]/sync",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "prettierjs.PrettierConfiguration.Package": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier",
+    "settings.editor.selected.configurable": "go.sdk",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/frontend/src/lib/components/products" />
+      <recent name="$PROJECT_DIR$/frontend/src/lib/components/orgs" />
+      <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard" />
+      <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]" />
+      <recent name="$PROJECT_DIR$/frontend/src/routes" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.23892.449" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-GO-252.23892.449" />
+        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.23892.530" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-GO-252.23892.530" />
       </set>
     </attachedChunks>
   </component>
@@ -89,6 +128,34 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fixing card for org" />
+    <MESSAGE value="fixing cards" />
+    <MESSAGE value="working build tool" />
+    <MESSAGE value="adding more properties" />
+    <MESSAGE value="refactoring to re-use form" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="cleanup, adding redirect" />
+    <MESSAGE value="update card" />
+    <MESSAGE value="update products + add clean up methods" />
+    <MESSAGE value="adding theming" />
+    <MESSAGE value="side bar" />
+    <MESSAGE value="adding nav bar" />
+    <MESSAGE value="fixing nav" />
+    <MESSAGE value="refactoring to use page container" />
+    <MESSAGE value="adding new methods + service" />
+    <MESSAGE value="adding PR card" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="adding reusable grid" />
+    <MESSAGE value="adding pull requests to dashboard" />
+    <MESSAGE value="small updates" />
+    <MESSAGE value="tweaks" />
+    <MESSAGE value="working with scrollers" />
+    <MESSAGE value="fixing" />
+    <MESSAGE value="update sources" />
+    <MESSAGE value="adding reactive settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding reactive settings" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
