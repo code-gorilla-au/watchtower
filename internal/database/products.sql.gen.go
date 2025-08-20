@@ -177,6 +177,64 @@ func (q *Queries) CreateRepo(ctx context.Context, arg CreateRepoParams) (Reposit
 	return i, err
 }
 
+const createSecurity = `-- name: CreateSecurity :one
+INSERT INTO securities (external_id,
+                        repository_name,
+                        package_name,
+                        state, severity,
+                        patched_version,
+                        created_at,
+                        updated_at)
+VALUES (?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
+                                        package_name    = excluded.package_name,
+                                        state           = excluded.state,
+                                        severity        = excluded.severity,
+                                        patched_version = excluded.patched_version,
+                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, created_at, updated_at
+`
+
+type CreateSecurityParams struct {
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+}
+
+func (q *Queries) CreateSecurity(ctx context.Context, arg CreateSecurityParams) (Security, error) {
+	row := q.db.QueryRowContext(ctx, createSecurity,
+		arg.ExternalID,
+		arg.RepositoryName,
+		arg.PackageName,
+		arg.State,
+		arg.Severity,
+		arg.PatchedVersion,
+	)
+	var i Security
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.RepositoryName,
+		&i.PackageName,
+		&i.State,
+		&i.Severity,
+		&i.PatchedVersion,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const deleteProduct = `-- name: DeleteProduct :exec
 DELETE
 FROM products
@@ -185,6 +243,24 @@ where id = ?
 
 func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteProduct, id)
+	return err
+}
+
+const deletePullRequestsByProductID = `-- name: DeletePullRequestsByProductID :exec
+DELETE
+FROM pull_requests
+WHERE external_id IN (SELECT pr.external_id
+                      FROM pull_requests pr
+                               JOIN repositories r ON r.name = pr.repository_name
+                               JOIN products p ON p.id = ?
+                          AND JSON_VALID(p.tags)
+                          AND EXISTS (SELECT 1
+                                      FROM JSON_EACH(p.tags)
+                                      WHERE JSON_EACH.value = r.topic))
+`
+
+func (q *Queries) DeletePullRequestsByProductID(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deletePullRequestsByProductID, id)
 	return err
 }
 
@@ -203,32 +279,17 @@ func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
 }
 
 const getOrganisationForProduct = `-- name: GetOrganisationForProduct :one
-SELECT product_id, organisation_id, id, friendly_name, description, namespace, default_org, token, created_at, updated_at
+SELECT o.id, o.friendly_name, o.description, o.namespace, o.default_org, o.token, o.created_at, o.updated_at
 FROM product_organisations po
          JOIN organisations o ON o.id = po.organisation_id
 WHERE po.product_id = ?
 LIMIT 1
 `
 
-type GetOrganisationForProductRow struct {
-	ProductID      sql.NullInt64
-	OrganisationID sql.NullInt64
-	ID             int64
-	FriendlyName   string
-	Description    string
-	Namespace      string
-	DefaultOrg     bool
-	Token          string
-	CreatedAt      int64
-	UpdatedAt      int64
-}
-
-func (q *Queries) GetOrganisationForProduct(ctx context.Context, productID sql.NullInt64) (GetOrganisationForProductRow, error) {
+func (q *Queries) GetOrganisationForProduct(ctx context.Context, productID sql.NullInt64) (Organisation, error) {
 	row := q.db.QueryRowContext(ctx, getOrganisationForProduct, productID)
-	var i GetOrganisationForProductRow
+	var i Organisation
 	err := row.Scan(
-		&i.ProductID,
-		&i.OrganisationID,
 		&i.ID,
 		&i.FriendlyName,
 		&i.Description,
@@ -325,7 +386,7 @@ FROM pull_requests pr
                 FROM JSON_EACH(p.tags)
                 WHERE JSON_EACH.value = r.topic)
 WHERE po.organisation_id = ?
-AND pr.state = ?
+  AND pr.state = ?
 ORDER BY pr.created_at DESC
 `
 

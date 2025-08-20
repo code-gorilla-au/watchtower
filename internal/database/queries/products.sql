@@ -47,7 +47,7 @@ WHERE po.organisation_id = ?
 ORDER BY p.name;
 
 -- name: GetOrganisationForProduct :one
-SELECT *
+SELECT o.*
 FROM product_organisations po
          JOIN organisations o ON o.id = po.organisation_id
 WHERE po.product_id = ?
@@ -143,5 +143,41 @@ FROM pull_requests pr
                 FROM JSON_EACH(p.tags)
                 WHERE JSON_EACH.value = r.topic)
 WHERE po.organisation_id = ?
-AND pr.state = ?
+  AND pr.state = ?
 ORDER BY pr.created_at DESC;
+
+-- name: DeletePullRequestsByProductID :exec
+DELETE
+FROM pull_requests
+WHERE external_id IN (SELECT pr.external_id
+                      FROM pull_requests pr
+                               JOIN repositories r ON r.name = pr.repository_name
+                               JOIN products p ON p.id = ?
+                          AND JSON_VALID(p.tags)
+                          AND EXISTS (SELECT 1
+                                      FROM JSON_EACH(p.tags)
+                                      WHERE JSON_EACH.value = r.topic));
+
+-- name: CreateSecurity :one
+INSERT INTO securities (external_id,
+                        repository_name,
+                        package_name,
+                        state, severity,
+                        patched_version,
+                        created_at,
+                        updated_at)
+VALUES (?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER))
+ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
+                                        package_name    = excluded.package_name,
+                                        state           = excluded.state,
+                                        severity        = excluded.severity,
+                                        patched_version = excluded.patched_version,
+                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+RETURNING *;

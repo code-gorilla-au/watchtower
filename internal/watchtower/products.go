@@ -112,12 +112,17 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 func (s *Service) DeleteProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting product")
-	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
-		logger.Error("Error deleting product", err)
-	}
-
 	if err := s.deleteReposByProductID(id); err != nil {
 		logger.Error("Error deleting repos for product", err)
+	}
+
+	if err := s.DeletePullRequestsByProductID(id); err != nil {
+		logger.Error("Error deleting pull requests for product", err)
+	}
+
+	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
+		logger.Error("Error deleting product", err)
+		return err
 	}
 
 	return nil
@@ -171,6 +176,38 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 	return toPullRequestDTOs(models), nil
 }
 
+func (s *Service) DeletePullRequestsByProductID(id int64) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Deleting PRs for product")
+	return s.db.DeletePullRequestsByProductID(s.ctx, id)
+}
+
+func (s *Service) SyncOrg(orgId int64) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Syncing org", "org", orgId)
+
+	products, err := s.GetAllProductsForOrganisation(orgId)
+	if err != nil {
+		logger.Error("Error fetching products for org", "error", err)
+		return err
+	}
+
+	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: products[0].ID, Valid: true})
+	if err != nil {
+		logger.Error("Error fetching organisation for product", err)
+		return err
+	}
+
+	for _, p := range products {
+		if err = s.syncProduct(p, org); err != nil {
+			logger.Error("Error syncing product", "error", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 
@@ -186,12 +223,17 @@ func (s *Service) SyncProduct(id int64) error {
 		return err
 	}
 
+	return s.syncProduct(product, org)
+}
+
+func (s *Service) syncProduct(product ProductDTO, org database.Organisation) error {
+	logger := logging.FromContext(s.ctx)
+
 	for _, tag := range product.Tags {
-		if err = s.syncByTag(tag, org.Namespace, org.Token); err != nil {
+		if err := s.syncByTag(tag, org.Namespace, org.Token); err != nil {
 			logger.Error("Error syncing repos", "error", err)
 			return err
 		}
-
 	}
 
 	return nil
@@ -221,6 +263,11 @@ func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
 
 		if err = s.bulkInsertPullRequests(dd.Data.Repository.PullRequests, repo.Node.Name); err != nil {
 			logger.Error("Error bulk inserting pull requests", "error", err)
+			return err
+		}
+
+		if err = s.bulkInsertSecurity(repo.Node.VulnerabilityAlerts, repo.Node.Name); err != nil {
+			logger.Error("Error bulk inserting security", "error", err)
 			return err
 		}
 	}
@@ -270,6 +317,27 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 		})
 		if err != nil {
 			logger.Error("Error creating pull request", "error", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *Service) bulkInsertSecurity(secs github.RootNode[github.VulnerabilityAlerts], repoName string) error {
+	logger := logging.FromContext(s.ctx)
+
+	for _, sec := range secs.Nodes {
+		_, err := s.db.CreateSecurity(s.ctx, database.CreateSecurityParams{
+			ExternalID:     sec.ID,
+			RepositoryName: repoName,
+			PackageName:    sec.SecurityVulnerability.Package.Name,
+			State:          string(sec.State),
+			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
+			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
+		})
+		if err != nil {
+			logger.Error("Error creating security", "error", err)
 			return err
 		}
 	}

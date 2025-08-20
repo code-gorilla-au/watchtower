@@ -11,6 +11,7 @@ import { watchtower } from "$lib/wailsjs/go/models";
 import { differenceInMinutes } from "date-fns";
 import OrganisationDTO = watchtower.OrganisationDTO;
 import { SvelteDate } from "svelte/reactivity";
+import { staleTimeoutMinutes, TIME_TWO_MINUTES } from "$lib/watchtower/types";
 
 export class OrgService {
 	#internal: {
@@ -19,6 +20,8 @@ export class OrgService {
 		orgs: OrganisationDTO[];
 		orgsLastSync?: Date;
 	};
+
+	#poll: number;
 
 	readonly defaultOrg: OrganisationDTO | undefined;
 
@@ -31,6 +34,11 @@ export class OrgService {
 		});
 
 		this.defaultOrg = $derived(this.#internal.defaultOrg);
+
+		this.#poll = setInterval(async () => {
+			await this.getAll();
+			await this.getDefaultForce();
+		}, TIME_TWO_MINUTES);
 	}
 
 	async create(name: string, owner: string, token: string, description: string) {
@@ -91,6 +99,10 @@ export class OrgService {
 		return this.defaultOrg;
 	}
 
+	unmount() {
+		clearInterval(this.#poll);
+	}
+
 	private async getDefaultForce() {
 		const org = await GetDefaultOrganisation();
 		this.updateDefaultOrg(org);
@@ -127,6 +139,6 @@ export class OrgService {
 		}
 
 		const diff = differenceInMinutes(this.#internal.defaultLastSync, new SvelteDate());
-		return diff > 5;
+		return diff > staleTimeoutMinutes;
 	}
 }

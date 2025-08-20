@@ -2,9 +2,15 @@
 	import "../app.css";
 	import favicon from "$lib/assets/favicon.svg";
 	import { settingsSvc } from "$lib/settings";
+	import { onDestroy } from "svelte";
+	import { orgSvc } from "$lib/watchtower";
 
 	let { children } = $props();
 	settingsSvc.initTheme();
+
+	onDestroy(() => {
+		orgSvc.unmount();
+	});
 </script>
 
 {@render children?.()}

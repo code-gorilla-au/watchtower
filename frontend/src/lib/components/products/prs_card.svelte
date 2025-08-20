@@ -5,12 +5,18 @@
 	import { formatDate } from "$design/formats";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
+	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
 
 	type Props = {
 		pr: watchtower.PullRequestDTO;
 	};
 
 	let { pr }: Props = $props();
+
+	async function routeToPr(e: Event) {
+		e.preventDefault();
+		await OpenExternalURL(pr.url);
+	}
 </script>
 
 <Card>
@@ -19,7 +25,7 @@
 			<span class="capitalize">{pr.title}</span>
 		</CardTitle>
 		<CardAction>
-			<Button href={pr.url} target="_blank" size="icon" variant="ghost">
+			<Button onclick={routeToPr} size="icon" variant="ghost">
 				<SquareArrowOutUpRight />
 			</Button>
 		</CardAction>
