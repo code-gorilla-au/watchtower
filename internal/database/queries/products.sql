@@ -181,3 +181,30 @@ ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_na
                                         patched_version = excluded.patched_version,
                                         updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
+
+
+-- name: GetSecurityByProductIDAndState :many
+SELECT s.*
+FROM securities s
+         JOIN repositories r ON r.name = s.repository_name
+         JOIN products p ON p.id = ?
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE s.state = ?
+ORDER BY s.created_at DESC;
+
+-- name: GetSecurityByOrganisationAndState :many
+SELECT s.*
+FROM securities s
+         JOIN repositories r ON r.name = s.repository_name
+         JOIN product_organisations po
+         JOIN products p ON p.id = po.product_id
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE po.organisation_id = ?
+  AND s.state = ?
+ORDER BY s.created_at DESC;

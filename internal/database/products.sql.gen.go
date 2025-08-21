@@ -470,6 +470,110 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Reposito
 	return items, nil
 }
 
+const getSecurityByOrganisationAndState = `-- name: GetSecurityByOrganisationAndState :many
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at
+FROM securities s
+         JOIN repositories r ON r.name = s.repository_name
+         JOIN product_organisations po
+         JOIN products p ON p.id = po.product_id
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE po.organisation_id = ?
+  AND s.state = ?
+ORDER BY s.created_at DESC
+`
+
+type GetSecurityByOrganisationAndStateParams struct {
+	OrganisationID sql.NullInt64
+	State          string
+}
+
+func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg GetSecurityByOrganisationAndStateParams) ([]Security, error) {
+	rows, err := q.db.QueryContext(ctx, getSecurityByOrganisationAndState, arg.OrganisationID, arg.State)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Security
+	for rows.Next() {
+		var i Security
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.RepositoryName,
+			&i.PackageName,
+			&i.State,
+			&i.Severity,
+			&i.PatchedVersion,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSecurityByProductIDAndState = `-- name: GetSecurityByProductIDAndState :many
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at
+FROM securities s
+         JOIN repositories r ON r.name = s.repository_name
+         JOIN products p ON p.id = ?
+    AND JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1
+                FROM JSON_EACH(p.tags)
+                WHERE JSON_EACH.value = r.topic)
+WHERE s.state = ?
+ORDER BY s.created_at DESC
+`
+
+type GetSecurityByProductIDAndStateParams struct {
+	ID    int64
+	State string
+}
+
+func (q *Queries) GetSecurityByProductIDAndState(ctx context.Context, arg GetSecurityByProductIDAndStateParams) ([]Security, error) {
+	rows, err := q.db.QueryContext(ctx, getSecurityByProductIDAndState, arg.ID, arg.State)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Security
+	for rows.Next() {
+		var i Security
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.RepositoryName,
+			&i.PackageName,
+			&i.State,
+			&i.Severity,
+			&i.PatchedVersion,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listProductsByOrganisation = `-- name: ListProductsByOrganisation :many
 SELECT p.id, p.name, p.description, p.tags, p.created_at, p.updated_at
 FROM products p
