@@ -14,12 +14,18 @@
 	let { expand, to, label, icon, class: className }: Props = $props();
 
 	let currentActive = $derived(page.url.pathname.startsWith(to));
-	let activeLink = $derived(currentActive ? "bg-accent text-accent-foreground" : "");
+	let activeLink = $derived(
+		currentActive ? "bg-accent text-accent-foreground" : "hover:bg-secondary"
+	);
 </script>
 
 <a
 	href={to}
-	class={cn("flex items-center justify-center gap-2 rounded-md p-2", className, activeLink)}
+	class={cn(
+		"flex items-center justify-center gap-2 rounded-md p-2 transition duration-300 ease-in-out",
+		className,
+		activeLink
+	)}
 >
 	<span>
 		{@render icon()}
