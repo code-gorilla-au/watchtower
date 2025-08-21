@@ -40,9 +40,12 @@
 			<p class="text-sm text-muted-foreground">Author</p>
 			<p>{pr.author}</p>
 		</div>
+		<div class="mb-2 flex items-center justify-between">
+			<p class="text-sm text-muted-foreground">Status</p>
+			<p class="lowercase">{pr.state}</p>
+		</div>
 		<div>
 			<Badge>{pr.repository_name}</Badge>
-			<Badge>{pr.state}</Badge>
 		</div>
 	</div>
 </Card>

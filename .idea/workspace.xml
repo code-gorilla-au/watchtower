@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding docs">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +134,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding more properties" />
     <MESSAGE value="refactoring to re-use form" />
     <MESSAGE value="cleanup, adding redirect" />
     <MESSAGE value="update card" />
@@ -155,7 +158,8 @@
     <MESSAGE value="update theme" />
     <MESSAGE value="adding shadow" />
     <MESSAGE value="wip" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip" />
+    <MESSAGE value="adding docs" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding docs" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
