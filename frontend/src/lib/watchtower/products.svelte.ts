@@ -9,12 +9,14 @@ import {
 	GetProductPullRequests,
 	GetProductRepos,
 	GetPullRequestByOrganisation,
+	GetSecurityByOrganisation,
+	GetSecurityByProductID,
 	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
 import RepositoryDTO = watchtower.RepositoryDTO;
 import { differenceInMinutes } from "date-fns";
-import { staleTimeoutMinutes, TIME_TWO_MINUTES } from "$lib/watchtower/types";
+import { staleTimeoutMinutes } from "$lib/watchtower/types";
 
 type RepoState = {
 	data: RepositoryDTO[];
@@ -93,6 +95,14 @@ export class ProductsService {
 
 	async getPullRequestsByOrganisation(orgId: number) {
 		return await GetPullRequestByOrganisation(orgId);
+	}
+
+	async getSecurityByProduct(productId: number) {
+		return await GetSecurityByProductID(productId);
+	}
+
+	async getSecurityByOrganisation(orgId: number) {
+		return await GetSecurityByOrganisation(orgId);
 	}
 
 	async getAllByOrgId(orgId: number) {

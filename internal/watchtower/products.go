@@ -182,6 +182,37 @@ func (s *Service) DeletePullRequestsByProductID(id int64) error {
 	return s.db.DeletePullRequestsByProductID(s.ctx, id)
 }
 
+func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("getting security by product id")
+
+	model, err := s.db.GetSecurityByProductIDAndState(s.ctx, database.GetSecurityByProductIDAndStateParams{
+		ID:    productID,
+		State: "OPEN",
+	})
+	if err != nil {
+		logger.Error("Error fetching security by product id", err)
+		return []SecurityDTO{}, err
+	}
+
+	return ToSecurityDTOs(model), nil
+}
+
+func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("getting security by organisation")
+	model, err := s.db.GetSecurityByProductIDAndState(s.ctx, database.GetSecurityByProductIDAndStateParams{
+		ID:    id,
+		State: "OPEN",
+	})
+	if err != nil {
+		logger.Error("Error fetching security by organisation", err)
+		return []SecurityDTO{}, err
+	}
+
+	return ToSecurityDTOs(model), nil
+}
+
 func (s *Service) SyncOrg(orgId int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing org", "org", orgId)

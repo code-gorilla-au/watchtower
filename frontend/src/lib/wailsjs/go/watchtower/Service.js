@@ -54,6 +54,14 @@ export function GetPullRequestByOrganisation(arg1) {
   return window['go']['watchtower']['Service']['GetPullRequestByOrganisation'](arg1);
 }
 
+export function GetSecurityByOrganisation(arg1) {
+  return window['go']['watchtower']['Service']['GetSecurityByOrganisation'](arg1);
+}
+
+export function GetSecurityByProductID(arg1) {
+  return window['go']['watchtower']['Service']['GetSecurityByProductID'](arg1);
+}
+
 export function SetDefaultOrg(arg1) {
   return window['go']['watchtower']['Service']['SetDefaultOrg'](arg1);
 }
