@@ -4,27 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding shadow">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/worker.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/hooks.client.ts" beforeDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/products.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+error.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+error.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/design/formats.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/design/formats.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/design/types.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +136,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adding more properties" />
     <MESSAGE value="refactoring to re-use form" />
-    <MESSAGE value="wip" />
     <MESSAGE value="cleanup, adding redirect" />
     <MESSAGE value="update card" />
     <MESSAGE value="update products + add clean up methods" />
@@ -176,7 +158,8 @@
     <MESSAGE value="adding ability to open browser" />
     <MESSAGE value="update theme" />
     <MESSAGE value="adding shadow" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding shadow" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

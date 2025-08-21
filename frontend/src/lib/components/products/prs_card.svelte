@@ -2,7 +2,7 @@
 	import { Card, CardAction, CardHeader, CardTitle } from "$components/ui/card/index.js";
 	import { watchtower } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
-	import { formatDate } from "$design/formats";
+	import { formatDate, truncate } from "$design/formats";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
@@ -22,7 +22,7 @@
 <Card>
 	<CardHeader class="flex items-center justify-between">
 		<CardTitle>
-			<span class="capitalize">{pr.title}</span>
+			<span class="capitalize">{truncate(pr.title)}</span>
 		</CardTitle>
 		<CardAction>
 			<Button onclick={routeToPr} size="icon" variant="ghost">
