@@ -22,22 +22,39 @@ tasks:
       - sqlc generate
       - go generate ./...
 
+  go-lint:
+    cmds:
+      - golangci-lint run {{ .GOLANG_WORKSPACES }}
+      - govulncheck {{ .GOLANG_WORKSPACES }}
+      - go vet {{ .GOLANG_WORKSPACES }}
 
-  test-go:
+  go-test:
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast  {{ .GOLANG_WORKSPACES }}
 
-  test-node:
-    dir: frontend
-    cmds:
-      - npm run test:unit
+  go-ci:
+    deps: [go-lint, go-test]
 
-  lint-node:
+  frontend-lint:
     dir: frontend
     cmds:
       - npm run lint
+
+  frontend-check:
+    dir: frontend
+    cmds:
+      - npm run check
+
+  frontend-ci:
+    dir: frontend
+    deps: [frontend-lint, frontend-check]
 
   reset:
     deps: [clean-db]
     cmds:
       - task: dev
+
+  tools-get:
+    cmds:
+      - go install golang.org/x/vuln/cmd/govulncheck@latest
+      - go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.2.2
