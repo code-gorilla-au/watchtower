@@ -112,3 +112,12 @@ func ToSecurityDTO(m database.Security) SecurityDTO {
 		UpdatedAt:      toTime(m.UpdatedAt),
 	}
 }
+
+func ToSecurityDTOs(models []database.Security) []SecurityDTO {
+	result := make([]SecurityDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToSecurityDTO(m))
+	}
+
+	return result
+}

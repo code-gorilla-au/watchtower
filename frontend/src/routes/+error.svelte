@@ -5,9 +5,9 @@
 	async function backToDashboard(e: Event) {
 		e.preventDefault();
 
-		await goto("/dashboard");
+		await goto("/");
 	}
 </script>
 
-<h1>Error</h1>
+<h1 class="text-4xl">Error</h1>
 <Button onclick={backToDashboard}>Back to dashboard</Button>

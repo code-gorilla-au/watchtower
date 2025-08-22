@@ -5,8 +5,8 @@
 		Package,
 		Castle,
 		LayoutDashboard,
-		ChevronLeft,
-		ChevronRight
+		PanelLeftClose,
+		PanelLeftOpen
 	} from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { NavItem } from "$components/nav/index.js";
@@ -30,25 +30,20 @@
 </script>
 
 <div class="flex h-screen">
-	<aside
-		class={cn(
-			"flex h-full max-w-40 flex-col bg-muted p-2 shadow-sm transition-all duration-300 ease-in-out",
-			expandedStyle
-		)}
-	>
+	<aside class={cn("flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl ", expandedStyle)}>
 		<div class="flex flex-1 flex-col gap-2">
-			<div class="py-2">
+			<div class="flex items-center justify-between py-2">
 				{#if expand}
 					<span class="font-bold">
 						{organisation?.friendly_name}
 					</span>
 				{/if}
 
-				<Button onclick={toggleExpand} size="sm" variant="ghost" class="ml-auto">
+				<Button onclick={toggleExpand} size="sm" variant="ghost">
 					{#if expand}
-						<ChevronLeft />
+						<PanelLeftClose />
 					{:else}
-						<ChevronRight />
+						<PanelLeftOpen />
 					{/if}
 				</Button>
 			</div>

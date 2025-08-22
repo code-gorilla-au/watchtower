@@ -6,13 +6,14 @@
 	import { Grid } from "$components/grid";
 	import { RepoCard } from "$components/products";
 	import { Button } from "$components/ui/button";
-	import { PRGrid } from "$components/products/index.js";
+	import { PRGrid, SecurityGrid } from "$components/products/index.js";
 
 	let { data }: PageProps = $props();
 
 	let product = $derived(data.product);
 	let repos = $derived(data.repos);
 	let prs = $derived(data.prs);
+	let securities = $derived(data.securities);
 
 	async function syncProduct(e: Event) {
 		e.preventDefault();
@@ -34,6 +35,10 @@
 		</Button>
 	</PageTitle>
 
+	<div>
+		<h2 class="text-xl text-muted-foreground">Security Vulnerabilities</h2>
+		<SecurityGrid {securities} />
+	</div>
 	<div class="my-4">
 		<h2 class="text-xl text-muted-foreground">Pull Requests</h2>
 	</div>

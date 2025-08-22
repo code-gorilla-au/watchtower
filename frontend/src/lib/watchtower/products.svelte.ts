@@ -9,11 +9,14 @@ import {
 	GetProductPullRequests,
 	GetProductRepos,
 	GetPullRequestByOrganisation,
+	GetSecurityByOrganisation,
+	GetSecurityByProductID,
 	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
 import RepositoryDTO = watchtower.RepositoryDTO;
 import { differenceInMinutes } from "date-fns";
+import { staleTimeoutMinutes } from "$lib/watchtower/types";
 
 type RepoState = {
 	data: RepositoryDTO[];
@@ -94,6 +97,14 @@ export class ProductsService {
 		return await GetPullRequestByOrganisation(orgId);
 	}
 
+	async getSecurityByProduct(productId: number) {
+		return await GetSecurityByProductID(productId);
+	}
+
+	async getSecurityByOrganisation(orgId: number) {
+		return await GetSecurityByOrganisation(orgId);
+	}
+
 	async getAllByOrgId(orgId: number) {
 		const products = await GetAllProductsForOrganisation(orgId);
 		this.internalUpdateProducts(products);
@@ -144,7 +155,7 @@ export class ProductsService {
 		}
 
 		const diff = differenceInMinutes(this.#internal.productsLastSync, new SvelteDate());
-		return diff > 5;
+		return diff > staleTimeoutMinutes;
 	}
 
 	private internalGetProductRepo(productId: number) {
@@ -166,6 +177,6 @@ export class ProductsService {
 		}
 
 		const diff = differenceInMinutes(repos.lastSync, new SvelteDate());
-		return diff > 5;
+		return diff > staleTimeoutMinutes;
 	}
 }

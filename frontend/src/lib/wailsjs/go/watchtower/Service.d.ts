@@ -11,6 +11,8 @@ export function DeleteOrganisation(arg1:number):Promise<void>;
 
 export function DeleteProduct(arg1:number):Promise<void>;
 
+export function DeletePullRequestsByProductID(arg1:number):Promise<void>;
+
 export function GetAllOrganisations():Promise<Array<watchtower.OrganisationDTO>>;
 
 export function GetAllProductsForOrganisation(arg1:number):Promise<Array<watchtower.ProductDTO>>;
@@ -27,9 +29,15 @@ export function GetProductRepos(arg1:number):Promise<Array<watchtower.Repository
 
 export function GetPullRequestByOrganisation(arg1:number):Promise<Array<watchtower.PullRequestDTO>>;
 
+export function GetSecurityByOrganisation(arg1:number):Promise<Array<watchtower.SecurityDTO>>;
+
+export function GetSecurityByProductID(arg1:number):Promise<Array<watchtower.SecurityDTO>>;
+
 export function SetDefaultOrg(arg1:number):Promise<watchtower.OrganisationDTO>;
 
 export function Startup(arg1:context.Context):Promise<void>;
+
+export function SyncOrg(arg1:number):Promise<void>;
 
 export function SyncProduct(arg1:number):Promise<void>;
 

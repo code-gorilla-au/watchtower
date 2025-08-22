@@ -17,6 +17,7 @@ import (
 var assets embed.FS
 
 func main() {
+	ctx := context.Background()
 	appConfig := LoadConfig()
 	logger := logging.New(appConfig.LogLevel, logging.LoggerJSON)
 
@@ -39,9 +40,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	wt := watchtower.NewService(context.Background(), db)
+	wt := watchtower.NewService(ctx, db)
+	worker := watchtower.NewOrgSyncWorker(wt)
 
-	app := NewApp(wt)
+	app := NewApp(worker)
 
 	err = wails.Run(&options.App{
 		Title:  "watchtower",
@@ -52,6 +54,7 @@ func main() {
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
+		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
 			app,
 			wt,
@@ -61,4 +64,5 @@ func main() {
 	if err != nil {
 		println("Error:", err.Error())
 	}
+
 }

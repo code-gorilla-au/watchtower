@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding reactive settings" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small change on card layout for PRs">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/appicon.png" beforeDir="false" afterPath="$PROJECT_DIR$/build/appicon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,6 +43,8 @@
         <option value="prs_grid" />
         <option value="repo_card" />
         <option value="loaders_square" />
+        <option value="security_card" />
+        <option value="security_grid" />
       </list>
     </option>
   </component>
@@ -61,41 +75,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultGoTemplateProperty": "Go File",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.GoLinterPluginOnboarding": "true",
-    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "feat-sql",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/src/routes/(orgs)/products/[product_id]/sync",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier",
-    "settings.editor.selected.configurable": "go.sdk",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-security&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/src/routes/(orgs)/products/[product_id]/sync&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.sdk&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync" />
@@ -130,20 +144,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing card for org" />
-    <MESSAGE value="fixing cards" />
-    <MESSAGE value="working build tool" />
-    <MESSAGE value="adding more properties" />
-    <MESSAGE value="refactoring to re-use form" />
-    <MESSAGE value="wip" />
-    <MESSAGE value="cleanup, adding redirect" />
-    <MESSAGE value="update card" />
-    <MESSAGE value="update products + add clean up methods" />
-    <MESSAGE value="adding theming" />
-    <MESSAGE value="side bar" />
-    <MESSAGE value="adding nav bar" />
-    <MESSAGE value="fixing nav" />
-    <MESSAGE value="refactoring to use page container" />
     <MESSAGE value="adding new methods + service" />
     <MESSAGE value="adding PR card" />
     <MESSAGE value="refactoring" />
@@ -155,7 +155,21 @@
     <MESSAGE value="fixing" />
     <MESSAGE value="update sources" />
     <MESSAGE value="adding reactive settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding reactive settings" />
+    <MESSAGE value="adding ability to open browser" />
+    <MESSAGE value="update theme" />
+    <MESSAGE value="adding shadow" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="adding docs" />
+    <MESSAGE value="adding active link styles" />
+    <MESSAGE value="adding get security methods" />
+    <MESSAGE value="adding get security components" />
+    <MESSAGE value="adding to dashboard" />
+    <MESSAGE value="adding grid for securities" />
+    <MESSAGE value="adding more user interactions" />
+    <MESSAGE value="fixing bug" />
+    <MESSAGE value="adding maxlength" />
+    <MESSAGE value="small change on card layout for PRs" />
+    <option name="LAST_COMMIT_MESSAGE" value="small change on card layout for PRs" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -1,14 +1,13 @@
 import type { PageLoad } from "./$types";
 import { goto } from "$app/navigation";
-import { OrgService } from "$lib/watchtower";
-
-const orgs = new OrgService();
+import { orgSvc } from "$lib/watchtower";
 
 export const load: PageLoad = async () => {
 	try {
-		await orgs.getDefault();
+		await orgSvc.getDefault();
 		await goto("/dashboard");
-	} catch {
+	} catch (e) {
+		console.error(e);
 		await goto("/register/organisation");
 	}
 };
