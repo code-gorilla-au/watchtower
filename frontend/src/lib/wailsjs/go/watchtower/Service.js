@@ -70,6 +70,10 @@ export function SyncOrg(arg1) {
   return window['go']['watchtower']['Service']['SyncOrg'](arg1);
 }
 
+export function SyncOrgs() {
+  return window['go']['watchtower']['Service']['SyncOrgs']();
+}
+
 export function SyncProduct(arg1) {
   return window['go']['watchtower']['Service']['SyncProduct'](arg1);
 }

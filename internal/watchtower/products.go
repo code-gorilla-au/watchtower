@@ -83,7 +83,7 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 // UpdateProduct updates a product and returns the updated entity
 func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
-	logger.Info("Updating product")
+	logger.Debug("Updating product")
 
 	var tagsNS sql.NullString
 	if tags != nil {
@@ -226,6 +226,24 @@ func (s *Service) deleteSecurityByProductID(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting security for product")
 	return s.db.DeleteSecurityByProductID(s.ctx, id)
+}
+
+func (s *Service) SyncOrgs() error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Syncing orgs")
+	orgs, err := s.db.ListOrganisations(s.ctx)
+	if err != nil {
+		logger.Error("Error fetching orgs", "error", err)
+		return err
+	}
+	for _, org := range orgs {
+		if err = s.SyncOrg(org.ID); err != nil {
+			logger.Error("Error syncing org", "error", err)
+			continue
+		}
+	}
+
+	return nil
 }
 
 func (s *Service) SyncOrg(orgId int64) error {

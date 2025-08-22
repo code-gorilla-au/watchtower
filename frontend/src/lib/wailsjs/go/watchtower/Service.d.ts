@@ -37,6 +37,8 @@ export function Startup(arg1:context.Context):Promise<void>;
 
 export function SyncOrg(arg1:number):Promise<void>;
 
+export function SyncOrgs():Promise<void>;
+
 export function SyncProduct(arg1:number):Promise<void>;
 
 export function UpdateOrganisation(arg1:watchtower.UpdateOrgParams):Promise<watchtower.OrganisationDTO>;
