@@ -163,15 +163,20 @@ func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
 
 func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, error) {
 	logger := logging.FromContext(s.ctx)
-	logger.Debug("Fetching pull requests for product")
-	models, err := s.db.GetPullRequestByProductIDAndState(s.ctx, database.GetPullRequestByProductIDAndStateParams{
-		ID:    id,
-		State: string(github.PrOpen),
+	logger.Debug("Fetching pull requests for organisation", "org", id)
+	models, err := s.db.GetPullRequestsByOrganisationAndState(s.ctx, database.GetPullRequestsByOrganisationAndStateParams{
+		OrganisationID: sql.NullInt64{
+			Int64: id,
+			Valid: true,
+		},
+		State: "OPEN",
 	})
 	if err != nil {
 		logger.Error("Error fetching pull requests for product", err)
 		return nil, err
 	}
+
+	logger.Debug("Found", "count", len(models))
 
 	return toPullRequestDTOs(models), nil
 }
@@ -200,7 +205,7 @@ func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error)
 
 func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 	logger := logging.FromContext(s.ctx)
-	logger.Debug("getting security by organisation")
+	logger.Debug("getting security by organisation", "org", id)
 	model, err := s.db.GetSecurityByProductIDAndState(s.ctx, database.GetSecurityByProductIDAndStateParams{
 		ID:    id,
 		State: "OPEN",
