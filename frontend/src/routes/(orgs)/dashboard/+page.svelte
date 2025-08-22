@@ -16,7 +16,6 @@
 	let intervalPoll: number;
 	onMount(() => {
 		intervalPoll = setInterval(async () => {
-			console.log("polling");
 			await invalidateAll();
 		}, TIME_TWO_MINUTES);
 	});
