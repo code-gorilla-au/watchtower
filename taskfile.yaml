@@ -9,52 +9,63 @@ vars:
 
 tasks:
   dev:
+    desc: Run the application in development mode.
     deps: [gen]
     cmds:
       - wails dev
 
   clean-db:
+    desc: Clean the database.
     cmds:
       - rm -f $LOCAL_DEV_DIR/watchtower.db
 
   gen:
+    desc: Generate go code.
     cmds:
       - sqlc generate
       - go generate ./...
 
   go-lint:
+    desc: Run go linters.
     cmds:
       - golangci-lint run {{ .GOLANG_WORKSPACES }}
       - govulncheck {{ .GOLANG_WORKSPACES }}
       - go vet {{ .GOLANG_WORKSPACES }}
 
   go-test:
+    desc: Run go tests.
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
   go-ci:
+    desc: Run go ci tasks.
     deps: [go-lint, go-test]
 
   frontend-lint:
+    desc: Run frontend linters.
     dir: frontend
     cmds:
       - npm run lint
 
   frontend-check:
+    desc: Run frontend checks.
     dir: frontend
     cmds:
       - npm run check
 
   frontend-ci:
+    desc: Run frontend ci tasks.
     dir: frontend
     deps: [frontend-lint, frontend-check]
 
   reset:
+    desc: Reset the application.
     deps: [clean-db]
     cmds:
       - task: dev
 
   tools-get:
+    desc: Get go dev tools.
     cmds:
       - go install golang.org/x/vuln/cmd/govulncheck@latest
       - go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.2.2
