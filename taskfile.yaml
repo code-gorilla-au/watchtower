@@ -27,6 +27,16 @@ tasks:
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast  {{ .GOLANG_WORKSPACES }}
 
+  test-node:
+    dir: frontend
+    cmds:
+      - npm run test:unit
+
+  lint-node:
+    dir: frontend
+    cmds:
+      - npm run lint
+
   reset:
     deps: [clean-db]
     cmds:
