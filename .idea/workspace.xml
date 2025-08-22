@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding commands">
-      <change afterPath="$PROJECT_DIR$/.golangci.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding tasks">
+      <change beforePath="$PROJECT_DIR$/.golangci.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.golangci.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +43,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file:///usr/local/go" />
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.6.darwin-arm64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -136,7 +140,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding PR card" />
     <MESSAGE value="refactoring" />
     <MESSAGE value="adding reusable grid" />
     <MESSAGE value="adding pull requests to dashboard" />
@@ -161,7 +164,8 @@
     <MESSAGE value="adding maxlength" />
     <MESSAGE value="small change on card layout for PRs" />
     <MESSAGE value="adding commands" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding commands" />
+    <MESSAGE value="adding tasks" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding tasks" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

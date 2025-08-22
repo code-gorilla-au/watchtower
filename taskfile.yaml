@@ -30,7 +30,7 @@ tasks:
 
   go-test:
     cmds:
-      - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast  {{ .GOLANG_WORKSPACES }}
+      - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
   go-ci:
     deps: [go-lint, go-test]

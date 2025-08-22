@@ -19,7 +19,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 
 	tagJson, err := json.Marshal(tags)
 	if err != nil {
-		logger.Error("Error marshalling tags", err)
+		logger.Error("Error marshalling tags", "error", err)
 		return ProductDTO{}, err
 	}
 
@@ -31,7 +31,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 		Description: description,
 	})
 	if err != nil {
-		logger.Error("Error creating product", err)
+		logger.Error("Error creating product", "error", err)
 		return ProductDTO{}, err
 	}
 
@@ -102,7 +102,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 
 	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
-		logger.Error("Error fetching updated product", err)
+		logger.Error("Error fetching updated product", "error", err)
 		return ProductDTO{}, err
 	}
 
@@ -113,15 +113,15 @@ func (s *Service) DeleteProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting product")
 	if err := s.deleteReposByProductID(id); err != nil {
-		logger.Error("Error deleting repos for product", err)
+		logger.Error("Error deleting repos for product", "error", err)
 	}
 
 	if err := s.DeletePullRequestsByProductID(id); err != nil {
-		logger.Error("Error deleting pull requests for product", err)
+		logger.Error("Error deleting pull requests for product", "error", err)
 	}
 
 	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
-		logger.Error("Error deleting product", err)
+		logger.Error("Error deleting product", "error", err)
 		return err
 	}
 
@@ -134,7 +134,7 @@ func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
 
 	repos, err := s.db.GetReposByProductID(s.ctx, id)
 	if err != nil {
-		logger.Error("Error fetching repos for product", err)
+		logger.Error("Error fetching repos for product", "error", err)
 		return nil, err
 	}
 
@@ -154,7 +154,7 @@ func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
 		State: string(github.PrOpen),
 	})
 	if err != nil {
-		logger.Error("Error fetching pull requests for product", err)
+		logger.Error("Error fetching pull requests for product", "error", err)
 		return nil, err
 	}
 
@@ -172,7 +172,7 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 		State: "OPEN",
 	})
 	if err != nil {
-		logger.Error("Error fetching pull requests for product", err)
+		logger.Error("Error fetching pull requests for product", "error", err)
 		return nil, err
 	}
 
@@ -196,7 +196,7 @@ func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error)
 		State: "OPEN",
 	})
 	if err != nil {
-		logger.Error("Error fetching security by product id", err)
+		logger.Error("Error fetching security by product id", "error", err)
 		return []SecurityDTO{}, err
 	}
 
@@ -211,7 +211,7 @@ func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 		State: "OPEN",
 	})
 	if err != nil {
-		logger.Error("Error fetching security by organisation", err)
+		logger.Error("Error fetching security by organisation", "error", err)
 		return []SecurityDTO{}, err
 	}
 
@@ -230,7 +230,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 
 	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: products[0].ID, Valid: true})
 	if err != nil {
-		logger.Error("Error fetching organisation for product", err)
+		logger.Error("Error fetching organisation for product", "error", err)
 		return err
 	}
 
@@ -249,13 +249,13 @@ func (s *Service) SyncProduct(id int64) error {
 
 	product, err := s.GetProductByID(id)
 	if err != nil {
-		logger.Error("Error fetching product", err)
+		logger.Error("Error fetching product", "error", err)
 		return err
 	}
 
 	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: product.ID, Valid: true})
 	if err != nil {
-		logger.Error("Error fetching organisation for product", err)
+		logger.Error("Error fetching organisation for product", "error", err)
 		return err
 	}
 
