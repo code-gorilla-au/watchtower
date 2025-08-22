@@ -10,7 +10,9 @@
 
 	let { security }: Props = $props();
 
-	function getSeverityVariant(severity: string): "default" | "secondary" | "destructive" | "outline" {
+	function getSeverityVariant(
+		severity: string
+	): "default" | "secondary" | "destructive" | "outline" {
 		switch (severity.toLowerCase()) {
 			case "critical":
 				return "destructive";
@@ -49,7 +51,7 @@
 	<div class="px-3">
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">External ID</p>
-			<p class="text-xs font-mono">{security.external_id}</p>
+			<p class="font-mono text-xs">{security.external_id}</p>
 		</div>
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Severity</p>
@@ -61,7 +63,7 @@
 		</div>
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Patched Version</p>
-			<p class="text-xs">{security.patched_version || 'N/A'}</p>
+			<p class="text-xs">{security.patched_version || "N/A"}</p>
 		</div>
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Last updated</p>

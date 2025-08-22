@@ -33,16 +33,16 @@
 
 	<div class="px-3">
 		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Last updated</p>
-			<p>{formatDate(pr.updated_at)}</p>
-		</div>
-		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Author</p>
 			<p>{pr.author}</p>
 		</div>
 		<div class="mb-2 flex items-center justify-between">
 			<p class="text-sm text-muted-foreground">Status</p>
 			<p class="lowercase">{pr.state}</p>
+		</div>
+		<div class="mb-2 flex items-center justify-between">
+			<p class="text-sm text-muted-foreground">Created</p>
+			<p>{formatDate(pr.created_at)}</p>
 		</div>
 		<div>
 			<Badge>{pr.repository_name}</Badge>
