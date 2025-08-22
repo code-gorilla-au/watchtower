@@ -41,6 +41,12 @@ tasks:
     desc: Run go ci tasks.
     deps: [go-lint, go-test]
 
+  frontend-format:
+    desc: Run frontend formatters.
+    dir: frontend
+    cmds:
+      - npm run format
+
   frontend-lint:
     desc: Run frontend linters.
     dir: frontend
