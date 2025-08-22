@@ -11,6 +11,12 @@ export function formatDate(date: Date) {
  * Truncates the provided string to a maximum of 100 characters and appends an ellipsis ("...") at the end.
  */
 export function truncate(str: string) {
-	const sub = str.substring(0, 100);
+	const maxLength = 100;
+
+	if (str.length <= maxLength) {
+		return str;
+	}
+
+	const sub = str.substring(0, maxLength);
 	return `${sub}...`;
 }
