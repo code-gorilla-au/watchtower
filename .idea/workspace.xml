@@ -5,43 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small change on card layout for PRs">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-content.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-group-heading.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-group.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-item.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-label.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-group.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-radio-item.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-separator.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-shortcut.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-content.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-sub-trigger.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/dropdown-menu-trigger.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/dropdown-menu/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/security_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/security_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/security_grid.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/security_grid.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/badge/badge.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/badge/badge.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/button.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/button.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-description.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-description.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-footer.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-footer.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-title.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card-title.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/card/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/input/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/input/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/input/input.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/input/input.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/label/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/label/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/label/label.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/label/label.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/separator/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/separator/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/separator/separator.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/separator/separator.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/switch/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/switch/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/switch/switch.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/switch/switch.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/appicon.png" beforeDir="false" afterPath="$PROJECT_DIR$/build/appicon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/models.ts" afterDir="false" />
@@ -50,7 +15,7 @@
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

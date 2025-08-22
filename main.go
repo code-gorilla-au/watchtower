@@ -60,6 +60,7 @@ func main() {
 			wt,
 		},
 	})
+
 	if err != nil {
 		println("Error:", err.Error())
 	}
