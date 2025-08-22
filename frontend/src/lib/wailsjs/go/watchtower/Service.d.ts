@@ -11,8 +11,6 @@ export function DeleteOrganisation(arg1:number):Promise<void>;
 
 export function DeleteProduct(arg1:number):Promise<void>;
 
-export function DeletePullRequestsByProductID(arg1:number):Promise<void>;
-
 export function GetAllOrganisations():Promise<Array<watchtower.OrganisationDTO>>;
 
 export function GetAllProductsForOrganisation(arg1:number):Promise<Array<watchtower.ProductDTO>>;

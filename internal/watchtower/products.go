@@ -116,7 +116,11 @@ func (s *Service) DeleteProduct(id int64) error {
 		logger.Error("Error deleting repos for product", "error", err)
 	}
 
-	if err := s.DeletePullRequestsByProductID(id); err != nil {
+	if err := s.deleteSecurityByProductID(id); err != nil {
+		logger.Error("Error deleting security for product", "error", err)
+	}
+
+	if err := s.deletePullRequestsByProductID(id); err != nil {
 		logger.Error("Error deleting pull requests for product", "error", err)
 	}
 
@@ -181,7 +185,7 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 	return toPullRequestDTOs(models), nil
 }
 
-func (s *Service) DeletePullRequestsByProductID(id int64) error {
+func (s *Service) deletePullRequestsByProductID(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting PRs for product")
 	return s.db.DeletePullRequestsByProductID(s.ctx, id)
@@ -216,6 +220,12 @@ func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 	}
 
 	return ToSecurityDTOs(model), nil
+}
+
+func (s *Service) deleteSecurityByProductID(id int64) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("Deleting security for product")
+	return s.db.DeleteSecurityByProductID(s.ctx, id)
 }
 
 func (s *Service) SyncOrg(orgId int64) error {

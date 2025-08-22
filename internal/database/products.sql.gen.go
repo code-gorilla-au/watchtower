@@ -246,7 +246,7 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 	return err
 }
 
-const deletePullRequestsByProductID = `-- name: DeletePullRequestsByProductID :exec
+const deletePullRequestsByProductID = `-- name: deletePullRequestsByProductID :exec
 DELETE
 FROM pull_requests
 WHERE external_id IN (SELECT pr.external_id
@@ -275,6 +275,23 @@ WHERE topic IN (SELECT JSON_EACH.value
 
 func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteReposByProductID, id)
+	return err
+}
+
+const deleteSecurityByProductID = `-- name: DeleteSecurityByProductID :exec
+DELETE FROM securities
+WHERE external_id IN (SELECT s.external_id
+                      FROM securities s
+                               JOIN repositories r ON r.name = s.repository_name
+                               JOIN products p ON p.id = ?
+                          AND JSON_VALID(p.tags)
+                          AND EXISTS (SELECT 1
+                                      FROM JSON_EACH(p.tags)
+                                      WHERE JSON_EACH.value = r.topic))
+`
+
+func (q *Queries) DeleteSecurityByProductID(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteSecurityByProductID, id)
 	return err
 }
 
