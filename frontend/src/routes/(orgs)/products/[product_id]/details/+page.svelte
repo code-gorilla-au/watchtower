@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PageTitle } from "$components/page_title";
-	import { RefreshCw } from "@lucide/svelte";
+	import { RefreshCw, Pencil } from "@lucide/svelte";
 	import { type PageProps } from "./$types";
 	import { goto } from "$app/navigation";
 	import { Grid } from "$components/grid";
@@ -20,6 +20,11 @@
 
 		await goto(`/products/${product.id}/sync`);
 	}
+
+	async function editProduct(e: Event) {
+		e.preventDefault();
+		await goto(`/products/${product.id}/edit`);
+	}
 </script>
 
 <div class="page-container">
@@ -32,6 +37,9 @@
 	>
 		<Button onclick={syncProduct} variant="ghost" size="icon">
 			<RefreshCw />
+		</Button>
+		<Button onclick={editProduct} variant="ghost" size="icon">
+			<Pencil />
 		</Button>
 	</PageTitle>
 

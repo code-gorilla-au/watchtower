@@ -246,7 +246,7 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 	return err
 }
 
-const deletePullRequestsByProductID = `-- name: deletePullRequestsByProductID :exec
+const deletePullRequestsByProductID = `-- name: DeletePullRequestsByProductID :exec
 DELETE
 FROM pull_requests
 WHERE external_id IN (SELECT pr.external_id
