@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding back route">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean up">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/design/time.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/design/time.svelte.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
     </list>
@@ -136,7 +137,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding reactive settings" />
     <MESSAGE value="adding ability to open browser" />
     <MESSAGE value="update theme" />
     <MESSAGE value="adding shadow" />
@@ -161,7 +161,8 @@
     <MESSAGE value="adding target" />
     <MESSAGE value="adding edit page" />
     <MESSAGE value="adding back route" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding back route" />
+    <MESSAGE value="clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

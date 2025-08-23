@@ -1,28 +1,50 @@
 import { SvelteDate } from "svelte/reactivity";
-import { differenceInSeconds } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 
+/**
+ * The TimeSince class calculates and tracks the time elapsed since a given date.
+ * It provides functionality to start and stop periodic updates of the elapsed time.
+ */
 export class TimeSince {
-	readonly #date: SvelteDate;
+	#date: SvelteDate;
+	#timeSince: string;
 
-	readonly #poll: number;
+	#poll?: number;
 	readonly date: string;
 
 	constructor(date: SvelteDate) {
 		this.#date = date;
-		this.date = $derived(differenceInSeconds(this.#date, new SvelteDate()).toString());
-
-		this.#poll = setInterval(this.start, 1000);
+		this.#timeSince = $state(this.differenceInTime());
+		this.date = $derived(this.#timeSince.toString());
 	}
 
-	private start() {
-		this.#date.setTime(Date.now());
+	/**
+	 * Starts the interval for executing the `updateTimeSince` method every second.
+	 * This method sets up a poll using `setInterval` to repeatedly call the `updateTimeSince` method.
+	 */
+	start() {
+		this.#poll = setInterval(this.updateTimeSince.bind(this), 1000);
 	}
 
+	/**
+	 * Stops the polling process by clearing the interval.
+	 */
 	stop() {
 		clearInterval(this.#poll);
 	}
 
-	setDate(date: SvelteDate) {
-		this.#date.setDate(date.getDate());
+	/**
+	 * Sets the date to the provided SvelteDate instance.
+	 */
+	setDate(time: SvelteDate) {
+		this.#date = time;
+	}
+
+	private updateTimeSince() {
+		this.#timeSince = this.differenceInTime();
+	}
+
+	private differenceInTime() {
+		return formatDistanceToNow(this.#date);
 	}
 }
