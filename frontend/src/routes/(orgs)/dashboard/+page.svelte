@@ -6,32 +6,28 @@
 	import { TIME_TWO_MINUTES } from "$lib/watchtower/types";
 	import { invalidateAll } from "$app/navigation";
 	import { SecurityGrid } from "$components/products/index.js";
-	import { TimeSince } from "$design/time.svelte";
-	import { SvelteDate } from "svelte/reactivity";
 
 	let { data }: PageProps = $props();
 	let org = $derived(data.organisation);
 	let products = $derived(data.products);
 	let prs = $derived(data.prs);
 	let securities = $derived(data.securities);
-	let lastSynced = new TimeSince(new SvelteDate());
 
 	let intervalPoll: number;
+
 	onMount(() => {
 		intervalPoll = setInterval(async () => {
 			await invalidateAll();
-			lastSynced.setDate(new SvelteDate());
 		}, TIME_TWO_MINUTES);
 	});
+
 	onDestroy(() => {
 		clearInterval(intervalPoll);
-		lastSynced.stop();
 	});
 </script>
 
 <div class="page-container">
 	<PageTitle title="Dashboard" subtitle={org?.friendly_name} />
-	<p>{lastSynced.date}</p>
 	<div class="my-4">
 		<h3 class="text-xl text-muted-foreground">Security Vulnerability</h3>
 	</div>

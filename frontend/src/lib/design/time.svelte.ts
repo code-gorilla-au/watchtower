@@ -1,5 +1,5 @@
-import type { SvelteDate } from "svelte/reactivity";
-import { formatDate } from "$design/formats";
+import { SvelteDate } from "svelte/reactivity";
+import { differenceInSeconds } from "date-fns";
 
 export class TimeSince {
 	readonly #date: SvelteDate;
@@ -9,7 +9,7 @@ export class TimeSince {
 
 	constructor(date: SvelteDate) {
 		this.#date = date;
-		this.date = $derived(formatDate(this.#date));
+		this.date = $derived(differenceInSeconds(this.#date, new SvelteDate()).toString());
 
 		this.#poll = setInterval(this.start, 1000);
 	}
