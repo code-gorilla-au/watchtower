@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
  * It provides functionality to start and stop periodic updates of the elapsed time.
  */
 export class TimeSince {
-	#date: SvelteDate;
+	readonly #date: SvelteDate;
 	#timeSince: string;
 
 	#poll?: number;
@@ -37,7 +37,7 @@ export class TimeSince {
 	 * Sets the date to the provided SvelteDate instance.
 	 */
 	setDate(time: SvelteDate) {
-		this.#date = time;
+		this.#date.setTime(time.getTime());
 	}
 
 	private updateTimeSince() {
