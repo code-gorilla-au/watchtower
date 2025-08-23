@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding target">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/edit/+page.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/edit/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/product_update_form.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/product_update_form.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding edit page">
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +135,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing" />
     <MESSAGE value="update sources" />
     <MESSAGE value="adding reactive settings" />
     <MESSAGE value="adding ability to open browser" />
@@ -165,7 +159,8 @@
     <MESSAGE value="adding description" />
     <MESSAGE value="formatting" />
     <MESSAGE value="adding target" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding target" />
+    <MESSAGE value="adding edit page" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding edit page" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

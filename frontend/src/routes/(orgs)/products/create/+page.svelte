@@ -39,6 +39,11 @@
 			form.error = err.message;
 		}
 	}
+
+	async function onCancel(e: Event) {
+		e.preventDefault();
+		await goto("/products");
+	}
 </script>
 
 <div class="page-container">
@@ -50,5 +55,11 @@
 		subtitle="Add a product to an organisation {organisation?.friendly_name}"
 	/>
 
-	<ProductUpdateForm mode="create" error={form.error} loading={form.loading} onCreate={onSubmit} />
+	<ProductUpdateForm
+		mode="create"
+		error={form.error}
+		loading={form.loading}
+		onCreate={onSubmit}
+		{onCancel}
+	/>
 </div>
