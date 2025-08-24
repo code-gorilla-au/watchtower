@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding test coverage">
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/orgs_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/local/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/database.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding test for method">
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/orgs_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +155,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding docs" />
     <MESSAGE value="adding active link styles" />
     <MESSAGE value="adding get security methods" />
     <MESSAGE value="adding get security components" />
@@ -187,7 +179,8 @@
     <MESSAGE value="update time + method" />
     <MESSAGE value="adding last sync workers" />
     <MESSAGE value="adding test coverage" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding test coverage" />
+    <MESSAGE value="adding test for method" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding test for method" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
