@@ -10,6 +10,7 @@ VALUES (?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
+                                 description = excluded.description,
                                  tags       = excluded.tags,
                                  updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
