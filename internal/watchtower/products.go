@@ -238,6 +238,8 @@ func (s *Service) SyncOrgs() error {
 		logger.Error("Error fetching orgs", "error", err)
 		return err
 	}
+
+	logger.Info("syncing number of orgs", "count", len(orgs))
 	for _, org := range orgs {
 		if err = s.SyncOrg(org.ID); err != nil {
 			logger.Error("Error syncing org", "error", err)

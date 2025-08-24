@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update time + method">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding last sync workers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/svelte.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/svelte.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/orgs.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/orgs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/orgs.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -142,7 +136,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding shadow" />
     <MESSAGE value="wip" />
     <MESSAGE value="adding docs" />
     <MESSAGE value="adding active link styles" />
@@ -167,7 +160,8 @@
     <MESSAGE value="clean up" />
     <MESSAGE value="adding last sync" />
     <MESSAGE value="update time + method" />
-    <option name="LAST_COMMIT_MESSAGE" value="update time + method" />
+    <MESSAGE value="adding last sync workers" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding last sync workers" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
