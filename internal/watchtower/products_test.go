@@ -532,3 +532,133 @@ func TestService_UpdateProduct(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_DeleteProduct(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_delete_product", "test_org_namespace_for_delete_product", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should not return error when trying to delete non-existent product", func(t *testing.T) {
+			err := s.DeleteProduct(999)
+			odize.AssertNoError(t, err)
+		}).
+		Test("should successfully delete existing product", func(t *testing.T) {
+
+			tags := []string{"delete", "test"}
+			createdProduct, err := s.CreateProduct("Delete Test Product", "Product to be deleted", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+		}).
+		Test("should not be able to retrieve deleted product", func(t *testing.T) {
+
+			tags := []string{"verify", "delete"}
+			createdProduct, err := s.CreateProduct("Verify Delete Product", "Product to verify deletion", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetProductByID(createdProduct.ID)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully delete product with empty tags", func(t *testing.T) {
+
+			tags := []string{}
+			createdProduct, err := s.CreateProduct("Empty Tags Delete", "Product with empty tags to delete", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetProductByID(createdProduct.ID)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully delete product with complex data", func(t *testing.T) {
+
+			tags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
+			createdProduct, err := s.CreateProduct("Complex Delete Product", "Product with complex tags to delete", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetProductByID(createdProduct.ID)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully delete product with empty name and description", func(t *testing.T) {
+
+			tags := []string{"test"}
+			createdProduct, err := s.CreateProduct("", "", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetProductByID(createdProduct.ID)
+			odize.AssertError(t, err)
+		}).
+		Test("should delete multiple products independently", func(t *testing.T) {
+
+			tags1 := []string{"product1"}
+			product1, err := s.CreateProduct("Product 1", "First product", tags1, orgID)
+			odize.AssertNoError(t, err)
+
+			tags2 := []string{"product2"}
+			product2, err := s.CreateProduct("Product 2", "Second product", tags2, orgID)
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteProduct(product1.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetProductByID(product1.ID)
+			odize.AssertError(t, err)
+
+			fetchedProduct2, err := s.GetProductByID(product2.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, fetchedProduct2.ID, product2.ID)
+			odize.AssertEqual(t, fetchedProduct2.Name, "Product 2")
+		}).
+		Test("should verify product is removed from organisation product list after deletion", func(t *testing.T) {
+			org, err := s.CreateOrganisation("delete_verify_org", "delete_verify_namespace", "token", "test description")
+			odize.AssertNoError(t, err)
+
+			tags := []string{"list", "test"}
+			createdProduct, err := s.CreateProduct("List Test Product", "Product for list test", tags, org.ID)
+			odize.AssertNoError(t, err)
+
+			products, err := s.GetAllProductsForOrganisation(org.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(products), 1)
+			odize.AssertEqual(t, products[0].ID, createdProduct.ID)
+
+			err = s.DeleteProduct(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			products, err = s.GetAllProductsForOrganisation(org.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(products), 0)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
