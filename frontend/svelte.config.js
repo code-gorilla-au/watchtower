@@ -24,6 +24,7 @@ const config = {
 				"/products/create",
 				"/products/[product_id]/sync",
 				"/products/[product_id]/details",
+				"/products/[product_id]/edit",
 				"/settings"
 			]
 		}

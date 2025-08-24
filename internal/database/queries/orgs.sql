@@ -20,6 +20,11 @@ SELECT *
 FROM organisations
 ORDER BY friendly_name;
 
+-- name: ListOrgsOlderThanUpdatedAt :many
+SELECT * FROM organisations
+WHERE updated_at < ?
+ORDER BY updated_at DESC;
+
 -- name: GetDefaultOrganisation :one
 SELECT *
 FROM organisations
@@ -36,6 +41,11 @@ SET friendly_name = ?,
     updated_at    = unixepoch('now')
 WHERE id = ?
 RETURNING *;
+
+-- name: UpdateOrganisationSync :exec
+UPDATE organisations
+SET updated_at = unixepoch('now')
+WHERE id = ?;
 
 -- name: SetOrgsDefaultFalse :exec
 UPDATE organisations

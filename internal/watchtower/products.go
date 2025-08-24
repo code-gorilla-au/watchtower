@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"strings"
+	"time"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/github"
@@ -231,7 +232,8 @@ func (s *Service) deleteSecurityByProductID(id int64) error {
 func (s *Service) SyncOrgs() error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing orgs")
-	orgs, err := s.db.ListOrganisations(s.ctx)
+	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
+	orgs, err := s.db.ListOrgsOlderThanUpdatedAt(s.ctx, fiveMinutesAgo)
 	if err != nil {
 		logger.Error("Error fetching orgs", "error", err)
 		return err
@@ -269,6 +271,11 @@ func (s *Service) SyncOrg(orgId int64) error {
 		}
 	}
 
+	if err = s.db.UpdateOrganisationSync(s.ctx, org.ID); err != nil {
+		logger.Error("Error updating organisation sync", "error", err)
+		return err
+	}
+
 	return nil
 }
 
@@ -298,6 +305,11 @@ func (s *Service) syncProduct(product ProductDTO, org database.Organisation) err
 			logger.Error("Error syncing repos", "error", err)
 			return err
 		}
+	}
+
+	if err := s.db.UpdateProductSync(s.ctx, product.ID); err != nil {
+		logger.Error("Error updating product sync", "error", err)
+		return err
 	}
 
 	return nil
