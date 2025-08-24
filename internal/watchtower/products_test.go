@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 	"time"
+	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/odize"
 )
@@ -658,6 +659,194 @@ func TestService_DeleteProduct(t *testing.T) {
 			products, err = s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
 			odize.AssertEqual(t, len(products), 0)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_GetProductRepos(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_get_repos", "test_org_namespace_for_get_repos", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return empty slice when product has no matching repositories", func(t *testing.T) {
+			tags := []string{"no-matching-repos"}
+			product, err := s.CreateProduct("No Repos Product", "Product with no matching repositories", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 0)
+		}).
+		Test("should return single repository when product has one matching tag", func(t *testing.T) {
+			tags := []string{"single-repo-tag"}
+			product, err := s.CreateProduct("Single Repo Product", "Product with one repository", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "single-test-repo",
+				Url:   "https://github.com/test/single-test-repo",
+				Topic: "single-repo-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 1)
+			odize.AssertEqual(t, repos[0].Name, "single-test-repo")
+			odize.AssertEqual(t, repos[0].URL, "https://github.com/test/single-test-repo")
+			odize.AssertEqual(t, repos[0].Topic, "single-repo-tag")
+			odize.AssertEqual(t, repos[0].Owner, "test-owner")
+			odize.AssertTrue(t, repos[0].ID > 0)
+			odize.AssertFalse(t, repos[0].CreatedAt == time.Time{})
+			odize.AssertFalse(t, repos[0].UpdatedAt == time.Time{})
+		}).
+		Test("should return multiple repositories when product has multiple matching tags", func(t *testing.T) {
+			tags := []string{"multi-repo-tag1", "multi-repo-tag2"}
+			product, err := s.CreateProduct("Multi Repo Product", "Product with multiple repositories", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-test-repo-1",
+				Url:   "https://github.com/test/multi-test-repo-1",
+				Topic: "multi-repo-tag1",
+				Owner: "test-owner-1",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-test-repo-2",
+				Url:   "https://github.com/test/multi-test-repo-2",
+				Topic: "multi-repo-tag2",
+				Owner: "test-owner-2",
+			})
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 2)
+
+			repoNames := make(map[string]bool)
+			for _, repo := range repos {
+				repoNames[repo.Name] = true
+			}
+			odize.AssertTrue(t, repoNames["multi-test-repo-1"])
+			odize.AssertTrue(t, repoNames["multi-test-repo-2"])
+		}).
+		Test("should return only repositories with matching topics", func(t *testing.T) {
+			tags := []string{"matching-tag"}
+			product, err := s.CreateProduct("Filtering Product", "Product to test filtering", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "matching-repo",
+				Url:   "https://github.com/test/matching-repo",
+				Topic: "matching-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "non-matching-repo",
+				Url:   "https://github.com/test/non-matching-repo",
+				Topic: "different-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 1)
+			odize.AssertEqual(t, repos[0].Name, "matching-repo")
+			odize.AssertEqual(t, repos[0].Topic, "matching-tag")
+		}).
+		Test("should handle product with empty tags", func(t *testing.T) {
+			tags := []string{}
+			product, err := s.CreateProduct("Empty Tags Product", "Product with empty tags", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 0)
+		}).
+		Test("should return empty slice for non-existent product", func(t *testing.T) {
+			repos, err := s.GetProductRepos(99999)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 0)
+		}).
+		Test("should handle repositories with special characters in names and URLs", func(t *testing.T) {
+			tags := []string{"special-chars-tag"}
+			product, err := s.CreateProduct("Special Chars Product", "Product with special character repos", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "repo-with-dash_underscore.dot",
+				Url:   "https://github.com/test-owner/repo-with-dash_underscore.dot",
+				Topic: "special-chars-tag",
+				Owner: "test-owner-with-dash",
+			})
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 1)
+			odize.AssertEqual(t, repos[0].Name, "repo-with-dash_underscore.dot")
+			odize.AssertEqual(t, repos[0].URL, "https://github.com/test-owner/repo-with-dash_underscore.dot")
+			odize.AssertEqual(t, repos[0].Owner, "test-owner-with-dash")
+		}).
+		Test("should handle multiple repositories with same topic", func(t *testing.T) {
+			tags := []string{"same-topic"}
+			product, err := s.CreateProduct("Same Topic Product", "Product with multiple repos having same topic", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "same-topic-repo-1",
+				Url:   "https://github.com/test/same-topic-repo-1",
+				Topic: "same-topic",
+				Owner: "owner-1",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "same-topic-repo-2",
+				Url:   "https://github.com/test/same-topic-repo-2",
+				Topic: "same-topic",
+				Owner: "owner-2",
+			})
+			odize.AssertNoError(t, err)
+
+			repos, err := s.GetProductRepos(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(repos), 2)
+
+			repoNames := make(map[string]string)
+			for _, repo := range repos {
+				repoNames[repo.Name] = repo.Owner
+				odize.AssertEqual(t, repo.Topic, "same-topic")
+				odize.AssertTrue(t, repo.ID > 0)
+			}
+			odize.AssertEqual(t, repoNames["same-topic-repo-1"], "owner-1")
+			odize.AssertEqual(t, repoNames["same-topic-repo-2"], "owner-2")
 		}).
 		Run()
 	odize.AssertNoError(t, err)
