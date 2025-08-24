@@ -112,6 +112,7 @@ type UpdateOrgParams struct {
 	DefaultOrg   bool
 	FriendlyName string
 	Namespace    string
+	Description  string
 }
 
 // UpdateOrganisation updates the details of an organisation based on the provided parameters.
@@ -133,6 +134,7 @@ func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, e
 		DefaultOrg:   params.DefaultOrg,
 		FriendlyName: params.FriendlyName,
 		Namespace:    params.Namespace,
+		Description:  params.Description,
 	})
 	if err != nil {
 		logger.Error("Error updating organisation", "error", err)

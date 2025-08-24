@@ -259,3 +259,120 @@ func TestService_DeleteOrganisation(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_UpdateOrganisation(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return error when trying to update non-existent organisation", func(t *testing.T) {
+			params := UpdateOrgParams{
+				ID:           999,
+				FriendlyName: "updated_name",
+				Namespace:    "updated_namespace",
+				Description:  "updated_description",
+				DefaultOrg:   false,
+			}
+			_, err := s.UpdateOrganisation(params)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully update organisation fields", func(t *testing.T) {
+			createdOrg, err := s.CreateOrganisation("original_org", "original_namespace", "token", "original description")
+			odize.AssertNoError(t, err)
+
+			params := UpdateOrgParams{
+				ID:           createdOrg.ID,
+				FriendlyName: "updated_friendly_name",
+				Namespace:    "updated_namespace",
+				Description:  "updated_description",
+				DefaultOrg:   false,
+			}
+			updatedOrg, err := s.UpdateOrganisation(params)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedOrg.ID, createdOrg.ID)
+			odize.AssertEqual(t, updatedOrg.FriendlyName, "updated_friendly_name")
+			odize.AssertEqual(t, updatedOrg.Namespace, "updated_namespace")
+			odize.AssertEqual(t, updatedOrg.DefaultOrg, false)
+			odize.AssertEqual(t, updatedOrg.Description, "updated_description")
+		}).
+		Test("should successfully set organisation as default", func(t *testing.T) {
+			firstOrg, err := s.CreateOrganisation("first_update_org", "first_update_namespace", "token1", "first description")
+			odize.AssertNoError(t, err)
+
+			secondOrg, err := s.CreateOrganisation("second_update_org", "second_update_namespace", "token2", "second description")
+			odize.AssertNoError(t, err)
+
+			params := UpdateOrgParams{
+				ID:           firstOrg.ID,
+				FriendlyName: "updated_first_org",
+				Namespace:    "updated_first_namespace",
+				Description:  "updated_first_description",
+				DefaultOrg:   true,
+			}
+			updatedOrg, err := s.UpdateOrganisation(params)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedOrg.ID, firstOrg.ID)
+			odize.AssertEqual(t, updatedOrg.FriendlyName, "updated_first_org")
+			odize.AssertEqual(t, updatedOrg.Namespace, "updated_first_namespace")
+			odize.AssertEqual(t, updatedOrg.DefaultOrg, true)
+
+			fetchedSecondOrg, err := s.GetOrganisationByID(secondOrg.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, fetchedSecondOrg.DefaultOrg, false)
+		}).
+		Test("should unset previous defaults when setting new default", func(t *testing.T) {
+			firstOrg, err := s.CreateOrganisation("prev_default_org", "prev_default_namespace", "token1", "prev description")
+			odize.AssertNoError(t, err)
+
+			secondOrg, err := s.CreateOrganisation("new_default_org", "new_default_namespace", "token2", "new description")
+			odize.AssertNoError(t, err)
+
+			params := UpdateOrgParams{
+				ID:           firstOrg.ID,
+				FriendlyName: firstOrg.FriendlyName,
+				Namespace:    firstOrg.Namespace,
+				Description:  firstOrg.Description,
+				DefaultOrg:   true,
+			}
+			_, err = s.UpdateOrganisation(params)
+			odize.AssertNoError(t, err)
+
+			defaultOrg, err := s.GetDefaultOrganisation()
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, defaultOrg.ID, firstOrg.ID)
+
+			fetchedSecondOrg, err := s.GetOrganisationByID(secondOrg.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, fetchedSecondOrg.DefaultOrg, false)
+		}).
+		Test("should update without changing default status when DefaultOrg is false", func(t *testing.T) {
+			createdOrg, err := s.CreateOrganisation("maintain_default_org", "maintain_default_namespace", "token", "maintain description")
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, createdOrg.DefaultOrg, true)
+
+			params := UpdateOrgParams{
+				ID:           createdOrg.ID,
+				FriendlyName: "updated_maintain_org",
+				Namespace:    "updated_maintain_namespace",
+				Description:  "updated_maintain_description",
+				DefaultOrg:   false,
+			}
+			updatedOrg, err := s.UpdateOrganisation(params)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedOrg.ID, createdOrg.ID)
+			odize.AssertEqual(t, updatedOrg.FriendlyName, "updated_maintain_org")
+			odize.AssertEqual(t, updatedOrg.Namespace, "updated_maintain_namespace")
+			odize.AssertEqual(t, updatedOrg.DefaultOrg, false)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
