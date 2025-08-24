@@ -37,9 +37,28 @@ tasks:
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
+  go-gen-coverage:
+    desc: Generate go coverage.
+    deps: [go-test]
+    cmds:
+      - grep -v -E -f ${PWD}/.covignore coverage.out > coverage.filtered.out
+      - mv coverage.filtered.out coverage.out
+
+  go-cover:
+    desc: Run go coverage.
+    deps: [go-gen-coverage]
+    cmds:
+      - go tool cover -func={{ .GOLANG_COVERAGE }} | grep total
+
+  go-cover-html:
+    desc: Run go coverage html.
+    deps: [go-gen-coverage]
+    cmds:
+      - go tool cover -html={{ .GOLANG_COVERAGE }}
+
   go-ci:
     desc: Run go ci tasks.
-    deps: [go-lint, go-test]
+    deps: [go-lint, go-cover]
 
   frontend-format:
     desc: Run frontend formatters.

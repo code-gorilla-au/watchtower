@@ -3,6 +3,7 @@
     <words>
       <w>cmds</w>
       <w>coverprofile</w>
+      <w>covignore</w>
       <w>failfast</w>
       <w>gitkeep</w>
       <w>golangci</w>
