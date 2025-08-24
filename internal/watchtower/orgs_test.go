@@ -192,3 +192,70 @@ func TestService_GetOrganisationByID(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_GetAllOrganisations(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return all existing organisations", func(t *testing.T) {
+			initialOrgs, err := s.GetAllOrganisations()
+			odize.AssertNoError(t, err)
+			initialCount := len(initialOrgs)
+			odize.AssertTrue(t, initialCount > 0)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_DeleteOrganisation(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should not return error when trying to delete non-existent organisation", func(t *testing.T) {
+			err := s.DeleteOrganisation(999)
+			odize.AssertNoError(t, err)
+		}).
+		Test("should successfully delete existing organisation", func(t *testing.T) {
+			createdOrg, err := s.CreateOrganisation("delete_test_org", "delete_test_namespace", "token", "delete test description")
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteOrganisation(createdOrg.ID)
+			odize.AssertNoError(t, err)
+		}).
+		Test("should not be able to retrieve deleted organisation", func(t *testing.T) {
+			createdOrg, err := s.CreateOrganisation("verify_delete_org", "verify_delete_namespace", "token", "verify delete description")
+			odize.AssertNoError(t, err)
+
+			err = s.DeleteOrganisation(createdOrg.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetOrganisationByID(createdOrg.ID)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully delete default organisation", func(t *testing.T) {
+			createdOrg, err := s.CreateOrganisation("default_delete_org", "default_delete_namespace", "token", "default delete description")
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, createdOrg.DefaultOrg, true)
+
+			err = s.DeleteOrganisation(createdOrg.ID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.GetOrganisationByID(createdOrg.ID)
+			odize.AssertError(t, err)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
