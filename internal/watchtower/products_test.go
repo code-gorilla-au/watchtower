@@ -394,3 +394,141 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_UpdateProduct(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_update_product", "test_org_namespace_for_update_product", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return error when trying to update non-existent product", func(t *testing.T) {
+			tags := `["updated"]`
+			_, err := s.UpdateProduct(999, "Updated Name", &tags)
+			odize.AssertError(t, err)
+		}).
+		Test("should successfully update product with new name and tags", func(t *testing.T) {
+
+			initialTags := []string{"initial", "tag"}
+			createdProduct, err := s.CreateProduct("Initial Name", "Initial description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			updatedTags := `["updated", "new", "tags"]`
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Name", &updatedTags)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
+			odize.AssertEqual(t, updatedProduct.Name, "Updated Name")
+			odize.AssertEqual(t, updatedProduct.Description, "Initial description")
+			odize.AssertEqual(t, len(updatedProduct.Tags), 3)
+			odize.AssertEqual(t, updatedProduct.Tags[0], "updated")
+			odize.AssertEqual(t, updatedProduct.Tags[1], "new")
+			odize.AssertEqual(t, updatedProduct.Tags[2], "tags")
+		}).
+		Test("should successfully update product with only name change (nil tags)", func(t *testing.T) {
+
+			initialTags := []string{"keep", "these", "tags"}
+			createdProduct, err := s.CreateProduct("Old Name", "Keep description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "New Name", nil)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
+			odize.AssertEqual(t, updatedProduct.Name, "New Name")
+			odize.AssertEqual(t, updatedProduct.Description, "Keep description")
+			odize.AssertEqual(t, len(updatedProduct.Tags), 0)
+		}).
+		Test("should successfully update product with only tags change", func(t *testing.T) {
+
+			initialTags := []string{"old", "tags"}
+			createdProduct, err := s.CreateProduct("Keep Name", "Keep description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			newTags := `["completely", "different", "tags"]`
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Keep Name", &newTags)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
+			odize.AssertEqual(t, updatedProduct.Name, "Keep Name")
+			odize.AssertEqual(t, updatedProduct.Description, "Keep description")
+			odize.AssertEqual(t, len(updatedProduct.Tags), 3)
+			odize.AssertEqual(t, updatedProduct.Tags[0], "completely")
+			odize.AssertEqual(t, updatedProduct.Tags[1], "different")
+			odize.AssertEqual(t, updatedProduct.Tags[2], "tags")
+		}).
+		Test("should successfully update product with empty tags", func(t *testing.T) {
+
+			initialTags := []string{"remove", "these"}
+			createdProduct, err := s.CreateProduct("Product Name", "Product description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			emptyTags := `[]`
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Product Name", &emptyTags)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
+			odize.AssertEqual(t, updatedProduct.Name, "Updated Product Name")
+			odize.AssertEqual(t, updatedProduct.Description, "Product description")
+			odize.AssertEqual(t, len(updatedProduct.Tags), 0)
+		}).
+		Test("should successfully update product with complex tags containing special characters", func(t *testing.T) {
+
+			initialTags := []string{"simple"}
+			createdProduct, err := s.CreateProduct("Test Product", "Test description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			complexTags := `["tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"]`
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "complex tags product", &complexTags)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
+			odize.AssertEqual(t, updatedProduct.Name, "complex tags product")
+			odize.AssertEqual(t, updatedProduct.Description, "Test description")
+			odize.AssertEqual(t, len(updatedProduct.Tags), 4)
+			odize.AssertEqual(t, updatedProduct.Tags[0], "tag-with-dash")
+			odize.AssertEqual(t, updatedProduct.Tags[1], "tag_with_underscore")
+			odize.AssertEqual(t, updatedProduct.Tags[2], "tag.with.dots")
+			odize.AssertEqual(t, updatedProduct.Tags[3], "tag with spaces")
+		}).
+		Test("should verify updated product can be retrieved correctly", func(t *testing.T) {
+
+			initialTags := []string{"before"}
+			createdProduct, err := s.CreateProduct("Before Update", "Before description", initialTags, orgID)
+			odize.AssertNoError(t, err)
+
+			afterTags := `["after", "update"]`
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "After Update", &afterTags)
+			odize.AssertNoError(t, err)
+
+			retrievedProduct, err := s.GetProductByID(createdProduct.ID)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, retrievedProduct.ID, updatedProduct.ID)
+			odize.AssertEqual(t, retrievedProduct.Name, "After Update")
+			odize.AssertEqual(t, retrievedProduct.Description, "Before description")
+			odize.AssertEqual(t, len(retrievedProduct.Tags), 2)
+			odize.AssertEqual(t, retrievedProduct.Tags[0], "after")
+			odize.AssertEqual(t, retrievedProduct.Tags[1], "update")
+			odize.AssertEqual(t, retrievedProduct.CreatedAt, updatedProduct.CreatedAt)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
