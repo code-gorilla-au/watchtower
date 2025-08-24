@@ -17,14 +17,9 @@ type Migrator struct {
 	db *sql.DB
 }
 
-func NewMigrator(filePath string) (*Migrator, error) {
-	dbFile := path.Join(filePath, dbName)
-	db, err := sql.Open("sqlite", dbFile)
-	if err != nil {
-		return nil, err
-	}
+func NewMigrator(db *sql.DB) *Migrator {
 
-	return &Migrator{db: db}, nil
+	return &Migrator{db: db}
 }
 
 func (m *Migrator) Init() error {
@@ -34,11 +29,19 @@ func (m *Migrator) Init() error {
 
 // NewDBFromProvider initializes a new Queries instance using a SQLite database at the given file path.
 // Returns a pointer to Queries and an error if the database connection cannot be established.
-func NewDBFromProvider(filePath string) (*Queries, error) {
-	dbFile := path.Join(filePath, dbName)
+func NewDBFromProvider(filePath string) (*Queries, *sql.DB, error) {
+	dbFile := resolveDBPath(filePath)
+
 	db, err := sql.Open("sqlite", dbFile)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return New(db), nil
+	return New(db), db, nil
+}
+
+func resolveDBPath(filePath string) string {
+	if filePath == ":memory:" {
+		return filePath
+	}
+	return path.Join(filePath, dbName)
 }

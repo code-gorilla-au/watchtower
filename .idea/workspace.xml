@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding last sync workers">
-      <change afterPath="$PROJECT_DIR$/.covignore" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding test coverage">
+      <change afterPath="$PROJECT_DIR$/internal/watchtower/orgs_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/local/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,9 +61,9 @@
     &quot;accountId&quot;: &quot;96e8ba8e-aa40-4f88-95b7-27f1c146a9c2&quot;
   }
 }</component>
-  <component name="GoLinterSelectedExecutable" path="$USER_HOME$/go/bin/golangci-lint" />
+  <component name="GoLinterSelectedExecutable" path="$USER_HOME$/golangci-lint/golangci-lint" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -72,6 +77,7 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "DefaultGoTemplateProperty": "Go File",
+    "Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.GoLinterPluginOnboarding": "true",
     "RunOnceActivity.GoLinterPluginStorageMigration": "true",
@@ -115,6 +121,25 @@
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="TestService_CreateOrganisation in watchtower/internal/watchtower" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="watchtower" />
+      <working_directory value="$PROJECT_DIR$/internal/watchtower" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="watchtower/internal/watchtower" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestService_CreateOrganisation\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -137,7 +162,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip" />
     <MESSAGE value="adding docs" />
     <MESSAGE value="adding active link styles" />
     <MESSAGE value="adding get security methods" />
@@ -162,7 +186,8 @@
     <MESSAGE value="adding last sync" />
     <MESSAGE value="update time + method" />
     <MESSAGE value="adding last sync workers" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding last sync workers" />
+    <MESSAGE value="adding test coverage" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding test coverage" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

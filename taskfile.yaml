@@ -41,8 +41,8 @@ tasks:
     desc: Generate go coverage.
     deps: [go-test]
     cmds:
-      - grep -v -E -f ${PWD}/.covignore coverage.out > coverage.filtered.out
-      - mv coverage.filtered.out coverage.out
+      - grep -v -E -f ${PWD}/.covignore {{ .GOLANG_COVERAGE }} > coverage.filtered.out
+      - mv coverage.filtered.out {{ .GOLANG_COVERAGE }}
 
   go-cover:
     desc: Run go coverage.
