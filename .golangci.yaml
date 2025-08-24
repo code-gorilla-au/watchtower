@@ -1,0 +1,11 @@
+version: 2
+
+linters:
+  enable:
+    - cyclop
+    - nestif
+    - bodyclose
+    - iface
+    - gosec
+  exclusions:
+    generated: lax

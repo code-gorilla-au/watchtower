@@ -39,17 +39,8 @@ func (w *OrgSyncWorker) Start(ctx context.Context) {
 				w.wg.Done()
 				return
 			default:
-				orgs, err := w.watchTower.GetAllOrganisations()
-				if err != nil {
+				if err := w.watchTower.SyncOrgs(); err != nil {
 					logger.Error("Error syncing orgs", "error", err)
-					continue
-				}
-
-				for _, org := range orgs {
-					if err = w.watchTower.SyncOrg(org.ID); err != nil {
-						logger.Error("Error syncing org", "error", err)
-						continue
-					}
 				}
 
 				time.Sleep(time.Minute * 3)

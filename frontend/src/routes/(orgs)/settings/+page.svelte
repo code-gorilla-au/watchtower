@@ -4,7 +4,6 @@
 	import { settingsSvc } from "$lib/settings";
 	import { Label } from "$components/ui/label";
 	import { Switch } from "$components/ui/switch";
-	import { Button } from "$components/ui/button";
 
 	type FormState = {
 		darkMode: boolean;

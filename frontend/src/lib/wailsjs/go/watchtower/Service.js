@@ -18,10 +18,6 @@ export function DeleteProduct(arg1) {
   return window['go']['watchtower']['Service']['DeleteProduct'](arg1);
 }
 
-export function DeletePullRequestsByProductID(arg1) {
-  return window['go']['watchtower']['Service']['DeletePullRequestsByProductID'](arg1);
-}
-
 export function GetAllOrganisations() {
   return window['go']['watchtower']['Service']['GetAllOrganisations']();
 }
@@ -72,6 +68,10 @@ export function Startup(arg1) {
 
 export function SyncOrg(arg1) {
   return window['go']['watchtower']['Service']['SyncOrg'](arg1);
+}
+
+export function SyncOrgs() {
+  return window['go']['watchtower']['Service']['SyncOrgs']();
 }
 
 export function SyncProduct(arg1) {

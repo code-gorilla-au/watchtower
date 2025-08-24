@@ -12,9 +12,10 @@
 		loading?: boolean;
 		onUpdate?: (formData: ProductUpdateFormData) => void;
 		onCreate?: (formData: ProductUpdateFormData) => void;
+		onCancel?: (e: Event) => void;
 	};
 
-	let { product, mode, onUpdate, onCreate, error, loading }: Props = $props();
+	let { product, mode, onUpdate, onCreate, error, loading, onCancel }: Props = $props();
 
 	const formData = $state<ProductUpdateFormData>({
 		id: product?.id ?? 0,
@@ -63,13 +64,16 @@
 		bind:value={formData.tags}
 	/>
 
-	<div class="my-10 flex w-full justify-end gap-3">
-		{#if error}
-			<div class="border-destructive text-destructive">
-				<p>{error}</p>
-			</div>
-		{/if}
+	{#if error}
+		<div class="border-destructive text-destructive">
+			<p>{error}</p>
+		</div>
+	{/if}
 
+	<div class="my-10 flex w-full justify-end gap-3">
+		{#if onCancel}
+			<Button variant="outline" onclick={onCancel}>Cancel</Button>
+		{/if}
 		<Button type="submit" class="capitalize">
 			{#if loading}
 				<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />

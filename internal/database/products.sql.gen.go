@@ -278,6 +278,23 @@ func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
 	return err
 }
 
+const deleteSecurityByProductID = `-- name: DeleteSecurityByProductID :exec
+DELETE FROM securities
+WHERE external_id IN (SELECT s.external_id
+                      FROM securities s
+                               JOIN repositories r ON r.name = s.repository_name
+                               JOIN products p ON p.id = ?
+                          AND JSON_VALID(p.tags)
+                          AND EXISTS (SELECT 1
+                                      FROM JSON_EACH(p.tags)
+                                      WHERE JSON_EACH.value = r.topic))
+`
+
+func (q *Queries) DeleteSecurityByProductID(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteSecurityByProductID, id)
+	return err
+}
+
 const getOrganisationForProduct = `-- name: GetOrganisationForProduct :one
 SELECT o.id, o.friendly_name, o.description, o.namespace, o.default_org, o.token, o.created_at, o.updated_at
 FROM product_organisations po
@@ -628,5 +645,16 @@ type UpdateProductParams struct {
 
 func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) error {
 	_, err := q.db.ExecContext(ctx, updateProduct, arg.Name, arg.Tags, arg.ID)
+	return err
+}
+
+const updateProductSync = `-- name: UpdateProductSync :exec
+UPDATE products
+SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+`
+
+func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, updateProductSync, id)
 	return err
 }

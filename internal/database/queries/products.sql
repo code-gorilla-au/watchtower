@@ -27,6 +27,11 @@ SET name       = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?;
 
+-- name: UpdateProductSync :exec
+UPDATE products
+SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?;
+
 -- name: GetProductByID :one
 SELECT *
 FROM products
@@ -208,3 +213,14 @@ FROM securities s
 WHERE po.organisation_id = ?
   AND s.state = ?
 ORDER BY s.created_at DESC;
+
+-- name: DeleteSecurityByProductID :exec
+DELETE FROM securities
+WHERE external_id IN (SELECT s.external_id
+                      FROM securities s
+                               JOIN repositories r ON r.name = s.repository_name
+                               JOIN products p ON p.id = ?
+                          AND JSON_VALID(p.tags)
+                          AND EXISTS (SELECT 1
+                                      FROM JSON_EACH(p.tags)
+                                      WHERE JSON_EACH.value = r.topic));

@@ -150,6 +150,44 @@ func (q *Queries) ListOrganisations(ctx context.Context) ([]Organisation, error)
 	return items, nil
 }
 
+const listOrgsOlderThanUpdatedAt = `-- name: ListOrgsOlderThanUpdatedAt :many
+SELECT id, friendly_name, description, namespace, default_org, token, created_at, updated_at FROM organisations
+WHERE updated_at < ?
+ORDER BY updated_at DESC
+`
+
+func (q *Queries) ListOrgsOlderThanUpdatedAt(ctx context.Context, updatedAt int64) ([]Organisation, error) {
+	rows, err := q.db.QueryContext(ctx, listOrgsOlderThanUpdatedAt, updatedAt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Organisation
+	for rows.Next() {
+		var i Organisation
+		if err := rows.Scan(
+			&i.ID,
+			&i.FriendlyName,
+			&i.Description,
+			&i.Namespace,
+			&i.DefaultOrg,
+			&i.Token,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const setDefaultOrg = `-- name: SetDefaultOrg :one
 UPDATE organisations
 SET default_org = true
@@ -223,4 +261,15 @@ func (q *Queries) UpdateOrganisation(ctx context.Context, arg UpdateOrganisation
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const updateOrganisationSync = `-- name: UpdateOrganisationSync :exec
+UPDATE organisations
+SET updated_at = unixepoch('now')
+WHERE id = ?
+`
+
+func (q *Queries) UpdateOrganisationSync(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, updateOrganisationSync, id)
+	return err
 }

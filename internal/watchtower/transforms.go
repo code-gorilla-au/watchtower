@@ -30,10 +30,7 @@ func ToProductDTO(m database.Product) ProductDTO {
 	if m.Tags.Valid {
 		val := m.Tags.String
 
-		err := json.Unmarshal([]byte(val), &tagList)
-		if err != nil {
-			val = ""
-		}
+		_ = json.Unmarshal([]byte(val), &tagList)
 
 	}
 	return ProductDTO{

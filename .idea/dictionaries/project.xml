@@ -5,6 +5,8 @@
       <w>coverprofile</w>
       <w>failfast</w>
       <w>gitkeep</w>
+      <w>golangci</w>
+      <w>govulncheck</w>
       <w>orgs</w>
       <w>querier</w>
       <w>sqlc</w>
