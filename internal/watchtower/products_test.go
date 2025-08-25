@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"testing"
 	"time"
@@ -847,6 +848,271 @@ func TestService_GetProductRepos(t *testing.T) {
 			}
 			odize.AssertEqual(t, repoNames["same-topic-repo-1"], "owner-1")
 			odize.AssertEqual(t, repoNames["same-topic-repo-2"], "owner-2")
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_GetProductPullRequests(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_get_prs", "test_org_namespace_for_get_prs", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return empty slice when product has no matching pull requests", func(t *testing.T) {
+			tags := []string{"no-matching-prs"}
+			product, err := s.CreateProduct("No PRs Product", "Product with no matching pull requests", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 0)
+		}).
+		Test("should return single pull request when product has one matching repository", func(t *testing.T) {
+			tags := []string{"single-pr-tag"}
+			product, err := s.CreateProduct("Single PR Product", "Product with one pull request", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "single-pr-repo",
+				Url:   "https://github.com/test/single-pr-repo",
+				Topic: "single-pr-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-external-1",
+				Title:          "Single Test PR",
+				RepositoryName: "single-pr-repo",
+				Url:            "https://github.com/test/single-pr-repo/pull/1",
+				State:          "OPEN",
+				Author:         "test-author",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 1)
+			odize.AssertEqual(t, prs[0].ExternalID, "pr-external-1")
+			odize.AssertEqual(t, prs[0].Title, "Single Test PR")
+			odize.AssertEqual(t, prs[0].RepositoryName, "single-pr-repo")
+			odize.AssertEqual(t, prs[0].URL, "https://github.com/test/single-pr-repo/pull/1")
+			odize.AssertEqual(t, prs[0].State, "OPEN")
+			odize.AssertEqual(t, prs[0].Author, "test-author")
+			odize.AssertTrue(t, prs[0].ID > 0)
+			odize.AssertFalse(t, prs[0].CreatedAt == time.Time{})
+			odize.AssertFalse(t, prs[0].UpdatedAt == time.Time{})
+		}).
+		Test("should return multiple pull requests when product has multiple matching repositories", func(t *testing.T) {
+			tags := []string{"multi-pr-tag1", "multi-pr-tag2"}
+			product, err := s.CreateProduct("Multi PR Product", "Product with multiple pull requests", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-pr-repo-1",
+				Url:   "https://github.com/test/multi-pr-repo-1",
+				Topic: "multi-pr-tag1",
+				Owner: "test-owner-1",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-pr-repo-2",
+				Url:   "https://github.com/test/multi-pr-repo-2",
+				Topic: "multi-pr-tag2",
+				Owner: "test-owner-2",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-external-2",
+				Title:          "Multi Test PR 1",
+				RepositoryName: "multi-pr-repo-1",
+				Url:            "https://github.com/test/multi-pr-repo-1/pull/1",
+				State:          "OPEN",
+				Author:         "test-author-1",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-external-3",
+				Title:          "Multi Test PR 2",
+				RepositoryName: "multi-pr-repo-2",
+				Url:            "https://github.com/test/multi-pr-repo-2/pull/1",
+				State:          "OPEN",
+				Author:         "test-author-2",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 2)
+
+			prTitles := make(map[string]bool)
+			for _, pr := range prs {
+				prTitles[pr.Title] = true
+				odize.AssertEqual(t, pr.State, "OPEN")
+			}
+			odize.AssertTrue(t, prTitles["Multi Test PR 1"])
+			odize.AssertTrue(t, prTitles["Multi Test PR 2"])
+		}).
+		Test("should return only OPEN pull requests and filter out closed ones", func(t *testing.T) {
+			tags := []string{"state-filter-tag"}
+			product, err := s.CreateProduct("State Filter Product", "Product to test state filtering", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "state-filter-repo",
+				Url:   "https://github.com/test/state-filter-repo",
+				Topic: "state-filter-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-external-open",
+				Title:          "Open PR",
+				RepositoryName: "state-filter-repo",
+				Url:            "https://github.com/test/state-filter-repo/pull/1",
+				State:          "OPEN",
+				Author:         "test-author",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-external-closed",
+				Title:          "Closed PR",
+				RepositoryName: "state-filter-repo",
+				Url:            "https://github.com/test/state-filter-repo/pull/2",
+				State:          "CLOSED",
+				Author:         "test-author",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 1)
+			odize.AssertEqual(t, prs[0].Title, "Open PR")
+			odize.AssertEqual(t, prs[0].State, "OPEN")
+		}).
+		Test("should handle product with empty tags", func(t *testing.T) {
+			tags := []string{}
+			product, err := s.CreateProduct("Empty Tags PR Product", "Product with empty tags", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 0)
+		}).
+		Test("should return empty slice for non-existent product", func(t *testing.T) {
+			prs, err := s.GetProductPullRequests(99999)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 0)
+		}).
+		Test("should handle pull requests with special characters and complete data", func(t *testing.T) {
+			tags := []string{"special-chars-pr-tag"}
+			product, err := s.CreateProduct("Special Chars PR Product", "Product with special character PRs", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "special-chars-pr-repo",
+				Url:   "https://github.com/test-owner/special-chars-pr-repo",
+				Topic: "special-chars-pr-tag",
+				Owner: "test-owner-with-dash",
+			})
+			odize.AssertNoError(t, err)
+
+			mergedAt := sql.NullInt64{Int64: time.Now().Unix(), Valid: true}
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-with-special-chars",
+				Title:          "Fix: bug with special-chars & symbols",
+				RepositoryName: "special-chars-pr-repo",
+				Url:            "https://github.com/test-owner/special-chars-pr-repo/pull/1",
+				State:          "OPEN",
+				Author:         "author-with_underscore",
+				MergedAt:       mergedAt,
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 1)
+			odize.AssertEqual(t, prs[0].Title, "Fix: bug with special-chars & symbols")
+			odize.AssertEqual(t, prs[0].Author, "author-with_underscore")
+			odize.AssertEqual(t, prs[0].ExternalID, "pr-with-special-chars")
+		}).
+		Test("should handle multiple pull requests from same repository", func(t *testing.T) {
+			tags := []string{"same-repo-pr-tag"}
+			product, err := s.CreateProduct("Same Repo PR Product", "Product with multiple PRs from same repo", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "same-repo-multiple-prs",
+				Url:   "https://github.com/test/same-repo-multiple-prs",
+				Topic: "same-repo-pr-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-same-repo-1",
+				Title:          "First PR from same repo",
+				RepositoryName: "same-repo-multiple-prs",
+				Url:            "https://github.com/test/same-repo-multiple-prs/pull/1",
+				State:          "OPEN",
+				Author:         "author-1",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "pr-same-repo-2",
+				Title:          "Second PR from same repo",
+				RepositoryName: "same-repo-multiple-prs",
+				Url:            "https://github.com/test/same-repo-multiple-prs/pull/2",
+				State:          "OPEN",
+				Author:         "author-2",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetProductPullRequests(product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 2)
+
+			prTitles := make(map[string]string)
+			for _, pr := range prs {
+				prTitles[pr.Title] = pr.Author
+				odize.AssertEqual(t, pr.RepositoryName, "same-repo-multiple-prs")
+				odize.AssertEqual(t, pr.State, "OPEN")
+				odize.AssertTrue(t, pr.ID > 0)
+			}
+			odize.AssertEqual(t, prTitles["First PR from same repo"], "author-1")
+			odize.AssertEqual(t, prTitles["Second PR from same repo"], "author-2")
 		}).
 		Run()
 	odize.AssertNoError(t, err)
