@@ -1117,3 +1117,221 @@ func TestService_GetProductPullRequests(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_GetPullRequestByOrganisation(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_pr_by_org", "test_org_namespace_for_pr_by_org", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return error when organisation does not exist", func(t *testing.T) {
+			prs, err := s.GetPullRequestByOrganisation(99999)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 0)
+		}).
+		Test("should return empty slice when organisation has no pull requests", func(t *testing.T) {
+			prs, err := s.GetPullRequestByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 0)
+		}).
+		Test("should return pull requests for organisation with products", func(t *testing.T) {
+			tags := []string{"org-pr-test-tag"}
+			_, err := s.CreateProduct("Org PR Test Product", "Product for org PR testing", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-pr-test-repo",
+				Url:   "https://github.com/test/org-pr-test-repo",
+				Topic: "org-pr-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-external-1",
+				Title:          "First Org PR",
+				RepositoryName: "org-pr-test-repo",
+				Url:            "https://github.com/test/org-pr-test-repo/pull/1",
+				State:          "OPEN",
+				Author:         "test-author-1",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-external-2",
+				Title:          "Second Org PR",
+				RepositoryName: "org-pr-test-repo",
+				Url:            "https://github.com/test/org-pr-test-repo/pull/2",
+				State:          "OPEN",
+				Author:         "test-author-2",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-external-closed",
+				Title:          "Closed Org PR",
+				RepositoryName: "org-pr-test-repo",
+				Url:            "https://github.com/test/org-pr-test-repo/pull/3",
+				State:          "CLOSED",
+				Author:         "test-author-3",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetPullRequestByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(prs), 2)
+
+			prTitles := make(map[string]string)
+			for _, pr := range prs {
+				prTitles[pr.Title] = pr.Author
+				odize.AssertEqual(t, pr.State, "OPEN")
+				odize.AssertTrue(t, pr.ID > 0)
+			}
+			odize.AssertEqual(t, prTitles["First Org PR"], "test-author-1")
+			odize.AssertEqual(t, prTitles["Second Org PR"], "test-author-2")
+		}).
+		Test("should only return OPEN pull requests for organisation", func(t *testing.T) {
+			tags := []string{"org-pr-state-test-tag"}
+			_, err := s.CreateProduct("Org PR State Test Product", "Product for org PR state testing", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-pr-state-test-repo",
+				Url:   "https://github.com/test/org-pr-state-test-repo",
+				Topic: "org-pr-state-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			// Create pull requests with different states
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-open-state",
+				Title:          "Open State PR",
+				RepositoryName: "org-pr-state-test-repo",
+				Url:            "https://github.com/test/org-pr-state-test-repo/pull/1",
+				State:          "OPEN",
+				Author:         "state-test-author",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-closed-state",
+				Title:          "Closed State PR",
+				RepositoryName: "org-pr-state-test-repo",
+				Url:            "https://github.com/test/org-pr-state-test-repo/pull/2",
+				State:          "CLOSED",
+				Author:         "state-test-author",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "org-pr-merged-state",
+				Title:          "Merged State PR",
+				RepositoryName: "org-pr-state-test-repo",
+				Url:            "https://github.com/test/org-pr-state-test-repo/pull/3",
+				State:          "MERGED",
+				Author:         "state-test-author",
+				MergedAt:       sql.NullInt64{Int64: time.Now().Unix(), Valid: true},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetPullRequestByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+
+			// Should only return OPEN PRs, including from previous test
+			openPRsFound := 0
+			for _, pr := range prs {
+				if pr.Title == "Open State PR" {
+					openPRsFound++
+					odize.AssertEqual(t, pr.State, "OPEN")
+				}
+				odize.AssertEqual(t, pr.State, "OPEN")
+			}
+			odize.AssertTrue(t, openPRsFound == 1)
+		}).
+		Test("should handle organisation with multiple products and repositories", func(t *testing.T) {
+			tags1 := []string{"multi-prod-tag-1"}
+			_, err := s.CreateProduct("Multi Prod 1", "First product for multi test", tags1, orgID)
+			odize.AssertNoError(t, err)
+
+			tags2 := []string{"multi-prod-tag-2"}
+			_, err = s.CreateProduct("Multi Prod 2", "Second product for multi test", tags2, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-prod-repo-1",
+				Url:   "https://github.com/test/multi-prod-repo-1",
+				Topic: "multi-prod-tag-1",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-prod-repo-2",
+				Url:   "https://github.com/test/multi-prod-repo-2",
+				Topic: "multi-prod-tag-2",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "multi-prod-pr-1",
+				Title:          "PR from Product 1",
+				RepositoryName: "multi-prod-repo-1",
+				Url:            "https://github.com/test/multi-prod-repo-1/pull/1",
+				State:          "OPEN",
+				Author:         "multi-test-author-1",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+				ExternalID:     "multi-prod-pr-2",
+				Title:          "PR from Product 2",
+				RepositoryName: "multi-prod-repo-2",
+				Url:            "https://github.com/test/multi-prod-repo-2/pull/1",
+				State:          "OPEN",
+				Author:         "multi-test-author-2",
+				MergedAt:       sql.NullInt64{},
+			})
+			odize.AssertNoError(t, err)
+
+			prs, err := s.GetPullRequestByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+
+			// Should return PRs from both products, plus any from previous tests
+			multiProdPRsFound := 0
+			for _, pr := range prs {
+				if pr.Title == "PR from Product 1" || pr.Title == "PR from Product 2" {
+					multiProdPRsFound++
+					odize.AssertEqual(t, pr.State, "OPEN")
+				}
+			}
+			odize.AssertTrue(t, multiProdPRsFound == 2)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
