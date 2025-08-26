@@ -211,9 +211,9 @@ func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error)
 func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("getting security by organisation", "org", id)
-	model, err := s.db.GetSecurityByProductIDAndState(s.ctx, database.GetSecurityByProductIDAndStateParams{
-		ID:    id,
-		State: "OPEN",
+	model, err := s.db.GetSecurityByOrganisationAndState(s.ctx, database.GetSecurityByOrganisationAndStateParams{
+		OrganisationID: sql.NullInt64{Int64: id, Valid: true},
+		State:          "OPEN",
 	})
 	if err != nil {
 		logger.Error("Error fetching security by organisation", "error", err)

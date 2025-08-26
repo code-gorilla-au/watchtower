@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding test">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/products_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

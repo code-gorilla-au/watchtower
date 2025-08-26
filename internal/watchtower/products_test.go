@@ -1335,3 +1335,493 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_GetSecurityByProductID(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+	var productID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_security", "test_org_namespace_for_security", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+
+		tags := []string{"security-test-tag"}
+		product, err := s.CreateProduct("Security Test Product", "Product for security testing", tags, orgID)
+		if err != nil {
+			fmt.Print("create product error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		productID = product.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return empty slice for non-existent product", func(t *testing.T) {
+			securities, err := s.GetSecurityByProductID(99999)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 0)
+		}).
+		Test("should return empty slice when product has no security data", func(t *testing.T) {
+			securities, err := s.GetSecurityByProductID(productID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 0)
+		}).
+		Test("should return security data for product with repositories", func(t *testing.T) {
+			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "security-test-repo",
+				Url:   "https://github.com/test/security-test-repo",
+				Topic: "security-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-external-1",
+				RepositoryName: "security-test-repo",
+				PackageName:    "test-package-1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				PatchedVersion: "1.2.3",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-external-2",
+				RepositoryName: "security-test-repo",
+				PackageName:    "test-package-2",
+				State:          "OPEN",
+				Severity:       "MEDIUM",
+				PatchedVersion: "2.3.4",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByProductID(productID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 2)
+
+			securityMap := make(map[string]SecurityDTO)
+			for _, sec := range securities {
+				securityMap[sec.ExternalID] = sec
+				odize.AssertEqual(t, sec.State, "OPEN")
+				odize.AssertEqual(t, sec.RepositoryName, "security-test-repo")
+				odize.AssertTrue(t, sec.ID > 0)
+			}
+
+			sec1 := securityMap["security-external-1"]
+			odize.AssertEqual(t, sec1.PackageName, "test-package-1")
+			odize.AssertEqual(t, sec1.Severity, "HIGH")
+			odize.AssertEqual(t, sec1.PatchedVersion, "1.2.3")
+
+			sec2 := securityMap["security-external-2"]
+			odize.AssertEqual(t, sec2.PackageName, "test-package-2")
+			odize.AssertEqual(t, sec2.Severity, "MEDIUM")
+			odize.AssertEqual(t, sec2.PatchedVersion, "2.3.4")
+		}).
+		Test("should only return OPEN security items", func(t *testing.T) {
+			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "security-state-test-repo",
+				Url:   "https://github.com/test/security-state-test-repo",
+				Topic: "security-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-open",
+				RepositoryName: "security-state-test-repo",
+				PackageName:    "open-package",
+				State:          "OPEN",
+				Severity:       "CRITICAL",
+				PatchedVersion: "3.4.5",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-closed",
+				RepositoryName: "security-state-test-repo",
+				PackageName:    "closed-package",
+				State:          "CLOSED",
+				Severity:       "HIGH",
+				PatchedVersion: "4.5.6",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-fixed",
+				RepositoryName: "security-state-test-repo",
+				PackageName:    "fixed-package",
+				State:          "FIXED",
+				Severity:       "LOW",
+				PatchedVersion: "5.6.7",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByProductID(productID)
+			odize.AssertNoError(t, err)
+
+			openSecuritiesFound := 0
+			for _, sec := range securities {
+				if sec.ExternalID == "security-open" {
+					openSecuritiesFound++
+					odize.AssertEqual(t, sec.State, "OPEN")
+					odize.AssertEqual(t, sec.PackageName, "open-package")
+					odize.AssertEqual(t, sec.Severity, "CRITICAL")
+				}
+				odize.AssertEqual(t, sec.State, "OPEN")
+			}
+			odize.AssertTrue(t, openSecuritiesFound == 1)
+		}).
+		Test("should handle multiple repositories with security data", func(t *testing.T) {
+			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-security-repo-1",
+				Url:   "https://github.com/test/multi-security-repo-1",
+				Topic: "security-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "multi-security-repo-2",
+				Url:   "https://github.com/test/multi-security-repo-2",
+				Topic: "security-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "multi-security-1",
+				RepositoryName: "multi-security-repo-1",
+				PackageName:    "multi-package-1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				PatchedVersion: "6.7.8",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "multi-security-2",
+				RepositoryName: "multi-security-repo-2",
+				PackageName:    "multi-package-2",
+				State:          "OPEN",
+				Severity:       "MEDIUM",
+				PatchedVersion: "7.8.9",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByProductID(productID)
+			odize.AssertNoError(t, err)
+
+			multiSecuritiesFound := 0
+			repoNames := make(map[string]bool)
+			for _, sec := range securities {
+				if sec.ExternalID == "multi-security-1" || sec.ExternalID == "multi-security-2" {
+					multiSecuritiesFound++
+					repoNames[sec.RepositoryName] = true
+					odize.AssertEqual(t, sec.State, "OPEN")
+				}
+			}
+			odize.AssertTrue(t, multiSecuritiesFound == 2)
+			odize.AssertTrue(t, repoNames["multi-security-repo-1"])
+			odize.AssertTrue(t, repoNames["multi-security-repo-2"])
+		}).
+		Test("should handle security items with special characters and edge cases", func(t *testing.T) {
+			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "special-chars-security-repo",
+				Url:   "https://github.com/test/special-chars-security-repo",
+				Topic: "security-test-tag",
+				Owner: "test-owner-with-dash",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "security-with-special-chars",
+				RepositoryName: "special-chars-security-repo",
+				PackageName:    "@scope/package-name",
+				State:          "OPEN",
+				Severity:       "CRITICAL",
+				PatchedVersion: "1.0.0-beta.1",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByProductID(productID)
+			odize.AssertNoError(t, err)
+
+			specialSecurityFound := false
+			for _, sec := range securities {
+				if sec.ExternalID == "security-with-special-chars" {
+					specialSecurityFound = true
+					odize.AssertEqual(t, sec.PackageName, "@scope/package-name")
+					odize.AssertEqual(t, sec.Severity, "CRITICAL")
+					odize.AssertEqual(t, sec.PatchedVersion, "1.0.0-beta.1")
+					odize.AssertEqual(t, sec.State, "OPEN")
+				}
+			}
+			odize.AssertTrue(t, specialSecurityFound)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_GetSecurityByOrganisation(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	ctx := context.Background()
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB)
+
+		org, err := s.CreateOrganisation("test_org_for_security_by_org", "test_org_namespace_for_security_by_org", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+
+		orgID = org.ID
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB)
+	})
+
+	err := group.
+		Test("should return empty slice for non-existent organisation", func(t *testing.T) {
+			securities, err := s.GetSecurityByOrganisation(99999)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 0)
+		}).
+		Test("should return empty slice when organisation has no security data", func(t *testing.T) {
+			securities, err := s.GetSecurityByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 0)
+		}).
+		Test("should return security data for organisation with products and repositories", func(t *testing.T) {
+			tags := []string{"org-security-test-tag"}
+			_, err := s.CreateProduct("Org Security Test Product", "Product for org security testing", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-security-test-repo",
+				Url:   "https://github.com/test/org-security-test-repo",
+				Topic: "org-security-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-external-1",
+				RepositoryName: "org-security-test-repo",
+				PackageName:    "org-test-package-1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				PatchedVersion: "1.2.3",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-external-2",
+				RepositoryName: "org-security-test-repo",
+				PackageName:    "org-test-package-2",
+				State:          "OPEN",
+				Severity:       "MEDIUM",
+				PatchedVersion: "2.3.4",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, len(securities), 2)
+
+			securityMap := make(map[string]SecurityDTO)
+			for _, sec := range securities {
+				securityMap[sec.ExternalID] = sec
+				odize.AssertEqual(t, sec.State, "OPEN")
+				odize.AssertEqual(t, sec.RepositoryName, "org-security-test-repo")
+				odize.AssertTrue(t, sec.ID > 0)
+			}
+
+			sec1 := securityMap["org-security-external-1"]
+			odize.AssertEqual(t, sec1.PackageName, "org-test-package-1")
+			odize.AssertEqual(t, sec1.Severity, "HIGH")
+			odize.AssertEqual(t, sec1.PatchedVersion, "1.2.3")
+
+			sec2 := securityMap["org-security-external-2"]
+			odize.AssertEqual(t, sec2.PackageName, "org-test-package-2")
+			odize.AssertEqual(t, sec2.Severity, "MEDIUM")
+			odize.AssertEqual(t, sec2.PatchedVersion, "2.3.4")
+		}).
+		Test("should only return OPEN security items for organisation", func(t *testing.T) {
+			tags := []string{"org-security-state-test-tag"}
+			_, err := s.CreateProduct("Org Security State Test Product", "Product for org security state testing", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-security-state-test-repo",
+				Url:   "https://github.com/test/org-security-state-test-repo",
+				Topic: "org-security-state-test-tag",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-open",
+				RepositoryName: "org-security-state-test-repo",
+				PackageName:    "open-package",
+				State:          "OPEN",
+				Severity:       "CRITICAL",
+				PatchedVersion: "3.4.5",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-closed",
+				RepositoryName: "org-security-state-test-repo",
+				PackageName:    "closed-package",
+				State:          "CLOSED",
+				Severity:       "HIGH",
+				PatchedVersion: "4.5.6",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-fixed",
+				RepositoryName: "org-security-state-test-repo",
+				PackageName:    "fixed-package",
+				State:          "FIXED",
+				Severity:       "LOW",
+				PatchedVersion: "5.6.7",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+
+			openSecuritiesFound := 0
+			for _, sec := range securities {
+				if sec.ExternalID == "org-security-open" {
+					openSecuritiesFound++
+					odize.AssertEqual(t, sec.State, "OPEN")
+					odize.AssertEqual(t, sec.PackageName, "open-package")
+					odize.AssertEqual(t, sec.Severity, "CRITICAL")
+				}
+				odize.AssertEqual(t, sec.State, "OPEN")
+			}
+			odize.AssertTrue(t, openSecuritiesFound == 1)
+		}).
+		Test("should handle organisation with multiple products and repositories", func(t *testing.T) {
+			tags1 := []string{"org-multi-security-tag-1"}
+			_, err := s.CreateProduct("Org Multi Security Prod 1", "First product for multi security test", tags1, orgID)
+			odize.AssertNoError(t, err)
+
+			tags2 := []string{"org-multi-security-tag-2"}
+			_, err = s.CreateProduct("Org Multi Security Prod 2", "Second product for multi security test", tags2, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-multi-security-repo-1",
+				Url:   "https://github.com/test/org-multi-security-repo-1",
+				Topic: "org-multi-security-tag-1",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-multi-security-repo-2",
+				Url:   "https://github.com/test/org-multi-security-repo-2",
+				Topic: "org-multi-security-tag-2",
+				Owner: "test-owner",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-multi-security-1",
+				RepositoryName: "org-multi-security-repo-1",
+				PackageName:    "multi-package-1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				PatchedVersion: "6.7.8",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-multi-security-2",
+				RepositoryName: "org-multi-security-repo-2",
+				PackageName:    "multi-package-2",
+				State:          "OPEN",
+				Severity:       "MEDIUM",
+				PatchedVersion: "7.8.9",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+
+			multiSecuritiesFound := 0
+			repoNames := make(map[string]bool)
+			for _, sec := range securities {
+				if sec.ExternalID == "org-multi-security-1" || sec.ExternalID == "org-multi-security-2" {
+					multiSecuritiesFound++
+					repoNames[sec.RepositoryName] = true
+					odize.AssertEqual(t, sec.State, "OPEN")
+				}
+			}
+			odize.AssertTrue(t, multiSecuritiesFound == 2)
+			odize.AssertTrue(t, repoNames["org-multi-security-repo-1"])
+			odize.AssertTrue(t, repoNames["org-multi-security-repo-2"])
+		}).
+		Test("should handle security items with special characters and edge cases", func(t *testing.T) {
+			tags := []string{"org-special-chars-security-tag"}
+			_, err := s.CreateProduct("Org Special Chars Security Product", "Product with special character security", tags, orgID)
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+				Name:  "org-special-chars-security-repo",
+				Url:   "https://github.com/test/org-special-chars-security-repo",
+				Topic: "org-special-chars-security-tag",
+				Owner: "test-owner-with-dash",
+			})
+			odize.AssertNoError(t, err)
+
+			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+				ExternalID:     "org-security-with-special-chars",
+				RepositoryName: "org-special-chars-security-repo",
+				PackageName:    "@scope/package-name",
+				State:          "OPEN",
+				Severity:       "CRITICAL",
+				PatchedVersion: "1.0.0-beta.1",
+			})
+			odize.AssertNoError(t, err)
+
+			securities, err := s.GetSecurityByOrganisation(orgID)
+			odize.AssertNoError(t, err)
+
+			specialSecurityFound := false
+			for _, sec := range securities {
+				if sec.ExternalID == "org-security-with-special-chars" {
+					specialSecurityFound = true
+					odize.AssertEqual(t, sec.PackageName, "@scope/package-name")
+					odize.AssertEqual(t, sec.Severity, "CRITICAL")
+					odize.AssertEqual(t, sec.PatchedVersion, "1.0.0-beta.1")
+					odize.AssertEqual(t, sec.State, "OPEN")
+				}
+			}
+			odize.AssertTrue(t, specialSecurityFound)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
