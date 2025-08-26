@@ -8,6 +8,11 @@ vars:
 
 
 tasks:
+  build:
+    desc: Build the application.
+    deps: [gen, go-ci, frontend-ci]
+    cmds:
+      - wails build
   dev:
     desc: Run the application in development mode.
     deps: [gen]

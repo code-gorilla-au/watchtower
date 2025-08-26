@@ -47,7 +47,7 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertEqual(t, product.Tags[0], "web")
 			odize.AssertEqual(t, product.Tags[1], "api")
 			odize.AssertEqual(t, product.Tags[2], "microservice")
-			odize.AssertFalse(t, product.CreatedAt == time.Time{})
+			odize.AssertFalse(t, product.CreatedAt.Equal(time.Time{}))
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create a product with empty tags array", func(t *testing.T) {
@@ -186,7 +186,7 @@ func TestService_GetProductByID(t *testing.T) {
 			odize.AssertEqual(t, len(fetchedProduct.Tags), 2)
 			odize.AssertEqual(t, fetchedProduct.Tags[0], "web")
 			odize.AssertEqual(t, fetchedProduct.Tags[1], "api")
-			odize.AssertFalse(t, fetchedProduct.CreatedAt == time.Time{})
+			odize.AssertFalse(t, fetchedProduct.CreatedAt.Equal(time.Time{}))
 		}).
 		Test("should return correct product when multiple products exist", func(t *testing.T) {
 			org, err := s.CreateOrganisation("multi_get_org", "multi_get_namespace", "token", "test description")
@@ -391,7 +391,7 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			odize.AssertEqual(t, product.Tags[0], "tag1")
 			odize.AssertEqual(t, product.Tags[1], "tag2")
 			odize.AssertEqual(t, product.Tags[2], "tag3")
-			odize.AssertFalse(t, product.CreatedAt == time.Time{})
+			odize.AssertFalse(t, product.CreatedAt.Equal(time.Time{}))
 		}).
 		Run()
 	odize.AssertNoError(t, err)
@@ -719,8 +719,8 @@ func TestService_GetProductRepos(t *testing.T) {
 			odize.AssertEqual(t, repos[0].Topic, "single-repo-tag")
 			odize.AssertEqual(t, repos[0].Owner, "test-owner")
 			odize.AssertTrue(t, repos[0].ID > 0)
-			odize.AssertFalse(t, repos[0].CreatedAt == time.Time{})
-			odize.AssertFalse(t, repos[0].UpdatedAt == time.Time{})
+			odize.AssertFalse(t, product.CreatedAt.Equal(time.Time{}))
+			odize.AssertFalse(t, repos[0].UpdatedAt.Equal(time.Time{}))
 		}).
 		Test("should return multiple repositories when product has multiple matching tags", func(t *testing.T) {
 			tags := []string{"multi-repo-tag1", "multi-repo-tag2"}
@@ -920,8 +920,8 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			odize.AssertEqual(t, prs[0].State, "OPEN")
 			odize.AssertEqual(t, prs[0].Author, "test-author")
 			odize.AssertTrue(t, prs[0].ID > 0)
-			odize.AssertFalse(t, prs[0].CreatedAt == time.Time{})
-			odize.AssertFalse(t, prs[0].UpdatedAt == time.Time{})
+			odize.AssertFalse(t, prs[0].CreatedAt.Equal(time.Time{}))
+			odize.AssertFalse(t, prs[0].UpdatedAt.Equal(time.Time{}))
 		}).
 		Test("should return multiple pull requests when product has multiple matching repositories", func(t *testing.T) {
 			tags := []string{"multi-pr-tag1", "multi-pr-tag2"}

@@ -9,3 +9,14 @@ linters:
     - gosec
   exclusions:
     generated: lax
+    rules:
+      # Exclude some linters from running on tests files.
+      - path: _test\.go
+        linters:
+          - gocyclo
+          - errcheck
+          - dupl
+          - gosec
+
+
+

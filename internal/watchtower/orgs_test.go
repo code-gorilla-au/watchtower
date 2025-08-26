@@ -26,7 +26,7 @@ func TestService_CreateOrganisation(t *testing.T) {
 			odize.AssertEqual(t, org.Namespace, "namespace")
 			odize.AssertEqual(t, org.Description, "description")
 			odize.AssertEqual(t, org.DefaultOrg, true)
-			odize.AssertFalse(t, org.CreatedAt == time.Time{})
+			odize.AssertFalse(t, org.CreatedAt.Equal(time.Time{}))
 		}).
 		Test("should return error if trying to create same org", func(t *testing.T) {
 			_, err := s.CreateOrganisation("friendly_name", "namespace", "token", "description")
@@ -64,7 +64,7 @@ func TestService_GetDefaultOrganisation(t *testing.T) {
 			odize.AssertEqual(t, defaultOrg.Namespace, "default_namespace")
 			odize.AssertEqual(t, defaultOrg.Description, "default description")
 			odize.AssertEqual(t, defaultOrg.DefaultOrg, true)
-			odize.AssertFalse(t, defaultOrg.CreatedAt == time.Time{})
+			odize.AssertFalse(t, defaultOrg.CreatedAt.Equal(time.Time{}))
 		}).
 		Test("should return correct default organisation when multiple orgs exist", func(t *testing.T) {
 			firstOrg, err := s.CreateOrganisation("first_org", "first_namespace", "token1", "first description")
@@ -162,7 +162,7 @@ func TestService_GetOrganisationByID(t *testing.T) {
 			odize.AssertEqual(t, fetchedOrg.Namespace, "test_namespace_byid")
 			odize.AssertEqual(t, fetchedOrg.Description, "test description")
 			odize.AssertEqual(t, fetchedOrg.DefaultOrg, true)
-			odize.AssertFalse(t, fetchedOrg.CreatedAt == time.Time{})
+			odize.AssertFalse(t, fetchedOrg.CreatedAt.Equal(time.Time{}))
 		}).
 		Test("should return correct organisation when multiple orgs exist", func(t *testing.T) {
 			firstOrg, err := s.CreateOrganisation("first_org", "first_namespace_get", "token1", "first description")
