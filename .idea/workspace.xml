@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update config file">
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_update_form.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/product_update_form.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/product_update_form.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update form to to have better formatting">
+      <change afterPath="$PROJECT_DIR$/.gtihub/workflows/publish.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +169,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding get security components" />
     <MESSAGE value="adding to dashboard" />
     <MESSAGE value="adding grid for securities" />
     <MESSAGE value="adding more user interactions" />
@@ -197,7 +193,8 @@
     <MESSAGE value="adding test for method" />
     <MESSAGE value="adding test" />
     <MESSAGE value="update config file" />
-    <option name="LAST_COMMIT_MESSAGE" value="update config file" />
+    <MESSAGE value="update form to to have better formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="update form to to have better formatting" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
