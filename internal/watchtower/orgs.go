@@ -14,6 +14,7 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string, toke
 
 	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
 		logger.Error("Error setting default org", "error", err)
+
 		return OrganisationDTO{}, err
 	}
 
@@ -26,13 +27,14 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string, toke
 
 	if err != nil {
 		logger.Error("Error creating organisation", "error", err)
+
 		return OrganisationDTO{}, err
 	}
 
 	return ToOrganisationDTO(model), nil
 }
 
-// GetDefaultOrganisation returns the default organisation (marked as default_org = 1)
+// GetDefaultOrganisation returns the default organisation (marked as default_org = 1).
 func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Fetching default organisation")
@@ -40,8 +42,10 @@ func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
 	model, err := s.db.GetDefaultOrganisation(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching default organisation", "error", err)
+
 		return OrganisationDTO{}, err
 	}
+
 	return ToOrganisationDTO(model), nil
 }
 
@@ -51,12 +55,14 @@ func (s *Service) SetDefaultOrg(id int64) (OrganisationDTO, error) {
 
 	if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
 		logger.Error("Error setting default org", "error", err)
+
 		return OrganisationDTO{}, err
 	}
 
 	model, err := s.db.SetDefaultOrg(s.ctx, id)
 	if err != nil {
 		logger.Error("Error setting default org", "error", err)
+
 		return OrganisationDTO{}, err
 	}
 
@@ -70,12 +76,14 @@ func (s *Service) GetOrganisationByID(id int64) (OrganisationDTO, error) {
 
 	if err != nil {
 		logger.Error("Error fetching organisation", "error", err)
+
 		return OrganisationDTO{}, err
 	}
+
 	return ToOrganisationDTO(model), nil
 }
 
-// GetAllOrganisations returns all organisations ordered by friendly_name
+// GetAllOrganisations returns all organisations ordered by friendly_name.
 func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Listing all organisations")
@@ -83,6 +91,7 @@ func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
 	models, err := s.db.ListOrganisations(s.ctx)
 	if err != nil {
 		logger.Error("Error listing organisations", "error", err)
+
 		return nil, err
 	}
 
@@ -101,6 +110,7 @@ func (s *Service) DeleteOrganisation(id int64) error {
 
 	if err := s.db.DeleteOrg(s.ctx, id); err != nil {
 		logger.Error("Error deleting organisation", "error", err)
+
 		return err
 	}
 
@@ -125,6 +135,7 @@ func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, e
 	if params.DefaultOrg {
 		if err := s.db.SetOrgsDefaultFalse(s.ctx); err != nil {
 			logger.Error("Error setting default org", "error", err)
+
 			return OrganisationDTO{}, err
 		}
 	}
@@ -138,6 +149,7 @@ func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, e
 	})
 	if err != nil {
 		logger.Error("Error updating organisation", "error", err)
+
 		return OrganisationDTO{}, err
 	}
 

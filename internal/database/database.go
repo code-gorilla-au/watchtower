@@ -18,12 +18,12 @@ type Migrator struct {
 }
 
 func NewMigrator(db *sql.DB) *Migrator {
-
 	return &Migrator{db: db}
 }
 
 func (m *Migrator) Init() error {
 	_, err := m.db.Exec(ddl)
+
 	return err
 }
 
@@ -36,6 +36,7 @@ func NewDBFromProvider(filePath string) (*Queries, *sql.DB, error) {
 	if err != nil {
 		return nil, nil, err
 	}
+
 	return New(db), db, nil
 }
 
@@ -43,5 +44,6 @@ func resolveDBPath(filePath string) string {
 	if filePath == ":memory:" {
 		return filePath
 	}
+
 	return path.Join(filePath, dbName)
 }

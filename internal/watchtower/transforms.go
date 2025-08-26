@@ -31,8 +31,8 @@ func ToProductDTO(m database.Product) ProductDTO {
 		val := m.Tags.String
 
 		_ = json.Unmarshal([]byte(val), &tagList)
-
 	}
+
 	return ProductDTO{
 		ID:          m.ID,
 		Name:        m.Name,
@@ -45,15 +45,19 @@ func ToProductDTO(m database.Product) ProductDTO {
 
 func ToProductOrganisationDTO(m database.ProductOrganisation) ProductOrganisationDTO {
 	var pidPtr *int64
+
 	var oidPtr *int64
+
 	if m.ProductID.Valid {
 		v := m.ProductID.Int64
 		pidPtr = &v
 	}
+
 	if m.OrganisationID.Valid {
 		v := m.OrganisationID.Int64
 		oidPtr = &v
 	}
+
 	return ProductOrganisationDTO{
 		ProductID:      pidPtr,
 		OrganisationID: oidPtr,

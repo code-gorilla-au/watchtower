@@ -12,7 +12,9 @@ func TestService_CreateOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -31,7 +33,6 @@ func TestService_CreateOrganisation(t *testing.T) {
 		Test("should return error if trying to create same org", func(t *testing.T) {
 			_, err := s.CreateOrganisation("friendly_name", "namespace", "token", "description")
 			odize.AssertError(t, err)
-
 		}).
 		Run()
 	odize.AssertNoError(t, err)
@@ -41,7 +42,9 @@ func TestService_GetDefaultOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -52,7 +55,6 @@ func TestService_GetDefaultOrganisation(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should return default organisation when it exists", func(t *testing.T) {
-
 			createdOrg, err := s.CreateOrganisation("default_org", "default_namespace", "token", "default description")
 			odize.AssertNoError(t, err)
 
@@ -92,7 +94,9 @@ func TestService_SetDefaultOrg(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -140,7 +144,9 @@ func TestService_GetOrganisationByID(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -197,7 +203,9 @@ func TestService_GetAllOrganisations(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -217,7 +225,9 @@ func TestService_DeleteOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -264,7 +274,9 @@ func TestService_UpdateOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})

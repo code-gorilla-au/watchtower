@@ -15,7 +15,9 @@ func TestService_CreateProduct(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -25,6 +27,7 @@ func TestService_CreateProduct(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -36,7 +39,6 @@ func TestService_CreateProduct(t *testing.T) {
 
 	err := group.
 		Test("should create a product with valid inputs", func(t *testing.T) {
-
 			tags := []string{"web", "api", "microservice"}
 			product, err := s.CreateProduct("Test Product", "A test product description", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -51,7 +53,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create a product with empty tags array", func(t *testing.T) {
-
 			tags := []string{}
 			product, err := s.CreateProduct("Empty Tags Product", "Product with no tags", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -62,7 +63,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create a product with single tag", func(t *testing.T) {
-
 			tags := []string{"backend"}
 			product, err := s.CreateProduct("Single Tag Product", "Product with one tag", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -82,7 +82,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create product with empty name", func(t *testing.T) {
-
 			tags := []string{"test"}
 			product, err := s.CreateProduct("", "Product with empty name", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -94,7 +93,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create product with empty description", func(t *testing.T) {
-
 			tags := []string{"test"}
 			product, err := s.CreateProduct("Product Name", "", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -106,7 +104,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, product.ID > 0)
 		}).
 		Test("should create multiple products for same organisation", func(t *testing.T) {
-
 			tags1 := []string{"frontend", "react"}
 			product1, err := s.CreateProduct("Frontend Product", "React frontend", tags1, orgID)
 			odize.AssertNoError(t, err)
@@ -124,7 +121,6 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertTrue(t, len(products) >= 2)
 		}).
 		Test("should handle complex tags with special characters", func(t *testing.T) {
-
 			tags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
 			product, err := s.CreateProduct("Complex Tags Product", "Product with complex tags", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -144,7 +140,9 @@ func TestService_GetProductByID(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -154,6 +152,7 @@ func TestService_GetProductByID(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -169,7 +168,6 @@ func TestService_GetProductByID(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should return product when it exists", func(t *testing.T) {
-
 			org, err := s.CreateOrganisation("get_test_org", "get_test_namespace", "token", "test description")
 			odize.AssertNoError(t, err)
 
@@ -257,7 +255,6 @@ func TestService_GetProductByID(t *testing.T) {
 			odize.AssertEqual(t, fetchedProduct.Tags[3], "tag with spaces")
 		}).
 		Test("should return product with empty name and description", func(t *testing.T) {
-
 			tags := []string{"test"}
 			createdProduct, err := s.CreateProduct("", "", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -279,7 +276,9 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	group.BeforeEach(func() {
 		s = NewService(ctx, _testDB)
 	})
@@ -401,7 +400,9 @@ func TestService_UpdateProduct(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -409,8 +410,9 @@ func TestService_UpdateProduct(t *testing.T) {
 
 		org, err := s.CreateOrganisation("test_org_for_update_product", "test_org_namespace_for_update_product", "token", "test description")
 		if err != nil {
-			fmt.Print("create org error", err)
+			fmt.Println("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -427,7 +429,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should successfully update product with new name and tags", func(t *testing.T) {
-
 			initialTags := []string{"initial", "tag"}
 			createdProduct, err := s.CreateProduct("Initial Name", "Initial description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -445,7 +446,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertEqual(t, updatedProduct.Tags[2], "tags")
 		}).
 		Test("should successfully update product with only name change (nil tags)", func(t *testing.T) {
-
 			initialTags := []string{"keep", "these", "tags"}
 			createdProduct, err := s.CreateProduct("Old Name", "Keep description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -459,7 +459,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertEqual(t, len(updatedProduct.Tags), 0)
 		}).
 		Test("should successfully update product with only tags change", func(t *testing.T) {
-
 			initialTags := []string{"old", "tags"}
 			createdProduct, err := s.CreateProduct("Keep Name", "Keep description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -477,7 +476,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertEqual(t, updatedProduct.Tags[2], "tags")
 		}).
 		Test("should successfully update product with empty tags", func(t *testing.T) {
-
 			initialTags := []string{"remove", "these"}
 			createdProduct, err := s.CreateProduct("Product Name", "Product description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -492,7 +490,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertEqual(t, len(updatedProduct.Tags), 0)
 		}).
 		Test("should successfully update product with complex tags containing special characters", func(t *testing.T) {
-
 			initialTags := []string{"simple"}
 			createdProduct, err := s.CreateProduct("Test Product", "Test description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -511,7 +508,6 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertEqual(t, updatedProduct.Tags[3], "tag with spaces")
 		}).
 		Test("should verify updated product can be retrieved correctly", func(t *testing.T) {
-
 			initialTags := []string{"before"}
 			createdProduct, err := s.CreateProduct("Before Update", "Before description", initialTags, orgID)
 			odize.AssertNoError(t, err)
@@ -539,7 +535,9 @@ func TestService_DeleteProduct(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -549,6 +547,7 @@ func TestService_DeleteProduct(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -564,7 +563,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertNoError(t, err)
 		}).
 		Test("should successfully delete existing product", func(t *testing.T) {
-
 			tags := []string{"delete", "test"}
 			createdProduct, err := s.CreateProduct("Delete Test Product", "Product to be deleted", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -573,7 +571,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertNoError(t, err)
 		}).
 		Test("should not be able to retrieve deleted product", func(t *testing.T) {
-
 			tags := []string{"verify", "delete"}
 			createdProduct, err := s.CreateProduct("Verify Delete Product", "Product to verify deletion", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -585,7 +582,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should successfully delete product with empty tags", func(t *testing.T) {
-
 			tags := []string{}
 			createdProduct, err := s.CreateProduct("Empty Tags Delete", "Product with empty tags to delete", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -597,7 +593,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should successfully delete product with complex data", func(t *testing.T) {
-
 			tags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
 			createdProduct, err := s.CreateProduct("Complex Delete Product", "Product with complex tags to delete", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -609,7 +604,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should successfully delete product with empty name and description", func(t *testing.T) {
-
 			tags := []string{"test"}
 			createdProduct, err := s.CreateProduct("", "", tags, orgID)
 			odize.AssertNoError(t, err)
@@ -621,7 +615,6 @@ func TestService_DeleteProduct(t *testing.T) {
 			odize.AssertError(t, err)
 		}).
 		Test("should delete multiple products independently", func(t *testing.T) {
-
 			tags1 := []string{"product1"}
 			product1, err := s.CreateProduct("Product 1", "First product", tags1, orgID)
 			odize.AssertNoError(t, err)
@@ -669,7 +662,9 @@ func TestService_GetProductRepos(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -679,6 +674,7 @@ func TestService_GetProductRepos(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -857,7 +853,9 @@ func TestService_GetProductPullRequests(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -867,6 +865,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -906,7 +905,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/single-pr-repo/pull/1",
 				State:          "OPEN",
 				Author:         "test-author",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -951,7 +953,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/multi-pr-repo-1/pull/1",
 				State:          "OPEN",
 				Author:         "test-author-1",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -962,7 +967,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/multi-pr-repo-2/pull/1",
 				State:          "OPEN",
 				Author:         "test-author-2",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Int64: 0,
+					Valid: false,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -998,7 +1006,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/state-filter-repo/pull/1",
 				State:          "OPEN",
 				Author:         "test-author",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1009,7 +1020,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/state-filter-repo/pull/2",
 				State:          "CLOSED",
 				Author:         "test-author",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1085,7 +1099,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/same-repo-multiple-prs/pull/1",
 				State:          "OPEN",
 				Author:         "author-1",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1096,7 +1113,10 @@ func TestService_GetProductPullRequests(t *testing.T) {
 				Url:            "https://github.com/test/same-repo-multiple-prs/pull/2",
 				State:          "OPEN",
 				Author:         "author-2",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1122,7 +1142,9 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -1132,6 +1154,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
@@ -1172,7 +1195,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/org-pr-test-repo/pull/1",
 				State:          "OPEN",
 				Author:         "test-author-1",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1183,7 +1209,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/org-pr-test-repo/pull/2",
 				State:          "OPEN",
 				Author:         "test-author-2",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1194,7 +1223,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/org-pr-test-repo/pull/3",
 				State:          "CLOSED",
 				Author:         "test-author-3",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Int64: 0,
+					Valid: false,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1232,7 +1264,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/org-pr-state-test-repo/pull/1",
 				State:          "OPEN",
 				Author:         "state-test-author",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Valid: true,
+					Int64: 1610000000,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1243,7 +1278,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/org-pr-state-test-repo/pull/2",
 				State:          "CLOSED",
 				Author:         "state-test-author",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Int64: 0,
+					Valid: false,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1304,7 +1342,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/multi-prod-repo-1/pull/1",
 				State:          "OPEN",
 				Author:         "multi-test-author-1",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Int64: 1610000000,
+					Valid: true,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1315,7 +1356,10 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 				Url:            "https://github.com/test/multi-prod-repo-2/pull/1",
 				State:          "OPEN",
 				Author:         "multi-test-author-2",
-				MergedAt:       sql.NullInt64{},
+				MergedAt: sql.NullInt64{
+					Int64: 0,
+					Valid: false,
+				},
 			})
 			odize.AssertNoError(t, err)
 
@@ -1340,8 +1384,11 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
+
 	var productID int64
 
 	group.BeforeAll(func() {
@@ -1351,15 +1398,18 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID
 
 		tags := []string{"security-test-tag"}
+
 		product, err := s.CreateProduct("Security Test Product", "Product for security testing", tags, orgID)
 		if err != nil {
 			fmt.Print("create product error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		productID = product.ID
@@ -1580,7 +1630,9 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
 	var s *Service
+
 	ctx := context.Background()
+
 	var orgID int64
 
 	group.BeforeAll(func() {
@@ -1590,6 +1642,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
+
 		odize.AssertNoError(t, err)
 
 		orgID = org.ID

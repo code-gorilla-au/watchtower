@@ -2,14 +2,11 @@ package watchtower
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"time"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
-
-var ErrEventChannelClosed = errors.New("event channel closed")
 
 type OrgSyncWorker struct {
 	watchTower *Service
@@ -30,13 +27,14 @@ func (w *OrgSyncWorker) Start(ctx context.Context) {
 	logger.Debug("Starting org sync worker")
 
 	w.wg.Add(1)
+
 	go func() {
 		for {
-
 			select {
 			case <-w.stop:
 				logger.Debug("Stopping org sync worker")
 				w.wg.Done()
+
 				return
 			default:
 				if err := w.watchTower.SyncOrgs(); err != nil {
@@ -45,7 +43,6 @@ func (w *OrgSyncWorker) Start(ctx context.Context) {
 
 				time.Sleep(time.Minute * 3)
 			}
-
 		}
 	}()
 

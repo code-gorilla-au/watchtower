@@ -11,7 +11,7 @@ import (
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
 
-// CreateProduct creates a new product and associates it with an organisation
+// CreateProduct creates a new product and associates it with an organisation.
 func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Creating product")
@@ -21,6 +21,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 	tagJson, err := json.Marshal(tags)
 	if err != nil {
 		logger.Error("Error marshalling tags", "error", err)
+
 		return ProductDTO{}, err
 	}
 
@@ -33,6 +34,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 	})
 	if err != nil {
 		logger.Error("Error creating product", "error", err)
+
 		return ProductDTO{}, err
 	}
 
@@ -42,13 +44,14 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 	})
 	if err != nil {
 		logger.Error("Error linking product to organisation", "error", err)
+
 		return ProductDTO{}, err
 	}
 
 	return ToProductDTO(prod), nil
 }
 
-// GetProductByID fetches a product by its ID
+// GetProductByID fetches a product by its ID.
 func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Fetching product by ID")
@@ -56,13 +59,14 @@ func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
 	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching product by ID", "error", err)
+
 		return ProductDTO{}, err
 	}
 
 	return ToProductDTO(prod), nil
 }
 
-// GetAllProductsForOrganisation lists products linked to the given organisation
+// GetAllProductsForOrganisation lists products linked to the given organisation.
 func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Info("Listing products for organisation")
@@ -70,6 +74,7 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 	models, err := s.db.ListProductsByOrganisation(s.ctx, sql.NullInt64{Int64: organisationID, Valid: true})
 	if err != nil {
 		logger.Error("Error listing products for organisation", "error", err)
+
 		return nil, err
 	}
 
@@ -81,7 +86,7 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 	return result, nil
 }
 
-// UpdateProduct updates a product and returns the updated entity
+// UpdateProduct updates a product and returns the updated entity.
 func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Updating product")
@@ -98,12 +103,14 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 	})
 	if err != nil {
 		logger.Error("Error updating product", "error", err)
+
 		return ProductDTO{}, err
 	}
 
 	prod, err := s.db.GetProductByID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching updated product", "error", err)
+
 		return ProductDTO{}, err
 	}
 
@@ -113,6 +120,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO
 func (s *Service) DeleteProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting product")
+
 	if err := s.deleteReposByProductID(id); err != nil {
 		logger.Error("Error deleting repos for product", "error", err)
 	}
@@ -127,6 +135,7 @@ func (s *Service) DeleteProduct(id int64) error {
 
 	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
 		logger.Error("Error deleting product", "error", err)
+
 		return err
 	}
 
@@ -140,6 +149,7 @@ func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
 	repos, err := s.db.GetReposByProductID(s.ctx, id)
 	if err != nil {
 		logger.Error("Error fetching repos for product", "error", err)
+
 		return nil, err
 	}
 
@@ -154,12 +164,14 @@ func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
 func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Fetching pull requests for product")
+
 	models, err := s.db.GetPullRequestByProductIDAndState(s.ctx, database.GetPullRequestByProductIDAndStateParams{
 		ID:    id,
 		State: string(github.PrOpen),
 	})
 	if err != nil {
 		logger.Error("Error fetching pull requests for product", "error", err)
+
 		return nil, err
 	}
 
@@ -169,6 +181,7 @@ func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
 func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Fetching pull requests for organisation", "org", id)
+
 	models, err := s.db.GetPullRequestsByOrganisationAndState(s.ctx, database.GetPullRequestsByOrganisationAndStateParams{
 		OrganisationID: sql.NullInt64{
 			Int64: id,
@@ -178,6 +191,7 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 	})
 	if err != nil {
 		logger.Error("Error fetching pull requests for product", "error", err)
+
 		return nil, err
 	}
 
@@ -189,6 +203,7 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 func (s *Service) deletePullRequestsByProductID(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting PRs for product")
+
 	return s.db.DeletePullRequestsByProductID(s.ctx, id)
 }
 
@@ -202,6 +217,7 @@ func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error)
 	})
 	if err != nil {
 		logger.Error("Error fetching security by product id", "error", err)
+
 		return []SecurityDTO{}, err
 	}
 
@@ -211,12 +227,14 @@ func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error)
 func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("getting security by organisation", "org", id)
+
 	model, err := s.db.GetSecurityByOrganisationAndState(s.ctx, database.GetSecurityByOrganisationAndStateParams{
 		OrganisationID: sql.NullInt64{Int64: id, Valid: true},
 		State:          "OPEN",
 	})
 	if err != nil {
 		logger.Error("Error fetching security by organisation", "error", err)
+
 		return []SecurityDTO{}, err
 	}
 
@@ -226,23 +244,29 @@ func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 func (s *Service) deleteSecurityByProductID(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting security for product")
+
 	return s.db.DeleteSecurityByProductID(s.ctx, id)
 }
 
 func (s *Service) SyncOrgs() error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing orgs")
+
 	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
+
 	orgs, err := s.db.ListOrgsOlderThanUpdatedAt(s.ctx, fiveMinutesAgo)
 	if err != nil {
 		logger.Error("Error fetching orgs", "error", err)
+
 		return err
 	}
 
 	logger.Info("syncing number of orgs", "count", len(orgs))
+
 	for _, org := range orgs {
 		if err = s.SyncOrg(org.ID); err != nil {
 			logger.Error("Error syncing org", "error", err)
+
 			continue
 		}
 	}
@@ -257,24 +281,28 @@ func (s *Service) SyncOrg(orgId int64) error {
 	products, err := s.GetAllProductsForOrganisation(orgId)
 	if err != nil {
 		logger.Error("Error fetching products for org", "error", err)
+
 		return err
 	}
 
 	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: products[0].ID, Valid: true})
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
+
 		return err
 	}
 
 	for _, p := range products {
 		if err = s.syncProduct(p, org); err != nil {
 			logger.Error("Error syncing product", "error", err)
+
 			return err
 		}
 	}
 
 	if err = s.db.UpdateOrganisationSync(s.ctx, org.ID); err != nil {
 		logger.Error("Error updating organisation sync", "error", err)
+
 		return err
 	}
 
@@ -287,12 +315,14 @@ func (s *Service) SyncProduct(id int64) error {
 	product, err := s.GetProductByID(id)
 	if err != nil {
 		logger.Error("Error fetching product", "error", err)
+
 		return err
 	}
 
 	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: product.ID, Valid: true})
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
+
 		return err
 	}
 
@@ -305,12 +335,14 @@ func (s *Service) syncProduct(product ProductDTO, org database.Organisation) err
 	for _, tag := range product.Tags {
 		if err := s.syncByTag(tag, org.Namespace, org.Token); err != nil {
 			logger.Error("Error syncing repos", "error", err)
+
 			return err
 		}
 	}
 
 	if err := s.db.UpdateProductSync(s.ctx, product.ID); err != nil {
 		logger.Error("Error updating product sync", "error", err)
+
 		return err
 	}
 
@@ -325,11 +357,13 @@ func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
 	repos, apiErr := s.ghClient.SearchRepos(owner, strings.TrimSpace(tag), ghToken)
 	if apiErr != nil {
 		logger.Error("Error searching for repos", "error", apiErr)
+
 		return apiErr
 	}
 
 	if err := s.bulkInsertRepos(repos.Data.Search.Edges, tag); err != nil {
 		logger.Error("Error bulk inserting repos", "error", err)
+
 		return err
 	}
 
@@ -341,11 +375,13 @@ func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
 
 		if err = s.bulkInsertPullRequests(dd.Data.Repository.PullRequests, repo.Node.Name); err != nil {
 			logger.Error("Error bulk inserting pull requests", "error", err)
+
 			return err
 		}
 
 		if err = s.bulkInsertSecurity(repo.Node.VulnerabilityAlerts, repo.Node.Name); err != nil {
 			logger.Error("Error bulk inserting security", "error", err)
+
 			return err
 		}
 	}
@@ -365,9 +401,9 @@ func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag st
 		})
 		if err != nil {
 			logger.Error("Error creating repo", "error", err)
+
 			return err
 		}
-
 	}
 
 	return nil
@@ -377,7 +413,10 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 	logger := logging.FromContext(s.ctx)
 
 	for _, pr := range prs.Nodes {
-		mergedAt := sql.NullInt64{}
+		mergedAt := sql.NullInt64{
+			Valid: false,
+			Int64: 0,
+		}
 
 		if pr.MergedAt != nil {
 			mergedAt.Int64 = pr.MergedAt.Unix()
@@ -395,6 +434,7 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 		})
 		if err != nil {
 			logger.Error("Error creating pull request", "error", err)
+
 			return err
 		}
 	}
@@ -416,6 +456,7 @@ func (s *Service) bulkInsertSecurity(secs github.RootNode[github.VulnerabilityAl
 		})
 		if err != nil {
 			logger.Error("Error creating security", "error", err)
+
 			return err
 		}
 	}
@@ -426,5 +467,6 @@ func (s *Service) bulkInsertSecurity(secs github.RootNode[github.VulnerabilityAl
 func (s *Service) deleteReposByProductID(id int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Deleting repos for product")
+
 	return s.db.DeleteReposByProductID(s.ctx, id)
 }

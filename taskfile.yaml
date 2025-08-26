@@ -33,9 +33,9 @@ tasks:
   go-lint:
     desc: Run go linters.
     cmds:
-      - golangci-lint run {{ .GOLANG_WORKSPACES }}
+      - golangci-lint run {{ .GOLANG_WORKSPACES }} --fix
       - govulncheck {{ .GOLANG_WORKSPACES }}
-      - go vet {{ .GOLANG_WORKSPACES }}
+      - go fmt {{ .GOLANG_WORKSPACES }}
 
   go-test:
     desc: Run go tests.
