@@ -13,6 +13,9 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
 
+//go:embed build/appicon.png
+var appIcon []byte
+
 //go:embed all:frontend/build
 var assets embed.FS
 

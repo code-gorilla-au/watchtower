@@ -14,10 +14,11 @@
 		loading?: boolean;
 		onUpdate?: (formData: OrgUpdateFormData) => void;
 		onCreate?: (formData: OrgUpdateFormData) => void;
+		onCancel?: () => void;
 		onSetDefault?: () => void;
 	};
 
-	let { org, mode, onUpdate, onCreate, onSetDefault, error, loading }: Props = $props();
+	let { org, mode, onUpdate, onCreate, onSetDefault, error, loading, onCancel }: Props = $props();
 
 	const formData = $state<OrgUpdateFormData>({
 		id: org?.id ?? 0,
@@ -80,22 +81,36 @@
 		<Label for="default-org">Default organisation</Label>
 		<Switch required id="default-org" bind:checked={formData.default_org} />
 	</div>
-	<div class="my-10 flex w-full justify-end gap-3">
-		{#if mode === "update"}
-			<Button onclick={onSetDefault} variant="outline">Set default</Button>
-		{/if}
 
-		{#if error}
-			<div class="border-destructive text-destructive">
-				<p>{error}</p>
+	{#if error}
+		<div class="border-destructive text-destructive">
+			<p>{error}</p>
+		</div>
+	{/if}
+	<div class="my-10 flex w-full justify-end">
+		{#if onCancel}
+			<div class="w-full">
+				<Button
+					onclick={(e: Event) => {
+						e.preventDefault();
+						onCancel?.();
+					}}
+					variant="outline">Cancel</Button
+				>
 			</div>
 		{/if}
 
-		<Button type="submit" class="capitalize">
-			{#if loading}
-				<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+		<div class="flex gap-4">
+			{#if mode === "update"}
+				<Button onclick={onSetDefault} variant="outline">Set default</Button>
 			{/if}
-			{mode}
-		</Button>
+
+			<Button type="submit" class="capitalize">
+				{#if loading}
+					<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+				{/if}
+				{mode}
+			</Button>
+		</div>
 	</div>
 </form>

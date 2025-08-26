@@ -72,7 +72,9 @@
 
 	<div class="my-10 flex w-full justify-end gap-3">
 		{#if onCancel}
-			<Button variant="outline" onclick={onCancel}>Cancel</Button>
+			<div class="w-full">
+				<Button variant="outline" onclick={onCancel}>Cancel</Button>
+			</div>
 		{/if}
 		<Button type="submit" class="capitalize">
 			{#if loading}
