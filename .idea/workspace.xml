@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="starting refactor for products">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactor to add transform">
       <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +170,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding commands" />
     <MESSAGE value="adding tasks" />
     <MESSAGE value="adding ci tasks" />
     <MESSAGE value="adding method to remove all secs" />
@@ -197,7 +194,8 @@
     <MESSAGE value="small refactor" />
     <MESSAGE value="refactor to add org service" />
     <MESSAGE value="starting refactor for products" />
-    <option name="LAST_COMMIT_MESSAGE" value="starting refactor for products" />
+    <MESSAGE value="refactor to add transform" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor to add transform" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

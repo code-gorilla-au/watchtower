@@ -244,7 +244,7 @@ func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) er
 			return err
 		}
 
-		if err = s.bulkInsertSecurity(repo.Node.VulnerabilityAlerts, repo.Node.Name); err != nil {
+		if err = s.bulkInsertSecurity(dd.Data.Repository.VulnerabilityAlerts, repo.Node.Name); err != nil {
 			logger.Error("Error bulk inserting security", "error", err)
 
 			return err

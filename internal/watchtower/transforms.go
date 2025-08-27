@@ -64,27 +64,6 @@ func ToProductDTO(m database.Product) ProductDTO {
 	}
 }
 
-func ToProductOrganisationDTO(m database.ProductOrganisation) ProductOrganisationDTO {
-	var pidPtr *int64
-
-	var oidPtr *int64
-
-	if m.ProductID.Valid {
-		v := m.ProductID.Int64
-		pidPtr = &v
-	}
-
-	if m.OrganisationID.Valid {
-		v := m.OrganisationID.Int64
-		oidPtr = &v
-	}
-
-	return ProductOrganisationDTO{
-		ProductID:      pidPtr,
-		OrganisationID: oidPtr,
-	}
-}
-
 func ToPullRequestDTO(m database.PullRequest) PullRequestDTO {
 	return PullRequestDTO{
 		ID:             m.ID,
@@ -156,6 +135,18 @@ func ToCreateRepoParamsFromGithubRepos(repos []github.Node[github.Repository], t
 	}
 
 	return result
+}
+
+type bulkInsertParams struct {
+	PRs  []database.CreatePullRequestParams
+	Secs []database.CreateSecurityParams
+}
+
+func toBulkInsertParams(repoName string, prs github.RootNode[github.PullRequest], secs github.RootNode[github.VulnerabilityAlerts]) bulkInsertParams {
+	return bulkInsertParams{
+		ToCreatePullRequestParamsFromGithubPRs(prs, repoName),
+		ToCreateSecurityParamsFromGithubVulnerabilities(secs, repoName),
+	}
 }
 
 func ToCreatePullRequestParamsFromGithubPRs(prs github.RootNode[github.PullRequest], repoName string) []database.CreatePullRequestParams {
