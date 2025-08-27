@@ -42,6 +42,11 @@ tasks:
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
+  go-watch:
+    desc: Run go tests in watch mode.
+    cmds:
+      - gow test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
+
   go-gen-coverage:
     desc: Generate go coverage.
     deps: [go-test]

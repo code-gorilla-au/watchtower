@@ -9,7 +9,12 @@ import (
 type Service struct {
 	ctx      context.Context
 	db       *database.Queries
+	orgSvc   *OrganisationService
 	ghClient ghClient
+}
+
+type OrganisationService struct {
+	db *database.Queries
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps

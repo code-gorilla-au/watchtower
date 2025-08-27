@@ -1973,6 +1973,9 @@ func TestService_SyncOrgs(t *testing.T) {
 			ctx:      ctx,
 			db:       _testDB,
 			ghClient: ghMock,
+			orgSvc: &OrganisationService{
+				db: _testDB,
+			},
 		}
 
 		// Create test organizations with unique namespaces to avoid conflicts
