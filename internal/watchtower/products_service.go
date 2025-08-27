@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
 
@@ -109,93 +108,21 @@ func (p *productsService) Update(ctx context.Context, params UpdateProductParams
 }
 
 func (p *productsService) GetRepos(ctx context.Context, id int64) ([]RepositoryDTO, error) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("Fetching repos for product")
-
-	repos, err := p.db.GetReposByProductID(ctx, id)
-	if err != nil {
-		logger.Error("Error fetching repos for product", "error", err)
-
-		return nil, err
-	}
-
-	result := make([]RepositoryDTO, 0, len(repos))
-	for _, r := range repos {
-		result = append(result, ToRepositoryDTO(r))
-	}
-
-	return result, nil
+	return p.repoService.GetRepos(ctx, id)
 }
 
 func (p *productsService) GetPullRequests(ctx context.Context, id int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("Fetching pull requests for product")
-
-	models, err := p.db.GetPullRequestByProductIDAndState(ctx, database.GetPullRequestByProductIDAndStateParams{
-		ID:    id,
-		State: string(github.PrOpen),
-	})
-	if err != nil {
-		logger.Error("Error fetching pull requests for product", "error", err)
-
-		return nil, err
-	}
-
-	return toPullRequestDTOs(models), nil
+	return p.repoService.GetPullRequests(ctx, id)
 }
 
 func (p *productsService) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("Fetching pull requests for organisation", "org", orgID)
-
-	models, err := p.db.GetPullRequestsByOrganisationAndState(ctx, database.GetPullRequestsByOrganisationAndStateParams{
-		OrganisationID: sql.NullInt64{
-			Int64: orgID,
-			Valid: true,
-		},
-		State: "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching pull requests for product", "error", err)
-
-		return nil, err
-	}
-
-	logger.Debug("Found", "count", len(models))
-
-	return toPullRequestDTOs(models), nil
+	return p.repoService.GetPullRequestByOrg(ctx, orgID)
 }
 
 func (p *productsService) GetSecurity(ctx context.Context, id int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("getting security by product id")
-
-	model, err := p.db.GetSecurityByProductIDAndState(ctx, database.GetSecurityByProductIDAndStateParams{
-		ID:    id,
-		State: "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching security by product id", "error", err)
-
-		return []SecurityDTO{}, err
-	}
-
-	return ToSecurityDTOs(model), nil
+	return p.repoService.GetSecurity(ctx, id)
 }
 
 func (p *productsService) GetSecurityByOrg(ctx context.Context, orgID int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("getting security by organisation", "org", orgID)
-
-	model, err := p.db.GetSecurityByOrganisationAndState(ctx, database.GetSecurityByOrganisationAndStateParams{
-		OrganisationID: sql.NullInt64{Int64: orgID, Valid: true},
-		State:          "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching security by organisation", "error", err)
-
-		return []SecurityDTO{}, err
-	}
-
-	return ToSecurityDTOs(model), nil
+	return p.repoService.GetSecurityByOrg(ctx, orgID)
 }

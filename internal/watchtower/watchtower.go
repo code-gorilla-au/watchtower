@@ -19,6 +19,9 @@ func NewService(ctx context.Context, db *database.Queries) *Service {
 		},
 		productSvc: &productsService{
 			db: db,
+			repoService: &repoService{
+				db: db,
+			},
 		},
 	}
 }

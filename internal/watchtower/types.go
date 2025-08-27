@@ -19,6 +19,11 @@ type organisationService struct {
 }
 
 type productsService struct {
+	db          *database.Queries
+	repoService *repoService
+}
+
+type repoService struct {
 	db *database.Queries
 }
 
