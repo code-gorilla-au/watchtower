@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update form to to have better formatting">
-      <change afterPath="$PROJECT_DIR$/.gtihub/workflows/publish.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding publish pipeline">
+      <change afterPath="$PROJECT_DIR$/internal/watchtower/interfaces.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +33,6 @@
         <option value="update_product_form" />
         <option value="nav_item" />
         <option value="products_summary" />
-        <option value="Go File" />
         <option value="prs_grid" />
         <option value="repo_card" />
         <option value="loaders_square" />
@@ -35,6 +40,7 @@
         <option value="security_grid" />
         <option value="+page" />
         <option value="TypeScript File" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -169,7 +175,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding to dashboard" />
     <MESSAGE value="adding grid for securities" />
     <MESSAGE value="adding more user interactions" />
     <MESSAGE value="fixing bug" />
@@ -194,7 +199,8 @@
     <MESSAGE value="adding test" />
     <MESSAGE value="update config file" />
     <MESSAGE value="update form to to have better formatting" />
-    <option name="LAST_COMMIT_MESSAGE" value="update form to to have better formatting" />
+    <MESSAGE value="adding publish pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding publish pipeline" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

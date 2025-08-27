@@ -8,6 +8,7 @@ import (
 	"time"
 	"watchtower/internal/database"
 
+	"github.com/code-gorilla-au/go-toolbox/github"
 	"github.com/code-gorilla-au/odize"
 )
 
@@ -1874,6 +1875,190 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 				}
 			}
 			odize.AssertTrue(t, specialSecurityFound)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_SyncOrgs(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	var ctx context.Context
+	var ghMock *ghClientMock
+	var org1ID, org2ID int64
+
+	group.BeforeAll(func() {
+		ctx = context.Background()
+	})
+
+	group.BeforeEach(func() {
+		ghMock = &ghClientMock{
+			SearchReposFunc: func(owner string, topic string, token string) (github.QuerySearch[github.Repository], error) {
+				return github.QuerySearch[github.Repository]{
+					Data: github.QueryData[github.Repository]{
+						Search: github.Search[github.Repository]{
+							PageInfo: github.PageInfo{},
+							Edges: []github.Node[github.Repository]{
+								{
+									Node: github.Repository{
+										Url:  "",
+										Name: "flash",
+										Owner: github.Owner{
+											Login: "gordon",
+										},
+										VulnerabilityAlerts: github.RootNode[github.VulnerabilityAlerts]{},
+										PullRequests:        github.RootNode[github.PullRequest]{},
+									},
+								},
+							},
+						},
+					},
+				}, nil
+			},
+			GetRepoDetailsFunc: func(owner, repo, token string) (github.QueryRepository, error) {
+				return github.QueryRepository{
+					Data: github.RepositoryData{
+						Repository: github.Repository{
+							Url:  "",
+							Name: "flash",
+							Owner: github.Owner{
+								Login: "gordon",
+							},
+							VulnerabilityAlerts: github.RootNode[github.VulnerabilityAlerts]{
+								PageInfo: github.PageInfo{},
+								Nodes: []github.VulnerabilityAlerts{
+									{
+										State:  "OPEN",
+										ID:     "1",
+										Number: 1,
+										SecurityVulnerability: github.SecurityVulnerability{
+											Package: github.Package{
+												Name: "1",
+											},
+											Advisory: github.Advisory{
+												Severity: "22",
+											},
+											FirstPatchedVersion: github.FirstPatchedVersion{
+												Identifier: "33",
+											},
+											UpdatedAt: time.Time{},
+										},
+										CreatedAt: time.Time{},
+										FixedAt:   nil,
+									},
+								},
+							},
+							PullRequests: github.RootNode[github.PullRequest]{
+								Nodes: []github.PullRequest{
+									{
+										ID:        "333",
+										Title:     "444",
+										State:     "555",
+										CreatedAt: time.Time{},
+										MergedAt:  nil,
+										Permalink: "",
+										Author: github.Author{
+											Login: "333",
+										},
+									},
+								},
+							},
+						},
+					},
+				}, nil
+			},
+		}
+		s = &Service{
+			ctx:      ctx,
+			db:       _testDB,
+			ghClient: ghMock,
+		}
+
+		// Create test organizations with unique namespaces to avoid conflicts
+		timestamp := time.Now().UnixNano()
+		org1, err := s.CreateOrganisation(fmt.Sprintf("test_org_1_sync_%d", timestamp), fmt.Sprintf("test_namespace_1_%d", timestamp), "token1", "Test org 1")
+		odize.AssertNoError(t, err)
+		org1ID = org1.ID
+
+		org2, err := s.CreateOrganisation(fmt.Sprintf("test_org_2_sync_%d", timestamp), fmt.Sprintf("test_namespace_2_%d", timestamp), "token2", "Test org 2")
+		odize.AssertNoError(t, err)
+		org2ID = org2.ID
+
+		// Create products for each organization
+		tags1 := []string{"sync-tag-1"}
+		_, err = s.CreateProduct("Sync Product 1", "Product for sync test 1", tags1, org1ID)
+		odize.AssertNoError(t, err)
+
+		tags2 := []string{"sync-tag-2"}
+		_, err = s.CreateProduct("Sync Product 2", "Product for sync test 2", tags2, org2ID)
+		odize.AssertNoError(t, err)
+	})
+
+	err := group.
+		Test("should handle no organizations to sync when all are recent", func(t *testing.T) {
+			// Since we just created the orgs, they should be recent and not eligible for sync
+			err := s.SyncOrgs()
+			odize.AssertNoError(t, err)
+
+			// Should not have called SearchRepos since orgs are too recent
+			calls := ghMock.SearchReposCalls()
+			odize.AssertEqual(t, len(calls), 0)
+		}).
+		Test("should return error when database operations fail", func(t *testing.T) {
+			// Create a service with a cancelled context to simulate database errors
+			cancelCtx, cancel := context.WithCancel(ctx)
+			cancel() // Cancel immediately to simulate connection issues
+
+			brokenService := &Service{
+				ctx:      cancelCtx,
+				db:       _testDB,
+				ghClient: ghMock,
+			}
+
+			err := brokenService.SyncOrgs()
+			// This should return an error due to the cancelled context
+			odize.AssertError(t, err)
+		}).
+		Test("should handle organization with no products gracefully", func(t *testing.T) {
+
+			timestamp := time.Now().UnixNano()
+			emptyOrg, err := s.CreateOrganisation(fmt.Sprintf("empty_org_sync_%d", timestamp), fmt.Sprintf("empty_namespace_%d", timestamp), "empty_token", "Empty org")
+			odize.AssertNoError(t, err)
+
+			err = s.SyncOrg(emptyOrg.ID)
+			odize.AssertNoError(t, err)
+		}).
+		Test("should successfully sync organization with products", func(t *testing.T) {
+			err := s.SyncOrg(org1ID)
+			odize.AssertNoError(t, err)
+
+			calls := ghMock.SearchReposCalls()
+			odize.AssertTrue(t, len(calls) > 0)
+		}).
+		Test("should call SearchRepos with correct parameters", func(t *testing.T) {
+			// Reset call tracking by creating new mock
+			ghMock = &ghClientMock{
+				SearchReposFunc: func(owner string, topic string, token string) (github.QuerySearch[github.Repository], error) {
+					return github.QuerySearch[github.Repository]{}, nil
+				},
+				GetRepoDetailsFunc: func(owner, repo, token string) (github.QueryRepository, error) {
+					return github.QueryRepository{}, nil
+				},
+			}
+			s.ghClient = ghMock
+
+			err := s.SyncOrg(org1ID)
+			odize.AssertNoError(t, err)
+
+			calls := ghMock.SearchReposCalls()
+			odize.AssertTrue(t, len(calls) > 0)
+
+			firstCall := calls[0]
+			odize.AssertEqual(t, firstCall.Topic, "sync-tag-1")
+			odize.AssertEqual(t, firstCall.Token, "token1")
+
+			odize.AssertTrue(t, firstCall.Owner != "")
 		}).
 		Run()
 	odize.AssertNoError(t, err)

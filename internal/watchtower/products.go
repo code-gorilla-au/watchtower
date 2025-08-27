@@ -285,6 +285,11 @@ func (s *Service) SyncOrg(orgId int64) error {
 		return err
 	}
 
+	if len(products) == 0 {
+		logger.Debug("No products found for org", "org", orgId)
+		return nil
+	}
+
 	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: products[0].ID, Valid: true})
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
@@ -293,7 +298,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 	}
 
 	for _, p := range products {
-		if err = s.syncProduct(p, org); err != nil {
+		if err = s.syncProductFromGithub(p, org); err != nil {
 			logger.Error("Error syncing product", "error", err)
 
 			return err
@@ -326,14 +331,14 @@ func (s *Service) SyncProduct(id int64) error {
 		return err
 	}
 
-	return s.syncProduct(product, org)
+	return s.syncProductFromGithub(product, org)
 }
 
-func (s *Service) syncProduct(product ProductDTO, org database.Organisation) error {
+func (s *Service) syncProductFromGithub(product ProductDTO, org database.Organisation) error {
 	logger := logging.FromContext(s.ctx)
 
 	for _, tag := range product.Tags {
-		if err := s.syncByTag(tag, org.Namespace, org.Token); err != nil {
+		if err := s.syncRepoDataByTag(tag, org.Namespace, org.Token); err != nil {
 			logger.Error("Error syncing repos", "error", err)
 
 			return err
@@ -349,7 +354,7 @@ func (s *Service) syncProduct(product ProductDTO, org database.Organisation) err
 	return nil
 }
 
-func (s *Service) syncByTag(tag string, owner string, ghToken string) error {
+func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) error {
 	logger := logging.FromContext(s.ctx)
 
 	logger.Debug("Searching for repo with tag", "tag", tag)

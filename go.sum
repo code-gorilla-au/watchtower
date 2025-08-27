@@ -4,8 +4,8 @@ github.com/code-gorilla-au/env v1.1.1 h1:4rkSwCnyymKh+KGAOPx3fEg9v2ZV5i9r92bSf7x
 github.com/code-gorilla-au/env v1.1.1/go.mod h1:KE4Ymfz5MhMi7SX3ZKH4iMFAHsDCvwOV8WTzgpwzzE4=
 github.com/code-gorilla-au/fetch v1.0.1 h1:dA/OJlAdnyceSu2BzcPngXQvVAH2GBFt6KwSnfXibYM=
 github.com/code-gorilla-au/fetch v1.0.1/go.mod h1:Tt4JtWa+uFZOad6atkoM/HIKV+zTq4z+mBVSnPUp64E=
-github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250815112949-a98f7ef48ccd h1:t05jWoQ44KNbuJhooUlhswNBkiNJgb67Ynhy8zxqSak=
-github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250815112949-a98f7ef48ccd/go.mod h1:3kK/Lu/v7IXIdcvYUK8E2fUbvzQOwmKOQ7ExitNZKso=
+github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250827024350-09f6bb42912a h1:f25Bs3hdIiGh1PNj17x2yurOH0Y7WGEBm7TrOi9UETc=
+github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250827024350-09f6bb42912a/go.mod h1:9BriE8CWYgez7KEMsP2Aby2/MFof4czSlBBTme3jThk=
 github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f h1:vH5gu06phRGcwmgSAv1EByO0UYSYKJK1CwBQlbA5cJ4=
 github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f/go.mod h1:csTFHuzb+BkCXrPB/lQvrSuuUfRqCkF3TwkCJzOieNM=
 github.com/code-gorilla-au/odize v1.3.4 h1:QHEM7v8/qH9R0QO6tVWh0yKr+VMv3RGC3PcIADwDGVA=

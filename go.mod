@@ -4,7 +4,7 @@ go 1.24.6
 
 require (
 	github.com/code-gorilla-au/env v1.1.1
-	github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250815112949-a98f7ef48ccd
+	github.com/code-gorilla-au/go-toolbox/github v0.0.0-20250827024350-09f6bb42912a
 	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f
 	github.com/code-gorilla-au/odize v1.3.4
 	github.com/wailsapp/wails/v2 v2.10.2

@@ -4,14 +4,12 @@ import (
 	"context"
 	"time"
 	"watchtower/internal/database"
-
-	"github.com/code-gorilla-au/go-toolbox/github"
 )
 
 type Service struct {
 	ctx      context.Context
 	db       *database.Queries
-	ghClient *github.Client
+	ghClient ghClient
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps
