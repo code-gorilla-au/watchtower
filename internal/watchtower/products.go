@@ -87,16 +87,21 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 }
 
 // UpdateProduct updates a product and returns the updated entity.
-func (s *Service) UpdateProduct(id int64, name string, tags *string) (ProductDTO, error) {
+func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDTO, error) {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Updating product")
 
-	var tagsNS sql.NullString
-	if tags != nil {
-		tagsNS = sql.NullString{String: *tags, Valid: true}
+	data, err := json.Marshal(tags)
+	if err != nil {
+		logger.Error("Error marshalling tags", "error", err)
 	}
 
-	err := s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
+	var tagsNS sql.NullString
+	if tags != nil {
+		tagsNS = sql.NullString{String: string(data), Valid: true}
+	}
+
+	err = s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
 		Name: name,
 		Tags: tagsNS,
 		ID:   id,
