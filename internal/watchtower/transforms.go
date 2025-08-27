@@ -24,6 +24,15 @@ func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
 	}
 }
 
+func ToProductDTOs(models []database.Product) []ProductDTO {
+	result := make([]ProductDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToProductDTO(m))
+	}
+
+	return result
+}
+
 func ToProductDTO(m database.Product) ProductDTO {
 	var tagList []string
 

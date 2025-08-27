@@ -78,12 +78,7 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]Product
 		return nil, err
 	}
 
-	result := make([]ProductDTO, 0, len(models))
-	for _, m := range models {
-		result = append(result, ToProductDTO(m))
-	}
-
-	return result, nil
+	return ToProductDTOs(models), nil
 }
 
 // UpdateProduct updates a product and returns the updated entity.
@@ -101,7 +96,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDT
 		tagsNS = sql.NullString{String: string(data), Valid: true}
 	}
 
-	err = s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
+	model, err := s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
 		Name: name,
 		Tags: tagsNS,
 		ID:   id,
@@ -112,14 +107,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDT
 		return ProductDTO{}, err
 	}
 
-	prod, err := s.db.GetProductByID(s.ctx, id)
-	if err != nil {
-		logger.Error("Error fetching updated product", "error", err)
-
-		return ProductDTO{}, err
-	}
-
-	return ToProductDTO(prod), nil
+	return ToProductDTO(model), nil
 }
 
 func (s *Service) DeleteProduct(id int64) error {
