@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small refactor">
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/orgs.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactor to add org service">
+      <change afterPath="$PROJECT_DIR$/internal/watchtower/products_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/products_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +175,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding maxlength" />
     <MESSAGE value="small change on card layout for PRs" />
     <MESSAGE value="adding commands" />
     <MESSAGE value="adding tasks" />
@@ -200,7 +199,8 @@
     <MESSAGE value="adding tests" />
     <MESSAGE value="fixing" />
     <MESSAGE value="small refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="small refactor" />
+    <MESSAGE value="refactor to add org service" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor to add org service" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

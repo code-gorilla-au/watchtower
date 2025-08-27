@@ -2,7 +2,6 @@ package watchtower
 
 import (
 	"database/sql"
-	"encoding/json"
 	"strings"
 	"time"
 	"watchtower/internal/database"
@@ -13,101 +12,41 @@ import (
 
 // CreateProduct creates a new product and associates it with an organisation.
 func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (ProductDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Info("Creating product")
 
-	var tagsNS sql.NullString
-
-	tagJson, err := json.Marshal(tags)
-	if err != nil {
-		logger.Error("Error marshalling tags", "error", err)
-
-		return ProductDTO{}, err
-	}
-
-	tagsNS = sql.NullString{String: string(tagJson), Valid: true}
-
-	prod, err := s.db.CreateProduct(s.ctx, database.CreateProductParams{
-		Name:        name,
-		Tags:        tagsNS,
-		Description: description,
+	prod, err := s.productSvc.Create(s.ctx, CreateProductParams{
+		Name: name,
+		Tags: tags,
+		Desc: description,
 	})
 	if err != nil {
-		logger.Error("Error creating product", "error", err)
-
 		return ProductDTO{}, err
 	}
 
-	err = s.db.AddProductToOrganisation(s.ctx, database.AddProductToOrganisationParams{
-		ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
-		OrganisationID: sql.NullInt64{Int64: organisationID, Valid: true},
-	})
+	err = s.orgSvc.AssociateProductToOrg(s.ctx, organisationID, prod.ID)
 	if err != nil {
-		logger.Error("Error linking product to organisation", "error", err)
-
 		return ProductDTO{}, err
 	}
 
-	return ToProductDTO(prod), nil
+	return prod, nil
 }
 
 // GetProductByID fetches a product by its ID.
 func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Info("Fetching product by ID")
-
-	prod, err := s.db.GetProductByID(s.ctx, id)
-	if err != nil {
-		logger.Error("Error fetching product by ID", "error", err)
-
-		return ProductDTO{}, err
-	}
-
-	return ToProductDTO(prod), nil
+	return s.productSvc.Get(s.ctx, id)
 }
 
 // GetAllProductsForOrganisation lists products linked to the given organisation.
 func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]ProductDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Info("Listing products for organisation")
-
-	models, err := s.db.ListProductsByOrganisation(s.ctx, sql.NullInt64{Int64: organisationID, Valid: true})
-	if err != nil {
-		logger.Error("Error listing products for organisation", "error", err)
-
-		return nil, err
-	}
-
-	return ToProductDTOs(models), nil
+	return s.productSvc.GetByOrg(s.ctx, organisationID)
 }
 
 // UpdateProduct updates a product and returns the updated entity.
 func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Updating product")
-
-	data, err := json.Marshal(tags)
-	if err != nil {
-		logger.Error("Error marshalling tags", "error", err)
-	}
-
-	var tagsNS sql.NullString
-	if tags != nil {
-		tagsNS = sql.NullString{String: string(data), Valid: true}
-	}
-
-	model, err := s.db.UpdateProduct(s.ctx, database.UpdateProductParams{
-		Name: name,
-		Tags: tagsNS,
+	return s.productSvc.Update(s.ctx, UpdateProductParams{
 		ID:   id,
+		Name: name,
+		Tags: tags,
 	})
-	if err != nil {
-		logger.Error("Error updating product", "error", err)
-
-		return ProductDTO{}, err
-	}
-
-	return ToProductDTO(model), nil
 }
 
 func (s *Service) DeleteProduct(id int64) error {
@@ -136,61 +75,15 @@ func (s *Service) DeleteProduct(id int64) error {
 }
 
 func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Fetching repos for product")
-
-	repos, err := s.db.GetReposByProductID(s.ctx, id)
-	if err != nil {
-		logger.Error("Error fetching repos for product", "error", err)
-
-		return nil, err
-	}
-
-	result := make([]RepositoryDTO, 0, len(repos))
-	for _, r := range repos {
-		result = append(result, ToRepositoryDTO(r))
-	}
-
-	return result, nil
+	return s.productSvc.GetRepos(s.ctx, id)
 }
 
 func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Fetching pull requests for product")
-
-	models, err := s.db.GetPullRequestByProductIDAndState(s.ctx, database.GetPullRequestByProductIDAndStateParams{
-		ID:    id,
-		State: string(github.PrOpen),
-	})
-	if err != nil {
-		logger.Error("Error fetching pull requests for product", "error", err)
-
-		return nil, err
-	}
-
-	return toPullRequestDTOs(models), nil
+	return s.productSvc.GetPullRequests(s.ctx, id)
 }
 
 func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Fetching pull requests for organisation", "org", id)
-
-	models, err := s.db.GetPullRequestsByOrganisationAndState(s.ctx, database.GetPullRequestsByOrganisationAndStateParams{
-		OrganisationID: sql.NullInt64{
-			Int64: id,
-			Valid: true,
-		},
-		State: "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching pull requests for product", "error", err)
-
-		return nil, err
-	}
-
-	logger.Debug("Found", "count", len(models))
-
-	return toPullRequestDTOs(models), nil
+	return s.productSvc.GetPullRequestByOrg(s.ctx, id)
 }
 
 func (s *Service) deletePullRequestsByProductID(id int64) error {
@@ -201,37 +94,11 @@ func (s *Service) deletePullRequestsByProductID(id int64) error {
 }
 
 func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("getting security by product id")
-
-	model, err := s.db.GetSecurityByProductIDAndState(s.ctx, database.GetSecurityByProductIDAndStateParams{
-		ID:    productID,
-		State: "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching security by product id", "error", err)
-
-		return []SecurityDTO{}, err
-	}
-
-	return ToSecurityDTOs(model), nil
+	return s.productSvc.GetSecurity(s.ctx, productID)
 }
 
 func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("getting security by organisation", "org", id)
-
-	model, err := s.db.GetSecurityByOrganisationAndState(s.ctx, database.GetSecurityByOrganisationAndStateParams{
-		OrganisationID: sql.NullInt64{Int64: id, Valid: true},
-		State:          "OPEN",
-	})
-	if err != nil {
-		logger.Error("Error fetching security by organisation", "error", err)
-
-		return []SecurityDTO{}, err
-	}
-
-	return ToSecurityDTOs(model), nil
+	return s.productSvc.GetSecurityByOrg(s.ctx, id)
 }
 
 func (s *Service) deleteSecurityByProductID(id int64) error {

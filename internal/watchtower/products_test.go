@@ -1973,7 +1973,10 @@ func TestService_SyncOrgs(t *testing.T) {
 			ctx:      ctx,
 			db:       _testDB,
 			ghClient: ghMock,
-			orgSvc: &OrganisationService{
+			orgSvc: &organisationService{
+				db: _testDB,
+			},
+			productSvc: &productsService{
 				db: _testDB,
 			},
 		}

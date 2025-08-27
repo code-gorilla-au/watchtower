@@ -7,13 +7,18 @@ import (
 )
 
 type Service struct {
-	ctx      context.Context
-	db       *database.Queries
-	orgSvc   *OrganisationService
-	ghClient ghClient
+	ctx        context.Context
+	db         *database.Queries
+	orgSvc     *organisationService
+	productSvc *productsService
+	ghClient   ghClient
 }
 
-type OrganisationService struct {
+type organisationService struct {
+	db *database.Queries
+}
+
+type productsService struct {
 	db *database.Queries
 }
 

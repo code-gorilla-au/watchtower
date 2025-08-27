@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"database/sql"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
@@ -14,7 +15,7 @@ type CreateOrgParams struct {
 	Description  string
 }
 
-func (o OrganisationService) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
+func (o organisationService) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Creating organisation")
 
@@ -40,7 +41,7 @@ func (o OrganisationService) Create(ctx context.Context, params CreateOrgParams)
 	return ToOrganisationDTO(model), nil
 }
 
-func (o OrganisationService) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
+func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Fetching organisation", "id", id)
 	model, err := o.db.GetOrganisationByID(ctx, id)
@@ -52,7 +53,7 @@ func (o OrganisationService) Get(ctx context.Context, id int64) (OrganisationDTO
 	return ToOrganisationDTO(model), nil
 }
 
-func (o OrganisationService) GetDefault(ctx context.Context) (OrganisationDTO, error) {
+func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Fetching default organisation")
 	model, err := o.db.GetDefaultOrganisation(ctx)
@@ -64,7 +65,7 @@ func (o OrganisationService) GetDefault(ctx context.Context) (OrganisationDTO, e
 	return ToOrganisationDTO(model), nil
 }
 
-func (o OrganisationService) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
+func (o organisationService) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("setting default org", "org", id)
 
@@ -84,7 +85,7 @@ func (o OrganisationService) SetDefault(ctx context.Context, id int64) (Organisa
 	return ToOrganisationDTO(model), nil
 }
 
-func (o OrganisationService) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
+func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Listing all organisations")
 
@@ -98,7 +99,7 @@ func (o OrganisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 	return ToOrganisationDTOs(models), nil
 }
 
-func (o OrganisationService) Delete(ctx context.Context, id int64) error {
+func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Info("Fetching organisation", "id", id)
 
@@ -119,7 +120,7 @@ type UpdateOrgParams struct {
 	Description  string
 }
 
-func (o OrganisationService) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
+func (o organisationService) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Updating organisation", "id", params.ID)
 
@@ -145,4 +146,25 @@ func (o OrganisationService) Update(ctx context.Context, params UpdateOrgParams)
 	}
 
 	return ToOrganisationDTO(model), nil
+}
+
+func (o organisationService) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Info("Associating product to org", "org", orgID, "product", productID)
+
+	if err := o.db.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+		ProductID: sql.NullInt64{
+			Int64: productID,
+			Valid: true,
+		},
+		OrganisationID: sql.NullInt64{
+			Int64: orgID,
+			Valid: true,
+		},
+	}); err != nil {
+		logger.Error("Error linking product to organisation", "error", err)
+		return err
+	}
+
+	return nil
 }
