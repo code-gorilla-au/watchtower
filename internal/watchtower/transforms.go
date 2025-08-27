@@ -1,9 +1,12 @@
 package watchtower
 
 import (
+	"database/sql"
 	"encoding/json"
 	"time"
 	"watchtower/internal/database"
+
+	"github.com/code-gorilla-au/go-toolbox/github"
 )
 
 // Conversion helpers from database models to DTOs
@@ -136,6 +139,63 @@ func ToSecurityDTOs(models []database.Security) []SecurityDTO {
 	result := make([]SecurityDTO, 0, len(models))
 	for _, m := range models {
 		result = append(result, ToSecurityDTO(m))
+	}
+
+	return result
+}
+
+func ToCreateRepoParamsFromGithubRepos(repos []github.Node[github.Repository], tag string) []database.CreateRepoParams {
+	result := make([]database.CreateRepoParams, 0, len(repos))
+	for _, repo := range repos {
+		result = append(result, database.CreateRepoParams{
+			Name:  repo.Node.Name,
+			Url:   repo.Node.Url,
+			Topic: tag,
+			Owner: repo.Node.Owner.Login,
+		})
+	}
+
+	return result
+}
+
+func ToCreatePullRequestParamsFromGithubPRs(prs github.RootNode[github.PullRequest], repoName string) []database.CreatePullRequestParams {
+	result := make([]database.CreatePullRequestParams, 0, len(prs.Nodes))
+	for _, pr := range prs.Nodes {
+		mergedAt := sql.NullInt64{
+			Valid: false,
+			Int64: 0,
+		}
+
+		if pr.MergedAt != nil {
+			mergedAt.Int64 = pr.MergedAt.Unix()
+			mergedAt.Valid = true
+		}
+
+		result = append(result, database.CreatePullRequestParams{
+			ExternalID:     pr.ID,
+			Title:          pr.Title,
+			RepositoryName: repoName,
+			Url:            pr.Permalink,
+			State:          string(pr.State),
+			Author:         pr.Author.Login,
+			MergedAt:       mergedAt,
+		})
+	}
+
+	return result
+}
+
+func ToCreateSecurityParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []database.CreateSecurityParams {
+	result := make([]database.CreateSecurityParams, 0, len(secs.Nodes))
+	for _, sec := range secs.Nodes {
+		result = append(result, database.CreateSecurityParams{
+			ExternalID:     sec.ID,
+			RepositoryName: repoName,
+			PackageName:    sec.SecurityVulnerability.Package.Name,
+			State:          string(sec.State),
+			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
+			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
+		})
 	}
 
 	return result

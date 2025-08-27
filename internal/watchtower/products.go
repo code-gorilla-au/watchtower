@@ -257,13 +257,10 @@ func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) er
 func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag string) error {
 	logger := logging.FromContext(s.ctx)
 
-	for _, repo := range repos {
-		_, err := s.db.CreateRepo(s.ctx, database.CreateRepoParams{
-			Name:  repo.Node.Name,
-			Url:   repo.Node.Url,
-			Topic: tag,
-			Owner: repo.Node.Owner.Login,
-		})
+	repoParams := ToCreateRepoParamsFromGithubRepos(repos, tag)
+
+	for _, params := range repoParams {
+		_, err := s.db.CreateRepo(s.ctx, params)
 		if err != nil {
 			logger.Error("Error creating repo", "error", err)
 
@@ -277,26 +274,10 @@ func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag st
 func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest], repoName string) error {
 	logger := logging.FromContext(s.ctx)
 
-	for _, pr := range prs.Nodes {
-		mergedAt := sql.NullInt64{
-			Valid: false,
-			Int64: 0,
-		}
+	prParams := ToCreatePullRequestParamsFromGithubPRs(prs, repoName)
 
-		if pr.MergedAt != nil {
-			mergedAt.Int64 = pr.MergedAt.Unix()
-			mergedAt.Valid = true
-		}
-
-		_, err := s.db.CreatePullRequest(s.ctx, database.CreatePullRequestParams{
-			ExternalID:     pr.ID,
-			Title:          pr.Title,
-			RepositoryName: repoName,
-			Url:            pr.Permalink,
-			State:          string(pr.State),
-			Author:         pr.Author.Login,
-			MergedAt:       mergedAt,
-		})
+	for _, params := range prParams {
+		_, err := s.db.CreatePullRequest(s.ctx, params)
 		if err != nil {
 			logger.Error("Error creating pull request", "error", err)
 
@@ -310,15 +291,10 @@ func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest]
 func (s *Service) bulkInsertSecurity(secs github.RootNode[github.VulnerabilityAlerts], repoName string) error {
 	logger := logging.FromContext(s.ctx)
 
-	for _, sec := range secs.Nodes {
-		_, err := s.db.CreateSecurity(s.ctx, database.CreateSecurityParams{
-			ExternalID:     sec.ID,
-			RepositoryName: repoName,
-			PackageName:    sec.SecurityVulnerability.Package.Name,
-			State:          string(sec.State),
-			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
-			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
-		})
+	secParams := ToCreateSecurityParamsFromGithubVulnerabilities(secs, repoName)
+
+	for _, params := range secParams {
+		_, err := s.db.CreateSecurity(s.ctx, params)
 		if err != nil {
 			logger.Error("Error creating security", "error", err)
 
