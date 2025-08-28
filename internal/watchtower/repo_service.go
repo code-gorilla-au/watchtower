@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"time"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/github"
@@ -90,6 +91,48 @@ func (r *repoService) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]P
 	logger.Debug("Found", "count", len(models))
 
 	return toPullRequestDTOs(models), nil
+}
+
+type CreatePRParams struct {
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       *time.Time
+}
+
+func (r *repoService) BulkCreatePullRequest(ctx context.Context, paramsList []CreatePRParams) error {
+	logger := logging.FromContext(ctx)
+
+	for _, params := range paramsList {
+		mergedAt := sql.NullInt64{
+			Valid: false,
+			Int64: 0,
+		}
+
+		if params.MergedAt != nil {
+			mergedAt.Int64 = params.MergedAt.Unix()
+			mergedAt.Valid = true
+		}
+		_, err := r.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			ExternalID:     params.ExternalID,
+			Title:          params.Title,
+			RepositoryName: params.RepositoryName,
+			Url:            params.Url,
+			State:          params.State,
+			Author:         params.Author,
+			MergedAt:       mergedAt,
+		})
+		if err != nil {
+			logger.Error("Error creating pull request", "error", err)
+
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (r *repoService) GetSecurity(ctx context.Context, productID int64) ([]SecurityDTO, error) {
