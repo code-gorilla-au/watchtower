@@ -6,7 +6,6 @@ import (
 	"time"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
 
@@ -50,28 +49,7 @@ func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDT
 }
 
 func (s *Service) DeleteProduct(id int64) error {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Deleting product")
-
-	if err := s.deleteReposByProductID(id); err != nil {
-		logger.Error("Error deleting repos for product", "error", err)
-	}
-
-	if err := s.deleteSecurityByProductID(id); err != nil {
-		logger.Error("Error deleting security for product", "error", err)
-	}
-
-	if err := s.deletePullRequestsByProductID(id); err != nil {
-		logger.Error("Error deleting pull requests for product", "error", err)
-	}
-
-	if err := s.db.DeleteProduct(s.ctx, id); err != nil {
-		logger.Error("Error deleting product", "error", err)
-
-		return err
-	}
-
-	return nil
+	return s.productSvc.DeleteProduct(s.ctx, id)
 }
 
 func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
@@ -86,26 +64,12 @@ func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, erro
 	return s.productSvc.GetPullRequestByOrg(s.ctx, id)
 }
 
-func (s *Service) deletePullRequestsByProductID(id int64) error {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Deleting PRs for product")
-
-	return s.db.DeletePullRequestsByProductID(s.ctx, id)
-}
-
 func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error) {
 	return s.productSvc.GetSecurity(s.ctx, productID)
 }
 
 func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
 	return s.productSvc.GetSecurityByOrg(s.ctx, id)
-}
-
-func (s *Service) deleteSecurityByProductID(id int64) error {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Deleting security for product")
-
-	return s.db.DeleteSecurityByProductID(s.ctx, id)
 }
 
 func (s *Service) SyncOrgs() error {
@@ -226,7 +190,7 @@ func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) er
 		return apiErr
 	}
 
-	if err := s.bulkInsertRepos(repos.Data.Search.Edges, tag); err != nil {
+	if err := s.productSvc.BulkInsertRepos(s.ctx, repos.Data.Search.Edges, tag); err != nil {
 		logger.Error("Error bulk inserting repos", "error", err)
 
 		return err
@@ -238,76 +202,10 @@ func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) er
 			logger.Error("Error getting repo details", "repo", repo.Node.Name, "error", err)
 		}
 
-		if err = s.bulkInsertPullRequests(dd.Data.Repository.PullRequests, repo.Node.Name); err != nil {
-			logger.Error("Error bulk inserting pull requests", "error", err)
-
-			return err
-		}
-
-		if err = s.bulkInsertSecurity(dd.Data.Repository.VulnerabilityAlerts, repo.Node.Name); err != nil {
-			logger.Error("Error bulk inserting security", "error", err)
-
-			return err
+		if err = s.productSvc.BulkInsertRepoDetails(s.ctx, dd); err != nil {
+			logger.Error("Error bulk inserting repo details", "repo", repo.Node.Name, "error", err)
 		}
 	}
 
 	return nil
-}
-
-func (s *Service) bulkInsertRepos(repos []github.Node[github.Repository], tag string) error {
-	logger := logging.FromContext(s.ctx)
-
-	repoParams := ToCreateRepoParamsFromGithubRepos(repos, tag)
-
-	for _, params := range repoParams {
-		_, err := s.db.CreateRepo(s.ctx, params)
-		if err != nil {
-			logger.Error("Error creating repo", "error", err)
-
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (s *Service) bulkInsertPullRequests(prs github.RootNode[github.PullRequest], repoName string) error {
-	logger := logging.FromContext(s.ctx)
-
-	prParams := ToCreatePullRequestParamsFromGithubPRs(prs, repoName)
-
-	for _, params := range prParams {
-		_, err := s.db.CreatePullRequest(s.ctx, params)
-		if err != nil {
-			logger.Error("Error creating pull request", "error", err)
-
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (s *Service) bulkInsertSecurity(secs github.RootNode[github.VulnerabilityAlerts], repoName string) error {
-	logger := logging.FromContext(s.ctx)
-
-	secParams := ToCreateSecurityParamsFromGithubVulnerabilities(secs, repoName)
-
-	for _, params := range secParams {
-		_, err := s.db.CreateSecurity(s.ctx, params)
-		if err != nil {
-			logger.Error("Error creating security", "error", err)
-
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (s *Service) deleteReposByProductID(id int64) error {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("Deleting repos for product")
-
-	return s.db.DeleteReposByProductID(s.ctx, id)
 }

@@ -93,6 +93,17 @@ func (r *repoService) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]P
 	return toPullRequestDTOs(models), nil
 }
 
+func (r *repoService) BulkCreateRepos(ctx context.Context, paramsList []CreateRepoParams) error {
+	for _, params := range paramsList {
+		_, err := r.CreateRepo(ctx, params)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type CreatePRParams struct {
 	ExternalID     string
 	Title          string
@@ -167,4 +178,34 @@ func (r *repoService) GetSecurityByOrg(ctx context.Context, orgID int64) ([]Secu
 	}
 
 	return ToSecurityDTOs(model), nil
+}
+
+type CreateSecurityParams struct {
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+}
+
+func (r *repoService) BulkCreateSecurity(ctx context.Context, paramsList []CreateSecurityParams) error {
+	logger := logging.FromContext(ctx)
+
+	for _, params := range paramsList {
+		_, err := r.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			ExternalID:     params.ExternalID,
+			RepositoryName: params.RepositoryName,
+			PackageName:    params.PackageName,
+			State:          params.State,
+			Severity:       params.Severity,
+			PatchedVersion: params.PatchedVersion,
+		})
+		if err != nil {
+			logger.Error("Error creating security", "error", err)
+			return err
+		}
+	}
+
+	return nil
 }

@@ -1,7 +1,6 @@
 package watchtower
 
 import (
-	"database/sql"
 	"encoding/json"
 	"time"
 	"watchtower/internal/database"
@@ -123,10 +122,11 @@ func ToSecurityDTOs(models []database.Security) []SecurityDTO {
 	return result
 }
 
-func ToCreateRepoParamsFromGithubRepos(repos []github.Node[github.Repository], tag string) []database.CreateRepoParams {
-	result := make([]database.CreateRepoParams, 0, len(repos))
+func ToCreateRepoFromGithub(repos []github.Node[github.Repository], tag string) []CreateRepoParams {
+	result := make([]CreateRepoParams, 0, len(repos))
+
 	for _, repo := range repos {
-		result = append(result, database.CreateRepoParams{
+		result = append(result, CreateRepoParams{
 			Name:  repo.Node.Name,
 			Url:   repo.Node.Url,
 			Topic: tag,
@@ -137,49 +137,28 @@ func ToCreateRepoParamsFromGithubRepos(repos []github.Node[github.Repository], t
 	return result
 }
 
-type bulkInsertParams struct {
-	PRs  []database.CreatePullRequestParams
-	Secs []database.CreateSecurityParams
-}
+func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoName string) []CreatePRParams {
+	result := make([]CreatePRParams, len(prs.Nodes))
 
-func toBulkInsertParams(repoName string, prs github.RootNode[github.PullRequest], secs github.RootNode[github.VulnerabilityAlerts]) bulkInsertParams {
-	return bulkInsertParams{
-		ToCreatePullRequestParamsFromGithubPRs(prs, repoName),
-		ToCreateSecurityParamsFromGithubVulnerabilities(secs, repoName),
-	}
-}
-
-func ToCreatePullRequestParamsFromGithubPRs(prs github.RootNode[github.PullRequest], repoName string) []database.CreatePullRequestParams {
-	result := make([]database.CreatePullRequestParams, 0, len(prs.Nodes))
 	for _, pr := range prs.Nodes {
-		mergedAt := sql.NullInt64{
-			Valid: false,
-			Int64: 0,
-		}
-
-		if pr.MergedAt != nil {
-			mergedAt.Int64 = pr.MergedAt.Unix()
-			mergedAt.Valid = true
-		}
-
-		result = append(result, database.CreatePullRequestParams{
+		result = append(result, CreatePRParams{
 			ExternalID:     pr.ID,
 			Title:          pr.Title,
 			RepositoryName: repoName,
 			Url:            pr.Permalink,
 			State:          string(pr.State),
 			Author:         pr.Author.Login,
-			MergedAt:       mergedAt,
+			MergedAt:       pr.MergedAt,
 		})
 	}
 
 	return result
 }
 
-func ToCreateSecurityParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []database.CreateSecurityParams {
-	result := make([]database.CreateSecurityParams, 0, len(secs.Nodes))
+func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []CreateSecurityParams {
+	result := make([]CreateSecurityParams, len(secs.Nodes))
 	for _, sec := range secs.Nodes {
-		result = append(result, database.CreateSecurityParams{
+		result = append(result, CreateSecurityParams{
 			ExternalID:     sec.ID,
 			RepositoryName: repoName,
 			PackageName:    sec.SecurityVulnerability.Package.Name,

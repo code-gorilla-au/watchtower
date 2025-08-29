@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"watchtower/internal/database"
 
+	"github.com/code-gorilla-au/go-toolbox/github"
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
 
@@ -125,4 +126,50 @@ func (p *productsService) GetSecurity(ctx context.Context, id int64) ([]Security
 
 func (p *productsService) GetSecurityByOrg(ctx context.Context, orgID int64) ([]SecurityDTO, error) {
 	return p.repoService.GetSecurityByOrg(ctx, orgID)
+}
+
+func (p *productsService) BulkInsertRepos(ctx context.Context, reposList []github.Node[github.Repository], tag string) error {
+
+	params := ToCreateRepoFromGithub(reposList, tag)
+
+	return p.repoService.BulkCreateRepos(ctx, params)
+
+}
+
+func (p *productsService) BulkInsertRepoDetails(ctx context.Context, repoDetails github.QueryRepository) error {
+	logger := logging.FromContext(ctx)
+
+	prs := ToCreatePRsFromGithubRepos(repoDetails.Data.Repository.PullRequests, repoDetails.Data.Repository.Name)
+	secs := ToSecParamsFromGithubVulnerabilities(repoDetails.Data.Repository.VulnerabilityAlerts, repoDetails.Data.Repository.Name)
+
+	if err := p.repoService.BulkCreatePullRequest(ctx, prs); err != nil {
+		logger.Error("Error creating pull requests", "error", err)
+		return err
+	}
+
+	if err := p.repoService.BulkCreateSecurity(ctx, secs); err != nil {
+		logger.Error("Error creating security", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (p *productsService) DeleteProduct(ctx context.Context, id int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Deleting product")
+
+	if err := p.db.DeleteSecurityByProductID(ctx, id); err != nil {
+		logger.Error("Error deleting security for product", "error", err)
+	}
+
+	if err := p.db.DeletePullRequestsByProductID(ctx, id); err != nil {
+		logger.Error("Error deleting pull requests for product", "error", err)
+	}
+
+	if err := p.db.DeleteReposByProductID(ctx, id); err != nil {
+		logger.Error("Error deleting repos for product", "error", err)
+	}
+
+	return p.db.DeleteProduct(ctx, id)
 }

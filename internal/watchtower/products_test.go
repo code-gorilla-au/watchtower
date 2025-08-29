@@ -1978,6 +1978,9 @@ func TestService_SyncOrgs(t *testing.T) {
 			},
 			productSvc: &productsService{
 				db: _testDB,
+				repoService: &repoService{
+					db: _testDB,
+				},
 			},
 		}
 
