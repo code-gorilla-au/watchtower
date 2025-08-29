@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"time"
 	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
@@ -99,17 +100,32 @@ func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 	return ToOrganisationDTOs(models), nil
 }
 
-func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (OrganisationDTO, error) {
+func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Fetching stale organisations")
+
+	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
+
+	models, err := o.db.ListOrgsOlderThanUpdatedAt(ctx, fiveMinutesAgo)
+	if err != nil {
+		logger.Error("Error fetching stale organisations", "error", err)
+		return nil, err
+	}
+
+	return ToOrganisationDTOs(models), nil
+}
+
+func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (InternalOrganisation, error) {
 	logger := logging.FromContext(ctx)
 	logger.Info("Fetching organisations associated to product", "product", productID)
 
 	model, err := o.db.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
 	if err != nil {
 		logger.Error("Error fetching organisations associated to product", "error", err)
-		return OrganisationDTO{}, err
+		return InternalOrganisation{}, err
 	}
 
-	return ToOrganisationDTO(model), err
+	return ToInternalOrganisation(model), err
 }
 
 func (o organisationService) Delete(ctx context.Context, id int64) error {
@@ -159,6 +175,12 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 	}
 
 	return ToOrganisationDTO(model), nil
+}
+
+func (o organisationService) UpdateSyncDateNow(ctx context.Context, id int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Updating sync date")
+	return o.db.UpdateProductSync(ctx, id)
 }
 
 func (o organisationService) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {

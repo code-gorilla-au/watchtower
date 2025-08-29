@@ -2023,6 +2023,15 @@ func TestService_SyncOrgs(t *testing.T) {
 				ctx:      cancelCtx,
 				db:       _testDB,
 				ghClient: ghMock,
+				orgSvc: &organisationService{
+					db: _testDB,
+				},
+				productSvc: &productsService{
+					db: _testDB,
+					repoService: &repoService{
+						db: _testDB,
+					},
+				},
 			}
 
 			err := brokenService.SyncOrgs()

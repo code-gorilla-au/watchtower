@@ -39,6 +39,11 @@ type OrganisationDTO struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 }
 
+type InternalOrganisation struct {
+	OrganisationDTO
+	Token string
+}
+
 type ProductDTO struct {
 	ID          int64     `json:"id"`
 	Name        string    `json:"name"`

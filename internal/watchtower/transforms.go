@@ -35,6 +35,21 @@ func ToOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
 	return result
 }
 
+func ToInternalOrganisation(m database.Organisation) InternalOrganisation {
+	return InternalOrganisation{
+		OrganisationDTO: OrganisationDTO{
+			ID:           m.ID,
+			FriendlyName: m.FriendlyName,
+			Description:  m.Description,
+			Namespace:    m.Namespace,
+			DefaultOrg:   m.DefaultOrg,
+			CreatedAt:    toTime(m.CreatedAt),
+			UpdatedAt:    toTime(m.UpdatedAt),
+		},
+		Token: m.Token,
+	}
+}
+
 func ToProductDTOs(models []database.Product) []ProductDTO {
 	result := make([]ProductDTO, 0, len(models))
 	for _, m := range models {

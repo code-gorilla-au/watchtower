@@ -1,10 +1,7 @@
 package watchtower
 
 import (
-	"database/sql"
 	"strings"
-	"time"
-	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/go-toolbox/logging"
 )
@@ -76,9 +73,7 @@ func (s *Service) SyncOrgs() error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing orgs")
 
-	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
-
-	orgs, err := s.db.ListOrgsOlderThanUpdatedAt(s.ctx, fiveMinutesAgo)
+	orgs, err := s.orgSvc.GetStaleOrgs(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching orgs", "error", err)
 
@@ -114,7 +109,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 		return nil
 	}
 
-	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: products[0].ID, Valid: true})
+	org, err := s.orgSvc.GetOrgAssociatedToProduct(s.ctx, products[0].ID)
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
 
@@ -129,7 +124,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 		}
 	}
 
-	if err = s.db.UpdateOrganisationSync(s.ctx, org.ID); err != nil {
+	if err = s.orgSvc.UpdateSyncDateNow(s.ctx, org.ID); err != nil {
 		logger.Error("Error updating organisation sync", "error", err)
 
 		return err
@@ -148,7 +143,7 @@ func (s *Service) SyncProduct(id int64) error {
 		return err
 	}
 
-	org, err := s.db.GetOrganisationForProduct(s.ctx, sql.NullInt64{Int64: product.ID, Valid: true})
+	org, err := s.orgSvc.GetOrgAssociatedToProduct(s.ctx, product.ID)
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
 
@@ -158,7 +153,7 @@ func (s *Service) SyncProduct(id int64) error {
 	return s.syncProductFromGithub(product, org)
 }
 
-func (s *Service) syncProductFromGithub(product ProductDTO, org database.Organisation) error {
+func (s *Service) syncProductFromGithub(product ProductDTO, org InternalOrganisation) error {
 	logger := logging.FromContext(s.ctx)
 
 	for _, tag := range product.Tags {
