@@ -107,6 +107,13 @@ func (p *productsService) Update(ctx context.Context, params UpdateProductParams
 	return ToProductDTO(model), nil
 }
 
+func (p *productsService) UpdateSyncDateNow(ctx context.Context, id int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Updating sync date")
+
+	return p.db.UpdateProductSync(ctx, id)
+}
+
 func (p *productsService) GetRepos(ctx context.Context, id int64) ([]RepositoryDTO, error) {
 	return p.repoService.GetRepos(ctx, id)
 }
@@ -132,7 +139,6 @@ func (p *productsService) BulkInsertRepos(ctx context.Context, reposList []githu
 	params := ToCreateRepoFromGithub(reposList, tag)
 
 	return p.repoService.BulkCreateRepos(ctx, params)
-
 }
 
 func (p *productsService) BulkInsertRepoDetails(ctx context.Context, repoDetails github.QueryRepository) error {

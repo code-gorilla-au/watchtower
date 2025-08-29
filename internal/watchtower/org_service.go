@@ -99,6 +99,19 @@ func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 	return ToOrganisationDTOs(models), nil
 }
 
+func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Info("Fetching organisations associated to product", "product", productID)
+
+	model, err := o.db.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
+	if err != nil {
+		logger.Error("Error fetching organisations associated to product", "error", err)
+		return OrganisationDTO{}, err
+	}
+
+	return ToOrganisationDTO(model), err
+}
+
 func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Info("Fetching organisation", "id", id)

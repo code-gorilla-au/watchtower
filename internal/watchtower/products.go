@@ -169,7 +169,7 @@ func (s *Service) syncProductFromGithub(product ProductDTO, org database.Organis
 		}
 	}
 
-	if err := s.db.UpdateProductSync(s.ctx, product.ID); err != nil {
+	if err := s.productSvc.UpdateSyncDateNow(s.ctx, product.ID); err != nil {
 		logger.Error("Error updating product sync", "error", err)
 
 		return err
