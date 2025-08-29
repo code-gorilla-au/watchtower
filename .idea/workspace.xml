@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip adding bulk create pull requests">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring repo">
       <change beforePath="$PROJECT_DIR$/internal/watchtower/products_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/repo_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/repo_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +169,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding ci tasks" />
     <MESSAGE value="adding method to remove all secs" />
     <MESSAGE value="adding dialogue + fix sync org for worker" />
     <MESSAGE value="adding description" />
@@ -199,7 +193,8 @@
     <MESSAGE value="starting refactor for products" />
     <MESSAGE value="refactor to add transform" />
     <MESSAGE value="wip adding bulk create pull requests" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip adding bulk create pull requests" />
+    <MESSAGE value="refactoring repo" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring repo" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

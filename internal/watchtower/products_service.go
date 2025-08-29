@@ -11,10 +11,9 @@ import (
 )
 
 type CreateProductParams struct {
-	Name  string
-	Desc  string
-	Tags  []string
-	OrgID int64
+	Name string
+	Desc string
+	Tags []string
 }
 
 func (p *productsService) Create(ctx context.Context, params CreateProductParams) (ProductDTO, error) {
