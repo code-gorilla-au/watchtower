@@ -700,7 +700,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			product, err := s.CreateProduct("Single Repo Product", "Product with one repository", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "single-test-repo",
 				Url:   "https://github.com/test/single-test-repo",
 				Topic: "single-repo-tag",
@@ -724,7 +724,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			product, err := s.CreateProduct("Multi Repo Product", "Product with multiple repositories", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-test-repo-1",
 				Url:   "https://github.com/test/multi-test-repo-1",
 				Topic: "multi-repo-tag1",
@@ -732,7 +732,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-test-repo-2",
 				Url:   "https://github.com/test/multi-test-repo-2",
 				Topic: "multi-repo-tag2",
@@ -756,7 +756,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			product, err := s.CreateProduct("Filtering Product", "Product to test filtering", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "matching-repo",
 				Url:   "https://github.com/test/matching-repo",
 				Topic: "matching-tag",
@@ -764,7 +764,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "non-matching-repo",
 				Url:   "https://github.com/test/non-matching-repo",
 				Topic: "different-tag",
@@ -797,7 +797,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			product, err := s.CreateProduct("Special Chars Product", "Product with special character repos", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "repo-with-dash_underscore.dot",
 				Url:   "https://github.com/test-owner/repo-with-dash_underscore.dot",
 				Topic: "special-chars-tag",
@@ -817,7 +817,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			product, err := s.CreateProduct("Same Topic Product", "Product with multiple repos having same topic", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "same-topic-repo-1",
 				Url:   "https://github.com/test/same-topic-repo-1",
 				Topic: "same-topic",
@@ -825,7 +825,7 @@ func TestService_GetProductRepos(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "same-topic-repo-2",
 				Url:   "https://github.com/test/same-topic-repo-2",
 				Topic: "same-topic",
@@ -891,7 +891,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			product, err := s.CreateProduct("Single PR Product", "Product with one pull request", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "single-pr-repo",
 				Url:   "https://github.com/test/single-pr-repo",
 				Topic: "single-pr-tag",
@@ -899,7 +899,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-external-1",
 				Title:          "Single Test PR",
 				RepositoryName: "single-pr-repo",
@@ -931,7 +931,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			product, err := s.CreateProduct("Multi PR Product", "Product with multiple pull requests", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-pr-repo-1",
 				Url:   "https://github.com/test/multi-pr-repo-1",
 				Topic: "multi-pr-tag1",
@@ -939,7 +939,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-pr-repo-2",
 				Url:   "https://github.com/test/multi-pr-repo-2",
 				Topic: "multi-pr-tag2",
@@ -947,7 +947,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-external-2",
 				Title:          "Multi Test PR 1",
 				RepositoryName: "multi-pr-repo-1",
@@ -961,7 +961,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-external-3",
 				Title:          "Multi Test PR 2",
 				RepositoryName: "multi-pr-repo-2",
@@ -992,7 +992,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			product, err := s.CreateProduct("State Filter Product", "Product to test state filtering", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "state-filter-repo",
 				Url:   "https://github.com/test/state-filter-repo",
 				Topic: "state-filter-tag",
@@ -1000,7 +1000,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-external-open",
 				Title:          "Open PR",
 				RepositoryName: "state-filter-repo",
@@ -1014,7 +1014,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-external-closed",
 				Title:          "Closed PR",
 				RepositoryName: "state-filter-repo",
@@ -1053,7 +1053,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			product, err := s.CreateProduct("Special Chars PR Product", "Product with special character PRs", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "special-chars-pr-repo",
 				Url:   "https://github.com/test-owner/special-chars-pr-repo",
 				Topic: "special-chars-pr-tag",
@@ -1062,7 +1062,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			mergedAt := sql.NullInt64{Int64: time.Now().Unix(), Valid: true}
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-with-special-chars",
 				Title:          "Fix: bug with special-chars & symbols",
 				RepositoryName: "special-chars-pr-repo",
@@ -1085,7 +1085,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			product, err := s.CreateProduct("Same Repo PR Product", "Product with multiple PRs from same repo", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "same-repo-multiple-prs",
 				Url:   "https://github.com/test/same-repo-multiple-prs",
 				Topic: "same-repo-pr-tag",
@@ -1093,7 +1093,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-same-repo-1",
 				Title:          "First PR from same repo",
 				RepositoryName: "same-repo-multiple-prs",
@@ -1107,7 +1107,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "pr-same-repo-2",
 				Title:          "Second PR from same repo",
 				RepositoryName: "same-repo-multiple-prs",
@@ -1181,7 +1181,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			_, err := s.CreateProduct("Org PR Test Product", "Product for org PR testing", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-pr-test-repo",
 				Url:   "https://github.com/test/org-pr-test-repo",
 				Topic: "org-pr-test-tag",
@@ -1189,7 +1189,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-external-1",
 				Title:          "First Org PR",
 				RepositoryName: "org-pr-test-repo",
@@ -1203,7 +1203,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-external-2",
 				Title:          "Second Org PR",
 				RepositoryName: "org-pr-test-repo",
@@ -1217,7 +1217,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-external-closed",
 				Title:          "Closed Org PR",
 				RepositoryName: "org-pr-test-repo",
@@ -1249,7 +1249,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			_, err := s.CreateProduct("Org PR State Test Product", "Product for org PR state testing", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-pr-state-test-repo",
 				Url:   "https://github.com/test/org-pr-state-test-repo",
 				Topic: "org-pr-state-test-tag",
@@ -1258,7 +1258,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			// Create pull requests with different states
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-open-state",
 				Title:          "Open State PR",
 				RepositoryName: "org-pr-state-test-repo",
@@ -1272,7 +1272,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-closed-state",
 				Title:          "Closed State PR",
 				RepositoryName: "org-pr-state-test-repo",
@@ -1286,7 +1286,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "org-pr-merged-state",
 				Title:          "Merged State PR",
 				RepositoryName: "org-pr-state-test-repo",
@@ -1320,7 +1320,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			_, err = s.CreateProduct("Multi Prod 2", "Second product for multi test", tags2, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-prod-repo-1",
 				Url:   "https://github.com/test/multi-prod-repo-1",
 				Topic: "multi-prod-tag-1",
@@ -1328,7 +1328,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-prod-repo-2",
 				Url:   "https://github.com/test/multi-prod-repo-2",
 				Topic: "multi-prod-tag-2",
@@ -1336,7 +1336,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "multi-prod-pr-1",
 				Title:          "PR from Product 1",
 				RepositoryName: "multi-prod-repo-1",
@@ -1350,7 +1350,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreatePullRequest(ctx, database.CreatePullRequestParams{
+			_, err = _testDB.CreatePullRequest(ctx, database.CreatePullRequestParams{
 				ExternalID:     "multi-prod-pr-2",
 				Title:          "PR from Product 2",
 				RepositoryName: "multi-prod-repo-2",
@@ -1432,7 +1432,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			odize.AssertEqual(t, len(securities), 0)
 		}).
 		Test("should return security data for product with repositories", func(t *testing.T) {
-			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err := _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "security-test-repo",
 				Url:   "https://github.com/test/security-test-repo",
 				Topic: "security-test-tag",
@@ -1440,7 +1440,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-external-1",
 				RepositoryName: "security-test-repo",
 				PackageName:    "test-package-1",
@@ -1450,7 +1450,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-external-2",
 				RepositoryName: "security-test-repo",
 				PackageName:    "test-package-2",
@@ -1483,7 +1483,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			odize.AssertEqual(t, sec2.PatchedVersion, "2.3.4")
 		}).
 		Test("should only return OPEN security items", func(t *testing.T) {
-			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err := _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "security-state-test-repo",
 				Url:   "https://github.com/test/security-state-test-repo",
 				Topic: "security-test-tag",
@@ -1491,7 +1491,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-open",
 				RepositoryName: "security-state-test-repo",
 				PackageName:    "open-package",
@@ -1501,7 +1501,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-closed",
 				RepositoryName: "security-state-test-repo",
 				PackageName:    "closed-package",
@@ -1511,7 +1511,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-fixed",
 				RepositoryName: "security-state-test-repo",
 				PackageName:    "fixed-package",
@@ -1537,7 +1537,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			odize.AssertTrue(t, openSecuritiesFound == 1)
 		}).
 		Test("should handle multiple repositories with security data", func(t *testing.T) {
-			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err := _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-security-repo-1",
 				Url:   "https://github.com/test/multi-security-repo-1",
 				Topic: "security-test-tag",
@@ -1545,7 +1545,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "multi-security-repo-2",
 				Url:   "https://github.com/test/multi-security-repo-2",
 				Topic: "security-test-tag",
@@ -1553,7 +1553,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "multi-security-1",
 				RepositoryName: "multi-security-repo-1",
 				PackageName:    "multi-package-1",
@@ -1563,7 +1563,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "multi-security-2",
 				RepositoryName: "multi-security-repo-2",
 				PackageName:    "multi-package-2",
@@ -1590,7 +1590,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			odize.AssertTrue(t, repoNames["multi-security-repo-2"])
 		}).
 		Test("should handle security items with special characters and edge cases", func(t *testing.T) {
-			_, err := s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err := _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "special-chars-security-repo",
 				Url:   "https://github.com/test/special-chars-security-repo",
 				Topic: "security-test-tag",
@@ -1598,7 +1598,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "security-with-special-chars",
 				RepositoryName: "special-chars-security-repo",
 				PackageName:    "@scope/package-name",
@@ -1669,7 +1669,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			_, err := s.CreateProduct("Org Security Test Product", "Product for org security testing", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-security-test-repo",
 				Url:   "https://github.com/test/org-security-test-repo",
 				Topic: "org-security-test-tag",
@@ -1677,7 +1677,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-external-1",
 				RepositoryName: "org-security-test-repo",
 				PackageName:    "org-test-package-1",
@@ -1687,7 +1687,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-external-2",
 				RepositoryName: "org-security-test-repo",
 				PackageName:    "org-test-package-2",
@@ -1724,7 +1724,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			_, err := s.CreateProduct("Org Security State Test Product", "Product for org security state testing", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-security-state-test-repo",
 				Url:   "https://github.com/test/org-security-state-test-repo",
 				Topic: "org-security-state-test-tag",
@@ -1732,7 +1732,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-open",
 				RepositoryName: "org-security-state-test-repo",
 				PackageName:    "open-package",
@@ -1742,7 +1742,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-closed",
 				RepositoryName: "org-security-state-test-repo",
 				PackageName:    "closed-package",
@@ -1752,7 +1752,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-fixed",
 				RepositoryName: "org-security-state-test-repo",
 				PackageName:    "fixed-package",
@@ -1786,7 +1786,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			_, err = s.CreateProduct("Org Multi Security Prod 2", "Second product for multi security test", tags2, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-multi-security-repo-1",
 				Url:   "https://github.com/test/org-multi-security-repo-1",
 				Topic: "org-multi-security-tag-1",
@@ -1794,7 +1794,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-multi-security-repo-2",
 				Url:   "https://github.com/test/org-multi-security-repo-2",
 				Topic: "org-multi-security-tag-2",
@@ -1802,7 +1802,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-multi-security-1",
 				RepositoryName: "org-multi-security-repo-1",
 				PackageName:    "multi-package-1",
@@ -1812,7 +1812,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-multi-security-2",
 				RepositoryName: "org-multi-security-repo-2",
 				PackageName:    "multi-package-2",
@@ -1843,7 +1843,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			_, err := s.CreateProduct("Org Special Chars Security Product", "Product with special character security", tags, orgID)
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateRepo(ctx, database.CreateRepoParams{
+			_, err = _testDB.CreateRepo(ctx, database.CreateRepoParams{
 				Name:  "org-special-chars-security-repo",
 				Url:   "https://github.com/test/org-special-chars-security-repo",
 				Topic: "org-special-chars-security-tag",
@@ -1851,7 +1851,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			_, err = s.db.CreateSecurity(ctx, database.CreateSecurityParams{
+			_, err = _testDB.CreateSecurity(ctx, database.CreateSecurityParams{
 				ExternalID:     "org-security-with-special-chars",
 				RepositoryName: "org-special-chars-security-repo",
 				PackageName:    "@scope/package-name",
