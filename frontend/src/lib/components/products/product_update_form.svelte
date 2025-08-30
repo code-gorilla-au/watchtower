@@ -72,10 +72,9 @@
 
 	<div class="my-10 flex w-full justify-end gap-3">
 		{#if onCancel}
-			<div class="w-full">
-				<Button variant="outline" onclick={onCancel}>Cancel</Button>
-			</div>
+			<Button variant="outline" onclick={onCancel}>Cancel</Button>
 		{/if}
+
 		<Button type="submit" class="capitalize">
 			{#if loading}
 				<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />

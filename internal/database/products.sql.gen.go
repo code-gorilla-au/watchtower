@@ -669,3 +669,14 @@ func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, updateProductSync, id)
 	return err
 }
+
+const updateProductSync = `-- name: UpdateProductSync :exec
+UPDATE products
+SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+`
+
+func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, updateProductSync, id)
+	return err
+}
