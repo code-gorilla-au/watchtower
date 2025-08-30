@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding nav header">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/orgs_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="moving files">
+      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +177,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding edit page" />
     <MESSAGE value="adding back route" />
     <MESSAGE value="adding last sync" />
     <MESSAGE value="update time + method" />
@@ -213,7 +201,8 @@
     <MESSAGE value="adding config" />
     <MESSAGE value="refactoring" />
     <MESSAGE value="adding nav header" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding nav header" />
+    <MESSAGE value="moving files" />
+    <option name="LAST_COMMIT_MESSAGE" value="moving files" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
