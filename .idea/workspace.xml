@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding config">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -200,11 +196,11 @@
     <MESSAGE value="wip adding bulk create pull requests" />
     <MESSAGE value="refactoring repo" />
     <MESSAGE value="wip" />
-    <MESSAGE value="refactoring" />
     <MESSAGE value="clean up" />
     <MESSAGE value="moving expanding to bottom" />
     <MESSAGE value="adding config" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding config" />
+    <MESSAGE value="refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
