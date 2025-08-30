@@ -18,12 +18,12 @@ type organisationService struct {
 }
 
 type productsService struct {
-	db          *database.Queries
+	db          ProductStore
 	repoService *repoService
 }
 
 type repoService struct {
-	db *database.Queries
+	db RepoStore
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps
