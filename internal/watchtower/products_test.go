@@ -1971,7 +1971,6 @@ func TestService_SyncOrgs(t *testing.T) {
 		}
 		s = &Service{
 			ctx:      ctx,
-			db:       _testDB,
 			ghClient: ghMock,
 			orgSvc: &organisationService{
 				db: _testDB,
@@ -2021,7 +2020,6 @@ func TestService_SyncOrgs(t *testing.T) {
 
 			brokenService := &Service{
 				ctx:      cancelCtx,
-				db:       _testDB,
 				ghClient: ghMock,
 				orgSvc: &organisationService{
 					db: _testDB,

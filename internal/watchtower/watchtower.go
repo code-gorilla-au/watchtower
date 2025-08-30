@@ -13,7 +13,6 @@ func NewService(ctx context.Context, db *database.Queries) *Service {
 	return &Service{
 		ghClient: github.New(logging.FromContext(ctx)),
 		ctx:      ctx,
-		db:       db,
 		orgSvc: &organisationService{
 			db: db,
 		},

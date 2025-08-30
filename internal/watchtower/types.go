@@ -8,7 +8,6 @@ import (
 
 type Service struct {
 	ctx        context.Context
-	db         *database.Queries
 	orgSvc     *organisationService
 	productSvc *productsService
 	ghClient   ghClient
