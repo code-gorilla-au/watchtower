@@ -18,7 +18,7 @@ type CreateOrgParams struct {
 
 func (o organisationService) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Creating organisation")
+	logger.Debug("Creating organisation")
 
 	if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
 		logger.Error("Error setting default org", "error", err)
@@ -44,7 +44,7 @@ func (o organisationService) Create(ctx context.Context, params CreateOrgParams)
 
 func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching organisation", "id", id)
+	logger.Debug("Fetching organisation", "id", id)
 	model, err := o.db.GetOrganisationByID(ctx, id)
 	if err != nil {
 		logger.Error("Error fetching organisation", "error", err)
@@ -56,7 +56,7 @@ func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO
 
 func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching default organisation")
+	logger.Debug("Fetching default organisation")
 	model, err := o.db.GetDefaultOrganisation(ctx)
 	if err != nil {
 		logger.Error("Error fetching default organisation", "error", err)
@@ -68,7 +68,7 @@ func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, e
 
 func (o organisationService) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("setting default org", "org", id)
+	logger.Debug("setting default org", "org", id)
 
 	if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
 		logger.Error("Error setting default org", "error", err)
@@ -88,7 +88,7 @@ func (o organisationService) SetDefault(ctx context.Context, id int64) (Organisa
 
 func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Listing all organisations")
+	logger.Debug("Listing all organisations")
 
 	models, err := o.db.ListOrganisations(ctx)
 	if err != nil {
@@ -102,7 +102,7 @@ func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 
 func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching stale organisations")
+	logger.Debug("Fetching stale organisations")
 
 	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
 
@@ -117,7 +117,7 @@ func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDT
 
 func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (InternalOrganisation, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching organisations associated to product", "product", productID)
+	logger.Debug("Fetching organisations associated to product", "product", productID)
 
 	model, err := o.db.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
 	if err != nil {
@@ -130,7 +130,7 @@ func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, prod
 
 func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching organisation", "id", id)
+	logger.Debug("Fetching organisation", "id", id)
 
 	if err := o.db.DeleteOrg(ctx, id); err != nil {
 		logger.Error("Error deleting organisation", "error", err)
@@ -151,7 +151,7 @@ type UpdateOrgParams struct {
 
 func (o organisationService) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Updating organisation", "id", params.ID)
+	logger.Debug("Updating organisation", "id", params.ID)
 
 	if params.DefaultOrg {
 		if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
@@ -185,7 +185,7 @@ func (o organisationService) UpdateSyncDateNow(ctx context.Context, id int64) er
 
 func (o organisationService) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
 	logger := logging.FromContext(ctx)
-	logger.Info("Associating product to org", "org", orgID, "product", productID)
+	logger.Debug("Associating product to org", "org", orgID, "product", productID)
 
 	if err := o.db.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
 		ProductID: sql.NullInt64{

@@ -2,27 +2,24 @@
 	type Props = {
 		expand?: boolean;
 		orgName: string;
+		orgId: string;
 	};
 
-	let { expand, orgName }: Props = $props();
+	let { expand, orgName, orgId }: Props = $props();
 
-	let isExpanded = $derived(expand);
-	let renderOrgName = $derived.by(() => {
-		if (isExpanded) {
-			return orgName;
-		}
-		return orgName.charAt(0);
-	});
+	let orgNameInitial = $derived(orgName.charAt(0));
 </script>
 
 <div class="flex items-center py-2">
-	{#if expand}
-		<span class="py-2 font-bold">
-			{renderOrgName}
-		</span>
-	{:else}
-		<span class="w-full rounded-full bg-secondary py-2 text-center">
-			{renderOrgName}
-		</span>
-	{/if}
+	<a href="/organisations/{orgId}" class="flex w-full items-center">
+		{#if expand}
+			<span class="p-2 font-bold">
+				{orgName}
+			</span>
+		{:else}
+			<span class="w-full rounded-full bg-secondary py-2 text-center">
+				{orgNameInitial}
+			</span>
+		{/if}
+	</a>
 </div>

@@ -24,7 +24,7 @@ func main() {
 	appConfig := LoadConfig()
 	logger := logging.New(appConfig.LogLevel, logging.LoggerJSON)
 
-	logger.Info("Starting watchtower", "config", appConfig)
+	logger.Debug("Starting watchtower", "config", appConfig)
 
 	databaseQueries, db, err := database.NewDBFromProvider(appConfig.DbFilePath)
 	if err != nil {

@@ -661,7 +661,7 @@ func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (P
 
 const updateProductSync = `-- name: UpdateProductSync :exec
 UPDATE products
-SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+SET updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 `
 

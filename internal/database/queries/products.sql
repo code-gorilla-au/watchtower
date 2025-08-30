@@ -31,7 +31,7 @@ RETURNING *;
 
 -- name: UpdateProductSync :exec
 UPDATE products
-SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+SET updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?;
 
 
