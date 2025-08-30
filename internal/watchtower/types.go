@@ -3,7 +3,6 @@ package watchtower
 import (
 	"context"
 	"time"
-	"watchtower/internal/database"
 )
 
 type Service struct {
@@ -14,7 +13,7 @@ type Service struct {
 }
 
 type organisationService struct {
-	db *database.Queries
+	db OrgStore
 }
 
 type productsService struct {
