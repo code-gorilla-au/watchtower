@@ -10,6 +10,7 @@ VALUES (?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
+                                 description = excluded.description,
                                  tags       = excluded.tags,
                                  updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
@@ -20,17 +21,19 @@ INSERT INTO product_organisations (product_id,
 VALUES (?,
         ?);
 
--- name: UpdateProduct :exec
+-- name: UpdateProduct :one
 UPDATE products
 SET name       = ?,
     tags       = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
-WHERE id = ?;
+WHERE id = ?
+RETURNING *;
 
 -- name: UpdateProductSync :exec
 UPDATE products
 SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?;
+
 
 -- name: GetProductByID :one
 SELECT *

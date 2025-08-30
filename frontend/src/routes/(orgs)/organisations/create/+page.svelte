@@ -18,5 +18,5 @@
 <div class="page-container">
 	<PageTitle title="Create Organisation" subtitle="Create a new organisation" />
 
-	<OrgUpdateForm mode="create" onCreate={createOrg} />
+	<OrgUpdateForm mode="create" onCreate={createOrg} onCancel={() => goto("/organisations")} />
 </div>

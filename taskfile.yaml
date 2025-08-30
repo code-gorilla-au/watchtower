@@ -3,11 +3,16 @@ version: '3'
 dotenv: ['.env.local']
 
 vars:
-  GOLANG_WORKSPACES: ./internal/... ./cmd/...
+  GOLANG_WORKSPACES: ./internal/...
   GOLANG_COVERAGE: coverage.out
 
 
 tasks:
+  build:
+    desc: Build the application.
+    deps: [gen, go-ci, frontend-ci]
+    cmds:
+      - wails build
   dev:
     desc: Run the application in development mode.
     deps: [gen]
@@ -28,18 +33,55 @@ tasks:
   go-lint:
     desc: Run go linters.
     cmds:
-      - golangci-lint run {{ .GOLANG_WORKSPACES }}
+      - golangci-lint run {{ .GOLANG_WORKSPACES }} --fix
       - govulncheck {{ .GOLANG_WORKSPACES }}
-      - go vet {{ .GOLANG_WORKSPACES }}
+      - go fmt {{ .GOLANG_WORKSPACES }}
+
+  go-install:
+    desc: Install go dependencies.
+    cmds:
+      - go mod tidy
+      - go mod download
 
   go-test:
     desc: Run go tests.
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
+  go-watch:
+    desc: Run go tests in watch mode.
+    cmds:
+      - gow test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
+
+  go-gen-coverage:
+    desc: Generate go coverage.
+    deps: [go-test]
+    cmds:
+      - grep -v -E -f ${PWD}/.covignore {{ .GOLANG_COVERAGE }} > coverage.filtered.out
+      - mv coverage.filtered.out {{ .GOLANG_COVERAGE }}
+
+  go-cover:
+    desc: Run go coverage.
+    deps: [go-gen-coverage]
+    cmds:
+      - go tool cover -func={{ .GOLANG_COVERAGE }} | grep total
+
+  go-cover-html:
+    desc: Run go coverage html.
+    deps: [go-gen-coverage]
+    cmds:
+      - go tool cover -html={{ .GOLANG_COVERAGE }}
+
   go-ci:
     desc: Run go ci tasks.
-    deps: [go-lint, go-test]
+    deps: [go-lint, go-cover]
+
+
+  frontend-install:
+    desc: Install frontend dependencies.
+    dir: frontend
+    cmds:
+      - npm install
 
   frontend-format:
     desc: Run frontend formatters.

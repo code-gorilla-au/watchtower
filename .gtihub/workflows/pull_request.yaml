@@ -1,0 +1,43 @@
+---
+name: pull_requests.yaml
+
+on:
+  pull_request:
+
+jobs:
+  scans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy vulnerability scanner in fs mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          trivy-config: trivy.yaml
+
+  golang:
+    runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/code-gorilla-au/go-toolbox
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup golang
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+
+      - run: git config --global url.https://${{ secrets.GH_ACCESS_TOKEN }}@github.com/.insteadOf https://github.com/
+
+      - name: Install golang
+        run: task go-install
+
+      - name: test + lint + scan
+        run: task go-ci

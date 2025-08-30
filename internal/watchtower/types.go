@@ -3,15 +3,26 @@ package watchtower
 import (
 	"context"
 	"time"
-	"watchtower/internal/database"
-
-	"github.com/code-gorilla-au/go-toolbox/github"
 )
 
 type Service struct {
-	ctx      context.Context
-	db       *database.Queries
-	ghClient *github.Client
+	ctx        context.Context
+	orgSvc     *organisationService
+	productSvc *productsService
+	ghClient   ghClient
+}
+
+type organisationService struct {
+	db OrgStore
+}
+
+type productsService struct {
+	db          ProductStore
+	repoService *repoService
+}
+
+type repoService struct {
+	db RepoStore
 }
 
 // DTOs with snake_case JSON tags and time.Time timestamps
@@ -24,6 +35,11 @@ type OrganisationDTO struct {
 	DefaultOrg   bool      `json:"default_org"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
+}
+
+type InternalOrganisation struct {
+	OrganisationDTO
+	Token string
 }
 
 type ProductDTO struct {

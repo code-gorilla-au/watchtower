@@ -234,6 +234,7 @@ export namespace watchtower {
 	    DefaultOrg: boolean;
 	    FriendlyName: string;
 	    Namespace: string;
+	    Description: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new UpdateOrgParams(source);
@@ -245,6 +246,7 @@ export namespace watchtower {
 	        this.DefaultOrg = source["DefaultOrg"];
 	        this.FriendlyName = source["FriendlyName"];
 	        this.Namespace = source["Namespace"];
+	        this.Description = source["Description"];
 	    }
 	}
 

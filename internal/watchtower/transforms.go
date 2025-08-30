@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"time"
 	"watchtower/internal/database"
+
+	"github.com/code-gorilla-au/go-toolbox/github"
 )
 
 // Conversion helpers from database models to DTOs
@@ -24,6 +26,39 @@ func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
 	}
 }
 
+func ToOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
+	result := make([]OrganisationDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToOrganisationDTO(m))
+	}
+
+	return result
+}
+
+func ToInternalOrganisation(m database.Organisation) InternalOrganisation {
+	return InternalOrganisation{
+		OrganisationDTO: OrganisationDTO{
+			ID:           m.ID,
+			FriendlyName: m.FriendlyName,
+			Description:  m.Description,
+			Namespace:    m.Namespace,
+			DefaultOrg:   m.DefaultOrg,
+			CreatedAt:    toTime(m.CreatedAt),
+			UpdatedAt:    toTime(m.UpdatedAt),
+		},
+		Token: m.Token,
+	}
+}
+
+func ToProductDTOs(models []database.Product) []ProductDTO {
+	result := make([]ProductDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, ToProductDTO(m))
+	}
+
+	return result
+}
+
 func ToProductDTO(m database.Product) ProductDTO {
 	var tagList []string
 
@@ -31,8 +66,8 @@ func ToProductDTO(m database.Product) ProductDTO {
 		val := m.Tags.String
 
 		_ = json.Unmarshal([]byte(val), &tagList)
-
 	}
+
 	return ProductDTO{
 		ID:          m.ID,
 		Name:        m.Name,
@@ -40,23 +75,6 @@ func ToProductDTO(m database.Product) ProductDTO {
 		Tags:        tagList,
 		CreatedAt:   toTime(m.CreatedAt),
 		UpdatedAt:   toTime(m.UpdatedAt),
-	}
-}
-
-func ToProductOrganisationDTO(m database.ProductOrganisation) ProductOrganisationDTO {
-	var pidPtr *int64
-	var oidPtr *int64
-	if m.ProductID.Valid {
-		v := m.ProductID.Int64
-		pidPtr = &v
-	}
-	if m.OrganisationID.Valid {
-		v := m.OrganisationID.Int64
-		oidPtr = &v
-	}
-	return ProductOrganisationDTO{
-		ProductID:      pidPtr,
-		OrganisationID: oidPtr,
 	}
 }
 
@@ -114,6 +132,55 @@ func ToSecurityDTOs(models []database.Security) []SecurityDTO {
 	result := make([]SecurityDTO, 0, len(models))
 	for _, m := range models {
 		result = append(result, ToSecurityDTO(m))
+	}
+
+	return result
+}
+
+func ToCreateRepoFromGithub(repos []github.Node[github.Repository], tag string) []CreateRepoParams {
+	result := make([]CreateRepoParams, 0, len(repos))
+
+	for _, repo := range repos {
+		result = append(result, CreateRepoParams{
+			Name:  repo.Node.Name,
+			Url:   repo.Node.Url,
+			Topic: tag,
+			Owner: repo.Node.Owner.Login,
+		})
+	}
+
+	return result
+}
+
+func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoName string) []CreatePRParams {
+	result := make([]CreatePRParams, len(prs.Nodes))
+
+	for _, pr := range prs.Nodes {
+		result = append(result, CreatePRParams{
+			ExternalID:     pr.ID,
+			Title:          pr.Title,
+			RepositoryName: repoName,
+			Url:            pr.Permalink,
+			State:          string(pr.State),
+			Author:         pr.Author.Login,
+			MergedAt:       pr.MergedAt,
+		})
+	}
+
+	return result
+}
+
+func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []CreateSecurityParams {
+	result := make([]CreateSecurityParams, len(secs.Nodes))
+	for _, sec := range secs.Nodes {
+		result = append(result, CreateSecurityParams{
+			ExternalID:     sec.ID,
+			RepositoryName: repoName,
+			PackageName:    sec.SecurityVulnerability.Package.Name,
+			State:          string(sec.State),
+			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
+			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
+		})
 	}
 
 	return result

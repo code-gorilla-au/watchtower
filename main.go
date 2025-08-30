@@ -13,6 +13,9 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
 
+//go:embed build/appicon.png
+var appIcon []byte
+
 //go:embed all:frontend/build
 var assets embed.FS
 
@@ -23,24 +26,26 @@ func main() {
 
 	logger.Info("Starting watchtower", "config", appConfig)
 
-	migrator, err := database.NewMigrator(appConfig.DbFilePath)
+	databaseQueries, db, err := database.NewDBFromProvider(appConfig.DbFilePath)
 	if err != nil {
-		logger.Error("Error creating database migrator", "error", err)
+		logger.Error("Error creating database", "error", err)
 		os.Exit(1)
 	}
+
+	defer func() {
+		if err = db.Close(); err != nil {
+			logger.Error("Error closing database", "error", err)
+		}
+	}()
+
+	migrator := database.NewMigrator(db)
 
 	if err = migrator.Init(); err != nil {
 		logger.Error("Error running migrations", "error", err)
 		os.Exit(1)
 	}
 
-	db, err := database.NewDBFromProvider(appConfig.DbFilePath)
-	if err != nil {
-		logger.Error("Error creating database", "error", err)
-		os.Exit(1)
-	}
-
-	wt := watchtower.NewService(ctx, db)
+	wt := watchtower.NewService(ctx, databaseQueries)
 	worker := watchtower.NewOrgSyncWorker(wt)
 
 	app := NewApp(worker)

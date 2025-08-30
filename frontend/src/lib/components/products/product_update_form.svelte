@@ -74,6 +74,7 @@
 		{#if onCancel}
 			<Button variant="outline" onclick={onCancel}>Cancel</Button>
 		{/if}
+
 		<Button type="submit" class="capitalize">
 			{#if loading}
 				<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />

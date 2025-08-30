@@ -39,6 +39,7 @@ VALUES (?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
+                                 description = excluded.description,
                                  tags       = excluded.tags,
                                  updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, name, description, tags, created_at, updated_at
@@ -629,12 +630,13 @@ func (q *Queries) ListProductsByOrganisation(ctx context.Context, organisationID
 	return items, nil
 }
 
-const updateProduct = `-- name: UpdateProduct :exec
+const updateProduct = `-- name: UpdateProduct :one
 UPDATE products
 SET name       = ?,
     tags       = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
+RETURNING id, name, description, tags, created_at, updated_at
 `
 
 type UpdateProductParams struct {
@@ -643,9 +645,18 @@ type UpdateProductParams struct {
 	ID   int64
 }
 
-func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) error {
-	_, err := q.db.ExecContext(ctx, updateProduct, arg.Name, arg.Tags, arg.ID)
-	return err
+func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error) {
+	row := q.db.QueryRowContext(ctx, updateProduct, arg.Name, arg.Tags, arg.ID)
+	var i Product
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.Tags,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateProductSync = `-- name: UpdateProductSync :exec

@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding last sync workers">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/products.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/products.go" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,7 +25,6 @@
         <option value="update_product_form" />
         <option value="nav_item" />
         <option value="products_summary" />
-        <option value="Go File" />
         <option value="prs_grid" />
         <option value="repo_card" />
         <option value="loaders_square" />
@@ -36,11 +32,17 @@
         <option value="security_grid" />
         <option value="+page" />
         <option value="TypeScript File" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.6.darwin-arm64" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -55,9 +57,9 @@
     &quot;accountId&quot;: &quot;96e8ba8e-aa40-4f88-95b7-27f1c146a9c2&quot;
   }
 }</component>
-  <component name="GoLinterSelectedExecutable" path="$USER_HOME$/go/bin/golangci-lint" />
+  <component name="GoLinterSelectedExecutable" path="$USER_HOME$/golangci-lint/golangci-lint" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -67,41 +69,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultGoTemplateProperty": "Go File",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.GoLinterPluginOnboarding": "true",
-    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "feat-search-filter",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/src/routes/(orgs)/products/[product_id]/sync",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestService_CreateProduct in watchtower/internal/watchtower.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboarding&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#4 on feat-lint-tests&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/src/routes/(orgs)/products/[product_id]/sync&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync" />
@@ -113,6 +117,40 @@
       <recent name="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/sync/[product_id]" />
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
     </key>
+  </component>
+  <component name="RunManager" selected="Go Test.TestService_CreateProduct in watchtower/internal/watchtower">
+    <configuration name="TestService_CreateOrganisation in watchtower/internal/watchtower" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="watchtower" />
+      <working_directory value="$PROJECT_DIR$/internal/watchtower" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="watchtower/internal/watchtower" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestService_CreateOrganisation\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestService_CreateProduct in watchtower/internal/watchtower" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="watchtower" />
+      <working_directory value="$PROJECT_DIR$/internal/watchtower" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="watchtower/internal/watchtower" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestService_CreateProduct\E$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
+        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
+        <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
+        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -136,32 +174,32 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip" />
-    <MESSAGE value="adding docs" />
-    <MESSAGE value="adding active link styles" />
-    <MESSAGE value="adding get security methods" />
-    <MESSAGE value="adding get security components" />
-    <MESSAGE value="adding to dashboard" />
-    <MESSAGE value="adding grid for securities" />
-    <MESSAGE value="adding more user interactions" />
-    <MESSAGE value="fixing bug" />
-    <MESSAGE value="adding maxlength" />
-    <MESSAGE value="small change on card layout for PRs" />
-    <MESSAGE value="adding commands" />
-    <MESSAGE value="adding tasks" />
-    <MESSAGE value="adding ci tasks" />
-    <MESSAGE value="adding method to remove all secs" />
-    <MESSAGE value="adding dialogue + fix sync org for worker" />
     <MESSAGE value="adding description" />
     <MESSAGE value="formatting" />
     <MESSAGE value="adding target" />
     <MESSAGE value="adding edit page" />
     <MESSAGE value="adding back route" />
-    <MESSAGE value="clean up" />
     <MESSAGE value="adding last sync" />
     <MESSAGE value="update time + method" />
     <MESSAGE value="adding last sync workers" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding last sync workers" />
+    <MESSAGE value="adding test coverage" />
+    <MESSAGE value="adding test for method" />
+    <MESSAGE value="adding test" />
+    <MESSAGE value="update config file" />
+    <MESSAGE value="update form to to have better formatting" />
+    <MESSAGE value="adding publish pipeline" />
+    <MESSAGE value="adding tests" />
+    <MESSAGE value="fixing" />
+    <MESSAGE value="small refactor" />
+    <MESSAGE value="refactor to add org service" />
+    <MESSAGE value="starting refactor for products" />
+    <MESSAGE value="refactor to add transform" />
+    <MESSAGE value="wip adding bulk create pull requests" />
+    <MESSAGE value="refactoring repo" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
