@@ -5,3 +5,5 @@ frontend/build
 !.local_dev/.gitkeep
 .env.*
 coverage*
+
+.DS_Store
