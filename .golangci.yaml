@@ -39,6 +39,7 @@ linters:
           - dupl
           - gosec
           - forbidigo
+          - exhaustruct
 
   settings:
     depguard:

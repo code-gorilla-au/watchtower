@@ -2059,7 +2059,10 @@ func TestService_SyncOrgs(t *testing.T) {
 					return github.QuerySearch[github.Repository]{}, nil
 				},
 				GetRepoDetailsFunc: func(owner, repo, token string) (github.QueryRepository, error) {
-					return github.QueryRepository{}, nil
+					return github.QueryRepository{
+						QueryModel: github.QueryModel{},
+						Data:       github.RepositoryData{},
+					}, nil
 				},
 			}
 			s.ghClient = ghMock
