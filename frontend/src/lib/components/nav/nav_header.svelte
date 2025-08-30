@@ -2,7 +2,7 @@
 	type Props = {
 		expand?: boolean;
 		orgName: string;
-		orgId: string;
+		orgId: number;
 	};
 
 	let { expand, orgName, orgId }: Props = $props();

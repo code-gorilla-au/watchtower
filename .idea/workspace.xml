@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="moving files">
-      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding watch">
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +178,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding back route" />
     <MESSAGE value="adding last sync" />
     <MESSAGE value="update time + method" />
     <MESSAGE value="adding last sync workers" />
@@ -202,7 +202,8 @@
     <MESSAGE value="refactoring" />
     <MESSAGE value="adding nav header" />
     <MESSAGE value="moving files" />
-    <option name="LAST_COMMIT_MESSAGE" value="moving files" />
+    <MESSAGE value="adding watch" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding watch" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
