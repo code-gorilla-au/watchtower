@@ -21,6 +21,7 @@
 
 	let expand = $state(settingsSvc.sidebarExpanded);
 	let expandedStyle = $derived(expand ? "min-w-40" : "w-14");
+	let expandIconStyle = $derived(expand ? "justify-end" : "");
 
 	function toggleExpand(e: Event) {
 		e.preventDefault();
@@ -38,14 +39,6 @@
 						{organisation?.friendly_name}
 					</span>
 				{/if}
-
-				<Button onclick={toggleExpand} size="sm" variant="ghost">
-					{#if expand}
-						<PanelLeftClose />
-					{:else}
-						<PanelLeftOpen />
-					{/if}
-				</Button>
 			</div>
 			<Separator class="mb-2" />
 			<NavItem to="/dashboard" {expand} label="Dashboard">
@@ -69,6 +62,16 @@
 				<Settings size={24} />
 			{/snippet}
 		</NavItem>
+		<Separator class="my-2" />
+		<div class={cn("flex", expandIconStyle)}>
+			<Button onclick={toggleExpand} size="sm" variant="ghost">
+				{#if expand}
+					<PanelLeftClose size={24} />
+				{:else}
+					<PanelLeftOpen size={24} />
+				{/if}
+			</Button>
+		</div>
 	</aside>
 	<main class="flex-1 overflow-auto">
 		{@render children?.()}
