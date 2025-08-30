@@ -21,7 +21,7 @@
 
 	let expand = $state(settingsSvc.sidebarExpanded);
 	let expandedStyle = $derived(expand ? "min-w-40" : "w-14");
-	let expandIconStyle = $derived(expand ? "justify-end" : "");
+	let expandIconStyle = $derived(expand ? "justify-end" : "justify-center");
 
 	function toggleExpand(e: Event) {
 		e.preventDefault();
@@ -31,10 +31,21 @@
 </script>
 
 <div class="flex h-screen">
-	<aside class={cn("flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl ", expandedStyle)}>
+	<aside
+		class={cn(
+			"flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl transition-all duration-300 ease-in-out",
+			expandedStyle
+		)}
+	>
 		<div class="flex flex-1 flex-col gap-2">
-			<NavHeader {expand} orgName={organisation?.friendly_name ?? ""} />
-			<Separator class="mb-2" />
+			{#if organisation?.id}
+				<NavHeader
+					{expand}
+					orgName={organisation?.friendly_name}
+					orgId={organisation?.id}
+				/>
+				<Separator class="mb-2" />
+			{/if}
 			<NavItem to="/dashboard" {expand} label="Dashboard">
 				{#snippet icon()}
 					<LayoutDashboard size={24} />
