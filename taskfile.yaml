@@ -3,7 +3,7 @@ version: '3'
 dotenv: ['.env.local']
 
 vars:
-  GOLANG_WORKSPACES: ./internal/... ./cmd/...
+  GOLANG_WORKSPACES: ./internal/...
   GOLANG_COVERAGE: coverage.out
 
 
