@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="moving expanding to bottom">
-      <change beforePath="$PROJECT_DIR$/frontend/.prettierrc" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.prettierrc.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/badge/badge.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/badge/badge.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding config">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +37,7 @@
         <option value="+page" />
         <option value="TypeScript File" />
         <option value="Go File" />
+        <option value="nav_header" />
       </list>
     </option>
   </component>
@@ -179,7 +179,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="formatting" />
     <MESSAGE value="adding target" />
     <MESSAGE value="adding edit page" />
     <MESSAGE value="adding back route" />
@@ -204,7 +203,8 @@
     <MESSAGE value="refactoring" />
     <MESSAGE value="clean up" />
     <MESSAGE value="moving expanding to bottom" />
-    <option name="LAST_COMMIT_MESSAGE" value="moving expanding to bottom" />
+    <MESSAGE value="adding config" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding config" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

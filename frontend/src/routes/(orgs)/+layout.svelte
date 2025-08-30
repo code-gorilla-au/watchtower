@@ -9,7 +9,7 @@
 		PanelLeftOpen
 	} from "@lucide/svelte";
 	import { cn } from "$lib/utils";
-	import { NavItem } from "$components/nav/index.js";
+	import { NavItem, NavHeader } from "$components/nav/index.js";
 	import { orgSvc } from "$lib/watchtower";
 	import { Button } from "$components/ui/button";
 	import { Separator } from "$components/ui/separator";
@@ -33,13 +33,7 @@
 <div class="flex h-screen">
 	<aside class={cn("flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl ", expandedStyle)}>
 		<div class="flex flex-1 flex-col gap-2">
-			<div class="flex items-center justify-between py-2">
-				{#if expand}
-					<span class="font-bold">
-						{organisation?.friendly_name}
-					</span>
-				{/if}
-			</div>
+			<NavHeader {expand} orgName={organisation?.friendly_name ?? ""} />
 			<Separator class="mb-2" />
 			<NavItem to="/dashboard" {expand} label="Dashboard">
 				{#snippet icon()}
