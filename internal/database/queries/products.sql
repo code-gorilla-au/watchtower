@@ -34,10 +34,6 @@ UPDATE products
 SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?;
 
--- name: UpdateProductSync :exec
-UPDATE products
-SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
-WHERE id = ?;
 
 -- name: GetProductByID :one
 SELECT *
