@@ -20,7 +20,7 @@
 	const organisation = $derived(orgSvc.defaultOrg);
 
 	let expand = $state(settingsSvc.sidebarExpanded);
-	let expandedStyle = $derived(expand ? "min-w-40" : "w-14");
+	let expandedStyle = $derived(expand ? "w-42" : "w-14");
 	let expandIconStyle = $derived(expand ? "justify-end" : "justify-center");
 
 	function toggleExpand(e: Event) {
@@ -33,7 +33,7 @@
 <div class="flex h-screen">
 	<aside
 		class={cn(
-			"flex h-full max-w-40 flex-col bg-muted p-2 shadow-2xl transition-all duration-300 ease-in-out",
+			"flex h-full flex-col bg-muted p-2 shadow-2xl transition-all duration-300 ease-in-out",
 			expandedStyle
 		)}
 	>

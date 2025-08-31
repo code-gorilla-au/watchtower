@@ -2,6 +2,7 @@
 	import type { Snippet } from "svelte";
 	import { page } from "$app/state";
 	import { cn } from "$lib/utils";
+	import { fade } from "svelte/transition";
 
 	type Props = {
 		class?: string;
@@ -17,20 +18,28 @@
 	let activeLink = $derived(
 		currentActive ? "bg-accent text-accent-foreground" : "hover:bg-secondary"
 	);
+
+	let transitionConfig = $derived.by(() => {
+		if (expand) {
+			return { duration: 150, delay: 100 };
+		}
+
+		return { duration: 50, delay: 0 };
+	});
 </script>
 
 <a
 	href={to}
 	class={cn(
-		"flex items-center justify-center gap-2 rounded-md p-2 transition duration-300 ease-in-out",
+		"inline-flex gap-2 rounded-md p-2 transition duration-300 ease-in-out",
 		className,
 		activeLink
 	)}
 >
-	<span>
+	<div>
 		{@render icon()}
-	</span>
+	</div>
 	{#if expand}
-		<span class="w-full">{label}</span>
+		<span transition:fade={transitionConfig} class="w-full">{label}</span>
 	{/if}
 </a>
