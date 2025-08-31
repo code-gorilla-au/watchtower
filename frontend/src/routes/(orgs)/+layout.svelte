@@ -14,7 +14,7 @@
 	import { Button } from "$components/ui/button";
 	import { Separator } from "$components/ui/separator";
 	import { settingsSvc } from "$lib/settings";
-	import { BaseTooltip } from "$components/base_tooktip/index.js";
+	import { BaseTooltip } from "$components/base_tooltip/index.js";
 
 	let { children }: LayoutProps = $props();
 
