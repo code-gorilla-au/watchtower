@@ -7,6 +7,7 @@
 	import { Separator } from "$components/ui/separator";
 	import { Button } from "$components/ui/button";
 	import { Trash } from "@lucide/svelte";
+	import { orgSvc } from "$lib/watchtower";
 
 	type FormState = {
 		darkMode: boolean;
@@ -19,6 +20,13 @@
 	$effect(() => {
 		settingsSvc.setTheme(formState.darkMode ? "dark" : "light");
 	});
+
+	async function deleteAllData(e: Event) {
+		e.preventDefault();
+
+		await orgSvc.deleteAll();
+		await goto("/register/organisation");
+	}
 </script>
 
 <div class="page-container">
@@ -42,7 +50,7 @@
 				<p>Delete all data</p>
 				<p class="text-sm text-muted-foreground">This action cannot be undone.</p>
 			</div>
-			<Button variant="destructive" size="icon">
+			<Button onclick={deleteAllData} variant="destructive" size="icon">
 				<Trash />
 			</Button>
 		</div>

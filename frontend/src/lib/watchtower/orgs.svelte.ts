@@ -1,5 +1,6 @@
 import {
 	CreateOrganisation,
+	DeleteAllOrgs,
 	DeleteOrganisation,
 	GetAllOrganisations,
 	GetDefaultOrganisation,
@@ -83,6 +84,10 @@ export class OrgService {
 
 	async delete(id: number) {
 		return DeleteOrganisation(id);
+	}
+
+	async deleteAll() {
+		return DeleteAllOrgs();
 	}
 
 	async getDefault() {
