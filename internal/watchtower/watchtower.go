@@ -59,8 +59,30 @@ func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
 	return s.orgSvc.GetAll(s.ctx)
 }
 
+func (s *Service) DeleteAllOrgs() error {
+	list, err := s.orgSvc.GetAll(s.ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, org := range list {
+		_ = s.DeleteOrganisation(org.ID)
+	}
+
+	return nil
+}
+
 // DeleteOrganisation deletes an organisation from the database by its ID. Returns an error if the operation fails.
 func (s *Service) DeleteOrganisation(id int64) error {
+	list, err := s.productSvc.GetByOrg(s.ctx, id)
+	if err != nil {
+		return err
+	}
+
+	for _, p := range list {
+		_ = s.productSvc.DeleteProduct(s.ctx, p.ID)
+	}
+
 	return s.orgSvc.Delete(s.ctx, id)
 }
 

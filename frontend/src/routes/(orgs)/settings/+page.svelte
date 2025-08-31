@@ -4,6 +4,9 @@
 	import { settingsSvc } from "$lib/settings";
 	import { Label } from "$components/ui/label";
 	import { Switch } from "$components/ui/switch";
+	import { Separator } from "$components/ui/separator";
+	import { Button } from "$components/ui/button";
+	import { Trash } from "@lucide/svelte";
 
 	type FormState = {
 		darkMode: boolean;
@@ -12,6 +15,7 @@
 	const formState = $state<FormState>({
 		darkMode: settingsSvc.theme === "dark"
 	});
+
 	$effect(() => {
 		settingsSvc.setTheme(formState.darkMode ? "dark" : "light");
 	});
@@ -30,6 +34,17 @@
 		<div class="flex w-full items-center justify-between gap-4">
 			<Label for="darkMode">Switch to dark mode</Label>
 			<Switch id="darkMode" bind:checked={formState.darkMode} />
+		</div>
+		<Separator class="my-10" />
+		<h3 class="heading-1">Danger zone</h3>
+		<div class="my-4 flex w-full items-center justify-between">
+			<div>
+				<p>Delete all data</p>
+				<p class="text-sm text-muted-foreground">This action cannot be undone.</p>
+			</div>
+			<Button variant="destructive" size="icon">
+				<Trash />
+			</Button>
 		</div>
 	</form>
 </div>

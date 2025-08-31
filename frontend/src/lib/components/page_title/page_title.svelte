@@ -20,7 +20,7 @@
 			</Button>
 		{/if}
 		<div>
-			<h1 class="mb-2 text-3xl">{title}</h1>
+			<h1 class="heading-1 mb-2">{title}</h1>
 			{#if subtitle}
 				<p class="text-sm">{subtitle}</p>
 			{/if}

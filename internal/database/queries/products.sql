@@ -21,6 +21,10 @@ INSERT INTO product_organisations (product_id,
 VALUES (?,
         ?);
 
+-- name: DeleteProductOrganisationByOrgID :exec
+DELETE FROM product_organisations
+WHERE organisation_id = ?;
+
 -- name: UpdateProduct :one
 UPDATE products
 SET name       = ?,

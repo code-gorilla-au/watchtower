@@ -166,4 +166,13 @@
 	.page-container {
 		@apply mb-20 w-full overflow-y-scroll p-2;
 	}
+	.heading-1 {
+		@apply text-3xl font-semibold;
+	}
+	.heading-2 {
+		@apply text-2xl font-semibold;
+	}
+	.heading-3 {
+		@apply text-xl font-semibold;
+	}
 }

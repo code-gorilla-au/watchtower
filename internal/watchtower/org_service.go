@@ -132,6 +132,13 @@ func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisation", "id", id)
 
+	if err := o.db.DeleteProductOrganisationByOrgID(ctx, sql.NullInt64{
+		Int64: id,
+		Valid: true,
+	}); err != nil {
+		logger.Error("Error deleting organisation", "error", err)
+	}
+
 	if err := o.db.DeleteOrg(ctx, id); err != nil {
 		logger.Error("Error deleting organisation", "error", err)
 

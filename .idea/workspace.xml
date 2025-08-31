@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="sidebar changes">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/base_tooktip/base_tooktip.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/base_tooktip/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding tooltip to expand">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/page_title/page_title.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/page_title/page_title.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/watchtower/Service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/interfaces.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/interfaces.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/mocks.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/mocks.gen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +189,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding last sync workers" />
     <MESSAGE value="adding test coverage" />
     <MESSAGE value="adding test for method" />
     <MESSAGE value="adding test" />
@@ -205,7 +213,8 @@
     <MESSAGE value="adding watch" />
     <MESSAGE value="looking to add css expand" />
     <MESSAGE value="sidebar changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="sidebar changes" />
+    <MESSAGE value="adding tooltip to expand" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding tooltip to expand" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
