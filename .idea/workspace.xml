@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring rego journey to provide more data">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small change for consistent config on transitions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,7 +177,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding publish pipeline" />
     <MESSAGE value="adding tests" />
     <MESSAGE value="fixing" />
     <MESSAGE value="small refactor" />
@@ -206,7 +201,8 @@
     <MESSAGE value="wip adding confirm" />
     <MESSAGE value="adding delete all buttons" />
     <MESSAGE value="refactoring rego journey to provide more data" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring rego journey to provide more data" />
+    <MESSAGE value="small change for consistent config on transitions" />
+    <option name="LAST_COMMIT_MESSAGE" value="small change for consistent config on transitions" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
