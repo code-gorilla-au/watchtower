@@ -5,7 +5,7 @@
 	import { Badge } from "$components/ui/badge";
 	import { Trash } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
-
+	import OrgRemoveDialogue from "$components/orgs/org_remove_dialog.svelte";
 	import { goto } from "$app/navigation";
 	import { orgSvc } from "$lib/watchtower";
 	import { CardAction, CardHeader } from "$components/ui/card/index.js";
@@ -29,16 +29,22 @@
 				<span>{org.friendly_name}</span>
 			</CardTitle>
 			<CardAction>
-				<Button
-					onclick={async (e: Event) => {
-						e.preventDefault();
-						await deleteOrg(org.id);
+				<OrgRemoveDialogue
+					orgName={org.friendly_name}
+					onConfirm={() => {
+						deleteOrg(org.id);
 					}}
-					size="icon"
-					variant="ghost"
 				>
-					<Trash />
-				</Button>
+					<Button
+						onclick={(e: Event) => {
+							e.preventDefault();
+						}}
+						size="icon"
+						variant="ghost"
+					>
+						<Trash />
+					</Button>
+				</OrgRemoveDialogue>
 			</CardAction>
 		</CardHeader>
 
