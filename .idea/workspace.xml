@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="looking to add css expand">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="sidebar changes">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/base_tooktip/base_tooktip.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/base_tooktip/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,6 +38,7 @@
         <option value="TypeScript File" />
         <option value="Go File" />
         <option value="nav_header" />
+        <option value="base_tooktip" />
       </list>
     </option>
   </component>
@@ -180,7 +180,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update time + method" />
     <MESSAGE value="adding last sync workers" />
     <MESSAGE value="adding test coverage" />
     <MESSAGE value="adding test for method" />
@@ -205,7 +204,8 @@
     <MESSAGE value="moving files" />
     <MESSAGE value="adding watch" />
     <MESSAGE value="looking to add css expand" />
-    <option name="LAST_COMMIT_MESSAGE" value="looking to add css expand" />
+    <MESSAGE value="sidebar changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="sidebar changes" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

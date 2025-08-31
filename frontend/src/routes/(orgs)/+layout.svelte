@@ -14,6 +14,7 @@
 	import { Button } from "$components/ui/button";
 	import { Separator } from "$components/ui/separator";
 	import { settingsSvc } from "$lib/settings";
+	import { BaseTooltip } from "$components/base_tooktip/index.js";
 
 	let { children }: LayoutProps = $props();
 
@@ -69,13 +70,23 @@
 		</NavItem>
 		<Separator class="my-2" />
 		<div class={cn("flex", expandIconStyle)}>
-			<Button onclick={toggleExpand} size="sm" variant="ghost">
+			<BaseTooltip>
+				{#snippet trigger()}
+					<Button onclick={toggleExpand} size="sm" variant="ghost">
+						{#if expand}
+							<PanelLeftClose size={24} />
+						{:else}
+							<PanelLeftOpen size={24} />
+						{/if}
+					</Button>
+				{/snippet}
+
 				{#if expand}
-					<PanelLeftClose size={24} />
+					<span>Collapse sidebar</span>
 				{:else}
-					<PanelLeftOpen size={24} />
+					<span>Expand sidebar</span>
 				{/if}
-			</Button>
+			</BaseTooltip>
 		</div>
 	</aside>
 	<main class="flex-1 overflow-auto">
