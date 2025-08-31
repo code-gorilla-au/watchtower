@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fade } from "svelte/transition";
+	import { transitionConfig } from "$components/nav/transitions";
 	type Props = {
 		expand?: boolean;
 		orgName: string;
@@ -9,6 +10,20 @@
 	let { expand, orgName, orgId }: Props = $props();
 
 	let orgNameInitial = $derived(orgName.charAt(0));
+	let trimmedOrgName = $derived.by(() => {
+		if (orgName.length <= 12) {
+			return orgName;
+		}
+		return `${orgName.slice(0, 12)}...`;
+	});
+
+	let transition = $derived.by(() => {
+		if (expand) {
+			return transitionConfig.expand;
+		}
+
+		return transitionConfig.contract;
+	});
 </script>
 
 <div class="flex items-center py-2">
@@ -22,8 +37,8 @@
 				</span>
 			</div>
 			{#if expand}
-				<span transition:fade={{ duration: 50, delay: 100 }} class="font-bold">
-					{orgName}
+				<span transition:fade={transition} class="font-bold">
+					{trimmedOrgName}
 				</span>
 			{/if}
 		</div>

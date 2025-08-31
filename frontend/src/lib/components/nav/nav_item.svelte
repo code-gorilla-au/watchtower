@@ -3,6 +3,7 @@
 	import { page } from "$app/state";
 	import { cn } from "$lib/utils";
 	import { fade } from "svelte/transition";
+	import { transitionConfig } from "$components/nav/transitions";
 
 	type Props = {
 		class?: string;
@@ -19,12 +20,12 @@
 		currentActive ? "bg-accent text-accent-foreground" : "hover:bg-secondary"
 	);
 
-	let transitionConfig = $derived.by(() => {
+	let transition = $derived.by(() => {
 		if (expand) {
-			return { duration: 150, delay: 100 };
+			return transitionConfig.expand;
 		}
 
-		return { duration: 50, delay: 0 };
+		return transitionConfig.contract;
 	});
 </script>
 
@@ -40,6 +41,6 @@
 		{@render icon()}
 	</div>
 	{#if expand}
-		<span transition:fade={transitionConfig} class="w-full">{label}</span>
+		<span transition:fade={transition} class="w-full">{label}</span>
 	{/if}
 </a>

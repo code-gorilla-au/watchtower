@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding delete all buttons">
-      <change afterPath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/page_title/page_title.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/page_title/page_title.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring rego journey to provide more data">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_item.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,12 +34,12 @@
         <option value="loaders_square" />
         <option value="security_card" />
         <option value="security_grid" />
-        <option value="TypeScript File" />
         <option value="Go File" />
         <option value="nav_header" />
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -184,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update form to to have better formatting" />
     <MESSAGE value="adding publish pipeline" />
     <MESSAGE value="adding tests" />
     <MESSAGE value="fixing" />
@@ -209,7 +205,8 @@
     <MESSAGE value="fix typo" />
     <MESSAGE value="wip adding confirm" />
     <MESSAGE value="adding delete all buttons" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding delete all buttons" />
+    <MESSAGE value="refactoring rego journey to provide more data" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring rego journey to provide more data" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
