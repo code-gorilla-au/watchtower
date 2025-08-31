@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { OrgUpdateForm, type OrgUpdateFormData } from "$components/orgs";
 	import { orgSvc } from "$lib/watchtower";
+	import { PageTitle } from "$components/page_title/index.js";
 
 	type PageState = {
 		error: string | undefined;
@@ -35,9 +36,8 @@
 	}
 </script>
 
-<div class="p-3">
-	<h1 class="text-4xl">Register - Organisation</h1>
-	<div class="mb-10">Create a new organisation</div>
+<div class="page-container">
+	<PageTitle class="mb-10" title="Register - Organisation" subtitle="Create a new organisation" />
 	<OrgUpdateForm
 		loading={pageState.loading}
 		error={pageState.error}

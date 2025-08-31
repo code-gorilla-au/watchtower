@@ -5,7 +5,7 @@ import { orgSvc } from "$lib/watchtower";
 export const load: LayoutLoad = async () => {
 	await orgSvc.getDefault();
 	if (!orgSvc.defaultOrg) {
-		await goto("/register/organisation");
+		await goto("/register");
 		return;
 	}
 };

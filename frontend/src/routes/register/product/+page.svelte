@@ -3,6 +3,7 @@
 	import { productSvc } from "$lib/watchtower";
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
 	import { goto } from "$app/navigation";
+	import { PageTitle } from "$components/page_title";
 
 	let { data }: PageProps = $props();
 
@@ -38,8 +39,11 @@
 </script>
 
 <div class="p-3">
-	<h1 class="text-4xl">Register - Product</h1>
-	<div class="mb-10">Add a product to an organisation {organisation.friendly_name}</div>
+	<PageTitle
+		class="mb-10"
+		title="Register - Product"
+		subtitle="Add a product to an organisation {organisation.friendly_name}"
+	/>
 	<ProductUpdateForm
 		mode="create"
 		error={pageState.error}
