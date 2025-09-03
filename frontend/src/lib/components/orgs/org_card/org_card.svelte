@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { watchtower } from "$lib/wailsjs/go/models";
-	import { formatDate } from "$design/formats";
+	import { formatDate } from "$lib/hooks/formats";
 	import { Card, CardContent, CardTitle } from "$components/ui/card";
 	import { Badge } from "$components/ui/badge";
 	import { Trash } from "@lucide/svelte";

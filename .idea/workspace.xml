@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="small change for consistent config on transitions" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/org_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/org_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/product_card/product_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/product_card/product_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/repo_card/repo_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/repo_card/repo_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/security_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/security_card.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/design/formats.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/formats.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/design/time.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/time.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -185,7 +195,6 @@
     <MESSAGE value="refactor to add transform" />
     <MESSAGE value="wip adding bulk create pull requests" />
     <MESSAGE value="refactoring repo" />
-    <MESSAGE value="wip" />
     <MESSAGE value="clean up" />
     <MESSAGE value="moving expanding to bottom" />
     <MESSAGE value="adding config" />
@@ -202,7 +211,8 @@
     <MESSAGE value="adding delete all buttons" />
     <MESSAGE value="refactoring rego journey to provide more data" />
     <MESSAGE value="small change for consistent config on transitions" />
-    <option name="LAST_COMMIT_MESSAGE" value="small change for consistent config on transitions" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -6,7 +6,7 @@
 	import { TIME_TWO_MINUTES } from "$lib/watchtower/types";
 	import { invalidateAll } from "$app/navigation";
 	import { SecurityGrid } from "$components/products/index.js";
-	import { TimeSince } from "$design/time.svelte";
+	import { TimeSince } from "$lib/hooks/time.svelte";
 	import { SvelteDate } from "svelte/reactivity";
 
 	let { data }: PageProps = $props();
