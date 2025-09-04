@@ -48,7 +48,7 @@
 					Security Vulnerability ({securities.length})
 				</h3>
 			</Accordion.Trigger>
-			<Accordion.Content>
+			<Accordion.Content class="mb-5">
 				<SecurityGrid {securities} />
 			</Accordion.Content>
 		</Accordion.Item>
@@ -56,7 +56,7 @@
 			<Accordion.Trigger class="text-left">
 				<h3 class="text-xl text-muted-foreground">Pull Requests ({prs.length})</h3>
 			</Accordion.Trigger>
-			<Accordion.Content>
+			<Accordion.Content class="mb-5">
 				<PRGrid {prs} />
 			</Accordion.Content>
 		</Accordion.Item>
@@ -64,7 +64,7 @@
 			<Accordion.Trigger class="text-left">
 				<h3 class="text-xl text-muted-foreground">Products ({products.length})</h3>
 			</Accordion.Trigger>
-			<Accordion.Content>
+			<Accordion.Content class="mb-5">
 				<ProductsGrid {products} />
 			</Accordion.Content>
 		</Accordion.Item>
