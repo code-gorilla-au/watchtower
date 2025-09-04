@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { PageTitle } from "$components/page_title";
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
-	import { Button } from "$components/ui/button";
 
 	async function routeToPAT() {
 		await OpenExternalURL(
