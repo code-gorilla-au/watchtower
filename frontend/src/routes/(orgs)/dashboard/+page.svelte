@@ -8,6 +8,7 @@
 	import { SecurityGrid } from "$components/products/index.js";
 	import { TimeSince } from "$lib/hooks/time.svelte";
 	import { SvelteDate } from "svelte/reactivity";
+	import * as Accordion from "$components/ui/accordion";
 
 	let { data }: PageProps = $props();
 	let org = $derived(data.organisation);
@@ -40,18 +41,32 @@
 	<PageTitle title="Dashboard" subtitle={org?.friendly_name}>
 		<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
 	</PageTitle>
-	<div class="my-4">
-		<h3 class="text-xl text-muted-foreground">Security Vulnerability</h3>
-	</div>
-	<SecurityGrid {securities} />
-
-	<div class="my-4">
-		<h3 class="text-xl text-muted-foreground">Pull Requests</h3>
-	</div>
-	<PRGrid {prs} />
-
-	<div class="my-4">
-		<h3 class="text-xl text-muted-foreground">Products</h3>
-	</div>
-	<ProductsGrid {products} />
+	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
+		<Accordion.Item value="security">
+			<Accordion.Trigger class="text-left">
+				<h3 class="text-xl text-muted-foreground">
+					Security Vulnerability ({securities.length})
+				</h3>
+			</Accordion.Trigger>
+			<Accordion.Content>
+				<SecurityGrid {securities} />
+			</Accordion.Content>
+		</Accordion.Item>
+		<Accordion.Item value="prs">
+			<Accordion.Trigger class="text-left">
+				<h3 class="text-xl text-muted-foreground">Pull Requests ({prs.length})</h3>
+			</Accordion.Trigger>
+			<Accordion.Content>
+				<PRGrid {prs} />
+			</Accordion.Content>
+		</Accordion.Item>
+		<Accordion.Item value="products">
+			<Accordion.Trigger class="text-left">
+				<h3 class="text-xl text-muted-foreground">Products ({products.length})</h3>
+			</Accordion.Trigger>
+			<Accordion.Content>
+				<ProductsGrid {products} />
+			</Accordion.Content>
+		</Accordion.Item>
+	</Accordion.Root>
 </div>
