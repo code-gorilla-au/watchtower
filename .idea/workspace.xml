@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="lints + format">
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="spacing adding">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/_appicon.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +180,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="starting refactor for products" />
     <MESSAGE value="refactor to add transform" />
     <MESSAGE value="wip adding bulk create pull requests" />
     <MESSAGE value="refactoring repo" />
@@ -205,7 +204,8 @@
     <MESSAGE value="adding component" />
     <MESSAGE value="adding accordion" />
     <MESSAGE value="lints + format" />
-    <option name="LAST_COMMIT_MESSAGE" value="lints + format" />
+    <MESSAGE value="spacing adding" />
+    <option name="LAST_COMMIT_MESSAGE" value="spacing adding" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
