@@ -168,28 +168,36 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 	logger := logging.FromContext(ctx)
 	logger.Debug("Updating organisation", "id", params.ID)
 
-	if params.DefaultOrg {
-		if err := o.store.SetOrgsDefaultFalse(ctx); err != nil {
-			logger.Error("Error setting default org", "error", err)
+	var model database.Organisation
+	var err error
 
-			return OrganisationDTO{}, err
+	err = database.WithTxnContext(ctx, o.txnDB, func(tx *sql.Tx) error {
+		txnStore := o.txnFunc(tx)
+		if params.DefaultOrg {
+			if err = txnStore.SetOrgsDefaultFalse(ctx); err != nil {
+				logger.Error("Error setting default org", "error", err)
+
+				return err
+			}
 		}
-	}
 
-	model, err := o.store.UpdateOrganisation(ctx, database.UpdateOrganisationParams{
-		ID:           params.ID,
-		DefaultOrg:   params.DefaultOrg,
-		FriendlyName: params.FriendlyName,
-		Namespace:    params.Namespace,
-		Description:  params.Description,
+		model, err = txnStore.UpdateOrganisation(ctx, database.UpdateOrganisationParams{
+			ID:           params.ID,
+			DefaultOrg:   params.DefaultOrg,
+			FriendlyName: params.FriendlyName,
+			Namespace:    params.Namespace,
+			Description:  params.Description,
+		})
+		if err != nil {
+			logger.Error("Error updating organisation", "error", err)
+
+			return err
+		}
+
+		return nil
 	})
-	if err != nil {
-		logger.Error("Error updating organisation", "error", err)
 
-		return OrganisationDTO{}, err
-	}
-
-	return ToOrganisationDTO(model), nil
+	return ToOrganisationDTO(model), err
 }
 
 func (o organisationService) UpdateSyncDateNow(ctx context.Context, id int64) error {
