@@ -38,7 +38,7 @@
 </script>
 
 <div class="page-container">
-	<PageTitle title="Dashboard" subtitle={org?.friendly_name}>
+	<PageTitle title="Dashboard" subtitle={org?.description || org?.friendly_name}>
 		<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
 	</PageTitle>
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
