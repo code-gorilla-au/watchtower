@@ -9,7 +9,7 @@ export class TimeSince {
 	readonly #date: SvelteDate;
 	#timeSince: string;
 
-	#poll?: number;
+	#poll?: NodeJS.Timeout;
 	readonly date: string;
 
 	constructor(date: SvelteDate) {

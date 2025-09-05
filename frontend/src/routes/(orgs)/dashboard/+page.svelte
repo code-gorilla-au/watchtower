@@ -16,7 +16,7 @@
 	let prs = $derived(data.prs);
 	let securities = $derived(data.securities);
 
-	let intervalPoll: number;
+	let intervalPoll: NodeJS.Timeout | undefined;
 
 	let timeSince = new TimeSince(new SvelteDate());
 

@@ -24,7 +24,7 @@ func makeResponse(status int, body string, headers map[string]string) *http.Resp
 }
 
 func testLogger() *slog.Logger {
-	return slog.New(slog.NewTextHandler(io.Discard, &slog.HandlerOptions{}))
+	return slog.New(slog.DiscardHandler)
 }
 
 func TestGithubClient(t *testing.T) {
