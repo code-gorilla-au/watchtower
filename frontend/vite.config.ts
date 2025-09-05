@@ -7,6 +7,6 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
 	test: {
 		expect: { requireAssertions: true },
-		projects: []
+		include: ["src/**/*.{test,spec}.{js,ts}"]
 	}
 });

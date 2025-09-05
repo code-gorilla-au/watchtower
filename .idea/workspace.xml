@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip">
-      <change beforePath="$PROJECT_DIR$/.golangci.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.golangci.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing dep list">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/time.svelte.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +38,8 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
-        <option value="TypeScript File" />
         <option value="Go File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -179,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding nav header" />
     <MESSAGE value="moving files" />
     <MESSAGE value="adding watch" />
     <MESSAGE value="looking to add css expand" />
@@ -204,7 +205,8 @@
     <MESSAGE value="adding test + refactoring" />
     <MESSAGE value="clean" />
     <MESSAGE value="wip" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip" />
+    <MESSAGE value="fixing dep list" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing dep list" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
