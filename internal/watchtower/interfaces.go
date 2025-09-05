@@ -48,6 +48,7 @@ type OrgStore interface {
 	ListOrgsOlderThanUpdatedAt(ctx context.Context, updatedAt int64) ([]database.Organisation, error)
 	GetOrganisationForProduct(ctx context.Context, productID sql.NullInt64) (database.Organisation, error)
 	DeleteOrg(ctx context.Context, id int64) error
+	DeleteProductOrganisationByOrgID(ctx context.Context, organisationID sql.NullInt64) error
 	UpdateOrganisation(ctx context.Context, arg database.UpdateOrganisationParams) (database.Organisation, error)
 	UpdateProductSync(ctx context.Context, id int64) error
 	AddProductToOrganisation(ctx context.Context, arg database.AddProductToOrganisationParams) error

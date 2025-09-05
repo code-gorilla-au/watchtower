@@ -1,6 +1,7 @@
 package watchtower
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 	"testing"
@@ -8,6 +9,7 @@ import (
 )
 
 var _testDB *database.Queries
+var _testTxnDB *sql.DB
 
 func TestMain(m *testing.M) {
 	q, db, err := database.NewDBFromProvider(":memory:")
@@ -15,6 +17,9 @@ func TestMain(m *testing.M) {
 		fmt.Print("Error:", err)
 		os.Exit(1)
 	}
+
+	_testDB = q
+	_testTxnDB = db
 
 	defer func() {
 		if err = db.Close(); err != nil {
@@ -28,8 +33,6 @@ func TestMain(m *testing.M) {
 		fmt.Print("Error running migrations", "error", err)
 		os.Exit(1)
 	}
-
-	_testDB = q
 
 	exitCode := m.Run()
 	os.Exit(exitCode)

@@ -24,7 +24,7 @@ func main() {
 	appConfig := LoadConfig()
 	logger := logging.New(appConfig.LogLevel, logging.LoggerJSON)
 
-	logger.Info("Starting watchtower", "config", appConfig)
+	logger.Debug("Starting watchtower", "config", appConfig)
 
 	databaseQueries, db, err := database.NewDBFromProvider(appConfig.DbFilePath)
 	if err != nil {
@@ -45,7 +45,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	wt := watchtower.NewService(ctx, databaseQueries)
+	wt := watchtower.NewService(ctx, databaseQueries, db)
 	worker := watchtower.NewOrgSyncWorker(wt)
 
 	app := NewApp(worker)

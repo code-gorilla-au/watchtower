@@ -7,6 +7,7 @@
 	import { RepoCard } from "$components/products";
 	import { Button } from "$components/ui/button";
 	import { PRGrid, SecurityGrid } from "$components/products/index.js";
+	import * as Accordion from "$components/ui/accordion";
 
 	let { data }: PageProps = $props();
 
@@ -43,21 +44,36 @@
 		</Button>
 	</PageTitle>
 
-	<div>
-		<h2 class="text-xl text-muted-foreground">Security Vulnerabilities</h2>
-		<SecurityGrid {securities} />
-	</div>
-	<div class="my-4">
-		<h2 class="text-xl text-muted-foreground">Pull Requests</h2>
-	</div>
-	<PRGrid {prs} />
-
-	<div class="my-4">
-		<h2 class="text-xl text-muted-foreground">Repositories</h2>
-	</div>
-	<Grid>
-		{#each repos as repo (repo.id)}
-			<RepoCard {repo} />
-		{/each}
-	</Grid>
+	<Accordion.Root type="multiple" value={["sec", "prs", "repos"]}>
+		<Accordion.Item value="sec">
+			<Accordion.Trigger>
+				<h2 class="text-xl text-muted-foreground">
+					Security Vulnerabilities ({securities.length})
+				</h2>
+			</Accordion.Trigger>
+			<Accordion.Content class="mb-5">
+				<SecurityGrid {securities} />
+			</Accordion.Content>
+		</Accordion.Item>
+		<Accordion.Item value="prs">
+			<Accordion.Trigger>
+				<h2 class="text-xl text-muted-foreground">Pull Requests ({prs.length})</h2>
+			</Accordion.Trigger>
+			<Accordion.Content class="mb-5">
+				<PRGrid {prs} />
+			</Accordion.Content>
+		</Accordion.Item>
+		<Accordion.Item value="repos">
+			<Accordion.Trigger>
+				<h2 class="text-xl text-muted-foreground">Repositories ({repos.length})</h2>
+			</Accordion.Trigger>
+			<Accordion.Content class="mb-5">
+				<Grid>
+					{#each repos as repo (repo.id)}
+						<RepoCard {repo} />
+					{/each}
+				</Grid>
+			</Accordion.Content>
+		</Accordion.Item>
+	</Accordion.Root>
 </div>

@@ -37,9 +37,8 @@ func LoadConfig() Config {
 
 		appDir = path.Join(current, localDevDBPath)
 	} else {
-		if err = os.Mkdir(appDir, 0755); err != nil {
-			panic(err)
-		}
+		// folder can already exist
+		_ = os.Mkdir(appDir, 0755)
 	}
 
 	return Config{

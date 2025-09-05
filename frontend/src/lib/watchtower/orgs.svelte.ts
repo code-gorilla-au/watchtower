@@ -1,5 +1,6 @@
 import {
 	CreateOrganisation,
+	DeleteAllOrgs,
 	DeleteOrganisation,
 	GetAllOrganisations,
 	GetDefaultOrganisation,
@@ -24,6 +25,7 @@ export class OrgService {
 	#poll: number;
 
 	readonly defaultOrg: OrganisationDTO | undefined;
+	readonly organisations: OrganisationDTO[];
 
 	constructor() {
 		this.#internal = $state({
@@ -34,6 +36,7 @@ export class OrgService {
 		});
 
 		this.defaultOrg = $derived(this.#internal.defaultOrg);
+		this.organisations = $derived(this.#internal.orgs);
 
 		this.#poll = setInterval(async () => {
 			await this.getAll();
@@ -83,6 +86,10 @@ export class OrgService {
 
 	async delete(id: number) {
 		return DeleteOrganisation(id);
+	}
+
+	async deleteAll() {
+		return DeleteAllOrgs();
 	}
 
 	async getDefault() {

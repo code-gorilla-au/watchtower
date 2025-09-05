@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -13,7 +14,9 @@ type Service struct {
 }
 
 type organisationService struct {
-	db OrgStore
+	store   OrgStore
+	txnDB   *sql.DB
+	txnFunc func(tx *sql.Tx) OrgStore
 }
 
 type productsService struct {

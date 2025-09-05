@@ -51,7 +51,9 @@
 	{:else}
 		<div class="flex flex-col items-center justify-center">
 			<EmptySlate class="w-full" title="Product sync complete">
-				<a class="underline" href={`/products/${product.id}/details`}>View product details</a>
+				<a class="underline" href={`/products/${product.id}/details`}
+					>View product details</a
+				>
 			</EmptySlate>
 		</div>
 	{/if}

@@ -1129,6 +1129,9 @@ var _ OrgStore = &OrgStoreMock{}
 //			DeleteOrgFunc: func(ctx context.Context, id int64) error {
 //				panic("mock out the DeleteOrg method")
 //			},
+//			DeleteProductOrganisationByOrgIDFunc: func(ctx context.Context, organisationID sql.NullInt64) error {
+//				panic("mock out the DeleteProductOrganisationByOrgID method")
+//			},
 //			GetDefaultOrganisationFunc: func(ctx context.Context) (database.Organisation, error) {
 //				panic("mock out the GetDefaultOrganisation method")
 //			},
@@ -1171,6 +1174,9 @@ type OrgStoreMock struct {
 
 	// DeleteOrgFunc mocks the DeleteOrg method.
 	DeleteOrgFunc func(ctx context.Context, id int64) error
+
+	// DeleteProductOrganisationByOrgIDFunc mocks the DeleteProductOrganisationByOrgID method.
+	DeleteProductOrganisationByOrgIDFunc func(ctx context.Context, organisationID sql.NullInt64) error
 
 	// GetDefaultOrganisationFunc mocks the GetDefaultOrganisation method.
 	GetDefaultOrganisationFunc func(ctx context.Context) (database.Organisation, error)
@@ -1221,6 +1227,13 @@ type OrgStoreMock struct {
 			Ctx context.Context
 			// ID is the id argument value.
 			ID int64
+		}
+		// DeleteProductOrganisationByOrgID holds details about calls to the DeleteProductOrganisationByOrgID method.
+		DeleteProductOrganisationByOrgID []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// OrganisationID is the organisationID argument value.
+			OrganisationID sql.NullInt64
 		}
 		// GetDefaultOrganisation holds details about calls to the GetDefaultOrganisation method.
 		GetDefaultOrganisation []struct {
@@ -1280,18 +1293,19 @@ type OrgStoreMock struct {
 			ID int64
 		}
 	}
-	lockAddProductToOrganisation   sync.RWMutex
-	lockCreateOrganisation         sync.RWMutex
-	lockDeleteOrg                  sync.RWMutex
-	lockGetDefaultOrganisation     sync.RWMutex
-	lockGetOrganisationByID        sync.RWMutex
-	lockGetOrganisationForProduct  sync.RWMutex
-	lockListOrganisations          sync.RWMutex
-	lockListOrgsOlderThanUpdatedAt sync.RWMutex
-	lockSetDefaultOrg              sync.RWMutex
-	lockSetOrgsDefaultFalse        sync.RWMutex
-	lockUpdateOrganisation         sync.RWMutex
-	lockUpdateProductSync          sync.RWMutex
+	lockAddProductToOrganisation         sync.RWMutex
+	lockCreateOrganisation               sync.RWMutex
+	lockDeleteOrg                        sync.RWMutex
+	lockDeleteProductOrganisationByOrgID sync.RWMutex
+	lockGetDefaultOrganisation           sync.RWMutex
+	lockGetOrganisationByID              sync.RWMutex
+	lockGetOrganisationForProduct        sync.RWMutex
+	lockListOrganisations                sync.RWMutex
+	lockListOrgsOlderThanUpdatedAt       sync.RWMutex
+	lockSetDefaultOrg                    sync.RWMutex
+	lockSetOrgsDefaultFalse              sync.RWMutex
+	lockUpdateOrganisation               sync.RWMutex
+	lockUpdateProductSync                sync.RWMutex
 }
 
 // AddProductToOrganisation calls AddProductToOrganisationFunc.
@@ -1409,6 +1423,45 @@ func (mock *OrgStoreMock) DeleteOrgCalls() []struct {
 	mock.lockDeleteOrg.RLock()
 	calls = mock.calls.DeleteOrg
 	mock.lockDeleteOrg.RUnlock()
+	return calls
+}
+
+// DeleteProductOrganisationByOrgID calls DeleteProductOrganisationByOrgIDFunc.
+func (mock *OrgStoreMock) DeleteProductOrganisationByOrgID(ctx context.Context, organisationID sql.NullInt64) error {
+	callInfo := struct {
+		Ctx            context.Context
+		OrganisationID sql.NullInt64
+	}{
+		Ctx:            ctx,
+		OrganisationID: organisationID,
+	}
+	mock.lockDeleteProductOrganisationByOrgID.Lock()
+	mock.calls.DeleteProductOrganisationByOrgID = append(mock.calls.DeleteProductOrganisationByOrgID, callInfo)
+	mock.lockDeleteProductOrganisationByOrgID.Unlock()
+	if mock.DeleteProductOrganisationByOrgIDFunc == nil {
+		var (
+			errOut error
+		)
+		return errOut
+	}
+	return mock.DeleteProductOrganisationByOrgIDFunc(ctx, organisationID)
+}
+
+// DeleteProductOrganisationByOrgIDCalls gets all the calls that were made to DeleteProductOrganisationByOrgID.
+// Check the length with:
+//
+//	len(mockedOrgStore.DeleteProductOrganisationByOrgIDCalls())
+func (mock *OrgStoreMock) DeleteProductOrganisationByOrgIDCalls() []struct {
+	Ctx            context.Context
+	OrganisationID sql.NullInt64
+} {
+	var calls []struct {
+		Ctx            context.Context
+		OrganisationID sql.NullInt64
+	}
+	mock.lockDeleteProductOrganisationByOrgID.RLock()
+	calls = mock.calls.DeleteProductOrganisationByOrgID
+	mock.lockDeleteProductOrganisationByOrgID.RUnlock()
 	return calls
 }
 

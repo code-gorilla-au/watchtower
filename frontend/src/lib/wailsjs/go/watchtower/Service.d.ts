@@ -7,6 +7,8 @@ export function CreateOrganisation(arg1:string,arg2:string,arg3:string,arg4:stri
 
 export function CreateProduct(arg1:string,arg2:string,arg3:Array<string>,arg4:number):Promise<watchtower.ProductDTO>;
 
+export function DeleteAllOrgs():Promise<void>;
+
 export function DeleteOrganisation(arg1:number):Promise<void>;
 
 export function DeleteProduct(arg1:number):Promise<void>;
@@ -43,4 +45,4 @@ export function SyncProduct(arg1:number):Promise<void>;
 
 export function UpdateOrganisation(arg1:watchtower.UpdateOrgParams):Promise<watchtower.OrganisationDTO>;
 
-export function UpdateProduct(arg1:number,arg2:string,arg3:any):Promise<watchtower.ProductDTO>;
+export function UpdateProduct(arg1:number,arg2:string,arg3:Array<string>):Promise<watchtower.ProductDTO>;

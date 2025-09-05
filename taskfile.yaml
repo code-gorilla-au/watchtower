@@ -36,6 +36,14 @@ tasks:
       - golangci-lint run {{ .GOLANG_WORKSPACES }} --fix
       - govulncheck {{ .GOLANG_WORKSPACES }}
       - go fmt {{ .GOLANG_WORKSPACES }}
+      -
+  go-lint-watch:
+    desc: Run go linters in watch mode.
+    watch: true
+    sources:
+      - ./**/*.go
+    cmds:
+      - task: go-lint
 
   go-install:
     desc: Install go dependencies.

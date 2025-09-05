@@ -18,7 +18,7 @@ type CreateProductParams struct {
 
 func (p *productsService) Create(ctx context.Context, params CreateProductParams) (ProductDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Creating product")
+	logger.Debug("Creating product")
 
 	var tagsNS sql.NullString
 
@@ -47,7 +47,7 @@ func (p *productsService) Create(ctx context.Context, params CreateProductParams
 
 func (p *productsService) Get(ctx context.Context, id int64) (ProductDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Fetching product by ID")
+	logger.Debug("Fetching product by ID")
 
 	prod, err := p.db.GetProductByID(ctx, id)
 	if err != nil {
@@ -61,7 +61,7 @@ func (p *productsService) Get(ctx context.Context, id int64) (ProductDTO, error)
 
 func (p *productsService) GetByOrg(ctx context.Context, orgID int64) ([]ProductDTO, error) {
 	logger := logging.FromContext(ctx)
-	logger.Info("Listing products for organisation")
+	logger.Debug("Listing products for organisation")
 
 	models, err := p.db.ListProductsByOrganisation(ctx, sql.NullInt64{Int64: orgID, Valid: true})
 	if err != nil {

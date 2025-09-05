@@ -7,3 +7,5 @@ frontend/build
 coverage*
 
 .DS_Store
+
+.task

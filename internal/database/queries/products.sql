@@ -21,6 +21,10 @@ INSERT INTO product_organisations (product_id,
 VALUES (?,
         ?);
 
+-- name: DeleteProductOrganisationByOrgID :exec
+DELETE FROM product_organisations
+WHERE organisation_id = ?;
+
 -- name: UpdateProduct :one
 UPDATE products
 SET name       = ?,
@@ -31,7 +35,7 @@ RETURNING *;
 
 -- name: UpdateProductSync :exec
 UPDATE products
-SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+SET updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?;
 
 

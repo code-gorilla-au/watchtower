@@ -2,7 +2,7 @@
 	import { Card, CardAction, CardHeader, CardTitle } from "$components/ui/card/index.js";
 	import { watchtower } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
-	import { formatDate } from "$design/formats";
+	import { formatDate } from "$lib/hooks/formats";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";

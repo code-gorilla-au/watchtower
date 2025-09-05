@@ -247,6 +247,16 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 	return err
 }
 
+const deleteProductOrganisationByOrgID = `-- name: DeleteProductOrganisationByOrgID :exec
+DELETE FROM product_organisations
+WHERE organisation_id = ?
+`
+
+func (q *Queries) DeleteProductOrganisationByOrgID(ctx context.Context, organisationID sql.NullInt64) error {
+	_, err := q.db.ExecContext(ctx, deleteProductOrganisationByOrgID, organisationID)
+	return err
+}
+
 const deletePullRequestsByProductID = `-- name: DeletePullRequestsByProductID :exec
 DELETE
 FROM pull_requests
@@ -661,7 +671,7 @@ func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (P
 
 const updateProductSync = `-- name: UpdateProductSync :exec
 UPDATE products
-SET updated_at = updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+SET updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 `
 

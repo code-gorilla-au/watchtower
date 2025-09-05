@@ -3,9 +3,10 @@ import { goto } from "$app/navigation";
 import { orgSvc } from "$lib/watchtower";
 
 export const load: LayoutLoad = async () => {
+	await orgSvc.getAll();
 	await orgSvc.getDefault();
 	if (!orgSvc.defaultOrg) {
-		await goto("/register/organisation");
+		await goto("/register");
 		return;
 	}
 };
