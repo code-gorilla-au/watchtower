@@ -53,6 +53,7 @@ tasks:
 
   go-test:
     desc: Run go tests.
+    deps: [gen]
     cmds:
       - go test -cover -coverprofile={{ .GOLANG_COVERAGE }} -failfast {{ .GOLANG_WORKSPACES }}
 
