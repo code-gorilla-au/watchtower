@@ -4,8 +4,6 @@ github.com/code-gorilla-au/env v1.1.1 h1:4rkSwCnyymKh+KGAOPx3fEg9v2ZV5i9r92bSf7x
 github.com/code-gorilla-au/env v1.1.1/go.mod h1:KE4Ymfz5MhMi7SX3ZKH4iMFAHsDCvwOV8WTzgpwzzE4=
 github.com/code-gorilla-au/fetch v1.0.1 h1:dA/OJlAdnyceSu2BzcPngXQvVAH2GBFt6KwSnfXibYM=
 github.com/code-gorilla-au/fetch v1.0.1/go.mod h1:Tt4JtWa+uFZOad6atkoM/HIKV+zTq4z+mBVSnPUp64E=
-github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f h1:vH5gu06phRGcwmgSAv1EByO0UYSYKJK1CwBQlbA5cJ4=
-github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f/go.mod h1:csTFHuzb+BkCXrPB/lQvrSuuUfRqCkF3TwkCJzOieNM=
 github.com/code-gorilla-au/odize v1.3.4 h1:QHEM7v8/qH9R0QO6tVWh0yKr+VMv3RGC3PcIADwDGVA=
 github.com/code-gorilla-au/odize v1.3.4/go.mod h1:Q6uRMcQWCPldPNtlxiaWdA78vaPibTLZIO5owiM96Cw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

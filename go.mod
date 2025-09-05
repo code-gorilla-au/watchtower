@@ -5,7 +5,6 @@ go 1.24.6
 require (
 	github.com/code-gorilla-au/env v1.1.1
 	github.com/code-gorilla-au/fetch v1.0.1
-	github.com/code-gorilla-au/go-toolbox/logging v0.0.0-20250809105705-2913a586911f
 	github.com/code-gorilla-au/odize v1.3.4
 	github.com/wailsapp/wails/v2 v2.10.2
 	modernc.org/sqlite v1.38.2
