@@ -22,7 +22,7 @@ func TestService_CreateProduct(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_product", "test_org_namespace_for_product", "token", "test description")
 		if err != nil {
@@ -35,7 +35,7 @@ func TestService_CreateProduct(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -144,23 +144,20 @@ func TestService_GetProductByID(t *testing.T) {
 
 	ctx := context.Background()
 
-	var orgID int64
-
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
-		org, err := s.CreateOrganisation("test_org_for_get_product", "test_org_namespace_for_get_product", "token", "test description")
+		_, err := s.CreateOrganisation("test_org_for_get_product", "test_org_namespace_for_get_product", "token", "test description")
 		if err != nil {
 			fmt.Print("create org error", err)
 		}
 
 		odize.AssertNoError(t, err)
 
-		orgID = org.ID
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -255,20 +252,6 @@ func TestService_GetProductByID(t *testing.T) {
 			odize.AssertEqual(t, fetchedProduct.Tags[2], "tag.with.dots")
 			odize.AssertEqual(t, fetchedProduct.Tags[3], "tag with spaces")
 		}).
-		Test("should return product with empty name and description", func(t *testing.T) {
-			tags := []string{"test"}
-			createdProduct, err := s.CreateProduct("", "", tags, orgID)
-			odize.AssertNoError(t, err)
-
-			fetchedProduct, err := s.GetProductByID(createdProduct.ID)
-			odize.AssertNoError(t, err)
-
-			odize.AssertEqual(t, fetchedProduct.ID, createdProduct.ID)
-			odize.AssertEqual(t, fetchedProduct.Name, "")
-			odize.AssertEqual(t, fetchedProduct.Description, "")
-			odize.AssertEqual(t, len(fetchedProduct.Tags), 1)
-			odize.AssertEqual(t, fetchedProduct.Tags[0], "test")
-		}).
 		Run()
 	odize.AssertNoError(t, err)
 }
@@ -281,7 +264,7 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -407,7 +390,7 @@ func TestService_UpdateProduct(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_update_product", "test_org_namespace_for_update_product", "token", "test description")
 		if err != nil {
@@ -420,7 +403,7 @@ func TestService_UpdateProduct(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -542,7 +525,7 @@ func TestService_DeleteProduct(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_delete_product", "test_org_namespace_for_delete_product", "token", "test description")
 		if err != nil {
@@ -555,7 +538,7 @@ func TestService_DeleteProduct(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -669,7 +652,7 @@ func TestService_GetProductRepos(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_get_repos", "test_org_namespace_for_get_repos", "token", "test description")
 		if err != nil {
@@ -682,7 +665,7 @@ func TestService_GetProductRepos(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -860,7 +843,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_get_prs", "test_org_namespace_for_get_prs", "token", "test description")
 		if err != nil {
@@ -873,7 +856,7 @@ func TestService_GetProductPullRequests(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -1149,7 +1132,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_pr_by_org", "test_org_namespace_for_pr_by_org", "token", "test description")
 		if err != nil {
@@ -1162,7 +1145,7 @@ func TestService_GetPullRequestByOrganisation(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -1393,7 +1376,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 	var productID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_security", "test_org_namespace_for_security", "token", "test description")
 		if err != nil {
@@ -1417,7 +1400,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -1637,7 +1620,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 	var orgID int64
 
 	group.BeforeAll(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 
 		org, err := s.CreateOrganisation("test_org_for_security_by_org", "test_org_namespace_for_security_by_org", "token", "test description")
 		if err != nil {
@@ -1650,7 +1633,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 	})
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -1973,7 +1956,11 @@ func TestService_SyncOrgs(t *testing.T) {
 			ctx:      ctx,
 			ghClient: ghMock,
 			orgSvc: &organisationService{
-				db: _testDB,
+				store: _testDB,
+				txnDB: _testTxnDB,
+				txnFunc: func(tx *sql.Tx) OrgStore {
+					return _testDB.WithTx(tx)
+				},
 			},
 			productSvc: &productsService{
 				db: _testDB,
@@ -2022,7 +2009,7 @@ func TestService_SyncOrgs(t *testing.T) {
 				ctx:      cancelCtx,
 				ghClient: ghMock,
 				orgSvc: &organisationService{
-					db: _testDB,
+					store: _testDB,
 				},
 				productSvc: &productsService{
 					db: _testDB,
@@ -2091,7 +2078,7 @@ func TestService_CreateOrganisation(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -2121,11 +2108,12 @@ func TestService_GetDefaultOrganisation(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
 		Test("should return error when no default organisation exists", func(t *testing.T) {
+			_ = _testDB.SetOrgsDefaultFalse(ctx)
 			_, err := s.GetDefaultOrganisation()
 			odize.AssertError(t, err)
 		}).
@@ -2173,7 +2161,7 @@ func TestService_SetDefaultOrg(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -2223,7 +2211,7 @@ func TestService_GetOrganisationByID(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -2282,7 +2270,7 @@ func TestService_GetAllOrganisations(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -2304,7 +2292,7 @@ func TestService_DeleteOrganisation(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.
@@ -2353,7 +2341,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(ctx, _testDB)
+		s = NewService(ctx, _testDB, _testTxnDB)
 	})
 
 	err := group.

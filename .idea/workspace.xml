@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding dropdown menu">
-      <change afterPath="$PROJECT_DIR$/frontend/e2e/register/register_org.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding txn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json.md5" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+page.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,12 +37,12 @@
         <option value="loaders_square" />
         <option value="security_card" />
         <option value="security_grid" />
-        <option value="Go File" />
         <option value="nav_header" />
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
         <option value="TypeScript File" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -187,8 +184,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactoring repo" />
-    <MESSAGE value="clean up" />
     <MESSAGE value="moving expanding to bottom" />
     <MESSAGE value="adding config" />
     <MESSAGE value="refactoring" />
@@ -212,7 +207,9 @@
     <MESSAGE value="spacing adding" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="adding dropdown menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding dropdown menu" />
+    <MESSAGE value="wip adding playwright" />
+    <MESSAGE value="adding txn" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding txn" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

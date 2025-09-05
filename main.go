@@ -45,7 +45,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	wt := watchtower.NewService(ctx, databaseQueries)
+	wt := watchtower.NewService(ctx, databaseQueries, db)
 	worker := watchtower.NewOrgSyncWorker(wt)
 
 	app := NewApp(worker)

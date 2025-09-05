@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"database/sql"
 	"strings"
 	"watchtower/internal/database"
 
@@ -10,12 +11,16 @@ import (
 )
 
 // NewService creates and returns a new Service instance with the provided database queries.
-func NewService(ctx context.Context, db *database.Queries) *Service {
+func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Service {
 	return &Service{
 		ghClient: github.New(logging.FromContext(ctx)),
 		ctx:      ctx,
 		orgSvc: &organisationService{
-			db: db,
+			store: db,
+			txnDB: txnDB,
+			txnFunc: func(tx *sql.Tx) OrgStore {
+				return db.WithTx(tx)
+			},
 		},
 		productSvc: &productsService{
 			db: db,

@@ -20,32 +20,40 @@ func (o organisationService) Create(ctx context.Context, params CreateOrgParams)
 	logger := logging.FromContext(ctx)
 	logger.Debug("Creating organisation")
 
-	if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
-		logger.Error("Error setting default org", "error", err)
+	var orgModel database.Organisation
+	var err error
 
-		return OrganisationDTO{}, err
-	}
+	err = database.WithTxnContext(ctx, o.txnDB, func(tx *sql.Tx) error {
+		txnStore := o.txnFunc(tx)
+		if err = txnStore.SetOrgsDefaultFalse(ctx); err != nil {
+			logger.Error("Error setting default org", "error", err)
 
-	model, err := o.db.CreateOrganisation(ctx, database.CreateOrganisationParams{
-		FriendlyName: params.FriendlyName,
-		Namespace:    params.Namespace,
-		Token:        params.Token,
-		Description:  params.Description,
+			return err
+		}
+
+		orgModel, err = txnStore.CreateOrganisation(ctx, database.CreateOrganisationParams{
+			FriendlyName: params.FriendlyName,
+			Namespace:    params.Namespace,
+			Token:        params.Token,
+			Description:  params.Description,
+		})
+
+		if err != nil {
+			logger.Error("Error creating organisation", "error", err)
+
+			return err
+		}
+
+		return nil
 	})
 
-	if err != nil {
-		logger.Error("Error creating organisation", "error", err)
-
-		return OrganisationDTO{}, err
-	}
-
-	return ToOrganisationDTO(model), nil
+	return ToOrganisationDTO(orgModel), err
 }
 
 func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisation", "id", id)
-	model, err := o.db.GetOrganisationByID(ctx, id)
+	model, err := o.store.GetOrganisationByID(ctx, id)
 	if err != nil {
 		logger.Error("Error fetching organisation", "error", err)
 		return OrganisationDTO{}, err
@@ -57,7 +65,7 @@ func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO
 func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching default organisation")
-	model, err := o.db.GetDefaultOrganisation(ctx)
+	model, err := o.store.GetDefaultOrganisation(ctx)
 	if err != nil {
 		logger.Error("Error fetching default organisation", "error", err)
 		return OrganisationDTO{}, err
@@ -70,13 +78,13 @@ func (o organisationService) SetDefault(ctx context.Context, id int64) (Organisa
 	logger := logging.FromContext(ctx)
 	logger.Debug("setting default org", "org", id)
 
-	if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
+	if err := o.store.SetOrgsDefaultFalse(ctx); err != nil {
 		logger.Error("Error setting default org", "error", err)
 
 		return OrganisationDTO{}, err
 	}
 
-	model, err := o.db.SetDefaultOrg(ctx, id)
+	model, err := o.store.SetDefaultOrg(ctx, id)
 	if err != nil {
 		logger.Error("Error setting default org", "error", err)
 
@@ -90,7 +98,7 @@ func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 	logger := logging.FromContext(ctx)
 	logger.Debug("Listing all organisations")
 
-	models, err := o.db.ListOrganisations(ctx)
+	models, err := o.store.ListOrganisations(ctx)
 	if err != nil {
 		logger.Error("Error listing organisations", "error", err)
 
@@ -106,7 +114,7 @@ func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDT
 
 	fiveMinutesAgo := time.Now().Add(-5 * time.Minute).Unix()
 
-	models, err := o.db.ListOrgsOlderThanUpdatedAt(ctx, fiveMinutesAgo)
+	models, err := o.store.ListOrgsOlderThanUpdatedAt(ctx, fiveMinutesAgo)
 	if err != nil {
 		logger.Error("Error fetching stale organisations", "error", err)
 		return nil, err
@@ -119,7 +127,7 @@ func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, prod
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisations associated to product", "product", productID)
 
-	model, err := o.db.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
+	model, err := o.store.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
 	if err != nil {
 		logger.Error("Error fetching organisations associated to product", "error", err)
 		return InternalOrganisation{}, err
@@ -132,14 +140,14 @@ func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisation", "id", id)
 
-	if err := o.db.DeleteProductOrganisationByOrgID(ctx, sql.NullInt64{
+	if err := o.store.DeleteProductOrganisationByOrgID(ctx, sql.NullInt64{
 		Int64: id,
 		Valid: true,
 	}); err != nil {
 		logger.Error("Error deleting organisation", "error", err)
 	}
 
-	if err := o.db.DeleteOrg(ctx, id); err != nil {
+	if err := o.store.DeleteOrg(ctx, id); err != nil {
 		logger.Error("Error deleting organisation", "error", err)
 
 		return err
@@ -161,14 +169,14 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 	logger.Debug("Updating organisation", "id", params.ID)
 
 	if params.DefaultOrg {
-		if err := o.db.SetOrgsDefaultFalse(ctx); err != nil {
+		if err := o.store.SetOrgsDefaultFalse(ctx); err != nil {
 			logger.Error("Error setting default org", "error", err)
 
 			return OrganisationDTO{}, err
 		}
 	}
 
-	model, err := o.db.UpdateOrganisation(ctx, database.UpdateOrganisationParams{
+	model, err := o.store.UpdateOrganisation(ctx, database.UpdateOrganisationParams{
 		ID:           params.ID,
 		DefaultOrg:   params.DefaultOrg,
 		FriendlyName: params.FriendlyName,
@@ -187,14 +195,14 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 func (o organisationService) UpdateSyncDateNow(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Updating sync date")
-	return o.db.UpdateProductSync(ctx, id)
+	return o.store.UpdateProductSync(ctx, id)
 }
 
 func (o organisationService) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Associating product to org", "org", orgID, "product", productID)
 
-	if err := o.db.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+	if err := o.store.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
 		ProductID: sql.NullInt64{
 			Int64: productID,
 			Valid: true,
