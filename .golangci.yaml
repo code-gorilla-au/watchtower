@@ -8,7 +8,6 @@ linters:
     - iface
     - gosec
     - errcheck
-    - err113
     - errchkjson
     - errname
     - errorlint

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -189,7 +189,6 @@
     <MESSAGE value="adding delete all buttons" />
     <MESSAGE value="refactoring rego journey to provide more data" />
     <MESSAGE value="small change for consistent config on transitions" />
-    <MESSAGE value="wip" />
     <MESSAGE value="renaming folder" />
     <MESSAGE value="adding component" />
     <MESSAGE value="adding accordion" />
@@ -202,7 +201,8 @@
     <MESSAGE value="import github" />
     <MESSAGE value="adding test + refactoring" />
     <MESSAGE value="clean" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean" />
+    <MESSAGE value="wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
