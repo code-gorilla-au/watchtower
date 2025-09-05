@@ -16,6 +16,7 @@ type CreateOrgParams struct {
 	Description  string
 }
 
+// Create creates a new organisation in the database with the given parameters and returns its DTO representation.
 func (o organisationService) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Creating organisation")
@@ -50,6 +51,7 @@ func (o organisationService) Create(ctx context.Context, params CreateOrgParams)
 	return ToOrganisationDTO(orgModel), err
 }
 
+// Get retrieves an organisation by its ID and returns its DTO representation or an error if the operation fails.
 func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisation", "id", id)
@@ -62,6 +64,7 @@ func (o organisationService) Get(ctx context.Context, id int64) (OrganisationDTO
 	return ToOrganisationDTO(model), nil
 }
 
+// GetDefault retrieves the default organisation and returns its DTO representation or an error if the operation fails.
 func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching default organisation")
@@ -74,6 +77,7 @@ func (o organisationService) GetDefault(ctx context.Context) (OrganisationDTO, e
 	return ToOrganisationDTO(model), nil
 }
 
+// SetDefault updates the organisation with the given ID to be the default organisation and returns its DTO or an error.
 func (o organisationService) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("setting default org", "org", id)
@@ -94,6 +98,7 @@ func (o organisationService) SetDefault(ctx context.Context, id int64) (Organisa
 	return ToOrganisationDTO(model), nil
 }
 
+// GetAll retrieves a list of all organisations and returns them as a slice of OrganisationDTOs or an error if it fails.
 func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Listing all organisations")
@@ -108,6 +113,7 @@ func (o organisationService) GetAll(ctx context.Context) ([]OrganisationDTO, err
 	return ToOrganisationDTOs(models), nil
 }
 
+// GetStaleOrgs retrieves organisations that have not been updated in the last 5 minutes and returns them as DTOs or an error.
 func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching stale organisations")
@@ -123,6 +129,7 @@ func (o organisationService) GetStaleOrgs(ctx context.Context) ([]OrganisationDT
 	return ToOrganisationDTOs(models), nil
 }
 
+// GetOrgAssociatedToProduct fetches the organisation associated with the given product ID and returns it or an error.
 func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (InternalOrganisation, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisations associated to product", "product", productID)
@@ -136,6 +143,7 @@ func (o organisationService) GetOrgAssociatedToProduct(ctx context.Context, prod
 	return ToInternalOrganisation(model), err
 }
 
+// Delete removes an organisation from the database using its ID. Returns an error in case of failure.
 func (o organisationService) Delete(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Fetching organisation", "id", id)
@@ -164,6 +172,7 @@ type UpdateOrgParams struct {
 	Description  string
 }
 
+// Update modifies an organisation's details based on the provided parameters and returns the updated DTO or an error.
 func (o organisationService) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Updating organisation", "id", params.ID)
@@ -200,12 +209,14 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 	return ToOrganisationDTO(model), err
 }
 
+// UpdateSyncDateNow updates the sync date for the organisation with the specified ID to the current timestamp. Returns an error if the update fails.
 func (o organisationService) UpdateSyncDateNow(ctx context.Context, id int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Updating sync date")
 	return o.store.UpdateProductSync(ctx, id)
 }
 
+// AssociateProductToOrg associates a product with an organisation by their IDs and returns an error if the operation fails.
 func (o organisationService) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Associating product to org", "org", orgID, "product", productID)
