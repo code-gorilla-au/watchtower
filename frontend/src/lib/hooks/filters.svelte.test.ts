@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { SimpleFilter } from "$lib/hooks/filters.svelte";
-import { flushSync } from "svelte";
 
 describe("filters", () => {
 	describe("simple filters", () => {
@@ -40,7 +39,6 @@ describe("filters", () => {
 			filter.filterBy((item) => {
 				return item > 1;
 			});
-			flushSync();
 
 			expect(filter.data).toEqual([2, 3]);
 		});

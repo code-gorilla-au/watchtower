@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding test">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip adding filter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" afterDir="false" />
@@ -181,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="looking to add css expand" />
     <MESSAGE value="sidebar changes" />
     <MESSAGE value="adding tooltip to expand" />
     <MESSAGE value="adding new methods, fixing page" />
@@ -206,7 +205,8 @@
     <MESSAGE value="fixing dep list" />
     <MESSAGE value="adding tests" />
     <MESSAGE value="adding test" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding test" />
+    <MESSAGE value="wip adding filter" />
+    <option name="LAST_COMMIT_MESSAGE" value="wip adding filter" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

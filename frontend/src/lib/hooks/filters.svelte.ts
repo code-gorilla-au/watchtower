@@ -2,18 +2,19 @@ export type FilterFunc<T> = (item: T) => boolean;
 
 export interface FilterState<T> {
 	initData: T[];
-	data: T[];
-	filterFn?: FilterFunc<T>;
+	filteredData: T[];
 }
 
 export class SimpleFilter<T> {
 	#internal: FilterState<T>;
+	#filterFn?: FilterFunc<T> = undefined;
 
 	readonly data: T[];
 
 	constructor(data: T[], filterFn?: FilterFunc<T>) {
-		this.#internal = $state({ data, initData: data, filterFn });
-		this.data = $derived(this.#internal.data);
+		this.#internal = $state({ filteredData: [], initData: [...data] });
+		this.#filterFn = filterFn;
+		this.data = $derived(this.#internal.filteredData);
 
 		this.applyFilter();
 
@@ -22,22 +23,41 @@ export class SimpleFilter<T> {
 		});
 	}
 
+	/**
+	 * Clears the current filter function and resets the filter state.
+	 *
+	 */
 	clear() {
-		this.#internal.filterFn = undefined;
+		this.#filterFn = undefined;
 		this.applyFilter();
 	}
 
+	/**
+	 * Applies the provided filter function to the current dataset and filters it based on the criteria defined in the function.
+	 */
 	filterBy(filterFn: FilterFunc<T>) {
-		this.#internal.filterFn = filterFn;
+		this.#filterFn = filterFn;
 		this.applyFilter();
 	}
 
 	private applyFilter() {
-		if (this.#internal.filterFn) {
-			this.#internal.data = this.#internal.data.filter(this.#internal.filterFn);
+		if (!this.#filterFn) {
+			this.resetInitState();
 			return;
 		}
 
-		this.#internal.data.splice(0, this.#internal.data.length, ...this.#internal.initData);
+		this.#internal.filteredData.splice(
+			0,
+			this.#internal.filteredData.length,
+			...this.#internal.initData.filter(this.#filterFn)
+		);
+	}
+
+	private resetInitState() {
+		this.#internal.filteredData.splice(
+			0,
+			this.#internal.filteredData.length,
+			...this.#internal.initData
+		);
 	}
 }
