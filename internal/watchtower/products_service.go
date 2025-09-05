@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"watchtower/internal/database"
+	"watchtower/internal/github"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/logging"
 )
 
 type CreateProductParams struct {

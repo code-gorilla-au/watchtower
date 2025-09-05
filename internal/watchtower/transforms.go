@@ -5,7 +5,7 @@ import (
 	"time"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
+	"watchtower/internal/github"
 )
 
 // Conversion helpers from database models to DTOs

@@ -7,7 +7,8 @@ import (
 	"watchtower/internal/database"
 	"watchtower/internal/watchtower"
 
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/logging"
+
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -22,7 +23,7 @@ var assets embed.FS
 func main() {
 	ctx := context.Background()
 	appConfig := LoadConfig()
-	logger := logging.New(appConfig.LogLevel, logging.LoggerJSON)
+	logger := logging.New(appConfig.LogLevel)
 
 	logger.Debug("Starting watchtower", "config", appConfig)
 

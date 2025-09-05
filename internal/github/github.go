@@ -31,7 +31,7 @@ func New(logger *slog.Logger) *Client {
 // SearchRepos searches for repositories by owner and topic
 func (c *Client) SearchRepos(owner string, topic string, token string) (QuerySearch[Repository], error) {
 	log := c.logger.With("owner", owner, "topic", topic)
-	log.Info("Searching repos by owner and topic")
+	log.Debug("Searching repos by owner and topic")
 
 	var result QuerySearch[Repository]
 
@@ -43,7 +43,7 @@ func (c *Client) SearchRepos(owner string, topic string, token string) (QuerySea
 // GetRepoDetails fetches repository details for a specified owner and repository name and returns the result or an error.
 func (c *Client) GetRepoDetails(owner, repo string, token string) (QueryRepository, error) {
 	log := c.logger.With("owner", owner, "repo", repo)
-	log.Info("Getting repo details")
+	log.Debug("Getting repo details")
 
 	var result QueryRepository
 
