@@ -8,6 +8,6 @@ export const load: PageLoad = async () => {
 		await goto("/dashboard");
 	} catch (e) {
 		console.error(e);
-		await goto("/register/organisation");
+		await goto("/register");
 	}
 };
