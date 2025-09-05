@@ -19,6 +19,7 @@
 	let { children }: LayoutProps = $props();
 
 	const organisation = $derived(orgSvc.defaultOrg);
+	const allOrgs = $derived(orgSvc.organisations);
 
 	let expand = $state(settingsSvc.sidebarExpanded);
 	let expandedStyle = $derived(expand ? "w-42" : "w-14");
@@ -40,11 +41,7 @@
 	>
 		<div class="flex flex-1 flex-col gap-2">
 			{#if organisation?.id}
-				<NavHeader
-					{expand}
-					orgName={organisation?.friendly_name}
-					orgId={organisation?.id}
-				/>
+				<NavHeader {expand} currentOrg={organisation} {allOrgs} />
 				<Separator class="mb-2" />
 			{/if}
 			<NavItem to="/dashboard" {expand} label="Dashboard">
