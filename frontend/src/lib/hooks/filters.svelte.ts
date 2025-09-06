@@ -93,6 +93,7 @@ export class TagsFilter<T extends object> {
 	readonly data: T[];
 
 	constructor(data: T[], tagField: FilterTag<T>) {
+		this.#currentTag = $state(undefined);
 		this.#tagField = tagField;
 		this.tags = $state(this.generateTags(tagField, data));
 		this.#filter = new SimpleFilter(data, this.filterFn.bind(this));
@@ -104,6 +105,11 @@ export class TagsFilter<T extends object> {
 	filterByTag(tag: FilterTagValue<T>) {
 		this.#currentTag = tag;
 		this.#filter.filterBy(this.filterFn.bind(this));
+	}
+
+	reset() {
+		this.#currentTag = undefined;
+		this.#filter.clear();
 	}
 
 	private generateTags(tag: FilterTag<T>, data: T[]) {

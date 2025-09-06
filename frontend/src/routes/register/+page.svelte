@@ -20,9 +20,9 @@
 	<div class="mx-auto flex max-w-lg flex-col text-muted-foreground">
 		<h2 class="heading-2 mb-2">What is needed to begin</h2>
 		<p class="mb-8">
-			A <button class="cursor-pointer underline" onclick={routeToPAT}
-				>Personal Access Token (PAT)</button
-			>
+			A <button class="cursor-pointer underline" onclick={routeToPAT}>
+				Personal Access Token (PAT)
+			</button>
 			is required to be registered when onboarding an organisation. Watchtower requires
 			<b> readonly </b>
 			access to repos, no data leaves the device.
@@ -37,9 +37,9 @@
 			Tag all repositories you wish to monitor with the <b>watchtower</b> topic.
 		</p>
 		<div class="my-8 flex justify-end">
-			<a href="/register/organisation" class="cursor-pointer underline"
-				>Onboard my first organisation</a
-			>
+			<a href="/register/organisation" class="cursor-pointer underline">
+				Onboard my first organisation
+			</a>
 		</div>
 	</div>
 </div>

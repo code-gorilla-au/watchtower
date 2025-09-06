@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding filtering by tag">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding 3 sec timeout">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_grid_header.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json.md5" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +43,7 @@
         <option value="+page" />
         <option value="Go File" />
         <option value="TypeScript File" />
+        <option value="prs_grid_header" />
       </list>
     </option>
   </component>
@@ -181,7 +185,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding new methods, fixing page" />
     <MESSAGE value="fix typo" />
     <MESSAGE value="wip adding confirm" />
     <MESSAGE value="adding delete all buttons" />
@@ -206,7 +209,8 @@
     <MESSAGE value="wip adding filter" />
     <MESSAGE value="adding base filter" />
     <MESSAGE value="adding filtering by tag" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding filtering by tag" />
+    <MESSAGE value="adding 3 sec timeout" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding 3 sec timeout" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
