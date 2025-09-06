@@ -3,20 +3,10 @@ import ProductsGrid from "./products_grid.svelte";
 import { RepoCard } from "./repo_card";
 import PRCard from "$components/products/prs_card.svelte";
 import PRGrid from "$components/products/prs_grid.svelte";
-import PRGridHeader from "$components/products/prs_grid_header.svelte";
 import SecurityCard from "$components/products/security_card.svelte";
 import SecurityGrid from "$components/products/security_grid.svelte";
 
 export * from "./product_card";
 export * from "./types";
 
-export {
-	ProductUpdateForm,
-	ProductsGrid,
-	PRCard,
-	PRGrid,
-	PRGridHeader,
-	RepoCard,
-	SecurityCard,
-	SecurityGrid
-};
+export { ProductUpdateForm, ProductsGrid, PRCard, PRGrid, RepoCard, SecurityCard, SecurityGrid };

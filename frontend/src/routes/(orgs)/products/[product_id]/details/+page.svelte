@@ -6,9 +6,10 @@
 	import { Grid } from "$components/grid";
 	import { RepoCard } from "$components/products";
 	import { Button } from "$components/ui/button";
-	import { PRGrid, PRGridHeader, SecurityGrid } from "$components/products/index.js";
+	import { PRGrid, SecurityGrid } from "$components/products/index.js";
 	import * as Accordion from "$components/ui/accordion";
 	import { TagsFilter } from "$lib/hooks/filters.svelte";
+	import { GridHeader } from "$components/grid/index.js";
 
 	let { data }: PageProps = $props();
 
@@ -60,7 +61,7 @@
 		</Accordion.Item>
 		<Accordion.Item value="prs">
 			<Accordion.Trigger>
-				<PRGridHeader {prs} />
+				<GridHeader data={prs} tagField="repository_name" title="Pull Requests" />
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<PRGrid prs={prsFilter.data} />
