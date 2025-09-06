@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { SimpleFilter } from "$lib/hooks/filters.svelte";
+import { SimpleFilter, TagsFilter } from "$lib/hooks/filters.svelte";
 
 describe("filters", () => {
-	describe("simple filters", () => {
+	describe("SimpleFilter()", () => {
 		it("should return an empty data array", () => {
 			const filter = new SimpleFilter([]);
 
@@ -41,6 +41,52 @@ describe("filters", () => {
 			});
 
 			expect(filter.data).toEqual([2, 3]);
+		});
+	});
+	describe("TagsFilter()", () => {
+		const validTags = [
+			{ name: "hello", value: "world" },
+			{ name: "goodbye", value: "planet" },
+			{ name: "baz", value: "world" }
+		];
+
+		it("should have a list of tags available", () => {
+			const filter = new TagsFilter(validTags, "value");
+			expect(filter.tags).toContain("world");
+			expect(filter.tags).toContain("planet");
+		});
+
+		it("should return init data without filter", () => {
+			const filter = new TagsFilter(validTags, "value");
+			expect(filter.data).toEqual(validTags);
+		});
+
+		it("should return filtered data with filter", () => {
+			const filter = new TagsFilter(validTags, "value");
+			expect(filter.data).toEqual(validTags);
+
+			filter.filterByTag("planet");
+			expect(filter.data).toEqual([{ name: "goodbye", value: "planet" }]);
+		});
+
+		it("should have current tag applied when filter is applied", () => {
+			const filter = new TagsFilter(validTags, "value");
+
+			filter.filterByTag("planet");
+			expect(filter.currentTag).toEqual("planet");
+		});
+
+		it("should change filter after applying twice", () => {
+			const filter = new TagsFilter(validTags, "value");
+
+			filter.filterByTag("planet");
+			expect(filter.data).toEqual([{ name: "goodbye", value: "planet" }]);
+
+			filter.filterByTag("world");
+			expect(filter.data).toEqual([
+				{ name: "hello", value: "world" },
+				{ name: "baz", value: "world" }
+			]);
 		});
 	});
 });
