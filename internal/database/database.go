@@ -32,7 +32,9 @@ func (m *Migrator) Init() error {
 func NewDBFromProvider(filePath string) (*Queries, *sql.DB, error) {
 	dbFile := resolveDBPath(filePath)
 
-	db, err := sql.Open("sqlite", dbFile)
+	withOptions := path.Join(dbFile, "?_busy_timeout=3000")
+
+	db, err := sql.Open("sqlite", withOptions)
 	if err != nil {
 		return nil, nil, err
 	}
