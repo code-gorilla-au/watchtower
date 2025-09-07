@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding tag filter">
-      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/grid/grid_header.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="refactoring to use common component">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/grid/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/grid/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_grid_header.svelte" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +182,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip adding confirm" />
     <MESSAGE value="adding delete all buttons" />
     <MESSAGE value="refactoring rego journey to provide more data" />
     <MESSAGE value="small change for consistent config on transitions" />
@@ -211,7 +206,8 @@
     <MESSAGE value="adding filtering by tag" />
     <MESSAGE value="adding 3 sec timeout" />
     <MESSAGE value="adding tag filter" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding tag filter" />
+    <MESSAGE value="refactoring to use common component" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring to use common component" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

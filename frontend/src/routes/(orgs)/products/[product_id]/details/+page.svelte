@@ -51,9 +51,11 @@
 	<Accordion.Root type="multiple" value={["sec", "prs", "repos"]}>
 		<Accordion.Item value="sec">
 			<Accordion.Trigger>
-				<h2 class="text-xl text-muted-foreground">
-					Security Vulnerabilities ({securities.length})
-				</h2>
+				<GridHeader
+					data={securities}
+					tagField="repository_name"
+					title="Security Vulnerabilities"
+				/>
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<SecurityGrid {securities} />
