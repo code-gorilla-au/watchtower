@@ -38,7 +38,7 @@ WHERE id = ?;
 
 ## Golang
 
-- use Odize as the test frame work
+- use Odize as the test framework
 - Do not add useless comments
 
 writing test example

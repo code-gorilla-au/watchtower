@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding component to dashboard">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing param miss match">
+      <change beforePath="$PROJECT_DIR$/.junie/guidelines.md" beforeDir="false" afterPath="$PROJECT_DIR$/.junie/guidelines.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -184,7 +182,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactoring rego journey to provide more data" />
     <MESSAGE value="small change for consistent config on transitions" />
     <MESSAGE value="renaming folder" />
     <MESSAGE value="adding component" />
@@ -209,7 +206,8 @@
     <MESSAGE value="adding tag filter" />
     <MESSAGE value="refactoring to use common component" />
     <MESSAGE value="adding component to dashboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding component to dashboard" />
+    <MESSAGE value="fixing param miss match" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing param miss match" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
