@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"watchtower/internal/watchtower"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -30,11 +29,6 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) shutdown(ctx context.Context) {
 	a.worker.Stop()
-}
-
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
 func (a *App) OpenExternalURL(url string) {

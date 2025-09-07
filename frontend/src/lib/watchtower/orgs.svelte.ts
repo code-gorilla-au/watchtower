@@ -22,7 +22,7 @@ export class OrgService {
 		orgsLastSync?: Date;
 	};
 
-	#poll: number;
+	#poll?: NodeJS.Timeout;
 
 	readonly defaultOrg: OrganisationDTO | undefined;
 	readonly organisations: OrganisationDTO[];
@@ -54,13 +54,20 @@ export class OrgService {
 		return this.defaultOrg;
 	}
 
-	async update(params: { id: number; friendlyName: string; owner: string; defaultOrg: boolean }) {
+	async update(params: {
+		id: number;
+		friendlyName: string;
+		description: string;
+		owner: string;
+		defaultOrg: boolean;
+	}) {
 		const updated = await UpdateOrganisation(
 			new watchtower.UpdateOrgParams({
 				ID: params.id,
 				DefaultOrg: params.defaultOrg,
 				FriendlyName: params.friendlyName,
-				Namespace: params.owner
+				Namespace: params.owner,
+				Description: params.description
 			})
 		);
 

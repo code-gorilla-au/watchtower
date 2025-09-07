@@ -8,7 +8,8 @@ import (
 	"time"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
+	"watchtower/internal/github"
+
 	"github.com/code-gorilla-au/odize"
 )
 

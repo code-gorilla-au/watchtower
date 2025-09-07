@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/logging"
 )
 
 type TxnFn func(tx *sql.Tx) error

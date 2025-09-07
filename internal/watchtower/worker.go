@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/logging"
 )
 
 type OrgSyncWorker struct {

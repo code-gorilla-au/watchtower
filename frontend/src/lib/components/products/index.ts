@@ -5,6 +5,7 @@ import PRCard from "$components/products/prs_card.svelte";
 import PRGrid from "$components/products/prs_grid.svelte";
 import SecurityCard from "$components/products/security_card.svelte";
 import SecurityGrid from "$components/products/security_grid.svelte";
+
 export * from "./product_card";
 export * from "./types";
 

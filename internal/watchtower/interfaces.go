@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
+	"watchtower/internal/github"
 )
 
 //go:generate moq -rm -stub -out mocks.gen.go . ghClient RepoStore ProductStore OrgStore

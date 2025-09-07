@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding txn">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/org_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/org_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/setup_main_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/watchtower_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/watchtower_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="missing dep">
+      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +36,10 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
-        <option value="TypeScript File" />
         <option value="Go File" />
+        <option value="TypeScript File" />
+        <option value="prs_grid_header" />
+        <option value="grid_header" />
       </list>
     </option>
   </component>
@@ -94,7 +91,7 @@
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat-frontend-tests&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-import-github&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
@@ -184,32 +181,32 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="moving expanding to bottom" />
-    <MESSAGE value="adding config" />
-    <MESSAGE value="refactoring" />
-    <MESSAGE value="adding nav header" />
-    <MESSAGE value="moving files" />
-    <MESSAGE value="adding watch" />
-    <MESSAGE value="looking to add css expand" />
-    <MESSAGE value="sidebar changes" />
-    <MESSAGE value="adding tooltip to expand" />
-    <MESSAGE value="adding new methods, fixing page" />
-    <MESSAGE value="fix typo" />
-    <MESSAGE value="wip adding confirm" />
-    <MESSAGE value="adding delete all buttons" />
-    <MESSAGE value="refactoring rego journey to provide more data" />
-    <MESSAGE value="small change for consistent config on transitions" />
-    <MESSAGE value="wip" />
-    <MESSAGE value="renaming folder" />
-    <MESSAGE value="adding component" />
-    <MESSAGE value="adding accordion" />
-    <MESSAGE value="lints + format" />
-    <MESSAGE value="spacing adding" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="adding dropdown menu" />
     <MESSAGE value="wip adding playwright" />
     <MESSAGE value="adding txn" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding txn" />
+    <MESSAGE value="import github" />
+    <MESSAGE value="adding test + refactoring" />
+    <MESSAGE value="clean" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="fixing dep list" />
+    <MESSAGE value="adding tests" />
+    <MESSAGE value="adding test" />
+    <MESSAGE value="wip adding filter" />
+    <MESSAGE value="adding base filter" />
+    <MESSAGE value="adding filtering by tag" />
+    <MESSAGE value="adding 3 sec timeout" />
+    <MESSAGE value="adding tag filter" />
+    <MESSAGE value="refactoring to use common component" />
+    <MESSAGE value="adding component to dashboard" />
+    <MESSAGE value="fixing param miss match" />
+    <MESSAGE value="remove excess log" />
+    <MESSAGE value="fixing db init" />
+    <MESSAGE value="fixing folder typo" />
+    <MESSAGE value="adding node" />
+    <MESSAGE value="adding deps" />
+    <MESSAGE value="missing dep" />
+    <option name="LAST_COMMIT_MESSAGE" value="missing dep" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

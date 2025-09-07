@@ -45,5 +45,5 @@ func resolveDBPath(filePath string) string {
 		return filePath
 	}
 
-	return path.Join(filePath, dbName)
+	return path.Join(filePath, dbName, "?_busy_timeout=3000")
 }

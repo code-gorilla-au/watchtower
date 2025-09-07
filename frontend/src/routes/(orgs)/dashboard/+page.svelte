@@ -2,6 +2,7 @@
 	import type { PageProps } from "./$types";
 	import { PageTitle } from "$components/page_title";
 	import { PRGrid, ProductsGrid } from "$components/products";
+	import { GridHeader } from "$components/grid/index.js";
 	import { onDestroy, onMount } from "svelte";
 	import { TIME_TWO_MINUTES } from "$lib/watchtower/types";
 	import { invalidateAll } from "$app/navigation";
@@ -16,7 +17,7 @@
 	let prs = $derived(data.prs);
 	let securities = $derived(data.securities);
 
-	let intervalPoll: number;
+	let intervalPoll: NodeJS.Timeout | undefined;
 
 	let timeSince = new TimeSince(new SvelteDate());
 
@@ -44,9 +45,11 @@
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
 		<Accordion.Item value="security">
 			<Accordion.Trigger class="text-left">
-				<h3 class="text-xl text-muted-foreground">
-					Security Vulnerability ({securities.length})
-				</h3>
+				<GridHeader
+					data={securities}
+					tagField="repository_name"
+					title="Security Vulnerabilities"
+				/>
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<SecurityGrid {securities} />
@@ -54,7 +57,7 @@
 		</Accordion.Item>
 		<Accordion.Item value="prs">
 			<Accordion.Trigger class="text-left">
-				<h3 class="text-xl text-muted-foreground">Pull Requests ({prs.length})</h3>
+				<GridHeader data={prs} tagField="repository_name" title="Pull Requests" />
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<PRGrid {prs} />

@@ -6,7 +6,7 @@ import (
 	"time"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/logging"
 )
 
 type CreateOrgParams struct {

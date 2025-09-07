@@ -6,9 +6,9 @@ package watchtower
 import (
 	"context"
 	"database/sql"
-	"github.com/code-gorilla-au/go-toolbox/github"
 	"sync"
 	"watchtower/internal/database"
+	"watchtower/internal/github"
 )
 
 // Ensure, that ghClientMock does implement ghClient.

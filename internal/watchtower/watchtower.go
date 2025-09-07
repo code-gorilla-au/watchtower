@@ -6,8 +6,8 @@ import (
 	"strings"
 	"watchtower/internal/database"
 
-	"github.com/code-gorilla-au/go-toolbox/github"
-	"github.com/code-gorilla-au/go-toolbox/logging"
+	"watchtower/internal/github"
+	"watchtower/internal/logging"
 )
 
 // NewService creates and returns a new Service instance with the provided database queries.

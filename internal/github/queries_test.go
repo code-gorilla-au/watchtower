@@ -1,49 +1,11 @@
+package github
 
+import (
+	"testing"
 
-## SQLC queries
-
-When writing SQL queries ensure you annotate your queries
-
-following are examples of correct annotations
-
-```sql
--- name: GetAuthor :one
-SELECT * FROM authors
-WHERE id = ? LIMIT 1;
-
--- name: ListAuthors :many
-SELECT * FROM authors
-ORDER BY name;
-
--- name: CreateAuthor :one
-INSERT INTO authors (
-  name, bio
-) VALUES (
-  ?, ?
+	"github.com/code-gorilla-au/odize"
 )
-RETURNING *;
 
--- name: UpdateAuthor :exec
-UPDATE authors
-set name = ?,
-bio = ?
-WHERE id = ?;
-
--- name: DeleteAuthor :exec
-DELETE FROM authors
-WHERE id = ?;
-```
-
-## Frontend
-
-## Golang
-
-- use Odize as the test framework
-- Do not add useless comments
-
-writing test example
-
-```golang
 func TestQueries(t *testing.T) {
 	group := odize.NewGroup(t, nil)
 
@@ -127,27 +89,3 @@ func TestQueries(t *testing.T) {
 
 	odize.AssertNoError(t, err)
 }
-
-
-func TestService_GetAllOrganisations(t *testing.T) {
-    group := odize.NewGroup(t, nil)
-    
-    var s *Service
-    
-    ctx := context.Background()
-    
-    group.BeforeEach(func() {
-        s = NewService(ctx, _testDB, _testTxnDB)
-    })
-    
-    err := group.
-        Test("should return all existing organisations", func(t *testing.T) {
-        initialOrgs, err := s.GetAllOrganisations()
-        odize.AssertNoError(t, err)
-        initialCount := len(initialOrgs)
-        odize.AssertTrue(t, initialCount > 0)
-        }).
-    Run()
-    odize.AssertNoError(t, err)
-}
-```
