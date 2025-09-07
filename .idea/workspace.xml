@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing folder typo">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/pull_request.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pull_request.yaml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding deps">
+      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,8 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding accordion" />
-    <MESSAGE value="lints + format" />
     <MESSAGE value="spacing adding" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="adding dropdown menu" />
@@ -206,7 +204,9 @@
     <MESSAGE value="remove excess log" />
     <MESSAGE value="fixing db init" />
     <MESSAGE value="fixing folder typo" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing folder typo" />
+    <MESSAGE value="adding node" />
+    <MESSAGE value="adding deps" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding deps" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
