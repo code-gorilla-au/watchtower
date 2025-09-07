@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding deps">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="missing dep">
       <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -181,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="spacing adding" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="adding dropdown menu" />
     <MESSAGE value="wip adding playwright" />
@@ -206,7 +205,8 @@
     <MESSAGE value="fixing folder typo" />
     <MESSAGE value="adding node" />
     <MESSAGE value="adding deps" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding deps" />
+    <MESSAGE value="missing dep" />
+    <option name="LAST_COMMIT_MESSAGE" value="missing dep" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
