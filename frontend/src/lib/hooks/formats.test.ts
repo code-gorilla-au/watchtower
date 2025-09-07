@@ -97,14 +97,19 @@ describe("Hooks: formats", () => {
 		});
 
 		it("should truncate very long string correctly", () => {
-			const veryLongString = "This is a very long string that definitely exceeds the maximum length of 100 characters and should be truncated with ellipsis at the end to indicate that there is more content that has been cut off";
+			const veryLongString =
+				"This is a very long string that definitely exceeds the maximum length of 100 characters and should be truncated with ellipsis at the end to indicate that there is more content that has been cut off";
 			const result = truncate(veryLongString);
-			expect(result).toBe("This is a very long string that definitely exceeds the maximum length of 100 characters and should b...");
+			expect(result).toBe(
+				"This is a very long string that definitely exceeds the maximum length of 100 characters and should b..."
+			);
 			expect(result.length).toBe(103); // 100 chars + "..."
 		});
 
 		it("should preserve special characters in truncated string", () => {
-			const stringWithSpecialChars = "Special chars: @#$%^&*()_+-={}[]|;:'\",.<>?/~`".repeat(3);
+			const stringWithSpecialChars = "Special chars: @#$%^&*()_+-={}[]|;:'\",.<>?/~`".repeat(
+				3
+			);
 			const result = truncate(stringWithSpecialChars);
 			expect(result.endsWith("...")).toBe(true);
 			expect(result.length).toBe(103);
