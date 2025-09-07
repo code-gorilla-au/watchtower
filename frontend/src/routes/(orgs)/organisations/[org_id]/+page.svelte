@@ -13,7 +13,8 @@
 			id: formData.id,
 			friendlyName: formData.friendly_name,
 			owner: formData.namespace,
-			defaultOrg: formData.default_org
+			defaultOrg: formData.default_org,
+			description: formData.description
 		});
 
 		await goto("/");

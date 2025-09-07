@@ -177,6 +177,8 @@ func (o organisationService) Update(ctx context.Context, params UpdateOrgParams)
 	logger := logging.FromContext(ctx)
 	logger.Debug("Updating organisation", "id", params.ID)
 
+	logger.Info("Updating organisation", "params", params)
+
 	var model database.Organisation
 	var err error
 
