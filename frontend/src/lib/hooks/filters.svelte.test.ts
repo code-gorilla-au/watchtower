@@ -43,6 +43,7 @@ describe("filters", () => {
 			expect(filter.data).toEqual([2, 3]);
 		});
 	});
+
 	describe("TagsFilter()", () => {
 		const validTags = [
 			{ name: "hello", value: "world" },
@@ -86,6 +87,37 @@ describe("filters", () => {
 			expect(filter.data).toEqual([
 				{ name: "hello", value: "world" },
 				{ name: "baz", value: "world" }
+			]);
+		});
+
+		it("should filter based on multiple tags", () => {
+			const multiTags = [
+				{
+					name: "hello",
+					value: "world",
+					tag: "tag1"
+				},
+				{
+					name: "bin",
+					value: "baz",
+					tag: "tag2"
+				},
+				{
+					name: "hawk",
+					value: "flash",
+					tag: "tag1"
+				}
+			];
+
+			const filter = new TagsFilter(multiTags, ["value", "tag"]);
+
+			filter.filterByTag("tag2");
+			expect(filter.data).toEqual([
+				{
+					name: "bin",
+					value: "baz",
+					tag: "tag2"
+				}
 			]);
 		});
 	});

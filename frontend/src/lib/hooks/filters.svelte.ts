@@ -81,18 +81,20 @@ export class SimpleFilter<T> {
 	}
 }
 
+type TagField<T> = FilterTag<T> | FilterTag<T>[];
+
 /**
  * Represents a filter that can be used to filter data by specific tags.
  */
 export class TagsFilter<T extends object> {
 	#filter: SimpleFilter<T>;
 	#currentTag?: FilterTagValue<T>;
-	readonly #tagField: FilterTag<T>;
+	readonly #tagField: TagField<T>;
 	readonly tags: FilterTagValue<T>[];
 	readonly currentTag: FilterTagValue<T> | undefined;
 	readonly data: T[];
 
-	constructor(data: T[], tagField: FilterTag<T>) {
+	constructor(data: T[], tagField: TagField<T>) {
 		this.#currentTag = $state(undefined);
 		this.#tagField = tagField;
 		this.tags = $state(this.generateTags(tagField, data));
@@ -112,11 +114,20 @@ export class TagsFilter<T extends object> {
 		this.#filter.clear();
 	}
 
-	private generateTags(tag: FilterTag<T>, data: T[]) {
+	private generateTags(tags: TagField<T>, data: T[]) {
 		const set = new SvelteSet<FilterTagValue<T>>();
+
 		for (const item of data) {
-			const value = item[tag];
-			set.add(value);
+			if (!Array.isArray(tags)) {
+				const value = item[tags];
+				set.add(value);
+				continue;
+			}
+
+			for (const tag of tags) {
+				const value = item[tag];
+				set.add(value);
+			}
 		}
 
 		return Array.from(set);
@@ -127,6 +138,16 @@ export class TagsFilter<T extends object> {
 			return true;
 		}
 
-		return item[this.#tagField] === this.#currentTag;
+		if (!Array.isArray(this.#tagField)) {
+			return item[this.#tagField] === this.#currentTag;
+		}
+
+		for (const tag of this.#tagField) {
+			if (item[tag] === this.#currentTag) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
