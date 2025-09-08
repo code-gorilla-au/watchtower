@@ -9,7 +9,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$design: "./src/lib/design",
+			$design: "./src/app.css",
 			$components: "./src/lib/components"
 		},
 		prerender: {

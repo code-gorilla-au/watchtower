@@ -352,7 +352,7 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 }
 
 const getPullRequestByProductIDAndState = `-- name: GetPullRequestByProductIDAndState :many
-SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at
+SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at, r.topic as tag, p.name as product_name
 FROM pull_requests pr
          JOIN repositories r ON r.name = pr.repository_name
          JOIN products p ON p.id = ?
@@ -369,15 +369,30 @@ type GetPullRequestByProductIDAndStateParams struct {
 	State string
 }
 
-func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg GetPullRequestByProductIDAndStateParams) ([]PullRequest, error) {
+type GetPullRequestByProductIDAndStateRow struct {
+	ID             int64
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       sql.NullInt64
+	CreatedAt      int64
+	UpdatedAt      int64
+	Tag            string
+	ProductName    string
+}
+
+func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg GetPullRequestByProductIDAndStateParams) ([]GetPullRequestByProductIDAndStateRow, error) {
 	rows, err := q.db.QueryContext(ctx, getPullRequestByProductIDAndState, arg.ID, arg.State)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []PullRequest
+	var items []GetPullRequestByProductIDAndStateRow
 	for rows.Next() {
-		var i PullRequest
+		var i GetPullRequestByProductIDAndStateRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.ExternalID,
@@ -389,6 +404,8 @@ func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg Get
 			&i.MergedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Tag,
+			&i.ProductName,
 		); err != nil {
 			return nil, err
 		}
@@ -404,7 +421,7 @@ func (q *Queries) GetPullRequestByProductIDAndState(ctx context.Context, arg Get
 }
 
 const getPullRequestsByOrganisationAndState = `-- name: GetPullRequestsByOrganisationAndState :many
-SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at
+SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at, r.topic as tag, p.name as product_name
 FROM pull_requests pr
          JOIN repositories r ON r.name = pr.repository_name
          JOIN product_organisations po
@@ -423,15 +440,30 @@ type GetPullRequestsByOrganisationAndStateParams struct {
 	State          string
 }
 
-func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg GetPullRequestsByOrganisationAndStateParams) ([]PullRequest, error) {
+type GetPullRequestsByOrganisationAndStateRow struct {
+	ID             int64
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       sql.NullInt64
+	CreatedAt      int64
+	UpdatedAt      int64
+	Tag            string
+	ProductName    string
+}
+
+func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg GetPullRequestsByOrganisationAndStateParams) ([]GetPullRequestsByOrganisationAndStateRow, error) {
 	rows, err := q.db.QueryContext(ctx, getPullRequestsByOrganisationAndState, arg.OrganisationID, arg.State)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []PullRequest
+	var items []GetPullRequestsByOrganisationAndStateRow
 	for rows.Next() {
-		var i PullRequest
+		var i GetPullRequestsByOrganisationAndStateRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.ExternalID,
@@ -443,6 +475,8 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 			&i.MergedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Tag,
+			&i.ProductName,
 		); err != nil {
 			return nil, err
 		}
@@ -458,7 +492,7 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 }
 
 const getReposByProductID = `-- name: GetReposByProductID :many
-SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at
+SELECT r.id, r.name, r.url, r.topic, r.owner, r.created_at, r.updated_at, p.name as product_name
 FROM repositories r
          JOIN products p ON p.id = ?
     AND JSON_VALID(p.tags)
@@ -467,15 +501,26 @@ FROM repositories r
                 WHERE JSON_EACH.value = r.topic)
 `
 
-func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Repository, error) {
+type GetReposByProductIDRow struct {
+	ID          int64
+	Name        string
+	Url         string
+	Topic       string
+	Owner       string
+	CreatedAt   int64
+	UpdatedAt   int64
+	ProductName string
+}
+
+func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetReposByProductIDRow, error) {
 	rows, err := q.db.QueryContext(ctx, getReposByProductID, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Repository
+	var items []GetReposByProductIDRow
 	for rows.Next() {
-		var i Repository
+		var i GetReposByProductIDRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
@@ -484,6 +529,7 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Reposito
 			&i.Owner,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.ProductName,
 		); err != nil {
 			return nil, err
 		}
@@ -499,7 +545,7 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]Reposito
 }
 
 const getSecurityByOrganisationAndState = `-- name: GetSecurityByOrganisationAndState :many
-SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN product_organisations po
@@ -518,15 +564,29 @@ type GetSecurityByOrganisationAndStateParams struct {
 	State          string
 }
 
-func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg GetSecurityByOrganisationAndStateParams) ([]Security, error) {
+type GetSecurityByOrganisationAndStateRow struct {
+	ID             int64
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	CreatedAt      int64
+	UpdatedAt      int64
+	Tag            string
+	ProductName    string
+}
+
+func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg GetSecurityByOrganisationAndStateParams) ([]GetSecurityByOrganisationAndStateRow, error) {
 	rows, err := q.db.QueryContext(ctx, getSecurityByOrganisationAndState, arg.OrganisationID, arg.State)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Security
+	var items []GetSecurityByOrganisationAndStateRow
 	for rows.Next() {
-		var i Security
+		var i GetSecurityByOrganisationAndStateRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.ExternalID,
@@ -537,6 +597,8 @@ func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg Get
 			&i.PatchedVersion,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Tag,
+			&i.ProductName,
 		); err != nil {
 			return nil, err
 		}
@@ -552,7 +614,7 @@ func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg Get
 }
 
 const getSecurityByProductIDAndState = `-- name: GetSecurityByProductIDAndState :many
-SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN products p ON p.id = ?
@@ -569,15 +631,29 @@ type GetSecurityByProductIDAndStateParams struct {
 	State string
 }
 
-func (q *Queries) GetSecurityByProductIDAndState(ctx context.Context, arg GetSecurityByProductIDAndStateParams) ([]Security, error) {
+type GetSecurityByProductIDAndStateRow struct {
+	ID             int64
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	CreatedAt      int64
+	UpdatedAt      int64
+	Tag            string
+	ProductName    string
+}
+
+func (q *Queries) GetSecurityByProductIDAndState(ctx context.Context, arg GetSecurityByProductIDAndStateParams) ([]GetSecurityByProductIDAndStateRow, error) {
 	rows, err := q.db.QueryContext(ctx, getSecurityByProductIDAndState, arg.ID, arg.State)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Security
+	var items []GetSecurityByProductIDAndStateRow
 	for rows.Next() {
-		var i Security
+		var i GetSecurityByProductIDAndStateRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.ExternalID,
@@ -588,6 +664,8 @@ func (q *Queries) GetSecurityByProductIDAndState(ctx context.Context, arg GetSec
 			&i.PatchedVersion,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Tag,
+			&i.ProductName,
 		); err != nil {
 			return nil, err
 		}

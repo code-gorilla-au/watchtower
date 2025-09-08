@@ -106,6 +106,19 @@ tasks:
     dir: frontend
     cmds:
       - npm run format
+      - npm run lint:fix
+
+  frontend-test:
+    desc: Run frontend unit tests.
+    dir: frontend
+    cmds:
+      - npm run test:coverage
+
+  frontend-watch:
+    desc: Run frontend unit tests in watch mode.
+    dir: frontend
+    cmds:
+      - npm run test:unit
 
   frontend-lint:
     desc: Run frontend linters.
@@ -122,7 +135,7 @@ tasks:
   frontend-ci:
     desc: Run frontend ci tasks.
     dir: frontend
-    deps: [frontend-lint, frontend-check]
+    deps: [frontend-lint, frontend-check, frontend-test]
 
   reset:
     desc: Reset the application.

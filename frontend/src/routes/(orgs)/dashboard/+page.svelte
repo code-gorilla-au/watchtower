@@ -45,11 +45,7 @@
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
 		<Accordion.Item value="security">
 			<Accordion.Trigger class="text-left">
-				<GridHeader
-					data={securities}
-					tagField="repository_name"
-					title="Security Vulnerabilities"
-				/>
+				<GridHeader data={securities} tagField="tag" title="Security Vulnerabilities" />
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<SecurityGrid {securities} />
@@ -57,7 +53,7 @@
 		</Accordion.Item>
 		<Accordion.Item value="prs">
 			<Accordion.Trigger class="text-left">
-				<GridHeader data={prs} tagField="repository_name" title="Pull Requests" />
+				<GridHeader data={prs} tagField="tag" title="Pull Requests" />
 			</Accordion.Trigger>
 			<Accordion.Content class="mb-5">
 				<PRGrid {prs} />

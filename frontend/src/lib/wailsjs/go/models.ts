@@ -94,6 +94,8 @@ export namespace watchtower {
 	    url: string;
 	    state: string;
 	    author: string;
+	    tag: string;
+	    product_name: string;
 	    // Go type: time
 	    merged_at: any;
 	    // Go type: time
@@ -114,6 +116,8 @@ export namespace watchtower {
 	        this.url = source["url"];
 	        this.state = source["state"];
 	        this.author = source["author"];
+	        this.tag = source["tag"];
+	        this.product_name = source["product_name"];
 	        this.merged_at = this.convertValues(source["merged_at"], null);
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);
@@ -143,6 +147,7 @@ export namespace watchtower {
 	    url: string;
 	    topic: string;
 	    owner: string;
+	    product_name: string;
 	    // Go type: time
 	    created_at: any;
 	    // Go type: time
@@ -159,6 +164,7 @@ export namespace watchtower {
 	        this.url = source["url"];
 	        this.topic = source["topic"];
 	        this.owner = source["owner"];
+	        this.product_name = source["product_name"];
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);
 	    }
@@ -189,6 +195,8 @@ export namespace watchtower {
 	    state: string;
 	    severity: string;
 	    patched_version: string;
+	    tag: string;
+	    product_name: string;
 	    // Go type: time
 	    created_at: any;
 	    // Go type: time
@@ -207,6 +215,8 @@ export namespace watchtower {
 	        this.state = source["state"];
 	        this.severity = source["severity"];
 	        this.patched_version = source["patched_version"];
+	        this.tag = source["tag"];
+	        this.product_name = source["product_name"];
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);
 	    }

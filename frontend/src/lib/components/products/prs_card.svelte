@@ -32,20 +32,36 @@
 	</CardHeader>
 
 	<div class="px-3">
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Author</p>
+		<div class="card-row">
+			<p class="row-label">Author</p>
 			<p>{pr.author}</p>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Status</p>
+		<div class="card-row">
+			<p class="row-label">Status</p>
 			<p class="lowercase">{pr.state}</p>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Created</p>
+		<div class="card-row">
+			<p class="row-label">Created</p>
 			<p>{formatDate(pr.created_at)}</p>
 		</div>
+		<div class="card-row">
+			<p class="row-label">Repository</p>
+			<p class="lowercase">{pr.repository_name}</p>
+		</div>
 		<div>
-			<Badge>{pr.repository_name}</Badge>
+			<Badge>{pr.tag}</Badge>
 		</div>
 	</div>
 </Card>
+
+<style lang="postcss">
+	@reference "$design";
+
+	.card-row {
+		@apply mb-2 flex;
+	}
+
+	.row-label {
+		@apply w-1/2 text-xs text-muted-foreground;
+	}
+</style>

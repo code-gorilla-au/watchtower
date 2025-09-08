@@ -17,12 +17,12 @@ type ghClient interface {
 
 type RepoStore interface {
 	CreateRepo(ctx context.Context, arg database.CreateRepoParams) (database.Repository, error)
-	GetReposByProductID(ctx context.Context, productID int64) ([]database.Repository, error)
-	GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.PullRequest, error)
-	GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.PullRequest, error)
+	GetReposByProductID(ctx context.Context, id int64) ([]database.GetReposByProductIDRow, error)
+	GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error)
+	GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error)
 	CreatePullRequest(ctx context.Context, arg database.CreatePullRequestParams) (database.PullRequest, error)
-	GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.Security, error)
-	GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.Security, error)
+	GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error)
+	GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error)
 	CreateSecurity(ctx context.Context, arg database.CreateSecurityParams) (database.Security, error)
 }
 

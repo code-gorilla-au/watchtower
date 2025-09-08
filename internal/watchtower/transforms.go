@@ -78,7 +78,7 @@ func ToProductDTO(m database.Product) ProductDTO {
 	}
 }
 
-func ToPullRequestDTO(m database.PullRequest) PullRequestDTO {
+func ProductToPullRequestDTO(m database.GetPullRequestByProductIDAndStateRow) PullRequestDTO {
 	return PullRequestDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -87,34 +87,63 @@ func ToPullRequestDTO(m database.PullRequest) PullRequestDTO {
 		URL:            m.Url,
 		State:          m.State,
 		Author:         m.Author,
+		Tag:            m.Tag,
+		ProductName:    m.ProductName,
 		MergedAt:       toTime(m.MergedAt.Int64),
 		CreatedAt:      toTime(m.CreatedAt),
 		UpdatedAt:      toTime(m.UpdatedAt),
 	}
 }
 
-func toPullRequestDTOs(models []database.PullRequest) []PullRequestDTO {
+func toPullRequestDTOs(models []database.GetPullRequestByProductIDAndStateRow) []PullRequestDTO {
 	result := make([]PullRequestDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, ToPullRequestDTO(m))
+		result = append(result, ProductToPullRequestDTO(m))
 	}
 
 	return result
 }
 
-func ToRepositoryDTO(m database.Repository) RepositoryDTO {
-	return RepositoryDTO{
-		ID:        m.ID,
-		Name:      m.Name,
-		URL:       m.Url,
-		Topic:     m.Topic,
-		Owner:     m.Owner,
-		CreatedAt: toTime(m.CreatedAt),
-		UpdatedAt: toTime(m.UpdatedAt),
+func OrgToPullRequestDTO(m database.GetPullRequestsByOrganisationAndStateRow) PullRequestDTO {
+	return PullRequestDTO{
+		ID:             m.ID,
+		ExternalID:     m.ExternalID,
+		Title:          m.Title,
+		RepositoryName: m.RepositoryName,
+		URL:            m.Url,
+		State:          m.State,
+		Author:         m.Author,
+		Tag:            m.Tag,
+		ProductName:    m.ProductName,
+		MergedAt:       toTime(m.MergedAt.Int64),
+		CreatedAt:      toTime(m.CreatedAt),
+		UpdatedAt:      toTime(m.UpdatedAt),
 	}
 }
 
-func ToSecurityDTO(m database.Security) SecurityDTO {
+func orgToPullRequestDTOs(models []database.GetPullRequestsByOrganisationAndStateRow) []PullRequestDTO {
+	result := make([]PullRequestDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, OrgToPullRequestDTO(m))
+	}
+
+	return result
+}
+
+func ToRepositoryDTO(m database.GetReposByProductIDRow) RepositoryDTO {
+	return RepositoryDTO{
+		ID:          m.ID,
+		Name:        m.Name,
+		URL:         m.Url,
+		Topic:       m.Topic,
+		Owner:       m.Owner,
+		ProductName: m.ProductName,
+		CreatedAt:   toTime(m.CreatedAt),
+		UpdatedAt:   toTime(m.UpdatedAt),
+	}
+}
+
+func ToSecurityDTO(m database.GetSecurityByProductIDAndStateRow) SecurityDTO {
 	return SecurityDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -123,15 +152,42 @@ func ToSecurityDTO(m database.Security) SecurityDTO {
 		State:          m.State,
 		Severity:       m.Severity,
 		PatchedVersion: m.PatchedVersion,
+		Tag:            m.Tag,
+		ProductName:    m.ProductName,
 		CreatedAt:      toTime(m.CreatedAt),
 		UpdatedAt:      toTime(m.UpdatedAt),
 	}
 }
 
-func ToSecurityDTOs(models []database.Security) []SecurityDTO {
+func ToSecurityDTOs(models []database.GetSecurityByProductIDAndStateRow) []SecurityDTO {
 	result := make([]SecurityDTO, 0, len(models))
 	for _, m := range models {
 		result = append(result, ToSecurityDTO(m))
+	}
+
+	return result
+}
+
+func OrgToSecurityDTO(m database.GetSecurityByOrganisationAndStateRow) SecurityDTO {
+	return SecurityDTO{
+		ID:             m.ID,
+		ExternalID:     m.ExternalID,
+		RepositoryName: m.RepositoryName,
+		PackageName:    m.PackageName,
+		State:          m.State,
+		Severity:       m.Severity,
+		PatchedVersion: m.PatchedVersion,
+		Tag:            m.Tag,
+		ProductName:    m.ProductName,
+		CreatedAt:      toTime(m.CreatedAt),
+		UpdatedAt:      toTime(m.UpdatedAt),
+	}
+}
+
+func OrgToSecurityDTOs(models []database.GetSecurityByOrganisationAndStateRow) []SecurityDTO {
+	result := make([]SecurityDTO, 0, len(models))
+	for _, m := range models {
+		result = append(result, OrgToSecurityDTO(m))
 	}
 
 	return result

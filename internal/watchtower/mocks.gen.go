@@ -172,19 +172,19 @@ var _ RepoStore = &RepoStoreMock{}
 //			CreateSecurityFunc: func(ctx context.Context, arg database.CreateSecurityParams) (database.Security, error) {
 //				panic("mock out the CreateSecurity method")
 //			},
-//			GetPullRequestByProductIDAndStateFunc: func(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.PullRequest, error) {
+//			GetPullRequestByProductIDAndStateFunc: func(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error) {
 //				panic("mock out the GetPullRequestByProductIDAndState method")
 //			},
-//			GetPullRequestsByOrganisationAndStateFunc: func(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.PullRequest, error) {
+//			GetPullRequestsByOrganisationAndStateFunc: func(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error) {
 //				panic("mock out the GetPullRequestsByOrganisationAndState method")
 //			},
-//			GetReposByProductIDFunc: func(ctx context.Context, productID int64) ([]database.Repository, error) {
+//			GetReposByProductIDFunc: func(ctx context.Context, id int64) ([]database.GetReposByProductIDRow, error) {
 //				panic("mock out the GetReposByProductID method")
 //			},
-//			GetSecurityByOrganisationAndStateFunc: func(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.Security, error) {
+//			GetSecurityByOrganisationAndStateFunc: func(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error) {
 //				panic("mock out the GetSecurityByOrganisationAndState method")
 //			},
-//			GetSecurityByProductIDAndStateFunc: func(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.Security, error) {
+//			GetSecurityByProductIDAndStateFunc: func(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error) {
 //				panic("mock out the GetSecurityByProductIDAndState method")
 //			},
 //		}
@@ -204,19 +204,19 @@ type RepoStoreMock struct {
 	CreateSecurityFunc func(ctx context.Context, arg database.CreateSecurityParams) (database.Security, error)
 
 	// GetPullRequestByProductIDAndStateFunc mocks the GetPullRequestByProductIDAndState method.
-	GetPullRequestByProductIDAndStateFunc func(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.PullRequest, error)
+	GetPullRequestByProductIDAndStateFunc func(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error)
 
 	// GetPullRequestsByOrganisationAndStateFunc mocks the GetPullRequestsByOrganisationAndState method.
-	GetPullRequestsByOrganisationAndStateFunc func(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.PullRequest, error)
+	GetPullRequestsByOrganisationAndStateFunc func(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error)
 
 	// GetReposByProductIDFunc mocks the GetReposByProductID method.
-	GetReposByProductIDFunc func(ctx context.Context, productID int64) ([]database.Repository, error)
+	GetReposByProductIDFunc func(ctx context.Context, id int64) ([]database.GetReposByProductIDRow, error)
 
 	// GetSecurityByOrganisationAndStateFunc mocks the GetSecurityByOrganisationAndState method.
-	GetSecurityByOrganisationAndStateFunc func(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.Security, error)
+	GetSecurityByOrganisationAndStateFunc func(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error)
 
 	// GetSecurityByProductIDAndStateFunc mocks the GetSecurityByProductIDAndState method.
-	GetSecurityByProductIDAndStateFunc func(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.Security, error)
+	GetSecurityByProductIDAndStateFunc func(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -259,8 +259,8 @@ type RepoStoreMock struct {
 		GetReposByProductID []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
-			// ProductID is the productID argument value.
-			ProductID int64
+			// ID is the id argument value.
+			ID int64
 		}
 		// GetSecurityByOrganisationAndState holds details about calls to the GetSecurityByOrganisationAndState method.
 		GetSecurityByOrganisationAndState []struct {
@@ -408,7 +408,7 @@ func (mock *RepoStoreMock) CreateSecurityCalls() []struct {
 }
 
 // GetPullRequestByProductIDAndState calls GetPullRequestByProductIDAndStateFunc.
-func (mock *RepoStoreMock) GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.PullRequest, error) {
+func (mock *RepoStoreMock) GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error) {
 	callInfo := struct {
 		Ctx context.Context
 		Arg database.GetPullRequestByProductIDAndStateParams
@@ -421,10 +421,10 @@ func (mock *RepoStoreMock) GetPullRequestByProductIDAndState(ctx context.Context
 	mock.lockGetPullRequestByProductIDAndState.Unlock()
 	if mock.GetPullRequestByProductIDAndStateFunc == nil {
 		var (
-			pullRequestsOut []database.PullRequest
-			errOut          error
+			getPullRequestByProductIDAndStateRowsOut []database.GetPullRequestByProductIDAndStateRow
+			errOut                                   error
 		)
-		return pullRequestsOut, errOut
+		return getPullRequestByProductIDAndStateRowsOut, errOut
 	}
 	return mock.GetPullRequestByProductIDAndStateFunc(ctx, arg)
 }
@@ -448,7 +448,7 @@ func (mock *RepoStoreMock) GetPullRequestByProductIDAndStateCalls() []struct {
 }
 
 // GetPullRequestsByOrganisationAndState calls GetPullRequestsByOrganisationAndStateFunc.
-func (mock *RepoStoreMock) GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.PullRequest, error) {
+func (mock *RepoStoreMock) GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error) {
 	callInfo := struct {
 		Ctx context.Context
 		Arg database.GetPullRequestsByOrganisationAndStateParams
@@ -461,10 +461,10 @@ func (mock *RepoStoreMock) GetPullRequestsByOrganisationAndState(ctx context.Con
 	mock.lockGetPullRequestsByOrganisationAndState.Unlock()
 	if mock.GetPullRequestsByOrganisationAndStateFunc == nil {
 		var (
-			pullRequestsOut []database.PullRequest
-			errOut          error
+			getPullRequestsByOrganisationAndStateRowsOut []database.GetPullRequestsByOrganisationAndStateRow
+			errOut                                       error
 		)
-		return pullRequestsOut, errOut
+		return getPullRequestsByOrganisationAndStateRowsOut, errOut
 	}
 	return mock.GetPullRequestsByOrganisationAndStateFunc(ctx, arg)
 }
@@ -488,25 +488,25 @@ func (mock *RepoStoreMock) GetPullRequestsByOrganisationAndStateCalls() []struct
 }
 
 // GetReposByProductID calls GetReposByProductIDFunc.
-func (mock *RepoStoreMock) GetReposByProductID(ctx context.Context, productID int64) ([]database.Repository, error) {
+func (mock *RepoStoreMock) GetReposByProductID(ctx context.Context, id int64) ([]database.GetReposByProductIDRow, error) {
 	callInfo := struct {
-		Ctx       context.Context
-		ProductID int64
+		Ctx context.Context
+		ID  int64
 	}{
-		Ctx:       ctx,
-		ProductID: productID,
+		Ctx: ctx,
+		ID:  id,
 	}
 	mock.lockGetReposByProductID.Lock()
 	mock.calls.GetReposByProductID = append(mock.calls.GetReposByProductID, callInfo)
 	mock.lockGetReposByProductID.Unlock()
 	if mock.GetReposByProductIDFunc == nil {
 		var (
-			repositorysOut []database.Repository
-			errOut         error
+			getReposByProductIDRowsOut []database.GetReposByProductIDRow
+			errOut                     error
 		)
-		return repositorysOut, errOut
+		return getReposByProductIDRowsOut, errOut
 	}
-	return mock.GetReposByProductIDFunc(ctx, productID)
+	return mock.GetReposByProductIDFunc(ctx, id)
 }
 
 // GetReposByProductIDCalls gets all the calls that were made to GetReposByProductID.
@@ -514,12 +514,12 @@ func (mock *RepoStoreMock) GetReposByProductID(ctx context.Context, productID in
 //
 //	len(mockedRepoStore.GetReposByProductIDCalls())
 func (mock *RepoStoreMock) GetReposByProductIDCalls() []struct {
-	Ctx       context.Context
-	ProductID int64
+	Ctx context.Context
+	ID  int64
 } {
 	var calls []struct {
-		Ctx       context.Context
-		ProductID int64
+		Ctx context.Context
+		ID  int64
 	}
 	mock.lockGetReposByProductID.RLock()
 	calls = mock.calls.GetReposByProductID
@@ -528,7 +528,7 @@ func (mock *RepoStoreMock) GetReposByProductIDCalls() []struct {
 }
 
 // GetSecurityByOrganisationAndState calls GetSecurityByOrganisationAndStateFunc.
-func (mock *RepoStoreMock) GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.Security, error) {
+func (mock *RepoStoreMock) GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error) {
 	callInfo := struct {
 		Ctx context.Context
 		Arg database.GetSecurityByOrganisationAndStateParams
@@ -541,10 +541,10 @@ func (mock *RepoStoreMock) GetSecurityByOrganisationAndState(ctx context.Context
 	mock.lockGetSecurityByOrganisationAndState.Unlock()
 	if mock.GetSecurityByOrganisationAndStateFunc == nil {
 		var (
-			securitysOut []database.Security
-			errOut       error
+			getSecurityByOrganisationAndStateRowsOut []database.GetSecurityByOrganisationAndStateRow
+			errOut                                   error
 		)
-		return securitysOut, errOut
+		return getSecurityByOrganisationAndStateRowsOut, errOut
 	}
 	return mock.GetSecurityByOrganisationAndStateFunc(ctx, arg)
 }
@@ -568,7 +568,7 @@ func (mock *RepoStoreMock) GetSecurityByOrganisationAndStateCalls() []struct {
 }
 
 // GetSecurityByProductIDAndState calls GetSecurityByProductIDAndStateFunc.
-func (mock *RepoStoreMock) GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.Security, error) {
+func (mock *RepoStoreMock) GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error) {
 	callInfo := struct {
 		Ctx context.Context
 		Arg database.GetSecurityByProductIDAndStateParams
@@ -581,10 +581,10 @@ func (mock *RepoStoreMock) GetSecurityByProductIDAndState(ctx context.Context, a
 	mock.lockGetSecurityByProductIDAndState.Unlock()
 	if mock.GetSecurityByProductIDAndStateFunc == nil {
 		var (
-			securitysOut []database.Security
-			errOut       error
+			getSecurityByProductIDAndStateRowsOut []database.GetSecurityByProductIDAndStateRow
+			errOut                                error
 		)
-		return securitysOut, errOut
+		return getSecurityByProductIDAndStateRowsOut, errOut
 	}
 	return mock.GetSecurityByProductIDAndStateFunc(ctx, arg)
 }
