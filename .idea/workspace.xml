@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding docs, fixing pipe, adding tasks">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/interfaces.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/interfaces.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/mocks.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/mocks.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/repo_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/repo_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/types.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update data model">
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/prs_card.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding dropdown menu" />
     <MESSAGE value="wip adding playwright" />
     <MESSAGE value="adding txn" />
     <MESSAGE value="import github" />
@@ -213,7 +205,8 @@
     <MESSAGE value="adding deps" />
     <MESSAGE value="missing dep" />
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding docs, fixing pipe, adding tasks" />
+    <MESSAGE value="update data model" />
+    <option name="LAST_COMMIT_MESSAGE" value="update data model" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
