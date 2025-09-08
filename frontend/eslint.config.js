@@ -37,5 +37,5 @@ export default ts.config(
 			}
 		}
 	},
-	{ ignores: ["src/lib/wailsjs/**"] }
+	{ ignores: ["src/lib/wailsjs/**", "**/coverage/**", "**/build/**"] }
 );
