@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { Button } from "$components/ui/button/index.js";
 	import { goto } from "$app/navigation";
+	import { resolve } from "$app/paths";
 
 	async function backToDashboard(e: Event) {
 		e.preventDefault();
 
-		await goto("/");
+		await goto(resolve("/"));
 	}
 </script>
 

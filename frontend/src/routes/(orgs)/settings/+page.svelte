@@ -8,6 +8,7 @@
 	import { Button } from "$components/ui/button";
 	import { Trash } from "@lucide/svelte";
 	import { orgSvc } from "$lib/watchtower";
+	import { resolve } from "$app/paths";
 
 	type FormState = {
 		darkMode: boolean;
@@ -25,14 +26,14 @@
 		e.preventDefault();
 
 		await orgSvc.deleteAll();
-		await goto("/register/organisation");
+		await goto(resolve("/register/organisation"));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto("/");
+			await goto(resolve("/"));
 		}}
 		title="Settings"
 		subtitle="User general settings"

@@ -4,6 +4,7 @@
 	import { orgSvc } from "$lib/watchtower";
 	import { goto } from "$app/navigation";
 	import { OrgUpdateForm, type OrgUpdateFormData } from "$components/orgs";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 	let org = $derived(data.org);
@@ -17,19 +18,19 @@
 			description: formData.description
 		});
 
-		await goto("/");
+		await goto(resolve("/"));
 	}
 
 	async function setDefault() {
 		await orgSvc.setDefault(org.id);
-		await goto("/");
+		await goto(resolve("/"));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto("/");
+			await goto(resolve("/"));
 		}}
 		title="Organisation"
 	/>

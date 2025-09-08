@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import { PageTitle } from "$components/page_title";
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
 
@@ -37,7 +38,7 @@
 			Tag all repositories you wish to monitor with the <b>watchtower</b> topic.
 		</p>
 		<div class="my-8 flex justify-end">
-			<a href="/register/organisation" class="cursor-pointer underline">
+			<a href={resolve("/register/organisation")} class="cursor-pointer underline">
 				Onboard my first organisation
 			</a>
 		</div>

@@ -4,11 +4,24 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean up">
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/assets/favicon.svg" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/assets/favicon.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/mocks.gen.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/github/mocks.gen.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/mocks.gen.go" beforeDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="bump gen tools version">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/button.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/ui/button/button.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/[org_id]/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/organisations/create/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/details/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/edit/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/edit/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/[product_id]/sync/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/products/create/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+error.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+error.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/+page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/+page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/organisation/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/register/product/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +107,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "#10 on dependabot/npm__and__yarn/frontend/…4d6b2",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -184,7 +197,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="import github" />
     <MESSAGE value="adding test + refactoring" />
     <MESSAGE value="clean" />
     <MESSAGE value="wip" />
@@ -209,7 +221,8 @@
     <MESSAGE value="update data model" />
     <MESSAGE value="update css" />
     <MESSAGE value="clean up" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
+    <MESSAGE value="bump gen tools version" />
+    <option name="LAST_COMMIT_MESSAGE" value="bump gen tools version" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

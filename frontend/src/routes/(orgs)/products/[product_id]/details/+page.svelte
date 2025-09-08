@@ -10,6 +10,7 @@
 	import * as Accordion from "$components/ui/accordion";
 	import { TagsFilter } from "$lib/hooks/filters.svelte";
 	import { GridHeader } from "$components/grid/index.js";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -23,19 +24,19 @@
 	async function syncProduct(e: Event) {
 		e.preventDefault();
 
-		await goto(`/products/${product.id}/sync`);
+		await goto(resolve(`/products/${product.id}/sync`));
 	}
 
 	async function editProduct(e: Event) {
 		e.preventDefault();
-		await goto(`/products/${product.id}/edit`);
+		await goto(resolve(`/products/${product.id}/edit`));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto(`/products`);
+			await goto(resolve(`/products`));
 		}}
 		title="Product Details"
 		subtitle="Details for product {product.name}"
