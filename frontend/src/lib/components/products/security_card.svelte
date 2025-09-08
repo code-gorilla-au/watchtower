@@ -49,28 +49,40 @@
 	</CardHeader>
 
 	<div class="px-3">
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">External ID</p>
+		<div class="card-row">
+			<p class="row-label">External ID</p>
 			<p class="font-mono text-xs">{security.external_id}</p>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Severity</p>
+		<div class="card-row">
+			<p class="row-label">Severity</p>
 			<Badge variant={getSeverityVariant(security.severity)}>{security.severity}</Badge>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">State</p>
+		<div class="card-row">
+			<p class="row-label">State</p>
 			<Badge variant={getStateVariant(security.state)}>{security.state}</Badge>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Patched Version</p>
+		<div class="card-row">
+			<p class="row-label">Patched Version</p>
 			<p class="text-xs">{security.patched_version || "N/A"}</p>
 		</div>
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Last updated</p>
+		<div class="card-row">
+			<p class="row-label">Last updated</p>
 			<p>{formatDate(security.updated_at)}</p>
 		</div>
 		<div>
-			<Badge>{security.repository_name}</Badge>
+			<Badge>{security.tag}</Badge>
 		</div>
 	</div>
 </Card>
+
+<style lang="postcss">
+	@reference "$design";
+
+	.card-row {
+		@apply mb-2 flex;
+	}
+
+	.row-label {
+		@apply w-1/2 text-xs text-muted-foreground;
+	}
+</style>

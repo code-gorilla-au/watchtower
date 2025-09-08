@@ -55,7 +55,7 @@
 </Card>
 
 <style lang="postcss">
-	@reference "../../../app.css";
+	@reference "$design";
 
 	.card-row {
 		@apply mb-2 flex;

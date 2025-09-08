@@ -52,8 +52,8 @@
 
 		<CardContent>
 			<p>{product.description}</p>
-			<div class="my-2 flex justify-between text-sm">
-				<p class="text-muted-foreground">Last updated:</p>
+			<div class="card-row">
+				<p class="row-label">Last updated:</p>
 				<p>{formatDate(product.updated_at)}</p>
 			</div>
 			{#each product?.tags ?? [] as tag (tag)}
@@ -62,3 +62,15 @@
 		</CardContent>
 	</Card>
 </a>
+
+<style lang="postcss">
+	@reference "$design";
+
+	.card-row {
+		@apply mb-2 flex;
+	}
+
+	.row-label {
+		@apply w-1/2 text-xs text-muted-foreground;
+	}
+</style>

@@ -32,8 +32,8 @@
 	</CardHeader>
 
 	<div class="px-3">
-		<div class="mb-2 flex items-center justify-between">
-			<p class="text-sm text-muted-foreground">Last updated</p>
+		<div class="card-row">
+			<p class="row-label">Last updated</p>
 			<p>{formatDate(repo.updated_at)}</p>
 		</div>
 		<div>
@@ -42,3 +42,15 @@
 		</div>
 	</div>
 </Card>
+
+<style lang="postcss">
+	@reference "$design";
+
+	.card-row {
+		@apply mb-2 flex;
+	}
+
+	.row-label {
+		@apply w-1/2 text-xs text-muted-foreground;
+	}
+</style>
