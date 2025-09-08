@@ -67,19 +67,22 @@ type PullRequestDTO struct {
 	URL            string    `json:"url"`
 	State          string    `json:"state"`
 	Author         string    `json:"author"`
+	Tag            string    `json:"tag"`
+	ProductName    string    `json:"product_name"`
 	MergedAt       time.Time `json:"merged_at"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }
 
 type RepositoryDTO struct {
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	URL       string    `json:"url"`
-	Topic     string    `json:"topic"`
-	Owner     string    `json:"owner"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	URL         string    `json:"url"`
+	Topic       string    `json:"topic"`
+	Owner       string    `json:"owner"`
+	ProductName string    `json:"product_name"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type SecurityDTO struct {
@@ -90,6 +93,8 @@ type SecurityDTO struct {
 	State          string    `json:"state"`
 	Severity       string    `json:"severity"`
 	PatchedVersion string    `json:"patched_version"`
+	Tag            string    `json:"tag"`
+	ProductName    string    `json:"product_name"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }

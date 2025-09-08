@@ -87,7 +87,7 @@ RETURNING *;
 
 
 -- name: GetReposByProductID :many
-SELECT r.*
+SELECT r.*, p.name as product_name
 FROM repositories r
          JOIN products p ON p.id = ?
     AND JSON_VALID(p.tags)
@@ -133,7 +133,7 @@ ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
 RETURNING *;
 
 -- name: GetPullRequestByProductIDAndState :many
-SELECT pr.*
+SELECT pr.*, r.topic as tag, p.name as product_name
 FROM pull_requests pr
          JOIN repositories r ON r.name = pr.repository_name
          JOIN products p ON p.id = ?
@@ -145,7 +145,7 @@ WHERE pr.state = ?
 ORDER BY pr.created_at DESC;
 
 -- name: GetPullRequestsByOrganisationAndState :many
-SELECT pr.*
+SELECT pr.*, r.topic as tag, p.name as product_name
 FROM pull_requests pr
          JOIN repositories r ON r.name = pr.repository_name
          JOIN product_organisations po
@@ -196,7 +196,7 @@ RETURNING *;
 
 
 -- name: GetSecurityByProductIDAndState :many
-SELECT s.*
+SELECT s.*, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN products p ON p.id = ?
@@ -208,7 +208,7 @@ WHERE s.state = ?
 ORDER BY s.created_at DESC;
 
 -- name: GetSecurityByOrganisationAndState :many
-SELECT s.*
+SELECT s.*, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN product_organisations po

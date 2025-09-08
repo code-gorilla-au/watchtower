@@ -17,11 +17,11 @@ type CreateRepoParams struct {
 	Owner string
 }
 
-func (r *repoService) CreateRepo(ctx context.Context, params CreateRepoParams) (RepositoryDTO, error) {
+func (r *repoService) CreateRepo(ctx context.Context, params CreateRepoParams) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Creating repo", "repo", params.Name)
 
-	model, err := r.db.CreateRepo(ctx, database.CreateRepoParams{
+	_, err := r.db.CreateRepo(ctx, database.CreateRepoParams{
 		Name:  params.Name,
 		Url:   params.Url,
 		Topic: params.Topic,
@@ -29,10 +29,10 @@ func (r *repoService) CreateRepo(ctx context.Context, params CreateRepoParams) (
 	})
 	if err != nil {
 		logger.Error("Error creating repo", "error", err)
-		return RepositoryDTO{}, err
+		return err
 	}
 
-	return ToRepositoryDTO(model), nil
+	return nil
 }
 
 func (r *repoService) GetRepos(ctx context.Context, productID int64) ([]RepositoryDTO, error) {
@@ -90,12 +90,12 @@ func (r *repoService) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]P
 
 	logger.Debug("Found", "count", len(models))
 
-	return toPullRequestDTOs(models), nil
+	return orgToPullRequestDTOs(models), nil
 }
 
 func (r *repoService) BulkCreateRepos(ctx context.Context, paramsList []CreateRepoParams) error {
 	for _, params := range paramsList {
-		_, err := r.CreateRepo(ctx, params)
+		err := r.CreateRepo(ctx, params)
 		if err != nil {
 			return err
 		}
@@ -177,7 +177,7 @@ func (r *repoService) GetSecurityByOrg(ctx context.Context, orgID int64) ([]Secu
 		return []SecurityDTO{}, err
 	}
 
-	return ToSecurityDTOs(model), nil
+	return OrgToSecurityDTOs(model), nil
 }
 
 type CreateSecurityParams struct {
