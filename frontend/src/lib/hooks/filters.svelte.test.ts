@@ -28,7 +28,7 @@ describe("filters", () => {
 			});
 			expect(filter.data).toEqual([2, 3]);
 
-			filter.clear();
+			filter.reset();
 			expect(filter.data).toEqual([1, 2, 3]);
 		});
 

@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update css">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean up">
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/hooks/filters.svelte.ts" afterDir="false" />
     </list>
@@ -183,7 +182,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding txn" />
     <MESSAGE value="import github" />
     <MESSAGE value="adding test + refactoring" />
     <MESSAGE value="clean" />
@@ -208,7 +206,8 @@
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
     <MESSAGE value="update data model" />
     <MESSAGE value="update css" />
-    <option name="LAST_COMMIT_MESSAGE" value="update css" />
+    <MESSAGE value="clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -46,7 +46,7 @@ export class SimpleFilter<T> {
 	 * Clears the current filter function and resets the filter state.
 	 *
 	 */
-	clear() {
+	reset() {
 		this.#filterFn = undefined;
 		this.applyFilter();
 	}
@@ -111,7 +111,7 @@ export class TagsFilter<T extends object> {
 
 	reset() {
 		this.#currentTag = undefined;
-		this.#filter.clear();
+		this.#filter.reset();
 	}
 
 	private generateTags(tags: TagField<T>, data: T[]) {
