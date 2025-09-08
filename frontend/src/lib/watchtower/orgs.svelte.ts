@@ -12,7 +12,7 @@ import { watchtower } from "$lib/wailsjs/go/models";
 import { differenceInMinutes } from "date-fns";
 import OrganisationDTO = watchtower.OrganisationDTO;
 import { SvelteDate } from "svelte/reactivity";
-import { staleTimeoutMinutes, TIME_TWO_MINUTES } from "$lib/watchtower/types";
+import { STALE_TIMEOUT_MINUTES, TIME_TWO_MINUTES } from "$lib/watchtower/types";
 
 export class OrgService {
 	#internal: {
@@ -153,6 +153,6 @@ export class OrgService {
 		}
 
 		const diff = differenceInMinutes(this.#internal.defaultLastSync, new SvelteDate());
-		return diff > staleTimeoutMinutes;
+		return diff > STALE_TIMEOUT_MINUTES;
 	}
 }

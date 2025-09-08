@@ -8,3 +8,7 @@ bun.lockb
 # Miscellaneous
 /static/
 src/lib/wailsjs/*
+coverage/
+.svelte-kit/
+build/
+playwright-report/
