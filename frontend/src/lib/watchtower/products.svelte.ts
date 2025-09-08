@@ -16,7 +16,7 @@ import {
 } from "$lib/wailsjs/go/watchtower/Service";
 import RepositoryDTO = watchtower.RepositoryDTO;
 import { differenceInMinutes } from "date-fns";
-import { staleTimeoutMinutes } from "$lib/watchtower/types";
+import { STALE_TIMEOUT_MINUTES } from "$lib/watchtower/types";
 
 type RepoState = {
 	data: RepositoryDTO[];
@@ -155,7 +155,7 @@ export class ProductsService {
 		}
 
 		const diff = differenceInMinutes(this.#internal.productsLastSync, new SvelteDate());
-		return diff > staleTimeoutMinutes;
+		return diff > STALE_TIMEOUT_MINUTES;
 	}
 
 	private internalGetProductRepo(productId: number) {
@@ -177,6 +177,6 @@ export class ProductsService {
 		}
 
 		const diff = differenceInMinutes(repos.lastSync, new SvelteDate());
-		return diff > staleTimeoutMinutes;
+		return diff > STALE_TIMEOUT_MINUTES;
 	}
 }
