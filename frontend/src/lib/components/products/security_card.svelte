@@ -79,7 +79,7 @@
 	@reference "$design";
 
 	.card-row {
-		@apply mb-2 flex;
+		@apply mb-2 flex items-baseline;
 	}
 
 	.row-label {

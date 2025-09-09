@@ -37,5 +37,16 @@ export default ts.config(
 			}
 		}
 	},
-	{ ignores: ["src/lib/wailsjs/**", "**/coverage/**", "**/build/**"] }
+	{ ignores: ["src/lib/wailsjs/**", "**/coverage/**", "**/build/**"] },
+	{
+		rules: {
+			"svelte/no-navigation-without-resolve": [
+				"error",
+				{
+					ignoreGoto: true,
+					ignoreLinks: true
+				}
+			]
+		}
+	}
 );

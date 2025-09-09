@@ -6,6 +6,7 @@
 	import { goto } from "$app/navigation";
 	import { EmptySlate } from "$components/empty_slate/index.js";
 	import { LoaderSquare } from "$components/loaders";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -32,7 +33,7 @@
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto(`/products`);
+			await goto(resolve(`/products`));
 		}}
 		title="Sync Product {product.name}"
 		subtitle="Sync pull request from GitHub"
@@ -51,9 +52,9 @@
 	{:else}
 		<div class="flex flex-col items-center justify-center">
 			<EmptySlate class="w-full" title="Product sync complete">
-				<a class="underline" href={`/products/${product.id}/details`}
-					>View product details</a
-				>
+				<a class="underline" href={resolve(`/products/${product.id}/details`)}>
+					View product details
+				</a>
 			</EmptySlate>
 		</div>
 	{/if}

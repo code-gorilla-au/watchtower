@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import { EmptySlate } from "$components/empty_slate";
 	import { ProductCard } from "$components/products/product_card";
 	import { Grid } from "$components/grid";
@@ -27,7 +28,7 @@
 <div class={cn(className)}>
 	{#if products.length === 0}
 		<EmptySlate caution={true} title="No products">
-			<a href="/products/create" class="text-xs text-muted-foreground underline">
+			<a href={resolve("/products/create")} class="text-xs text-muted-foreground underline">
 				Create a product to get started
 			</a>
 		</EmptySlate>

@@ -7,6 +7,7 @@
 	import { Button } from "$components/ui/button";
 	import { goto } from "$app/navigation";
 	import { CardAction, CardHeader } from "$components/ui/card/index.js";
+	import { resolve } from "$app/paths";
 
 	type Props = {
 		product: watchtower.ProductDTO;
@@ -16,11 +17,11 @@
 	let { product, onDelete }: Props = $props();
 
 	async function syncProduct(id: number) {
-		await goto(`/products/${id}/sync`);
+		await goto(resolve(`/products/${id}/sync`));
 	}
 </script>
 
-<a href={`/products/${product.id}/details`}>
+<a href={resolve(`/products/${product.id}/details`)}>
 	<Card class="w-full cursor-pointer hover:bg-muted/30">
 		<CardHeader class="flex items-center justify-between">
 			<CardTitle>
@@ -54,7 +55,7 @@
 			<p>{product.description}</p>
 			<div class="card-row">
 				<p class="row-label">Last updated:</p>
-				<p>{formatDate(product.updated_at)}</p>
+				<p class="flex-1">{formatDate(product.updated_at)}</p>
 			</div>
 			{#each product?.tags ?? [] as tag (tag)}
 				<Badge class="">{tag}</Badge>
@@ -67,7 +68,7 @@
 	@reference "$design";
 
 	.card-row {
-		@apply mb-2 flex;
+		@apply mb-2 flex items-baseline;
 	}
 
 	.row-label {

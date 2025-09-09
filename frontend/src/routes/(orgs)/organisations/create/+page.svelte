@@ -3,6 +3,7 @@
 	import { OrgUpdateForm, type OrgUpdateFormData } from "$components/orgs/index.js";
 	import { orgSvc } from "$lib/watchtower";
 	import { goto } from "$app/navigation";
+	import { resolve } from "$app/paths";
 
 	async function createOrg(formData: OrgUpdateFormData) {
 		await orgSvc.create(
@@ -11,12 +12,16 @@
 			formData.token,
 			formData.description
 		);
-		await goto("/");
+		await goto(resolve("/"));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle title="Create Organisation" subtitle="Create a new organisation" />
 
-	<OrgUpdateForm mode="create" onCreate={createOrg} onCancel={() => goto("/organisations")} />
+	<OrgUpdateForm
+		mode="create"
+		onCreate={createOrg}
+		onCancel={() => goto(resolve("/organisations"))}
+	/>
 </div>

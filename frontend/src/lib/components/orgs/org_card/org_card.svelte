@@ -9,6 +9,7 @@
 	import { goto } from "$app/navigation";
 	import { orgSvc } from "$lib/watchtower";
 	import { CardAction, CardHeader } from "$components/ui/card/index.js";
+	import { resolve } from "$app/paths";
 
 	type Props = {
 		org: watchtower.OrganisationDTO;
@@ -18,11 +19,11 @@
 
 	async function deleteOrg(id: number) {
 		await orgSvc.delete(id);
-		await goto("/dashboard");
+		await goto(resolve("/dashboard"));
 	}
 </script>
 
-<a href={`/organisations/${org.id}`}>
+<a href={resolve(`/organisations/${org.id}`)}>
 	<Card class="w-full cursor-pointer hover:bg-muted/30">
 		<CardHeader class="flex items-center justify-between">
 			<CardTitle>

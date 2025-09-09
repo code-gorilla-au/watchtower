@@ -38,7 +38,7 @@
 		</div>
 		<div class="card-row">
 			<p class="row-label">Status</p>
-			<p class="lowercase">{pr.state}</p>
+			<p class="flex-1 lowercase">{pr.state}</p>
 		</div>
 		<div class="card-row">
 			<p class="row-label">Created</p>
@@ -46,7 +46,7 @@
 		</div>
 		<div class="card-row">
 			<p class="row-label">Repository</p>
-			<p class="lowercase">{pr.repository_name}</p>
+			<p class="flex-1 lowercase">{pr.repository_name}</p>
 		</div>
 		<div>
 			<Badge>{pr.tag}</Badge>
@@ -58,7 +58,7 @@
 	@reference "$design";
 
 	.card-row {
-		@apply mb-2 flex;
+		@apply mb-2 flex items-baseline;
 	}
 
 	.row-label {

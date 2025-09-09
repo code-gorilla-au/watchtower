@@ -5,6 +5,7 @@
 
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products";
 	import { productSvc } from "$lib/watchtower";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -35,14 +36,14 @@
 
 	async function goBack(e: Event) {
 		e.preventDefault();
-		await goto("/products");
+		await goto(resolve("/products"));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto("/products");
+			await goto(resolve("/products"));
 		}}
 		title="Edit Product"
 		subtitle="Edit {product.name} details"

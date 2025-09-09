@@ -7,6 +7,7 @@
 	import { Button } from "$components/ui/button";
 	import { Plus } from "@lucide/svelte";
 	import { EmptySlate } from "$components/empty_slate";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -15,14 +16,14 @@
 	async function createNewOrg(e: Event) {
 		e.preventDefault();
 
-		await goto("/organisations/create");
+		await goto(resolve("/organisations/create"));
 	}
 </script>
 
 <div class="page-container">
 	<PageTitle
 		backAction={async () => {
-			await goto("/");
+			await goto(resolve("/"));
 		}}
 		title="Organisations"
 		subtitle="Manage your organisations"
@@ -33,7 +34,10 @@
 	<div>
 		{#if orgs.length === 0}
 			<EmptySlate caution={true} title="No organisations">
-				<a href="/organisations/create" class="text-xs text-muted-foreground underline">
+				<a
+					href={resolve("/organisations/create")}
+					class="text-xs text-muted-foreground underline"
+				>
 					Add a new organisation to get started
 				</a>
 			</EmptySlate>

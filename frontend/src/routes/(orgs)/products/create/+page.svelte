@@ -4,6 +4,7 @@
 	import { PageTitle } from "$components/page_title/index.js";
 	import { goto } from "$app/navigation";
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -32,7 +33,7 @@
 				organisation?.id,
 				formData.tags.split(",")
 			);
-			await goto(`/products/${product.id}/sync`);
+			await goto(resolve(`/products/${product.id}/sync`));
 			return;
 		} catch (e) {
 			const err = e as Error;
@@ -42,7 +43,7 @@
 
 	async function onCancel(e: Event) {
 		e.preventDefault();
-		await goto("/products");
+		await goto(resolve("/products"));
 	}
 </script>
 
@@ -50,7 +51,7 @@
 	<PageTitle
 		title="Add product"
 		backAction={async () => {
-			await goto("/products");
+			await goto(resolve("/products"));
 		}}
 		subtitle="Add a product to an organisation {organisation?.friendly_name}"
 	/>

@@ -4,6 +4,7 @@
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
 	import { goto } from "$app/navigation";
 	import { PageTitle } from "$components/page_title";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 
@@ -28,7 +29,7 @@
 				formData.tags.split(",")
 			);
 
-			await goto("/");
+			await goto(resolve("/"));
 		} catch (e) {
 			const err = e as Error;
 			pageState.error = err.message;

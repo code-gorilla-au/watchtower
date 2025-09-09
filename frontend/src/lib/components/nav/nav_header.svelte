@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
 	import * as DropdownMenu from "$components/ui/dropdown-menu";
 	import { fade } from "svelte/transition";
 	import { transitionConfig } from "$components/nav/transitions";
@@ -57,7 +58,7 @@
 		<DropdownMenu.Content class="w-56" side="bottom" align="start">
 			<DropdownMenu.Label>Active Organisation</DropdownMenu.Label>
 			<DropdownMenu.Item>
-				<a class="w-full" href="/organisations/{currentOrg.id}">
+				<a class="w-full" href={resolve(`/organisations/${currentOrg.id}`)}>
 					<span class="capitalize">{currentOrg.friendly_name}</span>
 				</a>
 			</DropdownMenu.Item>
@@ -65,7 +66,7 @@
 			<DropdownMenu.Label>Other Organisations</DropdownMenu.Label>
 			{#each otherOrgs as org (org.id)}
 				<DropdownMenu.Item>
-					<a class="w-full" href="/organisations/{org.id}">
+					<a class="w-full" href={resolve(`/organisations/${org.id}`)}>
 						<span class="capitalize">{org.friendly_name}</span>
 					</a>
 				</DropdownMenu.Item>

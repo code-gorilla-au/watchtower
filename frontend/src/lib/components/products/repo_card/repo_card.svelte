@@ -34,7 +34,7 @@
 	<div class="px-3">
 		<div class="card-row">
 			<p class="row-label">Last updated</p>
-			<p>{formatDate(repo.updated_at)}</p>
+			<p class="flex-1">{formatDate(repo.updated_at)}</p>
 		</div>
 		<div>
 			<Badge>{repo.owner}</Badge>
@@ -47,7 +47,7 @@
 	@reference "$design";
 
 	.card-row {
-		@apply mb-2 flex;
+		@apply mb-2 flex items-baseline;
 	}
 
 	.row-label {

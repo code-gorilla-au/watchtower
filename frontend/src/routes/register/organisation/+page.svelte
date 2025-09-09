@@ -3,6 +3,7 @@
 	import { OrgUpdateForm, type OrgUpdateFormData } from "$components/orgs";
 	import { orgSvc } from "$lib/watchtower";
 	import { PageTitle } from "$components/page_title/index.js";
+	import { resolve } from "$app/paths";
 
 	type PageState = {
 		error: string | undefined;
@@ -26,7 +27,7 @@
 				formData.description
 			);
 
-			await goto("/register/product");
+			await goto(resolve("/register/product"));
 		} catch (e) {
 			const err = e as Error;
 			pageState.error = err.message;
