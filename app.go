@@ -31,6 +31,10 @@ func (a *App) shutdown(ctx context.Context) {
 	a.worker.Stop()
 }
 
+func (a *App) Version() string {
+	return Version
+}
+
 func (a *App) OpenExternalURL(url string) {
 	runtime.BrowserOpenURL(a.ctx, url)
 }

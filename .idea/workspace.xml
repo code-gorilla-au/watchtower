@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip eslint cleanup">
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip eslint cleanup + db clean up + css fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/eslint.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/org_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/orgs/org_card/org_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/product_card/product_card.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/product_card/product_card.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/products/products_grid.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/products/products_grid.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +93,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "#10 on dependabot/npm__and__yarn/frontend/…4d6b2",
+    "git-widget-placeholder": "feat-open-source",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -131,7 +127,7 @@
       <recent name="$PROJECT_DIR$/frontend/src/routes" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower">
     <configuration name="TestService_CreateOrganisation in watchtower/internal/watchtower" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="watchtower" />
       <working_directory value="$PROJECT_DIR$/internal/watchtower" />
