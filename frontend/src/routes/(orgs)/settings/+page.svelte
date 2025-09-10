@@ -38,15 +38,25 @@
 		title="Settings"
 		subtitle="User general settings"
 	/>
-	<form class="mx-auto max-w-lg">
-		<h3 class="mb-10 text-2xl">User preferences</h3>
-		<div class="flex w-full items-center justify-between gap-4">
+	<form class="mx-auto flex max-w-lg flex-col gap-4">
+		<h3 class="heading-2">User preferences</h3>
+		<div class="flex w-full items-center justify-between">
 			<Label for="darkMode">Switch to dark mode</Label>
 			<Switch id="darkMode" bind:checked={formState.darkMode} />
 		</div>
-		<Separator class="my-10" />
-		<h3 class="heading-1">Danger zone</h3>
-		<div class="my-4 flex w-full items-center justify-between">
+		<Separator class="my-5" />
+		<h3 class="heading-2">System</h3>
+		<div class="flex w-full items-center justify-between">
+			<p>App version:</p>
+			<p>{settingsSvc.version}</p>
+		</div>
+		<div class="flex w-full items-center justify-between">
+			<p>Local database location:</p>
+			<p>{settingsSvc.version}</p>
+		</div>
+		<Separator class="my-5" />
+		<h3 class="heading-2">Danger zone</h3>
+		<div class="flex w-full items-center justify-between">
 			<div>
 				<p>Delete all data</p>
 				<p class="text-sm text-muted-foreground">This action cannot be undone.</p>

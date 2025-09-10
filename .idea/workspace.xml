@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="wip eslint cleanup + db clean up + css fixes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding version binding">
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/settings/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/settings/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +185,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="clean" />
     <MESSAGE value="wip" />
     <MESSAGE value="fixing dep list" />
     <MESSAGE value="adding tests" />
@@ -208,7 +209,8 @@
     <MESSAGE value="clean up" />
     <MESSAGE value="bump gen tools version" />
     <MESSAGE value="wip eslint cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="wip eslint cleanup" />
+    <MESSAGE value="adding version binding" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding version binding" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

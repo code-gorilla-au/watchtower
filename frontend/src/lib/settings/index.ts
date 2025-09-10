@@ -1,3 +1,6 @@
 import { Settings } from "./env.svelte";
+import { Version } from "$lib/wailsjs/go/main/App";
 
-export const settingsSvc = new Settings();
+const appVersion = await Version();
+
+export const settingsSvc = new Settings(appVersion);

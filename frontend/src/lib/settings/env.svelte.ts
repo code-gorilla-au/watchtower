@@ -15,8 +15,10 @@ export class Settings {
 
 	readonly theme = $derived(this.#internal.theme);
 	readonly sidebarExpanded = $derived(this.#internal.sidebarExpanded);
+	readonly version: string;
 
-	constructor() {
+	constructor(version: string) {
+		this.version = version;
 		this.init();
 		this.applyTheme(this.#internal.theme);
 	}
