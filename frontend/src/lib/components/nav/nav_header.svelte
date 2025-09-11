@@ -39,16 +39,19 @@
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger class="flex items-center gap-2">
 			{#snippet child({ props })}
-				<button {...props} class="inline-flex items-center gap-2">
+				<button {...props} class="inline-flex flex-row items-center gap-2 overflow-auto">
 					<span
-						class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary p-2 hover:bg-accent hover:text-accent-foreground"
+						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary p-2 hover:bg-accent hover:text-accent-foreground"
 					>
 						<span class="capitalize">
 							{orgNameInitial}
 						</span>
 					</span>
 					{#if expand}
-						<span transition:fade={transition} class="font-bold">
+						<span
+							transition:fade={transition}
+							class="shrink-0 overflow-hidden font-bold"
+						>
 							{trimmedOrgName}
 						</span>
 					{/if}

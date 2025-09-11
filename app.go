@@ -9,14 +9,17 @@ import (
 
 // App struct
 type App struct {
-	ctx    context.Context
-	worker *watchtower.OrgSyncWorker
+	ctx                context.Context
+	worker             *watchtower.OrgSyncWorker
+	configFileLocation string
 }
 
 // NewApp creates a new App application struct
-func NewApp(worker *watchtower.OrgSyncWorker) *App {
+func NewApp(worker *watchtower.OrgSyncWorker, configLocation string) *App {
 	return &App{
-		worker: worker,
+		ctx:                context.Background(),
+		worker:             worker,
+		configFileLocation: configLocation,
 	}
 }
 
@@ -29,6 +32,14 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) shutdown(ctx context.Context) {
 	a.worker.Stop()
+}
+
+func (a *App) Version() string {
+	return Version
+}
+
+func (a *App) ConfigFileLocation() string {
+	return a.configFileLocation
 }
 
 func (a *App) OpenExternalURL(url string) {

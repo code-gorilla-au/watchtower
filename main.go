@@ -14,6 +14,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
 
+var (
+	Version = "0.0.0-dev"
+)
+
 //go:embed all:frontend/build
 var assets embed.FS
 
@@ -24,7 +28,7 @@ func main() {
 
 	logger.Debug("Starting watchtower", "config", appConfig)
 
-	databaseQueries, db, err := database.NewDBFromProvider(appConfig.DbFilePath)
+	databaseQueries, db, err := database.NewDBFromProvider(appConfig.AppDir)
 	if err != nil {
 		logger.Error("Error creating database", "error", err)
 		os.Exit(1)
@@ -46,7 +50,7 @@ func main() {
 	wt := watchtower.NewService(ctx, databaseQueries, db)
 	worker := watchtower.NewOrgSyncWorker(wt)
 
-	app := NewApp(worker)
+	app := NewApp(worker, appConfig.AppDir)
 
 	err = wails.Run(&options.App{
 		Title:  "Watchtower",
