@@ -1,4 +1,7 @@
 # Watchtower
+
+**NOTE**: Alpha version, release pipelines are WIP, if you're keen on running it locally you'll need to install [wails](https://wails.io/).
+
 Focused product view of your GitHub organisation. View repositories, pull requests, security vulnerabilities grouped by product.
 
 ## Motivation
