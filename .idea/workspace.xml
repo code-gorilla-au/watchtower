@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding system settings for config location">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing bug on shrinking nav header" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -183,7 +179,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding tests" />
     <MESSAGE value="adding test" />
     <MESSAGE value="wip adding filter" />
     <MESSAGE value="adding base filter" />
@@ -208,7 +203,8 @@
     <MESSAGE value="adding version binding" />
     <MESSAGE value="adding system settings" />
     <MESSAGE value="adding system settings for config location" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding system settings for config location" />
+    <MESSAGE value="fixing bug on shrinking nav header" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing bug on shrinking nav header" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
