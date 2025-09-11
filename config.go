@@ -10,10 +10,9 @@ import (
 )
 
 type Config struct {
-	Env        string
-	AppDir     string
-	DbFilePath string
-	LogLevel   slog.Level
+	Env      string
+	AppDir   string
+	LogLevel slog.Level
 }
 
 const appDirPath = "watchtower"
@@ -42,9 +41,8 @@ func LoadConfig() Config {
 	}
 
 	return Config{
-		Env:        environment,
-		AppDir:     appDir,
-		DbFilePath: appDir,
-		LogLevel:   slog.Level(logLevel),
+		Env:      environment,
+		AppDir:   appDir,
+		LogLevel: slog.Level(logLevel),
 	}
 }

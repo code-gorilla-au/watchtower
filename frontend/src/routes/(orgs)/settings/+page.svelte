@@ -51,8 +51,8 @@
 			<p>{settingsSvc.version}</p>
 		</div>
 		<div class="flex w-full items-center justify-between">
-			<p>Local database location:</p>
-			<p>{settingsSvc.version}</p>
+			<p>App config location:</p>
+			<p>{settingsSvc.appConfigDir}</p>
 		</div>
 		<Separator class="my-5" />
 		<h3 class="heading-2">Danger zone</h3>
