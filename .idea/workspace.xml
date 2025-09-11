@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding system settings">
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding system settings for config location">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/settings/env.svelte.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/settings/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/settings/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/go/main/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/transitions.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +183,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing dep list" />
     <MESSAGE value="adding tests" />
     <MESSAGE value="adding test" />
     <MESSAGE value="wip adding filter" />
@@ -215,7 +207,8 @@
     <MESSAGE value="wip eslint cleanup" />
     <MESSAGE value="adding version binding" />
     <MESSAGE value="adding system settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding system settings" />
+    <MESSAGE value="adding system settings for config location" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding system settings for config location" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
