@@ -5,6 +5,7 @@
 	import { goto } from "$app/navigation";
 	import { ProductUpdateForm, type ProductUpdateFormData } from "$components/products/index.js";
 	import { resolve } from "$app/paths";
+	import { toast } from "svelte-sonner";
 
 	let { data }: PageProps = $props();
 
@@ -33,8 +34,12 @@
 				organisation?.id,
 				formData.tags.split(",")
 			);
+
+			toast.success("Product created", {
+				position: "top-right"
+			});
+
 			await goto(resolve(`/products/${product.id}/sync`));
-			return;
 		} catch (e) {
 			const err = e as Error;
 			form.error = err.message;

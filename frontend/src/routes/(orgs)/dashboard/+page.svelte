@@ -19,7 +19,7 @@
 
 	let intervalPoll: NodeJS.Timeout | undefined;
 
-	let timeSince = new TimeSince(new SvelteDate());
+	const timeSince = new TimeSince(new SvelteDate());
 
 	onMount(() => {
 		timeSince.start();
