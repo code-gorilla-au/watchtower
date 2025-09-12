@@ -9,6 +9,7 @@
 	import { Trash } from "@lucide/svelte";
 	import { orgSvc } from "$lib/watchtower";
 	import { resolve } from "$app/paths";
+	import { toast } from "svelte-sonner";
 
 	type FormState = {
 		darkMode: boolean;
@@ -26,6 +27,9 @@
 		e.preventDefault();
 
 		await orgSvc.deleteAll();
+		toast.success("Deleted all data", {
+			position: "top-right"
+		});
 		await goto(resolve("/register/organisation"));
 	}
 </script>
