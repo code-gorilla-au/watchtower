@@ -19,6 +19,11 @@
 	async function syncProduct(id: number) {
 		await goto(resolve(`/products/${id}/sync`));
 	}
+
+	function onDeleteAction(e: Event) {
+		e.preventDefault();
+		onDelete?.();
+	}
 </script>
 
 <a href={resolve(`/products/${product.id}/details`)}>
@@ -38,14 +43,7 @@
 				>
 					<RefreshCw />
 				</Button>
-				<Button
-					onclick={async (e: Event) => {
-						e.preventDefault();
-						onDelete?.();
-					}}
-					size="icon"
-					variant="ghost"
-				>
+				<Button onclick={onDeleteAction} size="icon" variant="ghost">
 					<Trash />
 				</Button>
 			</CardAction>

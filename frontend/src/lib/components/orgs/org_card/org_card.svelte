@@ -6,20 +6,18 @@
 	import { Trash } from "@lucide/svelte";
 	import { Button } from "$components/ui/button";
 	import OrgRemoveDialogue from "$components/orgs/org_remove_dialog.svelte";
-	import { goto } from "$app/navigation";
-	import { orgSvc } from "$lib/watchtower";
 	import { CardAction, CardHeader } from "$components/ui/card/index.js";
 	import { resolve } from "$app/paths";
 
 	type Props = {
 		org: watchtower.OrganisationDTO;
+		onDelete?: (id: number) => void;
 	};
 
-	let { org }: Props = $props();
+	let { org, onDelete }: Props = $props();
 
 	async function deleteOrg(id: number) {
-		await orgSvc.delete(id);
-		await goto(resolve("/dashboard"));
+		onDelete?.(id);
 	}
 </script>
 

@@ -7,6 +7,7 @@
 	import { productSvc } from "$lib/watchtower";
 	import { invalidateAll } from "$app/navigation";
 	import { cn } from "$lib/utils";
+	import { toast } from "svelte-sonner";
 
 	type Props = {
 		products: watchtower.ProductDTO[];
@@ -15,9 +16,20 @@
 
 	let { products, class: className }: Props = $props();
 
+	function findProductById(id: number) {
+		return products.find((p) => p.id === id);
+	}
+
 	async function deleteProduct(id: number) {
 		try {
+			const product = findProductById(id);
+
 			await productSvc.delete(id);
+
+			toast.success(`Product ${product?.name} deleted`, {
+				position: "top-right"
+			});
+
 			await invalidateAll();
 		} catch (e) {
 			console.error(e);

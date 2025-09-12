@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { toast } from "svelte-sonner";
 	import { PageTitle } from "$components/page_title/index.js";
 	import { OrgUpdateForm, type OrgUpdateFormData } from "$components/orgs/index.js";
 	import { orgSvc } from "$lib/watchtower";
@@ -12,6 +13,11 @@
 			formData.token,
 			formData.description
 		);
+
+		toast.success("Organisation created", {
+			position: "top-right"
+		});
+
 		await goto(resolve("/"));
 	}
 </script>
