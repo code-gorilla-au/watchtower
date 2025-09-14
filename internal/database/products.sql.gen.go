@@ -82,7 +82,7 @@ VALUES (?,
         ?,
         ?,
         ?,
-        CAST(strftime('%s', 'now') AS INTEGER),
+        ?,
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
                                         repository_name = excluded.repository_name,
@@ -102,6 +102,7 @@ type CreatePullRequestParams struct {
 	State          string
 	Author         string
 	MergedAt       sql.NullInt64
+	CreatedAt      int64
 }
 
 func (q *Queries) CreatePullRequest(ctx context.Context, arg CreatePullRequestParams) (PullRequest, error) {
@@ -113,6 +114,7 @@ func (q *Queries) CreatePullRequest(ctx context.Context, arg CreatePullRequestPa
 		arg.State,
 		arg.Author,
 		arg.MergedAt,
+		arg.CreatedAt,
 	)
 	var i PullRequest
 	err := row.Scan(
@@ -192,7 +194,7 @@ VALUES (?,
         ?,
         ?,
         ?,
-        CAST(strftime('%s', 'now') AS INTEGER),
+        ?,
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
                                         package_name    = excluded.package_name,
@@ -210,6 +212,7 @@ type CreateSecurityParams struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	CreatedAt      int64
 }
 
 func (q *Queries) CreateSecurity(ctx context.Context, arg CreateSecurityParams) (Security, error) {
@@ -220,6 +223,7 @@ func (q *Queries) CreateSecurity(ctx context.Context, arg CreateSecurityParams) 
 		arg.State,
 		arg.Severity,
 		arg.PatchedVersion,
+		arg.CreatedAt,
 	)
 	var i Security
 	err := row.Scan(

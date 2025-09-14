@@ -220,6 +220,7 @@ func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoNam
 			State:          string(pr.State),
 			Author:         pr.Author.Login,
 			MergedAt:       pr.MergedAt,
+			CreatedAt:      pr.CreatedAt,
 		})
 	}
 
@@ -236,6 +237,7 @@ func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.Vulnerabil
 			State:          string(sec.State),
 			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
 			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
+			CreatedAt:      sec.CreatedAt,
 		})
 	}
 

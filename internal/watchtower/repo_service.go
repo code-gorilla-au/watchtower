@@ -112,6 +112,7 @@ type CreatePRParams struct {
 	State          string
 	Author         string
 	MergedAt       *time.Time
+	CreatedAt      time.Time
 }
 
 func (r *repoService) BulkCreatePullRequest(ctx context.Context, paramsList []CreatePRParams) error {
@@ -135,6 +136,7 @@ func (r *repoService) BulkCreatePullRequest(ctx context.Context, paramsList []Cr
 			State:          params.State,
 			Author:         params.Author,
 			MergedAt:       mergedAt,
+			CreatedAt:      params.CreatedAt.Unix(),
 		})
 		if err != nil {
 			logger.Error("Error creating pull request", "error", err)
@@ -187,6 +189,7 @@ type CreateSecurityParams struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	CreatedAt      time.Time
 }
 
 func (r *repoService) BulkCreateSecurity(ctx context.Context, paramsList []CreateSecurityParams) error {
