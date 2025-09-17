@@ -8,7 +8,10 @@ WITH average_days_to_merge AS (
 SELECT
     ROUND(MIN(avg_days_to_merge),2) AS min_days_to_merge,
     ROUND(MAX(avg_days_to_merge),2) AS max_days_to_merge,
-    ROUND(AVG(avg_days_to_merge),2) AS avg_days_to_merge
+    ROUND(AVG(avg_days_to_merge),2) AS avg_days_to_merge,
+    (SELECT COUNT(*) FROM pull_requests WHERE state = 'OPEN') AS open,
+    COUNT(*) AS merged,
+    (SELECT COUNT(*) FROM pull_requests WHERE state = 'CLOSED') AS closed
 FROM average_days_to_merge;
 
 -- name: GetSecuritiesInsights :one
