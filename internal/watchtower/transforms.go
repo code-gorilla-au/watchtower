@@ -229,6 +229,7 @@ func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoNam
 
 func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []CreateSecurityParams {
 	result := make([]CreateSecurityParams, len(secs.Nodes))
+
 	for _, sec := range secs.Nodes {
 		result = append(result, CreateSecurityParams{
 			ExternalID:     sec.ID,
@@ -238,6 +239,7 @@ func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.Vulnerabil
 			Severity:       string(sec.SecurityVulnerability.Advisory.Severity),
 			PatchedVersion: sec.SecurityVulnerability.FirstPatchedVersion.Identifier,
 			CreatedAt:      sec.CreatedAt,
+			FixedAt:        sec.FixedAt,
 		})
 	}
 

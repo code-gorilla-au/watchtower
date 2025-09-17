@@ -176,9 +176,11 @@ INSERT INTO securities (external_id,
                         package_name,
                         state, severity,
                         patched_version,
+                        fixed_at,
                         created_at,
                         updated_at)
 VALUES (?,
+        ?,
         ?,
         ?,
         ?,
@@ -191,6 +193,7 @@ ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_na
                                         state           = excluded.state,
                                         severity        = excluded.severity,
                                         patched_version = excluded.patched_version,
+                                        fixed_at        = excluded.fixed_at,
                                         updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
 

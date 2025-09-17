@@ -186,9 +186,11 @@ INSERT INTO securities (external_id,
                         package_name,
                         state, severity,
                         patched_version,
+                        fixed_at,
                         created_at,
                         updated_at)
 VALUES (?,
+        ?,
         ?,
         ?,
         ?,
@@ -201,8 +203,9 @@ ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_na
                                         state           = excluded.state,
                                         severity        = excluded.severity,
                                         patched_version = excluded.patched_version,
+                                        fixed_at        = excluded.fixed_at,
                                         updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
-RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, created_at, updated_at
+RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
 `
 
 type CreateSecurityParams struct {
@@ -212,6 +215,7 @@ type CreateSecurityParams struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	FixedAt        sql.NullInt64
 	CreatedAt      int64
 }
 
@@ -223,6 +227,7 @@ func (q *Queries) CreateSecurity(ctx context.Context, arg CreateSecurityParams) 
 		arg.State,
 		arg.Severity,
 		arg.PatchedVersion,
+		arg.FixedAt,
 		arg.CreatedAt,
 	)
 	var i Security
@@ -234,6 +239,7 @@ func (q *Queries) CreateSecurity(ctx context.Context, arg CreateSecurityParams) 
 		&i.State,
 		&i.Severity,
 		&i.PatchedVersion,
+		&i.FixedAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -549,7 +555,7 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetRepos
 }
 
 const getSecurityByOrganisationAndState = `-- name: GetSecurityByOrganisationAndState :many
-SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.fixed_at, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN product_organisations po
@@ -576,6 +582,7 @@ type GetSecurityByOrganisationAndStateRow struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	FixedAt        sql.NullInt64
 	CreatedAt      int64
 	UpdatedAt      int64
 	Tag            string
@@ -599,6 +606,7 @@ func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg Get
 			&i.State,
 			&i.Severity,
 			&i.PatchedVersion,
+			&i.FixedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Tag,
@@ -618,7 +626,7 @@ func (q *Queries) GetSecurityByOrganisationAndState(ctx context.Context, arg Get
 }
 
 const getSecurityByProductIDAndState = `-- name: GetSecurityByProductIDAndState :many
-SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
+SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.fixed_at, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
 FROM securities s
          JOIN repositories r ON r.name = s.repository_name
          JOIN products p ON p.id = ?
@@ -643,6 +651,7 @@ type GetSecurityByProductIDAndStateRow struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	FixedAt        sql.NullInt64
 	CreatedAt      int64
 	UpdatedAt      int64
 	Tag            string
@@ -666,6 +675,7 @@ func (q *Queries) GetSecurityByProductIDAndState(ctx context.Context, arg GetSec
 			&i.State,
 			&i.Severity,
 			&i.PatchedVersion,
+			&i.FixedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.Tag,
