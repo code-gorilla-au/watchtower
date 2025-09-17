@@ -20,9 +20,8 @@ SELECT
     ROUND(MIN(avg_days_to_merge),2) AS min_days_to_merge,
     ROUND(MAX(avg_days_to_merge),2) AS max_days_to_merge,
     ROUND(AVG(avg_days_to_merge),2) AS avg_days_to_merge,
-    (SELECT COUNT(*) FROM pull_requests WHERE state = 'OPEN') AS open,
     COUNT(*) AS merged,
-    (SELECT COUNT(*) FROM pull_requests WHERE state = 'CLOSED') AS closed
+    (SELECT COUNT(*) FROM pull_requests WHERE state = 'CLOSED' AND created_at >= strftime('%s', 'now', '-90 days')) AS closed
 FROM average_days_to_merge
 `
 
@@ -30,7 +29,6 @@ type GetPullRequestInsightsRow struct {
 	MinDaysToMerge float64
 	MaxDaysToMerge float64
 	AvgDaysToMerge float64
-	Open           int64
 	Merged         int64
 	Closed         int64
 }
@@ -42,7 +40,6 @@ func (q *Queries) GetPullRequestInsights(ctx context.Context) (GetPullRequestIns
 		&i.MinDaysToMerge,
 		&i.MaxDaysToMerge,
 		&i.AvgDaysToMerge,
-		&i.Open,
 		&i.Merged,
 		&i.Closed,
 	)
