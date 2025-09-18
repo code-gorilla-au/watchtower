@@ -14,16 +14,23 @@ WITH average_days_to_merge AS (
     SELECT ROUND((merged_at - created_at) / 86400.0, 2) AS avg_days_to_merge
     FROM pull_requests
     WHERE state = 'MERGED'
-      AND created_at >= strftime('%s', 'now', '-90 days')
+      AND created_at >= strftime('%s', 'now', ?)
 )
 SELECT
     ROUND(MIN(avg_days_to_merge),2) AS min_days_to_merge,
     ROUND(MAX(avg_days_to_merge),2) AS max_days_to_merge,
     ROUND(AVG(avg_days_to_merge),2) AS avg_days_to_merge,
     COUNT(*) AS merged,
-    (SELECT COUNT(*) FROM pull_requests WHERE state = 'CLOSED' AND created_at >= strftime('%s', 'now', '-90 days')) AS closed
+    (SELECT COUNT(*) FROM pull_requests WHERE state = 'CLOSED' AND created_at >= strftime('%s', 'now', ?)) AS closed,
+    (SELECT COUNT(*) FROM pull_requests WHERE state = 'OPEN' AND created_at >= strftime('%s', 'now', ?)) AS open
 FROM average_days_to_merge
 `
+
+type GetPullRequestInsightsParams struct {
+	Strftime   interface{}
+	Strftime_2 interface{}
+	Strftime_3 interface{}
+}
 
 type GetPullRequestInsightsRow struct {
 	MinDaysToMerge float64
@@ -31,10 +38,11 @@ type GetPullRequestInsightsRow struct {
 	AvgDaysToMerge float64
 	Merged         int64
 	Closed         int64
+	Open           int64
 }
 
-func (q *Queries) GetPullRequestInsights(ctx context.Context) (GetPullRequestInsightsRow, error) {
-	row := q.db.QueryRowContext(ctx, getPullRequestInsights)
+func (q *Queries) GetPullRequestInsights(ctx context.Context, arg GetPullRequestInsightsParams) (GetPullRequestInsightsRow, error) {
+	row := q.db.QueryRowContext(ctx, getPullRequestInsights, arg.Strftime, arg.Strftime_2, arg.Strftime_3)
 	var i GetPullRequestInsightsRow
 	err := row.Scan(
 		&i.MinDaysToMerge,
@@ -42,6 +50,7 @@ func (q *Queries) GetPullRequestInsights(ctx context.Context) (GetPullRequestIns
 		&i.AvgDaysToMerge,
 		&i.Merged,
 		&i.Closed,
+		&i.Open,
 	)
 	return i, err
 }
@@ -52,24 +61,41 @@ WITH average_days_to_fix AS (
     FROM securities
     WHERE state = 'FIXED'
       AND fixed_at IS NOT NULL
-      AND created_at >= strftime('%s', 'now', '-90 days')
+      AND created_at >= strftime('%s', 'now', ?)
 )
 SELECT
     ROUND(MIN(days_to_fix), 2) AS min_days_to_fix,
     ROUND(MAX(days_to_fix), 2) AS max_days_to_fix,
-    ROUND(AVG(days_to_fix), 2) AS avg_days_to_fix
+    ROUND(AVG(days_to_fix), 2) AS avg_days_to_fix,
+    (SELECT COUNT(*) FROM securities WHERE state = 'FIXED' AND created_at >= strftime('%s', 'now', ?)) AS fixed,
+    (SELECT COUNT(*) FROM securities WHERE state = 'OPEN' AND created_at >= strftime('%s', 'now', ?)) AS open
+
 FROM average_days_to_fix
 `
+
+type GetSecuritiesInsightsParams struct {
+	Strftime   interface{}
+	Strftime_2 interface{}
+	Strftime_3 interface{}
+}
 
 type GetSecuritiesInsightsRow struct {
 	MinDaysToFix float64
 	MaxDaysToFix float64
 	AvgDaysToFix float64
+	Fixed        int64
+	Open         int64
 }
 
-func (q *Queries) GetSecuritiesInsights(ctx context.Context) (GetSecuritiesInsightsRow, error) {
-	row := q.db.QueryRowContext(ctx, getSecuritiesInsights)
+func (q *Queries) GetSecuritiesInsights(ctx context.Context, arg GetSecuritiesInsightsParams) (GetSecuritiesInsightsRow, error) {
+	row := q.db.QueryRowContext(ctx, getSecuritiesInsights, arg.Strftime, arg.Strftime_2, arg.Strftime_3)
 	var i GetSecuritiesInsightsRow
-	err := row.Scan(&i.MinDaysToFix, &i.MaxDaysToFix, &i.AvgDaysToFix)
+	err := row.Scan(
+		&i.MinDaysToFix,
+		&i.MaxDaysToFix,
+		&i.AvgDaysToFix,
+		&i.Fixed,
+		&i.Open,
+	)
 	return i, err
 }

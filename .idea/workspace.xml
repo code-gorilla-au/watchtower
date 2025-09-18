@@ -4,18 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding sql dialects">
-      <change afterPath="$PROJECT_DIR$/internal/database/queries/insights.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10b98d63-cb47-48af-afd2-444268222b82.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/nav/nav_header.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/models.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/models.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/products.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/products.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/products.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/products.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/schemas/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/schemas/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/repo_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/repo_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/transforms.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/transforms.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean up">
+      <change beforePath="$PROJECT_DIR$/internal/database/insights.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/insights.sql.gen.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/database/queries/insights.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/insights.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,8 +183,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding filtering by tag" />
-    <MESSAGE value="adding 3 sec timeout" />
     <MESSAGE value="adding tag filter" />
     <MESSAGE value="refactoring to use common component" />
     <MESSAGE value="adding component to dashboard" />
@@ -207,7 +196,6 @@
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
     <MESSAGE value="update data model" />
     <MESSAGE value="update css" />
-    <MESSAGE value="clean up" />
     <MESSAGE value="bump gen tools version" />
     <MESSAGE value="wip eslint cleanup" />
     <MESSAGE value="adding version binding" />
@@ -217,7 +205,10 @@
     <MESSAGE value="adding base sooner for notifying actions" />
     <MESSAGE value="mapping created at from repo details" />
     <MESSAGE value="adding sql dialects" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding sql dialects" />
+    <MESSAGE value="adding insights query" />
+    <MESSAGE value="adding more insights" />
+    <MESSAGE value="clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
