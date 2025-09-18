@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="clean up">
-      <change beforePath="$PROJECT_DIR$/internal/database/insights.sql.gen.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/insights.sql.gen.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/database/queries/insights.sql" beforeDir="false" afterPath="$PROJECT_DIR$/internal/database/queries/insights.sql" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding insights">
+      <change afterPath="$PROJECT_DIR$/internal/watchtower/insights_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/watchtower/interfaces.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/interfaces.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +37,11 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
-        <option value="Go File" />
         <option value="TypeScript File" />
         <option value="prs_grid_header" />
         <option value="grid_header" />
         <option value="orgs_grid" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -183,7 +183,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding tag filter" />
     <MESSAGE value="refactoring to use common component" />
     <MESSAGE value="adding component to dashboard" />
     <MESSAGE value="fixing param miss match" />
@@ -208,7 +207,8 @@
     <MESSAGE value="adding insights query" />
     <MESSAGE value="adding more insights" />
     <MESSAGE value="clean up" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
+    <MESSAGE value="adding insights" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding insights" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
