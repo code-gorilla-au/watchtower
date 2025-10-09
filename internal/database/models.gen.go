@@ -64,6 +64,7 @@ type Security struct {
 	State          string
 	Severity       string
 	PatchedVersion string
+	FixedAt        sql.NullInt64
 	CreatedAt      int64
 	UpdatedAt      int64
 }

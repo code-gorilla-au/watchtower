@@ -121,7 +121,7 @@ VALUES (?,
         ?,
         ?,
         ?,
-        CAST(strftime('%s', 'now') AS INTEGER),
+        ?,
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
                                         repository_name = excluded.repository_name,
@@ -176,6 +176,7 @@ INSERT INTO securities (external_id,
                         package_name,
                         state, severity,
                         patched_version,
+                        fixed_at,
                         created_at,
                         updated_at)
 VALUES (?,
@@ -184,13 +185,15 @@ VALUES (?,
         ?,
         ?,
         ?,
-        CAST(strftime('%s', 'now') AS INTEGER),
+        ?,
+        ?,
         CAST(strftime('%s', 'now') AS INTEGER))
 ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
                                         package_name    = excluded.package_name,
                                         state           = excluded.state,
                                         severity        = excluded.severity,
                                         patched_version = excluded.patched_version,
+                                        fixed_at        = excluded.fixed_at,
                                         updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
 

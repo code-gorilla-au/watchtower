@@ -22,7 +22,7 @@ export class OrgService {
 		orgsLastSync?: Date;
 	};
 
-	#poll?: NodeJS.Timeout;
+	readonly #poll?: NodeJS.Timeout;
 
 	readonly defaultOrg: OrganisationDTO | undefined;
 	readonly organisations: OrganisationDTO[];

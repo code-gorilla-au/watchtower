@@ -65,15 +65,17 @@
 					<span class="capitalize">{currentOrg.friendly_name}</span>
 				</a>
 			</DropdownMenu.Item>
-			<DropdownMenu.Separator />
-			<DropdownMenu.Label>Other Organisations</DropdownMenu.Label>
-			{#each otherOrgs as org (org.id)}
-				<DropdownMenu.Item>
-					<a class="w-full" href={resolve(`/organisations/${org.id}`)}>
-						<span class="capitalize">{org.friendly_name}</span>
-					</a>
-				</DropdownMenu.Item>
-			{/each}
+			{#if otherOrgs.length > 0}
+				<DropdownMenu.Separator />
+				<DropdownMenu.Label>Other Organisations</DropdownMenu.Label>
+				{#each otherOrgs as org (org.id)}
+					<DropdownMenu.Item>
+						<a class="w-full" href={resolve(`/organisations/${org.id}`)}>
+							<span class="capitalize">{org.friendly_name}</span>
+						</a>
+					</DropdownMenu.Item>
+				{/each}
+			{/if}
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 </div>

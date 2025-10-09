@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding base sooner for notifying actions">
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/settings/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding sec">
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,11 +37,12 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
-        <option value="Go File" />
-        <option value="TypeScript File" />
         <option value="prs_grid_header" />
         <option value="grid_header" />
         <option value="orgs_grid" />
+        <option value="Go File" />
+        <option value="searchbar" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -92,7 +94,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "feat-toast-notifications",
+    "git-widget-placeholder": "#20 on Merging feat-cmd-search",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -103,7 +105,7 @@
     "node.js.selected.package.standard": "",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
@@ -155,16 +157,14 @@
       <list>
         <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
         <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
-        <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
-        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.25557.175" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-GO-252.25557.175" />
+        <option value="bundled-gosdk-f466f9b0953e-146d08934cbf-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.26830.102" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-GO-252.26830.102" />
       </set>
     </attachedChunks>
   </component>
@@ -182,13 +182,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="wip adding filter" />
-    <MESSAGE value="adding base filter" />
-    <MESSAGE value="adding filtering by tag" />
-    <MESSAGE value="adding 3 sec timeout" />
-    <MESSAGE value="adding tag filter" />
-    <MESSAGE value="refactoring to use common component" />
-    <MESSAGE value="adding component to dashboard" />
     <MESSAGE value="fixing param miss match" />
     <MESSAGE value="remove excess log" />
     <MESSAGE value="fixing db init" />
@@ -199,7 +192,6 @@
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
     <MESSAGE value="update data model" />
     <MESSAGE value="update css" />
-    <MESSAGE value="clean up" />
     <MESSAGE value="bump gen tools version" />
     <MESSAGE value="wip eslint cleanup" />
     <MESSAGE value="adding version binding" />
@@ -207,7 +199,15 @@
     <MESSAGE value="adding system settings for config location" />
     <MESSAGE value="fixing bug on shrinking nav header" />
     <MESSAGE value="adding base sooner for notifying actions" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding base sooner for notifying actions" />
+    <MESSAGE value="mapping created at from repo details" />
+    <MESSAGE value="adding sql dialects" />
+    <MESSAGE value="adding insights query" />
+    <MESSAGE value="adding more insights" />
+    <MESSAGE value="clean up" />
+    <MESSAGE value="adding insights" />
+    <MESSAGE value="adding insights store" />
+    <MESSAGE value="adding search command" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding search command" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

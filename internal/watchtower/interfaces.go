@@ -54,6 +54,12 @@ type OrgStore interface {
 	AddProductToOrganisation(ctx context.Context, arg database.AddProductToOrganisationParams) error
 }
 
+type InsightsStore interface {
+	GetPullRequestInsights(ctx context.Context, arg database.GetPullRequestInsightsParams) (database.GetPullRequestInsightsRow, error)
+	GetSecuritiesInsights(ctx context.Context, arg database.GetSecuritiesInsightsParams) (database.GetSecuritiesInsightsRow, error)
+}
+
 var _ RepoStore = (*database.Queries)(nil)
 var _ ProductStore = (*database.Queries)(nil)
 var _ OrgStore = (*database.Queries)(nil)
+var _ InsightsStore = (*database.Queries)(nil)
