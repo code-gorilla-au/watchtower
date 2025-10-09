@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding insights">
-      <change afterPath="$PROJECT_DIR$/internal/watchtower/insights_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/watchtower/interfaces.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/watchtower/interfaces.go" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="adding insights store">
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/searchbar/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/components/searchbar/searchbar.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/lib/forms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/wailsjs/runtime/runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/watchtower/orgs.svelte.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,11 +47,12 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
-        <option value="TypeScript File" />
         <option value="prs_grid_header" />
         <option value="grid_header" />
         <option value="orgs_grid" />
         <option value="Go File" />
+        <option value="searchbar" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -104,7 +115,7 @@
     &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -156,16 +167,14 @@
       <list>
         <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
         <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
-        <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
-        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.25557.189" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-GO-252.25557.189" />
+        <option value="bundled-gosdk-f466f9b0953e-146d08934cbf-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.26830.102" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-GO-252.26830.102" />
       </set>
     </attachedChunks>
   </component>
@@ -183,7 +192,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactoring to use common component" />
     <MESSAGE value="adding component to dashboard" />
     <MESSAGE value="fixing param miss match" />
     <MESSAGE value="remove excess log" />
@@ -208,7 +216,8 @@
     <MESSAGE value="adding more insights" />
     <MESSAGE value="clean up" />
     <MESSAGE value="adding insights" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding insights" />
+    <MESSAGE value="adding insights store" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding insights store" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
