@@ -86,4 +86,4 @@
 		</Accordion.Item>
 	</Accordion.Root>
 </div>
-<SearchBar bind:open={searchBarOpen} {prs} />
+<SearchBar bind:open={searchBarOpen} {securities} {prs} />

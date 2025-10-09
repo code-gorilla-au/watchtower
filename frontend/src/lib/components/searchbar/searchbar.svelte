@@ -6,10 +6,11 @@
 
 	type Props = {
 		prs: watchtower.PullRequestDTO[];
+		securities: watchtower.SecurityDTO[];
 		open: boolean;
 	};
 
-	let { prs, open = $bindable() }: Props = $props();
+	let { prs, securities, open = $bindable() }: Props = $props();
 </script>
 
 <Command.Dialog bind:open>
@@ -30,9 +31,9 @@
 		</Command.Group>
 		<Command.Separator />
 		<Command.Group heading="Security vulnerability">
-			<Command.Item>Profile</Command.Item>
-			<Command.Item>Billing</Command.Item>
-			<Command.Item>Settings</Command.Item>
+			{#each securities as s (s.id)}
+				<Command.Item>{s.package_name}</Command.Item>
+			{/each}
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>
