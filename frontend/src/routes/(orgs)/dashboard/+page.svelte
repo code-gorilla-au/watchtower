@@ -10,6 +10,9 @@
 	import { TimeSince } from "$lib/hooks/time.svelte";
 	import { SvelteDate } from "svelte/reactivity";
 	import * as Accordion from "$components/ui/accordion";
+	import { Button } from "$components/ui/button";
+	import { Search } from "@lucide/svelte";
+	import { SearchBar } from "$components/searchbar";
 
 	let { data }: PageProps = $props();
 	let org = $derived(data.organisation);
@@ -20,6 +23,8 @@
 	let intervalPoll: NodeJS.Timeout | undefined;
 
 	const timeSince = new TimeSince(new SvelteDate());
+
+	let searchBarOpen = $state(false);
 
 	onMount(() => {
 		timeSince.start();
@@ -40,7 +45,19 @@
 
 <div class="page-container">
 	<PageTitle title="Dashboard" subtitle={org?.description || org?.friendly_name}>
-		<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
+		<div class="flex items-center gap-2">
+			<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
+			<Button
+				onclick={(e: Event) => {
+					e.preventDefault();
+					searchBarOpen = !searchBarOpen;
+				}}
+				class="hover:text-accent"
+				variant="ghost"
+			>
+				<Search />
+			</Button>
+		</div>
 	</PageTitle>
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
 		<Accordion.Item value="security">
@@ -69,3 +86,4 @@
 		</Accordion.Item>
 	</Accordion.Root>
 </div>
+<SearchBar bind:open={searchBarOpen} {securities} {prs} />

@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS securities
     state           TEXT        NOT NULL,
     severity        TEXT        NOT NULL,
     patched_version TEXT        NOT NULL,
+    fixed_at        INTEGER,
     created_at      INTEGER     NOT NULL,
     updated_at      INTEGER     NOT NULL
 );
