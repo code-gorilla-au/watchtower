@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: "feature:"
-labels: enhancement
+name: Bug
+about: Report bug for project
+title: "bug:"
+labels: bug
 assignees: ''
 
 ---
@@ -10,7 +10,8 @@ assignees: ''
 ## Description
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-## Acceptance criteria
-- dot point on expected behaviour
+## Expected behaviour
+
+## Actual behaviour
 
 ## Additional context (optional)
