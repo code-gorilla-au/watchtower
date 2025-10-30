@@ -44,6 +44,7 @@
 </script>
 
 <div class="page-container">
+	<SearchBar bind:open={searchBarOpen} {securities} {prs} />
 	<PageTitle title="Dashboard" subtitle={org?.description || org?.friendly_name}>
 		<div class="flex items-center gap-2">
 			<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
@@ -86,4 +87,3 @@
 		</Accordion.Item>
 	</Accordion.Root>
 </div>
-<SearchBar bind:open={searchBarOpen} {securities} {prs} />
