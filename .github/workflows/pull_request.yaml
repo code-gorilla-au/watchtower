@@ -6,8 +6,7 @@ permissions:
 on:
   pull_request:
     paths-ignore:
-      - ".github/workflows/*"
-      - ".github/dependabot.yaml"
+      - ".github/*"
 
 jobs:
   scans:
