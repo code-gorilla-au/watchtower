@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update deps">
-      <change beforePath="$PROJECT_DIR$/internal/github/mocks.gen.go" beforeDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="regen mocks">
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.1.darwin-arm64" />
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.3.darwin-arm64" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -104,7 +104,7 @@
     "node.js.selected.package.standard": "",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/prettier",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "go.sdk",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "/Users/mauricioriquelme/dev/code-gorilla/watchtower/frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
@@ -181,7 +181,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing param miss match" />
     <MESSAGE value="remove excess log" />
     <MESSAGE value="fixing db init" />
     <MESSAGE value="fixing folder typo" />
@@ -206,7 +205,8 @@
     <MESSAGE value="adding insights" />
     <MESSAGE value="adding insights store" />
     <MESSAGE value="adding search command" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding search command" />
+    <MESSAGE value="regen mocks" />
+    <option name="LAST_COMMIT_MESSAGE" value="regen mocks" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
