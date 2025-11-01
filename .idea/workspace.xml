@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing issues">
-      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update vite configuration" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,7 +90,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "#18 on dependabot/go__modules/prod-ebf424edbe",
+    "git-widget-placeholder": "#28 on dependabot/npm__and__yarn/frontend/…f1fc9",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -182,7 +180,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="adding node" />
     <MESSAGE value="adding deps" />
     <MESSAGE value="missing dep" />
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
@@ -207,7 +204,8 @@
     <MESSAGE value="update" />
     <MESSAGE value="regen mocks" />
     <MESSAGE value="fixing issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing issues" />
+    <MESSAGE value="update vite configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="update vite configuration" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
