@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="regen mocks" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing issues" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -180,7 +180,6 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing folder typo" />
     <MESSAGE value="adding node" />
     <MESSAGE value="adding deps" />
     <MESSAGE value="missing dep" />
@@ -205,7 +204,8 @@
     <MESSAGE value="adding search command" />
     <MESSAGE value="update" />
     <MESSAGE value="regen mocks" />
-    <option name="LAST_COMMIT_MESSAGE" value="regen mocks" />
+    <MESSAGE value="fixing issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing issues" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
