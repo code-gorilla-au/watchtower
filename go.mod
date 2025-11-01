@@ -2,8 +2,6 @@ module watchtower
 
 go 1.25.3
 
-ignore ./frontend
-
 require (
 	github.com/code-gorilla-au/env v1.1.1
 	github.com/code-gorilla-au/fetch v1.0.1
