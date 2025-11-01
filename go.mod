@@ -2,12 +2,14 @@ module watchtower
 
 go 1.25.3
 
+ignore ./frontend
+
 require (
 	github.com/code-gorilla-au/env v1.1.1
 	github.com/code-gorilla-au/fetch v1.0.1
 	github.com/code-gorilla-au/odize v1.3.4
 	github.com/wailsapp/wails/v2 v2.10.2
-	modernc.org/sqlite v1.38.2
+	modernc.org/sqlite v1.39.0
 )
 
 require (

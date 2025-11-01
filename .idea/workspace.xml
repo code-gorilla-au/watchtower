@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/lib/components/searchbar/searchbar.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/lib/components/searchbar/searchbar.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/+layout.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/routes/(orgs)/dashboard/+page.svelte" afterDir="false" />
+    <list default="true" id="055bded3-ea75-46d5-af79-d19dbdb24ded" name="Changes" comment="fixing issues">
+      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,12 +36,11 @@
         <option value="base_tooktip" />
         <option value="org_remove_dialog" />
         <option value="+page" />
+        <option value="Go File" />
+        <option value="TypeScript File" />
         <option value="prs_grid_header" />
         <option value="grid_header" />
         <option value="orgs_grid" />
-        <option value="Go File" />
-        <option value="searchbar" />
-        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -97,7 +92,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "#18 on dependabot/go__modules/prod-ebf424edbe",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "junie.onboarding.icon.badge.shown": "true",
@@ -160,14 +155,16 @@
       <list>
         <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
         <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
+        <item itemvalue="Go Test.TestService_CreateProduct in watchtower/internal/watchtower" />
+        <item itemvalue="Go Test.TestService_CreateOrganisation in watchtower/internal/watchtower" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-f466f9b0953e-146d08934cbf-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.26830.102" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-GO-252.26830.102" />
+        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.25557.175" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-GO-252.25557.175" />
       </set>
     </attachedChunks>
   </component>
@@ -185,14 +182,13 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixing db init" />
-    <MESSAGE value="fixing folder typo" />
     <MESSAGE value="adding node" />
     <MESSAGE value="adding deps" />
     <MESSAGE value="missing dep" />
     <MESSAGE value="adding docs, fixing pipe, adding tasks" />
     <MESSAGE value="update data model" />
     <MESSAGE value="update css" />
+    <MESSAGE value="clean up" />
     <MESSAGE value="bump gen tools version" />
     <MESSAGE value="wip eslint cleanup" />
     <MESSAGE value="adding version binding" />
@@ -208,9 +204,10 @@
     <MESSAGE value="adding insights" />
     <MESSAGE value="adding insights store" />
     <MESSAGE value="adding search command" />
-    <MESSAGE value="regen mocks" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="regen mocks" />
+    <MESSAGE value="fixing issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing issues" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

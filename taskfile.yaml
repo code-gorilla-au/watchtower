@@ -92,7 +92,9 @@ tasks:
 
   go-ci:
     desc: Run go ci tasks.
-    deps: [go-lint, go-cover]
+    cmds:
+      - task: go-lint
+      - task: go-cover
 
 
   frontend-install:
