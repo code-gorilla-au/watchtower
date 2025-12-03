@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
 	import { PageTitle } from "$components/page_title";
-	import { ProductsGrid } from "$components/products";
+	import { ProductsGrid, AccordionItemSecurity, AccordionItemPrs } from "$components/products";
 	import { onDestroy, onMount } from "svelte";
 	import { TIME_TWO_MINUTES } from "$lib/watchtower/types";
 	import { invalidateAll } from "$app/navigation";
@@ -11,8 +11,6 @@
 	import { Button } from "$components/ui/button";
 	import { Search } from "@lucide/svelte";
 	import { SearchBar } from "$components/searchbar";
-	import AccordionItemSecurity from "./accordion_item_security.svelte";
-	import AccordionItemPr from "./accordion_item_pr.svelte";
 
 	let { data }: PageProps = $props();
 	let org = $derived(data.organisation);
@@ -62,7 +60,7 @@
 	</PageTitle>
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
 		<AccordionItemSecurity {securities} />
-		<AccordionItemPr {prs} />
+		<AccordionItemPrs {prs} />
 		<Accordion.Item value="products">
 			<Accordion.Trigger class="text-left">
 				<h3 class="text-xl text-muted-foreground">Products ({products.length})</h3>
