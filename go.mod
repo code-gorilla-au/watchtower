@@ -1,13 +1,13 @@
 module watchtower
 
-go 1.25.3
+go 1.25.5
 
 require (
 	github.com/code-gorilla-au/env v1.1.1
-	github.com/code-gorilla-au/fetch v1.0.1
+	github.com/code-gorilla-au/fetch v1.1.0
 	github.com/code-gorilla-au/odize v1.3.4
-	github.com/wailsapp/wails/v2 v2.10.2
-	modernc.org/sqlite v1.39.0
+	github.com/wailsapp/wails/v2 v2.11.0
+	modernc.org/sqlite v1.40.1
 )
 
 require (
@@ -36,14 +36,14 @@ require (
 	github.com/tkrajina/go-reflector v0.5.8 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/wailsapp/go-webview2 v1.0.19 // indirect
+	github.com/wailsapp/go-webview2 v1.0.22 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
-	modernc.org/libc v1.66.3 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
+	modernc.org/libc v1.66.10 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 )
