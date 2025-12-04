@@ -6,15 +6,11 @@
 	import { Grid } from "$components/grid";
 	import { RepoCard } from "$components/products";
 	import { Button } from "$components/ui/button";
-	import { PRGrid, SecurityGrid } from "$components/products/index.js";
 	import * as Accordion from "$components/ui/accordion";
-	import { TagsFilter } from "$lib/hooks/filters.svelte";
-	import { GridHeader } from "$components/grid/index.js";
 	import { resolve } from "$app/paths";
+	import { AccordionItemPrs, AccordionItemSecurity } from "$components/products";
 
 	let { data }: PageProps = $props();
-
-	const prsFilter = new TagsFilter(data.prs, "repository_name");
 
 	let product = $derived(data.product);
 	let repos = $derived(data.repos);
@@ -49,27 +45,9 @@
 		</Button>
 	</PageTitle>
 
-	<Accordion.Root type="multiple" value={["sec", "prs", "repos"]}>
-		<Accordion.Item value="sec">
-			<Accordion.Trigger>
-				<GridHeader
-					data={securities}
-					tagField="repository_name"
-					title="Security Vulnerabilities"
-				/>
-			</Accordion.Trigger>
-			<Accordion.Content class="mb-5">
-				<SecurityGrid {securities} />
-			</Accordion.Content>
-		</Accordion.Item>
-		<Accordion.Item value="prs">
-			<Accordion.Trigger>
-				<GridHeader data={prs} tagField="repository_name" title="Pull Requests" />
-			</Accordion.Trigger>
-			<Accordion.Content class="mb-5">
-				<PRGrid prs={prsFilter.data} />
-			</Accordion.Content>
-		</Accordion.Item>
+	<Accordion.Root type="multiple" value={["security", "prs", "repos"]}>
+		<AccordionItemSecurity {securities} />
+		<AccordionItemPrs {prs} />
 		<Accordion.Item value="repos">
 			<Accordion.Trigger>
 				<h2 class="text-xl text-muted-foreground">Repositories ({repos.length})</h2>

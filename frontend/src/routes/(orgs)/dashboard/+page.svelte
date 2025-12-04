@@ -1,12 +1,10 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
 	import { PageTitle } from "$components/page_title";
-	import { PRGrid, ProductsGrid } from "$components/products";
-	import { GridHeader } from "$components/grid/index.js";
+	import { ProductsGrid, AccordionItemSecurity, AccordionItemPrs } from "$components/products";
 	import { onDestroy, onMount } from "svelte";
 	import { TIME_TWO_MINUTES } from "$lib/watchtower/types";
 	import { invalidateAll } from "$app/navigation";
-	import { SecurityGrid } from "$components/products/index.js";
 	import { TimeSince } from "$lib/hooks/time.svelte";
 	import { SvelteDate } from "svelte/reactivity";
 	import * as Accordion from "$components/ui/accordion";
@@ -61,22 +59,8 @@
 		</div>
 	</PageTitle>
 	<Accordion.Root type="multiple" value={["security", "prs", "products"]}>
-		<Accordion.Item value="security">
-			<Accordion.Trigger class="text-left">
-				<GridHeader data={securities} tagField="tag" title="Security Vulnerabilities" />
-			</Accordion.Trigger>
-			<Accordion.Content class="mb-5">
-				<SecurityGrid {securities} />
-			</Accordion.Content>
-		</Accordion.Item>
-		<Accordion.Item value="prs">
-			<Accordion.Trigger class="text-left">
-				<GridHeader data={prs} tagField="tag" title="Pull Requests" />
-			</Accordion.Trigger>
-			<Accordion.Content class="mb-5">
-				<PRGrid {prs} />
-			</Accordion.Content>
-		</Accordion.Item>
+		<AccordionItemSecurity {securities} />
+		<AccordionItemPrs {prs} />
 		<Accordion.Item value="products">
 			<Accordion.Trigger class="text-left">
 				<h3 class="text-xl text-muted-foreground">Products ({products.length})</h3>
