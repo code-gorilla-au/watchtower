@@ -141,7 +141,7 @@ export class ProductsService {
 	}
 
 	private internalUpdateProducts(products: ProductDTO[]) {
-		this.#internal.products = products;
+		this.#internal.products.splice(0, this.#internal.products.length, ...products);
 		this.#internal.productsLastSync = new SvelteDate();
 	}
 

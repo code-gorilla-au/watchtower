@@ -24,15 +24,23 @@
 					onSelect={() => {
 						OpenExternalURL(pr.url);
 					}}
+					keywords={[pr.title, pr.repository_name, pr.author]}
 				>
-					{truncate(pr.title)}
+					<div class="flex flex-col">
+						<span>{truncate(pr.title)}</span>
+						<span class="text-sm text-muted-foreground"
+							>{truncate(pr.repository_name)} - {pr.author}</span
+						>
+					</div>
 				</Command.Item>
 			{/each}
 		</Command.Group>
 		<Command.Separator />
 		<Command.Group heading="Security vulnerability">
 			{#each securities as s (s.id)}
-				<Command.Item>{s.package_name}</Command.Item>
+				<Command.Item value={String(s.id)}>
+					{s.package_name}
+				</Command.Item>
 			{/each}
 		</Command.Group>
 	</Command.List>

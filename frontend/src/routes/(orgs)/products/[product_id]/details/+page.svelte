@@ -47,7 +47,7 @@
 
 	<Accordion.Root type="multiple" value={["security", "prs", "repos"]}>
 		<AccordionItemSecurity {securities} />
-		<AccordionItemPrs {prs} />
+		<AccordionItemPrs {prs} fieldTag="repository_name" />
 		<Accordion.Item value="repos">
 			<Accordion.Trigger>
 				<h2 class="text-xl text-muted-foreground">Repositories ({repos.length})</h2>
