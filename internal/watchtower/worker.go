@@ -2,53 +2,58 @@ package watchtower
 
 import (
 	"context"
-	"sync"
 	"time"
 
 	"watchtower/internal/logging"
+
+	"github.com/go-co-op/gocron/v2"
 )
 
-type OrgSyncWorker struct {
+type Workers struct {
 	watchTower *Service
-	wg         sync.WaitGroup
-	stop       chan struct{}
+	cron       gocron.Scheduler
 }
 
-func NewOrgSyncWorker(wt *Service) *OrgSyncWorker {
-	return &OrgSyncWorker{
-		watchTower: wt,
-		wg:         sync.WaitGroup{},
-		stop:       make(chan struct{}, 1),
+func NewWorkers(wt *Service) (*Workers, error) {
+	s, err := gocron.NewScheduler()
+	if err != nil {
+		return nil, err
 	}
+
+	return &Workers{
+		watchTower: wt,
+		cron:       s,
+	}, nil
 }
 
-func (w *OrgSyncWorker) Start(ctx context.Context) {
+func (w *Workers) AddJobs() error {
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*3), gocron.NewTask(func() {
+		if err := w.watchTower.DeleteOldNotifications(); err != nil {
+			logging.FromContext(context.Background()).Error("Error syncing orgs", "error", err)
+		}
+	})); err != nil {
+		return err
+	}
+
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*15), gocron.NewTask(func() {
+		if err := w.watchTower.SyncOrgs(); err != nil {
+			logging.FromContext(context.Background()).Error("Error syncing orgs", "error", err)
+		}
+	})); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *Workers) Start(ctx context.Context) {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Starting org sync worker")
-
-	w.wg.Add(1)
-
-	go func() {
-		for {
-			select {
-			case <-w.stop:
-				logger.Debug("Stopping org sync worker")
-				w.wg.Done()
-
-				return
-			default:
-				if err := w.watchTower.SyncOrgs(); err != nil {
-					logger.Error("Error syncing orgs", "error", err)
-				}
-
-				time.Sleep(time.Minute * 3)
-			}
-		}
-	}()
-
-	w.wg.Wait()
+	w.cron.Start()
 }
 
-func (w *OrgSyncWorker) Stop() {
-	w.stop <- struct{}{}
+func (w *Workers) Stop() {
+	if err := w.cron.StopJobs(); err != nil {
+		logging.FromContext(context.Background()).Error("Error stopping org sync worker", "error", err)
+	}
 }

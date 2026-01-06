@@ -48,7 +48,11 @@ func main() {
 	}
 
 	wt := watchtower.NewService(ctx, databaseQueries, db)
-	worker := watchtower.NewOrgSyncWorker(wt)
+	worker, err := watchtower.NewWorkers(wt)
+	if err != nil {
+		logger.Error("Error creating workers", "error", err)
+		os.Exit(1)
+	}
 
 	app := NewApp(worker, appConfig.AppDir)
 
