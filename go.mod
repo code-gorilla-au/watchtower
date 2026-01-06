@@ -8,7 +8,7 @@ require (
 	github.com/code-gorilla-au/odize v1.3.4
 	github.com/go-co-op/gocron/v2 v2.19.0
 	github.com/wailsapp/wails/v2 v2.11.0
-	modernc.org/sqlite v1.40.1
+	modernc.org/sqlite v1.42.2
 )
 
 require (
