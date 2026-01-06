@@ -54,7 +54,7 @@ func (s Service) Create(ctx context.Context, params CreateOrgParams) (Organisati
 		return nil
 	})
 
-	return ToOrganisationDTO(orgModel), err
+	return toOrganisationDTO(orgModel), err
 }
 
 // Get retrieves an organisation by its ID and returns its DTO representation or an error if the operation fails.
@@ -67,7 +67,7 @@ func (s Service) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 		return OrganisationDTO{}, err
 	}
 
-	return ToOrganisationDTO(model), nil
+	return toOrganisationDTO(model), nil
 }
 
 // GetDefault retrieves the default organisation and returns its DTO representation or an error if the operation fails.
@@ -80,7 +80,7 @@ func (s Service) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 		return OrganisationDTO{}, err
 	}
 
-	return ToOrganisationDTO(model), nil
+	return toOrganisationDTO(model), nil
 }
 
 func (s Service) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
@@ -103,7 +103,7 @@ func (s Service) SetDefault(ctx context.Context, id int64) (OrganisationDTO, err
 		return nil
 	})
 
-	return ToOrganisationDTO(model), err
+	return toOrganisationDTO(model), err
 }
 
 // GetAll retrieves all organisations and returns their DTO representations or an error if the operation fails.
@@ -116,7 +116,7 @@ func (s Service) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
 		return nil, err
 	}
 
-	return ToOrganisationDTOs(models), nil
+	return toOrganisationDTOs(models), nil
 }
 
 // GetStaleOrgs retrieves organisations that haven't been updated for 1 hour.
@@ -132,7 +132,7 @@ func (s Service) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
 		return nil, err
 	}
 
-	return ToOrganisationDTOs(models), nil
+	return toOrganisationDTOs(models), nil
 }
 
 // GetOrgAssociatedToProduct retrieves the organisation associated with a product.
@@ -145,7 +145,7 @@ func (s Service) GetOrgAssociatedToProduct(ctx context.Context, productID int64)
 		return InternalOrganisation{}, err
 	}
 
-	return ToInternalOrganisation(model), nil
+	return toInternalOrganisation(model), nil
 }
 
 // Delete removes an organisation and its associated product-organisation mapping.
@@ -206,7 +206,7 @@ func (s Service) Update(ctx context.Context, params UpdateOrgParams) (Organisati
 		return OrganisationDTO{}, err
 	}
 
-	return ToOrganisationDTO(model), nil
+	return toOrganisationDTO(model), nil
 }
 
 func (s Service) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {

@@ -10,8 +10,8 @@ func toTime(ts int64) time.Time {
 	return time.Unix(ts, 0).UTC()
 }
 
-// ToOrganisationDTO converts a database Organisation model to an OrganisationDTO.
-func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
+// toOrganisationDTO converts a database Organisation model to an OrganisationDTO.
+func toOrganisationDTO(m database.Organisation) OrganisationDTO {
 	return OrganisationDTO{
 		ID:           m.ID,
 		FriendlyName: m.FriendlyName,
@@ -23,18 +23,18 @@ func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
 	}
 }
 
-// ToOrganisationDTOs converts a slice of database Organisation models to a slice of OrganisationDTOs.
-func ToOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
+// toOrganisationDTOs converts a slice of database Organisation models to a slice of OrganisationDTOs.
+func toOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
 	result := make([]OrganisationDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, ToOrganisationDTO(m))
+		result = append(result, toOrganisationDTO(m))
 	}
 
 	return result
 }
 
-// ToInternalOrganisation converts a database Organisation model to an InternalOrganisation.
-func ToInternalOrganisation(m database.Organisation) InternalOrganisation {
+// toInternalOrganisation converts a database Organisation model to an InternalOrganisation.
+func toInternalOrganisation(m database.Organisation) InternalOrganisation {
 	return InternalOrganisation{
 		OrganisationDTO: OrganisationDTO{
 			ID:           m.ID,
