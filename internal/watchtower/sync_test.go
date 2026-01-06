@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 	"watchtower/internal/database"
+	"watchtower/internal/organisations"
+	"watchtower/internal/products"
 
 	"watchtower/internal/github"
 
@@ -118,9 +120,9 @@ func TestService_CreateProduct(t *testing.T) {
 			odize.AssertEqual(t, product2.Name, "Backend Product")
 			odize.AssertTrue(t, product1.ID != product2.ID)
 
-			products, err := s.GetAllProductsForOrganisation(orgID)
+			productList, err := s.GetAllProductsForOrganisation(orgID)
 			odize.AssertNoError(t, err)
-			odize.AssertTrue(t, len(products) >= 2)
+			odize.AssertTrue(t, len(productList) >= 2)
 		}).
 		Test("should handle complex tags with special characters", func(t *testing.T) {
 			tags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
@@ -273,9 +275,9 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			org, err := s.CreateOrganisation("empty_org", "empty_namespace", "token", "test description")
 			odize.AssertNoError(t, err)
 
-			products, err := s.GetAllProductsForOrganisation(org.ID)
+			productList, err := s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 0)
+			odize.AssertEqual(t, len(productList), 0)
 		}).
 		Test("should return single product when organisation has one product", func(t *testing.T) {
 			org, err := s.CreateOrganisation("single_prod_org", "single_prod_namespace", "token", "test description")
@@ -285,15 +287,15 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			createdProduct, err := s.CreateProduct("Single Product", "Single product description", tags, org.ID)
 			odize.AssertNoError(t, err)
 
-			products, err := s.GetAllProductsForOrganisation(org.ID)
+			productList, err := s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 1)
-			odize.AssertEqual(t, products[0].ID, createdProduct.ID)
-			odize.AssertEqual(t, products[0].Name, "Single Product")
-			odize.AssertEqual(t, products[0].Description, "Single product description")
-			odize.AssertEqual(t, len(products[0].Tags), 2)
-			odize.AssertEqual(t, products[0].Tags[0], "web")
-			odize.AssertEqual(t, products[0].Tags[1], "api")
+			odize.AssertEqual(t, len(productList), 1)
+			odize.AssertEqual(t, productList[0].ID, createdProduct.ID)
+			odize.AssertEqual(t, productList[0].Name, "Single Product")
+			odize.AssertEqual(t, productList[0].Description, "Single product description")
+			odize.AssertEqual(t, len(productList[0].Tags), 2)
+			odize.AssertEqual(t, productList[0].Tags[0], "web")
+			odize.AssertEqual(t, productList[0].Tags[1], "api")
 		}).
 		Test("should return all products when organisation has multiple products", func(t *testing.T) {
 			org, err := s.CreateOrganisation("multi_prod_org", "multi_prod_namespace", "token", "test description")
@@ -311,12 +313,12 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			product3, err := s.CreateProduct("Mobile Product", "Mobile description", tags3, org.ID)
 			odize.AssertNoError(t, err)
 
-			products, err := s.GetAllProductsForOrganisation(org.ID)
+			productList, err := s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 3)
+			odize.AssertEqual(t, len(productList), 3)
 
 			productIDs := make(map[int64]bool)
-			for _, p := range products {
+			for _, p := range productList {
 				productIDs[p.ID] = true
 			}
 			odize.AssertTrue(t, productIDs[product1.ID])
@@ -338,11 +340,11 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			product2, err := s.CreateProduct("Org2 Product", "Product for org2", tags2, org2.ID)
 			odize.AssertNoError(t, err)
 
-			products1, err := s.GetAllProductsForOrganisation(org1.ID)
+			productList1, err := s.GetAllProductsForOrganisation(org1.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products1), 1)
-			odize.AssertEqual(t, products1[0].ID, product1.ID)
-			odize.AssertEqual(t, products1[0].Name, "Org1 Product")
+			odize.AssertEqual(t, len(productList1), 1)
+			odize.AssertEqual(t, productList1[0].ID, product1.ID)
+			odize.AssertEqual(t, productList1[0].Name, "Org1 Product")
 
 			products2, err := s.GetAllProductsForOrganisation(org2.ID)
 			odize.AssertNoError(t, err)
@@ -351,9 +353,9 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			odize.AssertEqual(t, products2[0].Name, "Org2 Product")
 		}).
 		Test("should return empty slice for non-existent organisation", func(t *testing.T) {
-			products, err := s.GetAllProductsForOrganisation(99999)
+			productList, err := s.GetAllProductsForOrganisation(99999)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 0)
+			odize.AssertEqual(t, len(productList), 0)
 		}).
 		Test("should return products with all data fields correctly populated", func(t *testing.T) {
 			org, err := s.CreateOrganisation("data_test_org", "data_test_namespace", "token", "test description")
@@ -363,11 +365,11 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			createdProduct, err := s.CreateProduct("Data Test Product", "Product with full data", tags, org.ID)
 			odize.AssertNoError(t, err)
 
-			products, err := s.GetAllProductsForOrganisation(org.ID)
+			productList, err := s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 1)
+			odize.AssertEqual(t, len(productList), 1)
 
-			product := products[0]
+			product := productList[0]
 			odize.AssertEqual(t, product.ID, createdProduct.ID)
 			odize.AssertEqual(t, product.Name, "Data Test Product")
 			odize.AssertEqual(t, product.Description, "Product with full data")
@@ -627,17 +629,17 @@ func TestService_DeleteProduct(t *testing.T) {
 			createdProduct, err := s.CreateProduct("List Test Product", "Product for list test", tags, org.ID)
 			odize.AssertNoError(t, err)
 
-			products, err := s.GetAllProductsForOrganisation(org.ID)
+			productList, err := s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 1)
-			odize.AssertEqual(t, products[0].ID, createdProduct.ID)
+			odize.AssertEqual(t, len(productList), 1)
+			odize.AssertEqual(t, productList[0].ID, createdProduct.ID)
 
 			err = s.DeleteProduct(createdProduct.ID)
 			odize.AssertNoError(t, err)
 
-			products, err = s.GetAllProductsForOrganisation(org.ID)
+			productList, err = s.GetAllProductsForOrganisation(org.ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, len(products), 0)
+			odize.AssertEqual(t, len(productList), 0)
 		}).
 		Run()
 	odize.AssertNoError(t, err)
@@ -1448,7 +1450,7 @@ func TestService_GetSecurityByProductID(t *testing.T) {
 			odize.AssertNoError(t, err)
 			odize.AssertEqual(t, len(securities), 2)
 
-			securityMap := make(map[string]SecurityDTO)
+			securityMap := make(map[string]products.SecurityDTO)
 			for _, sec := range securities {
 				securityMap[sec.ExternalID] = sec
 				odize.AssertEqual(t, sec.State, "OPEN")
@@ -1685,7 +1687,7 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 			odize.AssertNoError(t, err)
 			odize.AssertEqual(t, len(securities), 2)
 
-			securityMap := make(map[string]SecurityDTO)
+			securityMap := make(map[string]products.SecurityDTO)
 			for _, sec := range securities {
 				securityMap[sec.ExternalID] = sec
 				odize.AssertEqual(t, sec.State, "OPEN")
@@ -1956,19 +1958,10 @@ func TestService_SyncOrgs(t *testing.T) {
 		s = &Service{
 			ctx:      ctx,
 			ghClient: ghMock,
-			orgSvc: &organisationService{
-				store: _testDB,
-				txnDB: _testTxnDB,
-				txnFunc: func(tx *sql.Tx) OrgStore {
-					return _testDB.WithTx(tx)
-				},
-			},
-			productSvc: &productsService{
-				db: _testDB,
-				repoService: &repoService{
-					db: _testDB,
-				},
-			},
+			orgSvc: organisations.New(_testDB, _testTxnDB, func(tx *sql.Tx) organisations.OrgStore {
+				return _testDB.WithTx(tx)
+			}),
+			productSvc: products.New(_testDB),
 		}
 
 		// Create test organizations with unique namespaces to avoid conflicts
@@ -2007,17 +2000,10 @@ func TestService_SyncOrgs(t *testing.T) {
 			cancel() // Cancel immediately to simulate connection issues
 
 			brokenService := &Service{
-				ctx:      cancelCtx,
-				ghClient: ghMock,
-				orgSvc: &organisationService{
-					store: _testDB,
-				},
-				productSvc: &productsService{
-					db: _testDB,
-					repoService: &repoService{
-						db: _testDB,
-					},
-				},
+				ctx:        cancelCtx,
+				ghClient:   ghMock,
+				orgSvc:     organisations.New(_testDB, nil, nil),
+				productSvc: products.New(_testDB),
 			}
 
 			err := brokenService.SyncOrgs()
@@ -2347,7 +2333,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 
 	err := group.
 		Test("should return error when trying to update non-existent organisation", func(t *testing.T) {
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           999,
 				FriendlyName: "updated_name",
 				Namespace:    "updated_namespace",
@@ -2361,7 +2347,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			createdOrg, err := s.CreateOrganisation("original_org", "original_namespace", "token", "original description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           createdOrg.ID,
 				FriendlyName: "updated_friendly_name",
 				Namespace:    "updated_namespace",
@@ -2384,7 +2370,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			secondOrg, err := s.CreateOrganisation("second_update_org", "second_update_namespace", "token2", "second description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           firstOrg.ID,
 				FriendlyName: "updated_first_org",
 				Namespace:    "updated_first_namespace",
@@ -2410,7 +2396,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			secondOrg, err := s.CreateOrganisation("new_default_org", "new_default_namespace", "token2", "new description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           firstOrg.ID,
 				FriendlyName: firstOrg.FriendlyName,
 				Namespace:    firstOrg.Namespace,
@@ -2434,7 +2420,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 
 			odize.AssertEqual(t, createdOrg.DefaultOrg, true)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           createdOrg.ID,
 				FriendlyName: "updated_maintain_org",
 				Namespace:    "updated_maintain_namespace",

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Card, CardHeader, CardTitle } from "$components/ui/card/index.js";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
 	import { formatDate, truncate } from "$lib/hooks/formats";
 
 	type Props = {
-		security: watchtower.SecurityDTO;
+		security: products.SecurityDTO;
 	};
 
 	let { security }: Props = $props();

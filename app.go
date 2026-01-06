@@ -10,12 +10,12 @@ import (
 // App struct
 type App struct {
 	ctx                context.Context
-	worker             *watchtower.OrgSyncWorker
+	worker             *watchtower.Workers
 	configFileLocation string
 }
 
 // NewApp creates a new App application struct
-func NewApp(worker *watchtower.OrgSyncWorker, configLocation string) *App {
+func NewApp(worker *watchtower.Workers, configLocation string) *App {
 	return &App{
 		ctx:                context.Background(),
 		worker:             worker,

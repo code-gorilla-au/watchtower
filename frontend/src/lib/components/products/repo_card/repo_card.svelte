@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card, CardAction, CardHeader, CardTitle } from "$components/ui/card/index.js";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { Badge } from "$components/ui/badge/index.js";
 	import { formatDate } from "$lib/hooks/formats";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
@@ -8,7 +8,7 @@
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
 
 	type Props = {
-		repo: watchtower.RepositoryDTO;
+		repo: products.RepositoryDTO;
 	};
 
 	let { repo }: Props = $props();

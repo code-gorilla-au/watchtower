@@ -2,10 +2,10 @@
 	import { PRCard } from "$components/products/index";
 	import { EmptySlate } from "$components/empty_slate";
 	import { Grid } from "$components/grid";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 
 	type Props = {
-		prs: watchtower.PullRequestDTO[];
+		prs: products.PullRequestDTO[];
 	};
 	let { prs }: Props = $props();
 </script>

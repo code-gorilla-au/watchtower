@@ -19,6 +19,16 @@ type Organisation struct {
 	UpdatedAt    int64
 }
 
+type OrganisationNotification struct {
+	ID             int64
+	OrganisationID sql.NullInt64
+	Type           string
+	Content        string
+	Status         string
+	CreatedAt      int64
+	UpdatedAt      int64
+}
+
 type Product struct {
 	ID          int64
 	Name        string

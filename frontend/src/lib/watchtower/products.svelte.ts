@@ -1,5 +1,5 @@
-import { watchtower } from "$lib/wailsjs/go/models";
-import ProductDTO = watchtower.ProductDTO;
+import { products } from "$lib/wailsjs/go/models";
+import ProductDTO = products.ProductDTO;
 import { SvelteDate } from "svelte/reactivity";
 import {
 	CreateProduct,
@@ -14,7 +14,7 @@ import {
 	SyncProduct,
 	UpdateProduct
 } from "$lib/wailsjs/go/watchtower/Service";
-import RepositoryDTO = watchtower.RepositoryDTO;
+import RepositoryDTO = products.RepositoryDTO;
 import { differenceInMinutes } from "date-fns";
 import { STALE_TIMEOUT_MINUTES } from "$lib/watchtower/types";
 

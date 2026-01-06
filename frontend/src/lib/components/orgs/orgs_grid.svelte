@@ -3,13 +3,13 @@
 	import { OrgCard } from "$components/orgs/org_card";
 	import { EmptySlate } from "$components/empty_slate";
 	import { Grid } from "$components/grid";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { organisations } from "$lib/wailsjs/go/models";
 	import { orgSvc } from "$lib/watchtower";
 	import { goto } from "$app/navigation";
 	import { toast } from "svelte-sonner";
 
 	type Props = {
-		orgs: watchtower.OrganisationDTO[];
+		orgs: organisations.OrganisationDTO[];
 	};
 
 	let { orgs }: Props = $props();

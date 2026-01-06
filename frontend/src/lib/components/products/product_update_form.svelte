@@ -2,11 +2,11 @@
 	import { BaseInput } from "$components/base_input";
 	import { Button } from "$components/ui/button";
 	import { LoaderCircle } from "@lucide/svelte";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { type ProductUpdateFormData } from "./types";
 
 	type Props = {
-		product?: watchtower.ProductDTO;
+		product?: products.ProductDTO;
 		mode: "create" | "update";
 		error?: string;
 		loading?: boolean;

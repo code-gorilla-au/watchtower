@@ -1,4 +1,53 @@
-export namespace watchtower {
+export namespace notifications {
+	
+	export class Notification {
+	    id?: number;
+	    organisation_id?: number;
+	    status?: string;
+	    content?: string;
+	    type?: string;
+	    // Go type: time
+	    created_at: any;
+	    // Go type: time
+	    updated_at: any;
+	
+	    static createFrom(source: any = {}) {
+	        return new Notification(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.organisation_id = source["organisation_id"];
+	        this.status = source["status"];
+	        this.content = source["content"];
+	        this.type = source["type"];
+	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.updated_at = this.convertValues(source["updated_at"], null);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
+export namespace organisations {
 	
 	export class OrganisationDTO {
 	    id: number;
@@ -44,6 +93,33 @@ export namespace watchtower {
 		    return a;
 		}
 	}
+	export class UpdateOrgParams {
+	    ID: number;
+	    FriendlyName: string;
+	    Namespace: string;
+	    Token: string;
+	    Description: string;
+	    DefaultOrg: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new UpdateOrgParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ID = source["ID"];
+	        this.FriendlyName = source["FriendlyName"];
+	        this.Namespace = source["Namespace"];
+	        this.Token = source["Token"];
+	        this.Description = source["Description"];
+	        this.DefaultOrg = source["DefaultOrg"];
+	    }
+	}
+
+}
+
+export namespace products {
+	
 	export class ProductDTO {
 	    id: number;
 	    name: string;
@@ -238,26 +314,6 @@ export namespace watchtower {
 		    }
 		    return a;
 		}
-	}
-	export class UpdateOrgParams {
-	    ID: number;
-	    DefaultOrg: boolean;
-	    FriendlyName: string;
-	    Namespace: string;
-	    Description: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new UpdateOrgParams(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.ID = source["ID"];
-	        this.DefaultOrg = source["DefaultOrg"];
-	        this.FriendlyName = source["FriendlyName"];
-	        this.Namespace = source["Namespace"];
-	        this.Description = source["Description"];
-	    }
 	}
 
 }

@@ -4,11 +4,11 @@
 	import { Switch } from "$components/ui/switch";
 	import { Button } from "$components/ui/button";
 	import { LoaderCircle } from "@lucide/svelte";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { organisations } from "$lib/wailsjs/go/models";
 	import { type OrgUpdateFormData } from "./types";
 
 	type Props = {
-		org?: watchtower.OrganisationDTO;
+		org?: organisations.OrganisationDTO;
 		mode: "create" | "update";
 		error?: string;
 		loading?: boolean;

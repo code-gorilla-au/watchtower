@@ -2,53 +2,64 @@ package watchtower
 
 import (
 	"context"
-	"sync"
 	"time"
 
 	"watchtower/internal/logging"
+
+	"github.com/go-co-op/gocron/v2"
 )
 
-type OrgSyncWorker struct {
+type Workers struct {
 	watchTower *Service
-	wg         sync.WaitGroup
-	stop       chan struct{}
+	cron       gocron.Scheduler
 }
 
-func NewOrgSyncWorker(wt *Service) *OrgSyncWorker {
-	return &OrgSyncWorker{
-		watchTower: wt,
-		wg:         sync.WaitGroup{},
-		stop:       make(chan struct{}, 1),
+func NewWorkers(wt *Service) (*Workers, error) {
+	s, err := gocron.NewScheduler()
+	if err != nil {
+		return nil, err
 	}
+
+	return &Workers{
+		watchTower: wt,
+		cron:       s,
+	}, nil
 }
 
-func (w *OrgSyncWorker) Start(ctx context.Context) {
-	logger := logging.FromContext(ctx)
-	logger.Debug("Starting org sync worker")
+func (w *Workers) AddJobs() error {
+	logger := logging.FromContext(context.Background()).With("service", "workers")
 
-	w.wg.Add(1)
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*2), gocron.NewTask(func() {
+		logger.Debug("Running syncing orgs worker")
 
-	go func() {
-		for {
-			select {
-			case <-w.stop:
-				logger.Debug("Stopping org sync worker")
-				w.wg.Done()
-
-				return
-			default:
-				if err := w.watchTower.SyncOrgs(); err != nil {
-					logger.Error("Error syncing orgs", "error", err)
-				}
-
-				time.Sleep(time.Minute * 3)
-			}
+		if err := w.watchTower.SyncOrgs(); err != nil {
+			logger.Error("Error syncing orgs", "error", err)
 		}
-	}()
+	})); err != nil {
+		return err
+	}
 
-	w.wg.Wait()
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*10), gocron.NewTask(func() {
+		logger.Debug("Running remove old notifications worker")
+
+		if err := w.watchTower.DeleteOldNotifications(); err != nil {
+			logger.Error("Error syncing orgs", "error", err)
+		}
+	})); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (w *OrgSyncWorker) Stop() {
-	w.stop <- struct{}{}
+func (w *Workers) Start(ctx context.Context) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Starting workers")
+	w.cron.Start()
+}
+
+func (w *Workers) Stop() {
+	if err := w.cron.StopJobs(); err != nil {
+		logging.FromContext(context.Background()).Error("Error stopping org sync worker", "error", err)
+	}
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { truncate } from "$lib/hooks/formats";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import * as Command from "$lib/components/ui/command";
 	import { OpenExternalURL } from "$lib/wailsjs/go/main/App";
 
 	type Props = {
-		prs: watchtower.PullRequestDTO[];
-		securities: watchtower.SecurityDTO[];
+		prs: products.PullRequestDTO[];
+		securities: products.SecurityDTO[];
 		open: boolean;
 	};
 

@@ -1,65 +1,27 @@
-package watchtower
+package products
 
 import (
 	"encoding/json"
 	"time"
 	"watchtower/internal/database"
-
 	"watchtower/internal/github"
 )
 
-// Conversion helpers from database models to DTOs
-
+// toTime converts a Unix timestamp to time.Time.
 func toTime(ts int64) time.Time {
 	return time.Unix(ts, 0).UTC()
 }
 
-func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
-	return OrganisationDTO{
-		ID:           m.ID,
-		FriendlyName: m.FriendlyName,
-		Description:  m.Description,
-		Namespace:    m.Namespace,
-		DefaultOrg:   m.DefaultOrg,
-		CreatedAt:    toTime(m.CreatedAt),
-		UpdatedAt:    toTime(m.UpdatedAt),
-	}
-}
-
-func ToOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
-	result := make([]OrganisationDTO, 0, len(models))
-	for _, m := range models {
-		result = append(result, ToOrganisationDTO(m))
-	}
-
-	return result
-}
-
-func ToInternalOrganisation(m database.Organisation) InternalOrganisation {
-	return InternalOrganisation{
-		OrganisationDTO: OrganisationDTO{
-			ID:           m.ID,
-			FriendlyName: m.FriendlyName,
-			Description:  m.Description,
-			Namespace:    m.Namespace,
-			DefaultOrg:   m.DefaultOrg,
-			CreatedAt:    toTime(m.CreatedAt),
-			UpdatedAt:    toTime(m.UpdatedAt),
-		},
-		Token: m.Token,
-	}
-}
-
-func ToProductDTOs(models []database.Product) []ProductDTO {
+func toProductDTOs(models []database.Product) []ProductDTO {
 	result := make([]ProductDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, ToProductDTO(m))
+		result = append(result, toProductDTO(m))
 	}
 
 	return result
 }
 
-func ToProductDTO(m database.Product) ProductDTO {
+func toProductDTO(m database.Product) ProductDTO {
 	var tagList []string
 
 	if m.Tags.Valid {
@@ -78,7 +40,7 @@ func ToProductDTO(m database.Product) ProductDTO {
 	}
 }
 
-func ProductToPullRequestDTO(m database.GetPullRequestByProductIDAndStateRow) PullRequestDTO {
+func productToPullRequestDTO(m database.GetPullRequestByProductIDAndStateRow) PullRequestDTO {
 	return PullRequestDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -98,13 +60,13 @@ func ProductToPullRequestDTO(m database.GetPullRequestByProductIDAndStateRow) Pu
 func toPullRequestDTOs(models []database.GetPullRequestByProductIDAndStateRow) []PullRequestDTO {
 	result := make([]PullRequestDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, ProductToPullRequestDTO(m))
+		result = append(result, productToPullRequestDTO(m))
 	}
 
 	return result
 }
 
-func OrgToPullRequestDTO(m database.GetPullRequestsByOrganisationAndStateRow) PullRequestDTO {
+func orgToPullRequestDTO(m database.GetPullRequestsByOrganisationAndStateRow) PullRequestDTO {
 	return PullRequestDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -124,13 +86,13 @@ func OrgToPullRequestDTO(m database.GetPullRequestsByOrganisationAndStateRow) Pu
 func orgToPullRequestDTOs(models []database.GetPullRequestsByOrganisationAndStateRow) []PullRequestDTO {
 	result := make([]PullRequestDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, OrgToPullRequestDTO(m))
+		result = append(result, orgToPullRequestDTO(m))
 	}
 
 	return result
 }
 
-func ToRepositoryDTO(m database.GetReposByProductIDRow) RepositoryDTO {
+func toRepositoryDTO(m database.GetReposByProductIDRow) RepositoryDTO {
 	return RepositoryDTO{
 		ID:          m.ID,
 		Name:        m.Name,
@@ -143,7 +105,7 @@ func ToRepositoryDTO(m database.GetReposByProductIDRow) RepositoryDTO {
 	}
 }
 
-func ToSecurityDTO(m database.GetSecurityByProductIDAndStateRow) SecurityDTO {
+func toSecurityDTO(m database.GetSecurityByProductIDAndStateRow) SecurityDTO {
 	return SecurityDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -159,16 +121,16 @@ func ToSecurityDTO(m database.GetSecurityByProductIDAndStateRow) SecurityDTO {
 	}
 }
 
-func ToSecurityDTOs(models []database.GetSecurityByProductIDAndStateRow) []SecurityDTO {
+func toSecurityDTOs(models []database.GetSecurityByProductIDAndStateRow) []SecurityDTO {
 	result := make([]SecurityDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, ToSecurityDTO(m))
+		result = append(result, toSecurityDTO(m))
 	}
 
 	return result
 }
 
-func OrgToSecurityDTO(m database.GetSecurityByOrganisationAndStateRow) SecurityDTO {
+func orgToSecurityDTO(m database.GetSecurityByOrganisationAndStateRow) SecurityDTO {
 	return SecurityDTO{
 		ID:             m.ID,
 		ExternalID:     m.ExternalID,
@@ -184,16 +146,16 @@ func OrgToSecurityDTO(m database.GetSecurityByOrganisationAndStateRow) SecurityD
 	}
 }
 
-func OrgToSecurityDTOs(models []database.GetSecurityByOrganisationAndStateRow) []SecurityDTO {
+func orgToSecurityDTOs(models []database.GetSecurityByOrganisationAndStateRow) []SecurityDTO {
 	result := make([]SecurityDTO, 0, len(models))
 	for _, m := range models {
-		result = append(result, OrgToSecurityDTO(m))
+		result = append(result, orgToSecurityDTO(m))
 	}
 
 	return result
 }
 
-func ToCreateRepoFromGithub(repos []github.Node[github.Repository], tag string) []CreateRepoParams {
+func toCreateRepoFromGithub(repos []github.Node[github.Repository], tag string) []CreateRepoParams {
 	result := make([]CreateRepoParams, 0, len(repos))
 
 	for _, repo := range repos {
@@ -208,8 +170,8 @@ func ToCreateRepoFromGithub(repos []github.Node[github.Repository], tag string) 
 	return result
 }
 
-func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoName string) []CreatePRParams {
-	result := make([]CreatePRParams, len(prs.Nodes))
+func toCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoName string) []CreatePRParams {
+	result := make([]CreatePRParams, 0, len(prs.Nodes))
 
 	for _, pr := range prs.Nodes {
 		result = append(result, CreatePRParams{
@@ -227,8 +189,8 @@ func ToCreatePRsFromGithubRepos(prs github.RootNode[github.PullRequest], repoNam
 	return result
 }
 
-func ToSecParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []CreateSecurityParams {
-	result := make([]CreateSecurityParams, len(secs.Nodes))
+func toSecParamsFromGithubVulnerabilities(secs github.RootNode[github.VulnerabilityAlerts], repoName string) []CreateSecurityParams {
+	result := make([]CreateSecurityParams, 0, len(secs.Nodes))
 
 	for _, sec := range secs.Nodes {
 		result = append(result, CreateSecurityParams{
