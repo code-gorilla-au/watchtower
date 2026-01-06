@@ -38,10 +38,6 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
-                                 description = excluded.description,
-                                 tags       = excluded.tags,
-                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, name, description, tags, created_at, updated_at
 `
 
@@ -145,11 +141,6 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
-                                 url        = excluded.url,
-                                 topic      = excluded.topic,
-                                 owner      = excluded.owner,
-                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, name, url, topic, owner, created_at, updated_at
 `
 
@@ -736,19 +727,26 @@ const updateProduct = `-- name: UpdateProduct :one
 UPDATE products
 SET name       = ?,
     tags       = ?,
+    description = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING id, name, description, tags, created_at, updated_at
 `
 
 type UpdateProductParams struct {
-	Name string
-	Tags sql.NullString
-	ID   int64
+	Name        string
+	Tags        sql.NullString
+	Description string
+	ID          int64
 }
 
 func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, updateProduct, arg.Name, arg.Tags, arg.ID)
+	row := q.db.QueryRowContext(ctx, updateProduct,
+		arg.Name,
+		arg.Tags,
+		arg.Description,
+		arg.ID,
+	)
 	var i Product
 	err := row.Scan(
 		&i.ID,
@@ -770,4 +768,44 @@ WHERE id = ?
 func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, updateProductSync, id)
 	return err
+}
+
+const updateRepo = `-- name: UpdateRepo :one
+UPDATE repositories
+SET name       = ?,
+    url        = ?,
+    topic      = ?,
+    owner      = ?,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING id, name, url, topic, owner, created_at, updated_at
+`
+
+type UpdateRepoParams struct {
+	Name  string
+	Url   string
+	Topic string
+	Owner string
+	ID    int64
+}
+
+func (q *Queries) UpdateRepo(ctx context.Context, arg UpdateRepoParams) (Repository, error) {
+	row := q.db.QueryRowContext(ctx, updateRepo,
+		arg.Name,
+		arg.Url,
+		arg.Topic,
+		arg.Owner,
+		arg.ID,
+	)
+	var i Repository
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Url,
+		&i.Topic,
+		&i.Owner,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }

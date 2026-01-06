@@ -18,6 +18,7 @@ type ProductStore interface {
 	DeleteProduct(ctx context.Context, id int64) error
 
 	CreateRepo(ctx context.Context, arg database.CreateRepoParams) (database.Repository, error)
+	UpdateRepo(ctx context.Context, arg database.UpdateRepoParams) (database.Repository, error)
 	GetReposByProductID(ctx context.Context, id int64) ([]database.GetReposByProductIDRow, error)
 	GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error)
 	GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error)

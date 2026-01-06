@@ -65,9 +65,10 @@ type CreateProductParams struct {
 }
 
 type UpdateProductParams struct {
-	ID   int64
-	Name string
-	Tags []string
+	ID          int64
+	Name        string
+	Description string
+	Tags        []string
 }
 
 type CreateRepoParams struct {

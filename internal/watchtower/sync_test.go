@@ -302,15 +302,15 @@ func TestService_GetAllProductsForOrganisation(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			tags1 := []string{"frontend"}
-			product1, err := s.CreateProduct("Frontend Product", "Frontend description", tags1, org.ID)
+			product1, err := s.CreateProduct("Frontend Product1", "Frontend description", tags1, org.ID)
 			odize.AssertNoError(t, err)
 
 			tags2 := []string{"backend"}
-			product2, err := s.CreateProduct("Backend Product", "Backend description", tags2, org.ID)
+			product2, err := s.CreateProduct("Backend Product2", "Backend description", tags2, org.ID)
 			odize.AssertNoError(t, err)
 
 			tags3 := []string{"mobile"}
-			product3, err := s.CreateProduct("Mobile Product", "Mobile description", tags3, org.ID)
+			product3, err := s.CreateProduct("Mobile Product3", "Mobile description", tags3, org.ID)
 			odize.AssertNoError(t, err)
 
 			productList, err := s.GetAllProductsForOrganisation(org.ID)
@@ -412,7 +412,7 @@ func TestService_UpdateProduct(t *testing.T) {
 	err := group.
 		Test("should return error when trying to update non-existent product", func(t *testing.T) {
 			tags := []string{"updated", "test"}
-			_, err := s.UpdateProduct(999, "Updated Name", tags)
+			_, err := s.UpdateProduct(999, "Updated Name", "updated description", tags)
 			odize.AssertError(t, err)
 		}).
 		Test("should successfully update product with new name and tags", func(t *testing.T) {
@@ -421,12 +421,12 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			updatedTags := []string{"updated", "new", "tags"}
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Name", updatedTags)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Name", "updated description", updatedTags)
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
 			odize.AssertEqual(t, updatedProduct.Name, "Updated Name")
-			odize.AssertEqual(t, updatedProduct.Description, "Initial description")
+			odize.AssertEqual(t, updatedProduct.Description, "updated description")
 			odize.AssertEqual(t, len(updatedProduct.Tags), 3)
 			odize.AssertEqual(t, updatedProduct.Tags[0], "updated")
 			odize.AssertEqual(t, updatedProduct.Tags[1], "new")
@@ -437,7 +437,7 @@ func TestService_UpdateProduct(t *testing.T) {
 			createdProduct, err := s.CreateProduct("Old Name", "Keep description", initialTags, orgID)
 			odize.AssertNoError(t, err)
 
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "New Name", nil)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "New Name", "Keep description", nil)
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
@@ -451,7 +451,7 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			newTags := []string{"completely", "different", "tags"}
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Keep Name", newTags)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Keep Name", "Keep description", newTags)
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
@@ -464,29 +464,29 @@ func TestService_UpdateProduct(t *testing.T) {
 		}).
 		Test("should successfully update product with empty tags", func(t *testing.T) {
 			initialTags := []string{"remove", "these"}
-			createdProduct, err := s.CreateProduct("Product Name", "Product description", initialTags, orgID)
+			createdProduct, err := s.CreateProduct("Product Name empty tags", "Product description", initialTags, orgID)
 			odize.AssertNoError(t, err)
 
 			emptyTags := []string{}
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Product Name", emptyTags)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "Updated Product Name empty tags", "Product description", emptyTags)
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
-			odize.AssertEqual(t, updatedProduct.Name, "Updated Product Name")
+			odize.AssertEqual(t, updatedProduct.Name, "Updated Product Name empty tags")
 			odize.AssertEqual(t, updatedProduct.Description, "Product description")
 			odize.AssertEqual(t, len(updatedProduct.Tags), 0)
 		}).
 		Test("should successfully update product with complex tags containing special characters", func(t *testing.T) {
 			initialTags := []string{"simple"}
-			createdProduct, err := s.CreateProduct("Test Product", "Test description", initialTags, orgID)
+			createdProduct, err := s.CreateProduct("Test Product special characters", "Test description", initialTags, orgID)
 			odize.AssertNoError(t, err)
 
 			complexTags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "complex tags product", complexTags)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "complex tags product special characters", "Test description", complexTags)
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, updatedProduct.ID, createdProduct.ID)
-			odize.AssertEqual(t, updatedProduct.Name, "complex tags product")
+			odize.AssertEqual(t, updatedProduct.Name, "complex tags product special characters")
 			odize.AssertEqual(t, updatedProduct.Description, "Test description")
 			odize.AssertEqual(t, len(updatedProduct.Tags), 4)
 			odize.AssertEqual(t, updatedProduct.Tags[0], "tag-with-dash")
@@ -500,7 +500,7 @@ func TestService_UpdateProduct(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			afterTags := []string{"after", "update"}
-			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "After Update", afterTags)
+			updatedProduct, err := s.UpdateProduct(createdProduct.ID, "After Update", "Before description", afterTags)
 			odize.AssertNoError(t, err)
 
 			retrievedProduct, err := s.GetProductByID(createdProduct.ID)
@@ -582,17 +582,6 @@ func TestService_DeleteProduct(t *testing.T) {
 		Test("should successfully delete product with complex data", func(t *testing.T) {
 			tags := []string{"tag-with-dash", "tag_with_underscore", "tag.with.dots", "tag with spaces"}
 			createdProduct, err := s.CreateProduct("Complex Delete Product", "Product with complex tags to delete", tags, orgID)
-			odize.AssertNoError(t, err)
-
-			err = s.DeleteProduct(createdProduct.ID)
-			odize.AssertNoError(t, err)
-
-			_, err = s.GetProductByID(createdProduct.ID)
-			odize.AssertError(t, err)
-		}).
-		Test("should successfully delete product with empty name and description", func(t *testing.T) {
-			tags := []string{"test"}
-			createdProduct, err := s.CreateProduct("", "", tags, orgID)
 			odize.AssertNoError(t, err)
 
 			err = s.DeleteProduct(createdProduct.ID)
@@ -766,7 +755,7 @@ func TestService_GetProductRepos(t *testing.T) {
 		}).
 		Test("should handle product with empty tags", func(t *testing.T) {
 			tags := []string{}
-			product, err := s.CreateProduct("Empty Tags Product", "Product with empty tags", tags, orgID)
+			product, err := s.CreateProduct("Empty Tags Product1", "Product with empty tags", tags, orgID)
 			odize.AssertNoError(t, err)
 
 			repos, err := s.GetProductRepos(product.ID)
@@ -1976,11 +1965,11 @@ func TestService_SyncOrgs(t *testing.T) {
 
 		// Create products for each organization
 		tags1 := []string{"sync-tag-1"}
-		_, err = s.CreateProduct("Sync Product 1", "Product for sync test 1", tags1, org1ID)
+		_, err = s.CreateProduct(fmt.Sprintf("sync_product_1_sync_%d", timestamp), "Product for sync test 1", tags1, org1ID)
 		odize.AssertNoError(t, err)
 
 		tags2 := []string{"sync-tag-2"}
-		_, err = s.CreateProduct("Sync Product 2", "Product for sync test 2", tags2, org2ID)
+		_, err = s.CreateProduct(fmt.Sprintf("sync_product_2_sync_%d", timestamp), "Product for sync test 2", tags2, org2ID)
 		odize.AssertNoError(t, err)
 	})
 

@@ -33,11 +33,12 @@ func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]product
 }
 
 // UpdateProduct updates a product and returns the updated entity.
-func (s *Service) UpdateProduct(id int64, name string, tags []string) (products.ProductDTO, error) {
+func (s *Service) UpdateProduct(id int64, name string, description string, tags []string) (products.ProductDTO, error) {
 	return s.productSvc.Update(s.ctx, products.UpdateProductParams{
-		ID:   id,
-		Name: name,
-		Tags: tags,
+		ID:          id,
+		Name:        name,
+		Tags:        tags,
+		Description: description,
 	})
 }
 

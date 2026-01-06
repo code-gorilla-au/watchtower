@@ -95,9 +95,10 @@ func (s *Service) Update(ctx context.Context, params UpdateProductParams) (Produ
 	}
 
 	model, err := s.store.UpdateProduct(ctx, database.UpdateProductParams{
-		Name: params.Name,
-		Tags: tagsNS,
-		ID:   params.ID,
+		Name:        params.Name,
+		Tags:        tagsNS,
+		ID:          params.ID,
+		Description: params.Description,
 	})
 	if err != nil {
 		logger.Error("Error updating product", "error", err)

@@ -9,10 +9,6 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
-                                 description = excluded.description,
-                                 tags       = excluded.tags,
-                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
 
 -- name: AddProductToOrganisation :exec
@@ -29,6 +25,7 @@ WHERE organisation_id = ?;
 UPDATE products
 SET name       = ?,
     tags       = ?,
+    description = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING *;
@@ -78,13 +75,18 @@ VALUES (?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (name) DO UPDATE SET name       = excluded.name,
-                                 url        = excluded.url,
-                                 topic      = excluded.topic,
-                                 owner      = excluded.owner,
-                                 updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
 
+
+-- name: UpdateRepo :one
+UPDATE repositories
+SET name       = ?,
+    url        = ?,
+    topic      = ?,
+    owner      = ?,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING *;
 
 -- name: GetReposByProductID :many
 SELECT r.*, p.name as product_name
