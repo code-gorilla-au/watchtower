@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { organisations } from "$lib/wailsjs/go/models";
 	import { formatDate } from "$lib/hooks/formats";
 	import { Card, CardContent, CardTitle } from "$components/ui/card";
 	import { Badge } from "$components/ui/badge";
@@ -10,7 +10,7 @@
 	import { resolve } from "$app/paths";
 
 	type Props = {
-		org: watchtower.OrganisationDTO;
+		org: organisations.OrganisationDTO;
 		onDelete?: (id: number) => void;
 	};
 

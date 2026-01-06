@@ -8,9 +8,9 @@ import {
 	SetDefaultOrg,
 	UpdateOrganisation
 } from "$lib/wailsjs/go/watchtower/Service";
-import { watchtower } from "$lib/wailsjs/go/models";
+import { organisations } from "$lib/wailsjs/go/models";
 import { differenceInMinutes } from "date-fns";
-import OrganisationDTO = watchtower.OrganisationDTO;
+import OrganisationDTO = organisations.OrganisationDTO;
 import { SvelteDate } from "svelte/reactivity";
 import { STALE_TIMEOUT_MINUTES, TIME_TWO_MINUTES } from "$lib/watchtower/types";
 
@@ -62,7 +62,7 @@ export class OrgService {
 		defaultOrg: boolean;
 	}) {
 		const updated = await UpdateOrganisation(
-			new watchtower.UpdateOrgParams({
+			new organisations.UpdateOrgParams({
 				ID: params.id,
 				DefaultOrg: params.defaultOrg,
 				FriendlyName: params.friendlyName,

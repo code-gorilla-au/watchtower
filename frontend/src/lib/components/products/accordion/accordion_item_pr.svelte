@@ -2,12 +2,12 @@
 	import * as Accordion from "$components/ui/accordion";
 	import { GridHeader } from "$components/grid";
 	import { PRGrid } from "$components/products";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { type FilterTagValue, TagsFilter } from "$lib/hooks/filters.svelte";
 
 	type Props = {
-		prs: watchtower.PullRequestDTO[];
-		fieldTag?: FilterTagValue<watchtower.PullRequestDTO>;
+		prs: products.PullRequestDTO[];
+		fieldTag?: FilterTagValue<products.PullRequestDTO>;
 	};
 
 	let { prs, fieldTag = "tag" }: Props = $props();

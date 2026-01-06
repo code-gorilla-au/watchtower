@@ -2,11 +2,11 @@
 	import * as Accordion from "$components/ui/accordion";
 	import { GridHeader } from "$components/grid";
 	import { SecurityGrid } from "$components/products";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { TagsFilter } from "$lib/hooks/filters.svelte";
 
 	type Props = {
-		securities: watchtower.SecurityDTO[];
+		securities: products.SecurityDTO[];
 	};
 
 	let { securities }: Props = $props();

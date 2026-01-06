@@ -3,11 +3,11 @@
 	import * as DropdownMenu from "$components/ui/dropdown-menu";
 	import { fade } from "svelte/transition";
 	import { transitionConfig } from "$components/nav/transitions";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { organisations } from "$lib/wailsjs/go/models";
 	type Props = {
 		expand?: boolean;
-		currentOrg: watchtower.OrganisationDTO;
-		allOrgs: watchtower.OrganisationDTO[];
+		currentOrg: organisations.OrganisationDTO;
+		allOrgs: organisations.OrganisationDTO[];
 	};
 
 	let { expand, currentOrg, allOrgs }: Props = $props();

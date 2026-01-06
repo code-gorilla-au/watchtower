@@ -14,6 +14,10 @@ export function DeleteAllOrgs() {
   return window['go']['watchtower']['Service']['DeleteAllOrgs']();
 }
 
+export function DeleteOldNotifications() {
+  return window['go']['watchtower']['Service']['DeleteOldNotifications']();
+}
+
 export function DeleteOrganisation(arg1) {
   return window['go']['watchtower']['Service']['DeleteOrganisation'](arg1);
 }
@@ -60,6 +64,14 @@ export function GetSecurityByOrganisation(arg1) {
 
 export function GetSecurityByProductID(arg1) {
   return window['go']['watchtower']['Service']['GetSecurityByProductID'](arg1);
+}
+
+export function GetUnreadNotifications(arg1) {
+  return window['go']['watchtower']['Service']['GetUnreadNotifications'](arg1);
+}
+
+export function MarkNotificationAsRead(arg1) {
+  return window['go']['watchtower']['Service']['MarkNotificationAsRead'](arg1);
 }
 
 export function SetDefaultOrg(arg1) {

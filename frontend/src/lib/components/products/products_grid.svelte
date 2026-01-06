@@ -3,14 +3,14 @@
 	import { EmptySlate } from "$components/empty_slate";
 	import { ProductCard } from "$components/products/product_card";
 	import { Grid } from "$components/grid";
-	import { watchtower } from "$lib/wailsjs/go/models";
+	import { products } from "$lib/wailsjs/go/models";
 	import { productSvc } from "$lib/watchtower";
 	import { invalidateAll } from "$app/navigation";
 	import { cn } from "$lib/utils";
 	import { toast } from "svelte-sonner";
 
 	type Props = {
-		products: watchtower.ProductDTO[];
+		products: products.ProductDTO[];
 		class?: string;
 	};
 
