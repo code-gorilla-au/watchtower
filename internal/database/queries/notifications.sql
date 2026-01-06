@@ -30,3 +30,6 @@ RETURNING *;
 -- name: GetUnreadNotificationsByOrgID :many
 SELECT * FROM organisation_notifications WHERE organisation_id = ?
 AND status = 'unread';
+
+-- name: DeleteOrgNotificationByDate :exec
+DELETE FROM organisation_notifications WHERE created_at < ?;

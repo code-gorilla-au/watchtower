@@ -26,7 +26,7 @@ func TestTransforms(t *testing.T) {
 				},
 				Type:      "alert",
 				Content:   "test content",
-				Status:    string(Unread),
+				Status:    string(StatusUnread),
 				CreatedAt: createdAtTs,
 				UpdatedAt: updatedAtTs,
 			}
@@ -34,7 +34,7 @@ func TestTransforms(t *testing.T) {
 			expected := Notification{
 				ID:             123,
 				OrganisationID: 456,
-				Status:         Unread,
+				Status:         StatusUnread,
 				Content:        "test content",
 				Type:           "alert",
 				CreatedAt:      time.Unix(createdAtTs, 0).UTC(),
@@ -69,7 +69,7 @@ func TestTransforms(t *testing.T) {
 					OrganisationID: sql.NullInt64{Int64: 10, Valid: true},
 					Type:           "type1",
 					Content:        "content1",
-					Status:         string(Unread),
+					Status:         string(StatusUnread),
 					CreatedAt:      1000,
 					UpdatedAt:      2000,
 				},
@@ -78,7 +78,7 @@ func TestTransforms(t *testing.T) {
 					OrganisationID: sql.NullInt64{Int64: 20, Valid: true},
 					Type:           "type2",
 					Content:        "content2",
-					Status:         string(Read),
+					Status:         string(StatusRead),
 					CreatedAt:      3000,
 					UpdatedAt:      4000,
 				},
@@ -91,12 +91,12 @@ func TestTransforms(t *testing.T) {
 			odize.AssertEqual(t, int64(1), results[0].ID)
 			odize.AssertEqual(t, int64(10), results[0].OrganisationID)
 			odize.AssertEqual(t, "type1", results[0].Type)
-			odize.AssertEqual(t, Unread, results[0].Status)
+			odize.AssertEqual(t, StatusUnread, results[0].Status)
 
 			odize.AssertEqual(t, int64(2), results[1].ID)
 			odize.AssertEqual(t, int64(20), results[1].OrganisationID)
 			odize.AssertEqual(t, "type2", results[1].Type)
-			odize.AssertEqual(t, Read, results[1].Status)
+			odize.AssertEqual(t, StatusRead, results[1].Status)
 		}).
 		Test("fromNotificationModels should return an empty slice when input is empty", func(t *testing.T) {
 			var models []database.OrganisationNotification

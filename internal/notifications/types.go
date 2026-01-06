@@ -14,8 +14,8 @@ type Service struct {
 type NotificationStatus string
 
 const (
-	Unread NotificationStatus = "unread"
-	Read   NotificationStatus = "read"
+	StatusUnread NotificationStatus = "unread"
+	StatusRead   NotificationStatus = "read"
 )
 
 type Notification struct {

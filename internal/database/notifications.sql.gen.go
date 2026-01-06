@@ -45,6 +45,15 @@ func (q *Queries) CreateOrgNotification(ctx context.Context, arg CreateOrgNotifi
 	return i, err
 }
 
+const deleteOrgNotificationByDate = `-- name: DeleteOrgNotificationByDate :exec
+DELETE FROM organisation_notifications WHERE created_at < ?
+`
+
+func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error {
+	_, err := q.db.ExecContext(ctx, deleteOrgNotificationByDate, createdAt)
+	return err
+}
+
 const getUnreadNotificationsByOrgID = `-- name: GetUnreadNotificationsByOrgID :many
 SELECT id, organisation_id, type, content, status, created_at, updated_at FROM organisation_notifications WHERE organisation_id = ?
 AND status = 'unread'
