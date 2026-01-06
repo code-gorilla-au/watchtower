@@ -11,7 +11,7 @@
 
 	let { securities }: Props = $props();
 
-	const tagsFilter = new TagsFilter(securities, "tag");
+	const tagsFilter = $derived(new TagsFilter(securities, "tag"));
 </script>
 
 <Accordion.Item value="security">

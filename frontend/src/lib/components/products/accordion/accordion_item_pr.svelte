@@ -12,7 +12,7 @@
 
 	let { prs, fieldTag = "tag" }: Props = $props();
 
-	const tagsFilter = new TagsFilter(prs, fieldTag);
+	const tagsFilter = $derived(new TagsFilter(prs, fieldTag));
 </script>
 
 <Accordion.Item value="prs">
