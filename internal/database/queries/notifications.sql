@@ -26,3 +26,7 @@ SET status     = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING *;
+
+-- name: GetUnreadNotificationsByOrgID :many
+SELECT * FROM organisation_notifications WHERE organisation_id = ?
+AND status = 'unread';

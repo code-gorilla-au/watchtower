@@ -62,6 +62,47 @@ func TestTransforms(t *testing.T) {
 			result := fromNotificationModel(model)
 			odize.AssertEqual(t, int64(0), result.OrganisationID)
 		}).
+		Test("fromNotificationModels should correctly transform a slice of database models", func(t *testing.T) {
+			models := []database.OrganisationNotification{
+				{
+					ID:             1,
+					OrganisationID: sql.NullInt64{Int64: 10, Valid: true},
+					Type:           "type1",
+					Content:        "content1",
+					Status:         string(Unread),
+					CreatedAt:      1000,
+					UpdatedAt:      2000,
+				},
+				{
+					ID:             2,
+					OrganisationID: sql.NullInt64{Int64: 20, Valid: true},
+					Type:           "type2",
+					Content:        "content2",
+					Status:         string(Read),
+					CreatedAt:      3000,
+					UpdatedAt:      4000,
+				},
+			}
+
+			results := fromNotificationModels(models)
+
+			odize.AssertEqual(t, 2, len(results))
+
+			odize.AssertEqual(t, int64(1), results[0].ID)
+			odize.AssertEqual(t, int64(10), results[0].OrganisationID)
+			odize.AssertEqual(t, "type1", results[0].Type)
+			odize.AssertEqual(t, Unread, results[0].Status)
+
+			odize.AssertEqual(t, int64(2), results[1].ID)
+			odize.AssertEqual(t, int64(20), results[1].OrganisationID)
+			odize.AssertEqual(t, "type2", results[1].Type)
+			odize.AssertEqual(t, Read, results[1].Status)
+		}).
+		Test("fromNotificationModels should return an empty slice when input is empty", func(t *testing.T) {
+			var models []database.OrganisationNotification
+			results := fromNotificationModels(models)
+			odize.AssertEqual(t, 0, len(results))
+		}).
 		Run()
 
 	odize.AssertNoError(t, err)

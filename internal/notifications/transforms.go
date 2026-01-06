@@ -20,3 +20,11 @@ func fromNotificationModel(model database.OrganisationNotification) Notification
 		UpdatedAt:      toTime(model.UpdatedAt),
 	}
 }
+
+func fromNotificationModels(models []database.OrganisationNotification) []Notification {
+	notifications := make([]Notification, len(models))
+	for i, model := range models {
+		notifications[i] = fromNotificationModel(model)
+	}
+	return notifications
+}

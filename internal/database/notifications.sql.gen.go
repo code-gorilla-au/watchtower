@@ -45,6 +45,42 @@ func (q *Queries) CreateOrgNotification(ctx context.Context, arg CreateOrgNotifi
 	return i, err
 }
 
+const getUnreadNotificationsByOrgID = `-- name: GetUnreadNotificationsByOrgID :many
+SELECT id, organisation_id, type, content, status, created_at, updated_at FROM organisation_notifications WHERE organisation_id = ?
+AND status = 'unread'
+`
+
+func (q *Queries) GetUnreadNotificationsByOrgID(ctx context.Context, organisationID sql.NullInt64) ([]OrganisationNotification, error) {
+	rows, err := q.db.QueryContext(ctx, getUnreadNotificationsByOrgID, organisationID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []OrganisationNotification
+	for rows.Next() {
+		var i OrganisationNotification
+		if err := rows.Scan(
+			&i.ID,
+			&i.OrganisationID,
+			&i.Type,
+			&i.Content,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateOrgNotificationByID = `-- name: UpdateOrgNotificationByID :one
 UPDATE organisation_notifications
 SET type       = ?,

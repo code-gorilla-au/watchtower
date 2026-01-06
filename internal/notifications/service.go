@@ -36,3 +36,19 @@ func (s *Service) CreateNotification(ctx context.Context, orgID int64, notificat
 
 	return fromNotificationModel(model), nil
 }
+
+func (s *Service) GetUnreadNotifications(ctx context.Context, orgID int64) ([]Notification, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching unread notifications")
+
+	models, err := s.store.GetUnreadNotificationsByOrgID(ctx, sql.NullInt64{
+		Int64: orgID,
+		Valid: true,
+	})
+	if err != nil {
+		logger.Error("Error fetching unread notifications", "error", err)
+		return []Notification{}, err
+	}
+
+	return fromNotificationModels(models), nil
+}
