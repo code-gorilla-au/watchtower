@@ -130,30 +130,37 @@ func (s *Service) UpdateProduct(id int64, name string, tags []string) (products.
 	})
 }
 
+// DeleteProduct removes a product from the database by its ID. Returns an error if the operation fails.
 func (s *Service) DeleteProduct(id int64) error {
 	return s.productSvc.DeleteProduct(s.ctx, id)
 }
 
+// GetProductRepos retrieves a list of repositories associated with the product identified by the given ID.
 func (s *Service) GetProductRepos(id int64) ([]products.RepositoryDTO, error) {
 	return s.productSvc.GetRepos(s.ctx, id)
 }
 
+// GetProductPullRequests retrieves a list of pull requests for a specified product ID.
 func (s *Service) GetProductPullRequests(id int64) ([]products.PullRequestDTO, error) {
 	return s.productSvc.GetPullRequests(s.ctx, id)
 }
 
+// GetPullRequestByOrganisation retrieves a list of pull requests for a given organization by its ID.
 func (s *Service) GetPullRequestByOrganisation(id int64) ([]products.PullRequestDTO, error) {
 	return s.productSvc.GetPullRequestByOrg(s.ctx, id)
 }
 
+// GetSecurityByProductID retrieves a list of security details for a given product ID. Returns an error if the operation fails.
 func (s *Service) GetSecurityByProductID(productID int64) ([]products.SecurityDTO, error) {
 	return s.productSvc.GetSecurity(s.ctx, productID)
 }
 
+// GetSecurityByOrganisation retrieves a list of security details associated with a specific organization by its ID.
 func (s *Service) GetSecurityByOrganisation(id int64) ([]products.SecurityDTO, error) {
 	return s.productSvc.GetSecurityByOrg(s.ctx, id)
 }
 
+// SyncOrgs synchronizes stale organizations by retrieving them and invoking the sync process for each.
 func (s *Service) SyncOrgs() error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing orgs")
@@ -178,6 +185,7 @@ func (s *Service) SyncOrgs() error {
 	return nil
 }
 
+// SyncOrg synchronizes the products and associated organization for the given organization ID.
 func (s *Service) SyncOrg(orgId int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing org", "org", orgId)
@@ -218,6 +226,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 	return nil
 }
 
+// SyncProduct synchronizes a product with the given ID by retrieving its details and associated organization data.
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 
@@ -238,6 +247,9 @@ func (s *Service) SyncProduct(id int64) error {
 	return s.syncProductFromGithub(product, org)
 }
 
+// syncProductFromGithub synchronizes product repository data from GitHub for the specified product and organization.
+// The method iterates through the product's tags to fetch repository data and updates the product's sync date upon success.
+// Returns an error if syncing repositories or updating the sync date fails.
 func (s *Service) syncProductFromGithub(product products.ProductDTO, org organisations.InternalOrganisation) error {
 	logger := logging.FromContext(s.ctx)
 
@@ -258,6 +270,7 @@ func (s *Service) syncProductFromGithub(product products.ProductDTO, org organis
 	return nil
 }
 
+// syncRepoDataByTag synchronizes repository data based on a given tag by searching, retrieving, and inserting repository details.
 func (s *Service) syncRepoDataByTag(tag string, owner string, ghToken string) error {
 	logger := logging.FromContext(s.ctx)
 
