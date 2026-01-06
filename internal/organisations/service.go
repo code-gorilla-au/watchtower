@@ -24,7 +24,8 @@ func New(store OrgStore, txnDB *sql.DB, txnFunc func(tx *sql.Tx) OrgStore) *Serv
 
 // Create creates a new organisation in the database with the given parameters and returns its DTO representation.
 func (s Service) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Creating organisation")
 
 	var orgModel database.Organisation
@@ -59,7 +60,8 @@ func (s Service) Create(ctx context.Context, params CreateOrgParams) (Organisati
 
 // Get retrieves an organisation by its ID and returns its DTO representation or an error if the operation fails.
 func (s Service) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Fetching organisation", "id", id)
 	model, err := s.store.GetOrganisationByID(ctx, id)
 	if err != nil {
@@ -72,7 +74,8 @@ func (s Service) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
 
 // GetDefault retrieves the default organisation and returns its DTO representation or an error if the operation fails.
 func (s Service) GetDefault(ctx context.Context) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Fetching default organisation")
 	model, err := s.store.GetDefaultOrganisation(ctx)
 	if err != nil {
@@ -83,8 +86,10 @@ func (s Service) GetDefault(ctx context.Context) (OrganisationDTO, error) {
 	return toOrganisationDTO(model), nil
 }
 
+// SetDefault sets the organisation with the given ID as the default organisation and updates the database accordingly.
 func (s Service) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Setting default organisation", "id", id)
 
 	var model database.Organisation
@@ -108,7 +113,8 @@ func (s Service) SetDefault(ctx context.Context, id int64) (OrganisationDTO, err
 
 // GetAll retrieves all organisations and returns their DTO representations or an error if the operation fails.
 func (s Service) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Fetching all organisations")
 	models, err := s.store.ListOrganisations(ctx)
 	if err != nil {
@@ -121,7 +127,8 @@ func (s Service) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
 
 // GetStaleOrgs retrieves organisations that haven't been updated for 1 hour.
 func (s Service) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Fetching stale organisations")
 
 	oneHourAgo := time.Now().Add(-1 * time.Hour).Unix()
@@ -137,7 +144,8 @@ func (s Service) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
 
 // GetOrgAssociatedToProduct retrieves the organisation associated with a product.
 func (s Service) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (InternalOrganisation, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Fetching organisation for product", "productID", productID)
 	model, err := s.store.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
 	if err != nil {
@@ -150,7 +158,8 @@ func (s Service) GetOrgAssociatedToProduct(ctx context.Context, productID int64)
 
 // Delete removes an organisation and its associated product-organisation mapping.
 func (s Service) Delete(ctx context.Context, id int64) error {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Deleting organisation", "id", id)
 
 	err := database.WithTxnContext(ctx, s.txnDB, func(tx *sql.Tx) error {
@@ -176,7 +185,8 @@ func (s Service) Delete(ctx context.Context, id int64) error {
 
 // Update updates an existing organisation's details.
 func (s Service) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Updating organisation", "id", params.ID)
 
 	var model database.Organisation
@@ -209,8 +219,10 @@ func (s Service) Update(ctx context.Context, params UpdateOrgParams) (Organisati
 	return toOrganisationDTO(model), nil
 }
 
+// AssociateProductToOrg associates a product with an organisation based on the provided organisation and product IDs.
 func (s Service) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "organisations")
+
 	logger.Debug("Associating product to organisation", "orgID", orgID, "productID", productID)
 
 	err := s.store.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{

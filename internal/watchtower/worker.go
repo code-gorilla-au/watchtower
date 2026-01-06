@@ -27,17 +27,23 @@ func NewWorkers(wt *Service) (*Workers, error) {
 }
 
 func (w *Workers) AddJobs() error {
-	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*3), gocron.NewTask(func() {
-		if err := w.watchTower.DeleteOldNotifications(); err != nil {
-			logging.FromContext(context.Background()).Error("Error syncing orgs", "error", err)
+	logger := logging.FromContext(context.Background()).With("service", "workers")
+
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*2), gocron.NewTask(func() {
+		logger.Debug("Running syncing orgs worker")
+
+		if err := w.watchTower.SyncOrgs(); err != nil {
+			logger.Error("Error syncing orgs", "error", err)
 		}
 	})); err != nil {
 		return err
 	}
 
-	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*15), gocron.NewTask(func() {
-		if err := w.watchTower.SyncOrgs(); err != nil {
-			logging.FromContext(context.Background()).Error("Error syncing orgs", "error", err)
+	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*10), gocron.NewTask(func() {
+		logger.Debug("Running remove old notifications worker")
+
+		if err := w.watchTower.DeleteOldNotifications(); err != nil {
+			logger.Error("Error syncing orgs", "error", err)
 		}
 	})); err != nil {
 		return err
@@ -48,7 +54,7 @@ func (w *Workers) AddJobs() error {
 
 func (w *Workers) Start(ctx context.Context) {
 	logger := logging.FromContext(ctx)
-	logger.Debug("Starting org sync worker")
+	logger.Debug("Starting workers")
 	w.cron.Start()
 }
 

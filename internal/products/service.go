@@ -20,7 +20,8 @@ func New(store ProductStore) *Service {
 }
 
 func (s *Service) Create(ctx context.Context, params CreateProductParams) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Creating product")
 
 	var tagsNS sql.NullString
@@ -49,7 +50,8 @@ func (s *Service) Create(ctx context.Context, params CreateProductParams) (Produ
 }
 
 func (s *Service) Get(ctx context.Context, id int64) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Fetching product by ID")
 
 	prod, err := s.store.GetProductByID(ctx, id)
@@ -63,7 +65,8 @@ func (s *Service) Get(ctx context.Context, id int64) (ProductDTO, error) {
 }
 
 func (s *Service) GetByOrg(ctx context.Context, orgID int64) ([]ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Listing products for organisation")
 
 	models, err := s.store.ListProductsByOrganisation(ctx, sql.NullInt64{Int64: orgID, Valid: true})
@@ -77,7 +80,8 @@ func (s *Service) GetByOrg(ctx context.Context, orgID int64) ([]ProductDTO, erro
 }
 
 func (s *Service) Update(ctx context.Context, params UpdateProductParams) (ProductDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Updating product")
 
 	data, err := json.Marshal(params.Tags)
@@ -105,14 +109,16 @@ func (s *Service) Update(ctx context.Context, params UpdateProductParams) (Produ
 }
 
 func (s *Service) UpdateSyncDateNow(ctx context.Context, id int64) error {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Updating sync date")
 
 	return s.store.UpdateProductSync(ctx, id)
 }
 
 func (s *Service) DeleteProduct(ctx context.Context, id int64) error {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Deleting product")
 
 	if err := s.store.DeleteSecurityByProductID(ctx, id); err != nil {
@@ -133,7 +139,8 @@ func (s *Service) DeleteProduct(ctx context.Context, id int64) error {
 // Repo methods
 
 func (s *Service) CreateRepo(ctx context.Context, params CreateRepoParams) error {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Creating repo", "repo", params.Name)
 
 	_, err := s.store.CreateRepo(ctx, database.CreateRepoParams{
@@ -151,7 +158,8 @@ func (s *Service) CreateRepo(ctx context.Context, params CreateRepoParams) error
 }
 
 func (s *Service) GetRepos(ctx context.Context, productID int64) ([]RepositoryDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Fetching repos for product")
 
 	repos, err := s.store.GetReposByProductID(ctx, productID)
@@ -170,7 +178,8 @@ func (s *Service) GetRepos(ctx context.Context, productID int64) ([]RepositoryDT
 }
 
 func (s *Service) GetPullRequests(ctx context.Context, productID int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Fetching pull requests for product")
 
 	models, err := s.store.GetPullRequestByProductIDAndState(ctx, database.GetPullRequestByProductIDAndStateParams{
@@ -187,7 +196,8 @@ func (s *Service) GetPullRequests(ctx context.Context, productID int64) ([]PullR
 }
 
 func (s *Service) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]PullRequestDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("Fetching pull requests for organisation", "org", orgID)
 
 	models, err := s.store.GetPullRequestsByOrganisationAndState(ctx, database.GetPullRequestsByOrganisationAndStateParams{
@@ -253,7 +263,8 @@ func (s *Service) BulkCreatePullRequest(ctx context.Context, paramsList []Create
 }
 
 func (s *Service) GetSecurity(ctx context.Context, productID int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("getting security by product id")
 
 	model, err := s.store.GetSecurityByProductIDAndState(ctx, database.GetSecurityByProductIDAndStateParams{
@@ -270,7 +281,8 @@ func (s *Service) GetSecurity(ctx context.Context, productID int64) ([]SecurityD
 }
 
 func (s *Service) GetSecurityByOrg(ctx context.Context, orgID int64) ([]SecurityDTO, error) {
-	logger := logging.FromContext(ctx)
+	logger := logging.FromContext(ctx).With("service", "products")
+
 	logger.Debug("getting security by organisation", "org", orgID)
 
 	model, err := s.store.GetSecurityByOrganisationAndState(ctx, database.GetSecurityByOrganisationAndStateParams{

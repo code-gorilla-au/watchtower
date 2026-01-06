@@ -54,6 +54,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if workerErr := worker.AddJobs(); workerErr != nil {
+		logger.Error("Error adding cron jobs", "error", workerErr)
+		os.Exit(1)
+	}
+
 	app := NewApp(worker, appConfig.AppDir)
 
 	err = wails.Run(&options.App{
