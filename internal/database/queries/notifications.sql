@@ -1,0 +1,28 @@
+-- name: CreateOrgNotification :one
+INSERT INTO organisation_notifications (organisation_id,
+                                        type,
+                                        content,
+                                        created_at,
+                                        updated_at)
+VALUES (?,
+        ?,
+        ?,
+        CAST(strftime('%s', 'now') AS INTEGER),
+        CAST(strftime('%s', 'now') AS INTEGER))
+RETURNING *;
+
+-- name: UpdateOrgNotificationByID :one
+UPDATE organisation_notifications
+SET type       = ?,
+    content    = ?,
+    status     = ?,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING *;
+
+-- name: UpdateOrgNotificationStatusByID :one
+UPDATE organisation_notifications
+SET status     = ?,
+    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING *;

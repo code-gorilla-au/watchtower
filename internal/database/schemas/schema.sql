@@ -65,3 +65,14 @@ CREATE TABLE IF NOT EXISTS pull_requests
     created_at      INTEGER     NOT NULL,
     updated_at      INTEGER     NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS organisation_notifications
+(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    organisation_id INTEGER REFERENCES organisations (id),
+    type TEXT NOT NULL,
+    content TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'unread',
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+)
