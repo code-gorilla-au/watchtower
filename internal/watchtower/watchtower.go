@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"strings"
 	"watchtower/internal/database"
+	"watchtower/internal/organisations"
 
 	"watchtower/internal/github"
 	"watchtower/internal/logging"
@@ -15,13 +16,9 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 	return &Service{
 		ghClient: github.New(logging.FromContext(ctx)),
 		ctx:      ctx,
-		orgSvc: &organisationService{
-			store: db,
-			txnDB: txnDB,
-			txnFunc: func(tx *sql.Tx) OrgStore {
-				return db.WithTx(tx)
-			},
-		},
+		orgSvc: organisations.New(db, txnDB, func(tx *sql.Tx) organisations.OrgStore {
+			return db.WithTx(tx)
+		}),
 		productSvc: &productsService{
 			db: db,
 			repoService: &repoService{
@@ -37,8 +34,8 @@ func (s *Service) Startup(ctx context.Context) {
 
 // CreateOrganisation creates a new organisation in the database using the specified friendly name and namespace.
 // It logs the creation process and returns the created organisation DTO or an error if the operation fails.
-func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string, description string) (OrganisationDTO, error) {
-	return s.orgSvc.Create(s.ctx, CreateOrgParams{
+func (s *Service) CreateOrganisation(friendlyName string, namespace string, token string, description string) (organisations.OrganisationDTO, error) {
+	return s.orgSvc.Create(s.ctx, organisations.CreateOrgParams{
 		FriendlyName: friendlyName,
 		Namespace:    namespace,
 		Token:        token,
@@ -47,20 +44,20 @@ func (s *Service) CreateOrganisation(friendlyName string, namespace string, toke
 }
 
 // GetDefaultOrganisation returns the default organisation (marked as default_org = 1).
-func (s *Service) GetDefaultOrganisation() (OrganisationDTO, error) {
+func (s *Service) GetDefaultOrganisation() (organisations.OrganisationDTO, error) {
 	return s.orgSvc.GetDefault(s.ctx)
 }
 
-func (s *Service) SetDefaultOrg(id int64) (OrganisationDTO, error) {
+func (s *Service) SetDefaultOrg(id int64) (organisations.OrganisationDTO, error) {
 	return s.orgSvc.SetDefault(s.ctx, id)
 }
 
-func (s *Service) GetOrganisationByID(id int64) (OrganisationDTO, error) {
+func (s *Service) GetOrganisationByID(id int64) (organisations.OrganisationDTO, error) {
 	return s.orgSvc.Get(s.ctx, id)
 }
 
 // GetAllOrganisations returns all organisations ordered by friendly_name.
-func (s *Service) GetAllOrganisations() ([]OrganisationDTO, error) {
+func (s *Service) GetAllOrganisations() ([]organisations.OrganisationDTO, error) {
 	return s.orgSvc.GetAll(s.ctx)
 }
 
@@ -94,7 +91,7 @@ func (s *Service) DeleteOrganisation(id int64) error {
 // UpdateOrganisation updates the details of an organisation based on the provided parameters.
 // It sets other organisations' default status to false if a new default organisation is specified.
 // Returns the updated organisation details as OrganisationDTO or an error if the update fails.
-func (s *Service) UpdateOrganisation(params UpdateOrgParams) (OrganisationDTO, error) {
+func (s *Service) UpdateOrganisation(params organisations.UpdateOrgParams) (organisations.OrganisationDTO, error) {
 	return s.orgSvc.Update(s.ctx, params)
 }
 
@@ -245,7 +242,7 @@ func (s *Service) SyncProduct(id int64) error {
 	return s.syncProductFromGithub(product, org)
 }
 
-func (s *Service) syncProductFromGithub(product ProductDTO, org InternalOrganisation) error {
+func (s *Service) syncProductFromGithub(product ProductDTO, org organisations.InternalOrganisation) error {
 	logger := logging.FromContext(s.ctx)
 
 	for _, tag := range product.Tags {

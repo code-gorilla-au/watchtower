@@ -8,7 +8,7 @@ import (
 	"watchtower/internal/github"
 )
 
-//go:generate moq -rm -stub -out mocks.gen.go . ghClient RepoStore ProductStore OrgStore
+//go:generate moq -rm -stub -out mocks.gen.go . ghClient RepoStore ProductStore
 
 type ghClient interface {
 	SearchRepos(owner string, topic string, token string) (github.QuerySearch[github.Repository], error)
@@ -38,22 +38,6 @@ type ProductStore interface {
 	DeleteProduct(ctx context.Context, id int64) error
 }
 
-type OrgStore interface {
-	SetOrgsDefaultFalse(ctx context.Context) error
-	CreateOrganisation(ctx context.Context, arg database.CreateOrganisationParams) (database.Organisation, error)
-	GetOrganisationByID(ctx context.Context, id int64) (database.Organisation, error)
-	GetDefaultOrganisation(ctx context.Context) (database.Organisation, error)
-	SetDefaultOrg(ctx context.Context, id int64) (database.Organisation, error)
-	ListOrganisations(ctx context.Context) ([]database.Organisation, error)
-	ListOrgsOlderThanUpdatedAt(ctx context.Context, updatedAt int64) ([]database.Organisation, error)
-	GetOrganisationForProduct(ctx context.Context, productID sql.NullInt64) (database.Organisation, error)
-	DeleteOrg(ctx context.Context, id int64) error
-	DeleteProductOrganisationByOrgID(ctx context.Context, organisationID sql.NullInt64) error
-	UpdateOrganisation(ctx context.Context, arg database.UpdateOrganisationParams) (database.Organisation, error)
-	UpdateProductSync(ctx context.Context, id int64) error
-	AddProductToOrganisation(ctx context.Context, arg database.AddProductToOrganisationParams) error
-}
-
 type InsightsStore interface {
 	GetPullRequestInsights(ctx context.Context, arg database.GetPullRequestInsightsParams) (database.GetPullRequestInsightsRow, error)
 	GetSecuritiesInsights(ctx context.Context, arg database.GetSecuritiesInsightsParams) (database.GetSecuritiesInsightsRow, error)
@@ -61,5 +45,4 @@ type InsightsStore interface {
 
 var _ RepoStore = (*database.Queries)(nil)
 var _ ProductStore = (*database.Queries)(nil)
-var _ OrgStore = (*database.Queries)(nil)
 var _ InsightsStore = (*database.Queries)(nil)

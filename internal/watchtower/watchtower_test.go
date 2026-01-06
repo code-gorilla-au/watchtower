@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 	"watchtower/internal/database"
+	"watchtower/internal/organisations"
 
 	"watchtower/internal/github"
 
@@ -1956,13 +1957,9 @@ func TestService_SyncOrgs(t *testing.T) {
 		s = &Service{
 			ctx:      ctx,
 			ghClient: ghMock,
-			orgSvc: &organisationService{
-				store: _testDB,
-				txnDB: _testTxnDB,
-				txnFunc: func(tx *sql.Tx) OrgStore {
-					return _testDB.WithTx(tx)
-				},
-			},
+			orgSvc: organisations.New(_testDB, _testTxnDB, func(tx *sql.Tx) organisations.OrgStore {
+				return _testDB.WithTx(tx)
+			}),
 			productSvc: &productsService{
 				db: _testDB,
 				repoService: &repoService{
@@ -2009,9 +2006,7 @@ func TestService_SyncOrgs(t *testing.T) {
 			brokenService := &Service{
 				ctx:      cancelCtx,
 				ghClient: ghMock,
-				orgSvc: &organisationService{
-					store: _testDB,
-				},
+				orgSvc:   organisations.New(_testDB, nil, nil),
 				productSvc: &productsService{
 					db: _testDB,
 					repoService: &repoService{
@@ -2347,7 +2342,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 
 	err := group.
 		Test("should return error when trying to update non-existent organisation", func(t *testing.T) {
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           999,
 				FriendlyName: "updated_name",
 				Namespace:    "updated_namespace",
@@ -2361,7 +2356,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			createdOrg, err := s.CreateOrganisation("original_org", "original_namespace", "token", "original description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           createdOrg.ID,
 				FriendlyName: "updated_friendly_name",
 				Namespace:    "updated_namespace",
@@ -2384,7 +2379,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			secondOrg, err := s.CreateOrganisation("second_update_org", "second_update_namespace", "token2", "second description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           firstOrg.ID,
 				FriendlyName: "updated_first_org",
 				Namespace:    "updated_first_namespace",
@@ -2410,7 +2405,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 			secondOrg, err := s.CreateOrganisation("new_default_org", "new_default_namespace", "token2", "new description")
 			odize.AssertNoError(t, err)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           firstOrg.ID,
 				FriendlyName: firstOrg.FriendlyName,
 				Namespace:    firstOrg.Namespace,
@@ -2434,7 +2429,7 @@ func TestService_UpdateOrganisation(t *testing.T) {
 
 			odize.AssertEqual(t, createdOrg.DefaultOrg, true)
 
-			params := UpdateOrgParams{
+			params := organisations.UpdateOrgParams{
 				ID:           createdOrg.ID,
 				FriendlyName: "updated_maintain_org",
 				Namespace:    "updated_maintain_namespace",

@@ -2,21 +2,15 @@ package watchtower
 
 import (
 	"context"
-	"database/sql"
 	"time"
+	"watchtower/internal/organisations"
 )
 
 type Service struct {
 	ctx        context.Context
-	orgSvc     *organisationService
+	orgSvc     *organisations.Service
 	productSvc *productsService
 	ghClient   ghClient
-}
-
-type organisationService struct {
-	store   OrgStore
-	txnDB   *sql.DB
-	txnFunc func(tx *sql.Tx) OrgStore
 }
 
 type productsService struct {
@@ -26,23 +20,6 @@ type productsService struct {
 
 type repoService struct {
 	db RepoStore
-}
-
-// DTOs with snake_case JSON tags and time.Time timestamps
-
-type OrganisationDTO struct {
-	ID           int64     `json:"id"`
-	FriendlyName string    `json:"friendly_name"`
-	Description  string    `json:"description"`
-	Namespace    string    `json:"namespace"`
-	DefaultOrg   bool      `json:"default_org"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
-}
-
-type InternalOrganisation struct {
-	OrganisationDTO
-	Token string
 }
 
 type ProductDTO struct {

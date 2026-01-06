@@ -1,0 +1,231 @@
+package organisations
+
+import (
+	"context"
+	"database/sql"
+	"time"
+	"watchtower/internal/database"
+	"watchtower/internal/logging"
+)
+
+type Service struct {
+	store   OrgStore
+	txnDB   *sql.DB
+	txnFunc func(tx *sql.Tx) OrgStore
+}
+
+func New(store OrgStore, txnDB *sql.DB, txnFunc func(tx *sql.Tx) OrgStore) *Service {
+	return &Service{
+		store:   store,
+		txnDB:   txnDB,
+		txnFunc: txnFunc,
+	}
+}
+
+// Create creates a new organisation in the database with the given parameters and returns its DTO representation.
+func (s Service) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Creating organisation")
+
+	var orgModel database.Organisation
+	var err error
+
+	err = database.WithTxnContext(ctx, s.txnDB, func(tx *sql.Tx) error {
+		txnStore := s.txnFunc(tx)
+		if err = txnStore.SetOrgsDefaultFalse(ctx); err != nil {
+			logger.Error("Error setting default org", "error", err)
+
+			return err
+		}
+
+		orgModel, err = txnStore.CreateOrganisation(ctx, database.CreateOrganisationParams{
+			FriendlyName: params.FriendlyName,
+			Namespace:    params.Namespace,
+			Token:        params.Token,
+			Description:  params.Description,
+		})
+
+		if err != nil {
+			logger.Error("Error creating organisation", "error", err)
+
+			return err
+		}
+
+		return nil
+	})
+
+	return ToOrganisationDTO(orgModel), err
+}
+
+// Get retrieves an organisation by its ID and returns its DTO representation or an error if the operation fails.
+func (s Service) Get(ctx context.Context, id int64) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching organisation", "id", id)
+	model, err := s.store.GetOrganisationByID(ctx, id)
+	if err != nil {
+		logger.Error("Error fetching organisation", "error", err)
+		return OrganisationDTO{}, err
+	}
+
+	return ToOrganisationDTO(model), nil
+}
+
+// GetDefault retrieves the default organisation and returns its DTO representation or an error if the operation fails.
+func (s Service) GetDefault(ctx context.Context) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching default organisation")
+	model, err := s.store.GetDefaultOrganisation(ctx)
+	if err != nil {
+		logger.Error("Error fetching default organisation", "error", err)
+		return OrganisationDTO{}, err
+	}
+
+	return ToOrganisationDTO(model), nil
+}
+
+func (s Service) SetDefault(ctx context.Context, id int64) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Setting default organisation", "id", id)
+
+	var model database.Organisation
+	var err error
+
+	err = database.WithTxnContext(ctx, s.txnDB, func(tx *sql.Tx) error {
+		txnStore := s.txnFunc(tx)
+		if err = txnStore.SetOrgsDefaultFalse(ctx); err != nil {
+			return err
+		}
+
+		if model, err = txnStore.SetDefaultOrg(ctx, id); err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return ToOrganisationDTO(model), err
+}
+
+// GetAll retrieves all organisations and returns their DTO representations or an error if the operation fails.
+func (s Service) GetAll(ctx context.Context) ([]OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching all organisations")
+	models, err := s.store.ListOrganisations(ctx)
+	if err != nil {
+		logger.Error("Error fetching all organisations", "error", err)
+		return nil, err
+	}
+
+	return ToOrganisationDTOs(models), nil
+}
+
+// GetStaleOrgs retrieves organisations that haven't been updated for 1 hour.
+func (s Service) GetStaleOrgs(ctx context.Context) ([]OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching stale organisations")
+
+	oneHourAgo := time.Now().Add(-1 * time.Hour).Unix()
+
+	models, err := s.store.ListOrgsOlderThanUpdatedAt(ctx, oneHourAgo)
+	if err != nil {
+		logger.Error("Error fetching stale organisations", "error", err)
+		return nil, err
+	}
+
+	return ToOrganisationDTOs(models), nil
+}
+
+// GetOrgAssociatedToProduct retrieves the organisation associated with a product.
+func (s Service) GetOrgAssociatedToProduct(ctx context.Context, productID int64) (InternalOrganisation, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Fetching organisation for product", "productID", productID)
+	model, err := s.store.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
+	if err != nil {
+		logger.Error("Error fetching organisation for product", "error", err)
+		return InternalOrganisation{}, err
+	}
+
+	return ToInternalOrganisation(model), nil
+}
+
+// Delete removes an organisation and its associated product-organisation mapping.
+func (s Service) Delete(ctx context.Context, id int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Deleting organisation", "id", id)
+
+	err := database.WithTxnContext(ctx, s.txnDB, func(tx *sql.Tx) error {
+		txnStore := s.txnFunc(tx)
+		if err := txnStore.DeleteProductOrganisationByOrgID(ctx, sql.NullInt64{Int64: id, Valid: true}); err != nil {
+			return err
+		}
+
+		if err := txnStore.DeleteOrg(ctx, id); err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		logger.Error("Error deleting organisation", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+// Update updates an existing organisation's details.
+func (s Service) Update(ctx context.Context, params UpdateOrgParams) (OrganisationDTO, error) {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Updating organisation", "id", params.ID)
+
+	var model database.Organisation
+	var err error
+
+	err = database.WithTxnContext(ctx, s.txnDB, func(tx *sql.Tx) error {
+		txnStore := s.txnFunc(tx)
+		if params.DefaultOrg {
+			if err = txnStore.SetOrgsDefaultFalse(ctx); err != nil {
+				return err
+			}
+		}
+
+		model, err = txnStore.UpdateOrganisation(ctx, database.UpdateOrganisationParams{
+			ID:           params.ID,
+			FriendlyName: params.FriendlyName,
+			Namespace:    params.Namespace,
+			Description:  params.Description,
+			DefaultOrg:   params.DefaultOrg,
+		})
+
+		return err
+	})
+
+	if err != nil {
+		logger.Error("Error updating organisation", "error", err)
+		return OrganisationDTO{}, err
+	}
+
+	return ToOrganisationDTO(model), nil
+}
+
+func (s Service) UpdateSyncDateNow(ctx context.Context, id int64) error {
+	return s.store.UpdateProductSync(ctx, id)
+}
+
+func (s Service) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
+	logger := logging.FromContext(ctx)
+	logger.Debug("Associating product to organisation", "orgID", orgID, "productID", productID)
+
+	err := s.store.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+		OrganisationID: sql.NullInt64{Int64: orgID, Valid: true},
+		ProductID:      sql.NullInt64{Int64: productID, Valid: true},
+	})
+
+	if err != nil {
+		logger.Error("Error associating product to organisation", "error", err)
+		return err
+	}
+
+	return nil
+}

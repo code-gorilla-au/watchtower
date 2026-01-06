@@ -14,42 +14,6 @@ func toTime(ts int64) time.Time {
 	return time.Unix(ts, 0).UTC()
 }
 
-func ToOrganisationDTO(m database.Organisation) OrganisationDTO {
-	return OrganisationDTO{
-		ID:           m.ID,
-		FriendlyName: m.FriendlyName,
-		Description:  m.Description,
-		Namespace:    m.Namespace,
-		DefaultOrg:   m.DefaultOrg,
-		CreatedAt:    toTime(m.CreatedAt),
-		UpdatedAt:    toTime(m.UpdatedAt),
-	}
-}
-
-func ToOrganisationDTOs(models []database.Organisation) []OrganisationDTO {
-	result := make([]OrganisationDTO, 0, len(models))
-	for _, m := range models {
-		result = append(result, ToOrganisationDTO(m))
-	}
-
-	return result
-}
-
-func ToInternalOrganisation(m database.Organisation) InternalOrganisation {
-	return InternalOrganisation{
-		OrganisationDTO: OrganisationDTO{
-			ID:           m.ID,
-			FriendlyName: m.FriendlyName,
-			Description:  m.Description,
-			Namespace:    m.Namespace,
-			DefaultOrg:   m.DefaultOrg,
-			CreatedAt:    toTime(m.CreatedAt),
-			UpdatedAt:    toTime(m.UpdatedAt),
-		},
-		Token: m.Token,
-	}
-}
-
 func ToProductDTOs(models []database.Product) []ProductDTO {
 	result := make([]ProductDTO, 0, len(models))
 	for _, m := range models {
