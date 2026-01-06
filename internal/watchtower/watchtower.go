@@ -6,6 +6,7 @@ import (
 	"strings"
 	"watchtower/internal/database"
 	"watchtower/internal/organisations"
+	"watchtower/internal/products"
 
 	"watchtower/internal/github"
 	"watchtower/internal/logging"
@@ -19,12 +20,7 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 		orgSvc: organisations.New(db, txnDB, func(tx *sql.Tx) organisations.OrgStore {
 			return db.WithTx(tx)
 		}),
-		productSvc: &productsService{
-			db: db,
-			repoService: &repoService{
-				db: db,
-			},
-		},
+		productSvc: products.New(db),
 	}
 }
 
@@ -96,38 +92,38 @@ func (s *Service) UpdateOrganisation(params organisations.UpdateOrgParams) (orga
 }
 
 // CreateProduct creates a new product and associates it with an organisation.
-func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (ProductDTO, error) {
+func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (products.ProductDTO, error) {
 
-	prod, err := s.productSvc.Create(s.ctx, CreateProductParams{
+	prod, err := s.productSvc.Create(s.ctx, products.CreateProductParams{
 		Name: name,
 		Tags: tags,
 		Desc: description,
 	})
 	if err != nil {
-		return ProductDTO{}, err
+		return products.ProductDTO{}, err
 	}
 
 	err = s.orgSvc.AssociateProductToOrg(s.ctx, organisationID, prod.ID)
 	if err != nil {
-		return ProductDTO{}, err
+		return products.ProductDTO{}, err
 	}
 
 	return prod, nil
 }
 
 // GetProductByID fetches a product by its ID.
-func (s *Service) GetProductByID(id int64) (ProductDTO, error) {
+func (s *Service) GetProductByID(id int64) (products.ProductDTO, error) {
 	return s.productSvc.Get(s.ctx, id)
 }
 
 // GetAllProductsForOrganisation lists products linked to the given organisation.
-func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]ProductDTO, error) {
+func (s *Service) GetAllProductsForOrganisation(organisationID int64) ([]products.ProductDTO, error) {
 	return s.productSvc.GetByOrg(s.ctx, organisationID)
 }
 
 // UpdateProduct updates a product and returns the updated entity.
-func (s *Service) UpdateProduct(id int64, name string, tags []string) (ProductDTO, error) {
-	return s.productSvc.Update(s.ctx, UpdateProductParams{
+func (s *Service) UpdateProduct(id int64, name string, tags []string) (products.ProductDTO, error) {
+	return s.productSvc.Update(s.ctx, products.UpdateProductParams{
 		ID:   id,
 		Name: name,
 		Tags: tags,
@@ -138,23 +134,23 @@ func (s *Service) DeleteProduct(id int64) error {
 	return s.productSvc.DeleteProduct(s.ctx, id)
 }
 
-func (s *Service) GetProductRepos(id int64) ([]RepositoryDTO, error) {
+func (s *Service) GetProductRepos(id int64) ([]products.RepositoryDTO, error) {
 	return s.productSvc.GetRepos(s.ctx, id)
 }
 
-func (s *Service) GetProductPullRequests(id int64) ([]PullRequestDTO, error) {
+func (s *Service) GetProductPullRequests(id int64) ([]products.PullRequestDTO, error) {
 	return s.productSvc.GetPullRequests(s.ctx, id)
 }
 
-func (s *Service) GetPullRequestByOrganisation(id int64) ([]PullRequestDTO, error) {
+func (s *Service) GetPullRequestByOrganisation(id int64) ([]products.PullRequestDTO, error) {
 	return s.productSvc.GetPullRequestByOrg(s.ctx, id)
 }
 
-func (s *Service) GetSecurityByProductID(productID int64) ([]SecurityDTO, error) {
+func (s *Service) GetSecurityByProductID(productID int64) ([]products.SecurityDTO, error) {
 	return s.productSvc.GetSecurity(s.ctx, productID)
 }
 
-func (s *Service) GetSecurityByOrganisation(id int64) ([]SecurityDTO, error) {
+func (s *Service) GetSecurityByOrganisation(id int64) ([]products.SecurityDTO, error) {
 	return s.productSvc.GetSecurityByOrg(s.ctx, id)
 }
 
@@ -186,26 +182,26 @@ func (s *Service) SyncOrg(orgId int64) error {
 	logger := logging.FromContext(s.ctx)
 	logger.Debug("Syncing org", "org", orgId)
 
-	products, err := s.GetAllProductsForOrganisation(orgId)
+	prodList, err := s.GetAllProductsForOrganisation(orgId)
 	if err != nil {
 		logger.Error("Error fetching products for org", "error", err)
 
 		return err
 	}
 
-	if len(products) == 0 {
+	if len(prodList) == 0 {
 		logger.Debug("No products found for org", "org", orgId)
 		return nil
 	}
 
-	org, err := s.orgSvc.GetOrgAssociatedToProduct(s.ctx, products[0].ID)
+	org, err := s.orgSvc.GetOrgAssociatedToProduct(s.ctx, prodList[0].ID)
 	if err != nil {
 		logger.Error("Error fetching organisation for product", "error", err)
 
 		return err
 	}
 
-	for _, p := range products {
+	for _, p := range prodList {
 		if err = s.syncProductFromGithub(p, org); err != nil {
 			logger.Error("Error syncing product", "error", err)
 
@@ -242,7 +238,7 @@ func (s *Service) SyncProduct(id int64) error {
 	return s.syncProductFromGithub(product, org)
 }
 
-func (s *Service) syncProductFromGithub(product ProductDTO, org organisations.InternalOrganisation) error {
+func (s *Service) syncProductFromGithub(product products.ProductDTO, org organisations.InternalOrganisation) error {
 	logger := logging.FromContext(s.ctx)
 
 	for _, tag := range product.Tags {
