@@ -2,6 +2,7 @@ package notifications
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 	"time"
 
@@ -15,7 +16,9 @@ func TestService(t *testing.T) {
 	ctx := context.Background()
 
 	group.BeforeEach(func() {
-		s = NewService(_testDB, _testTxnDB)
+		s = New(_testDB, _testTxnDB, func(tx *sql.Tx) Store {
+			return _testDB.WithTx(tx)
+		})
 	})
 
 	err := group.

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"strings"
 	"watchtower/internal/database"
+	"watchtower/internal/notifications"
 	"watchtower/internal/organisations"
 	"watchtower/internal/products"
 
@@ -21,6 +22,9 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 			return db.WithTx(tx)
 		}),
 		productSvc: products.New(db),
+		notificationSvc: notifications.New(db, txnDB, func(tx *sql.Tx) notifications.Store {
+			return db.WithTx(tx)
+		}),
 	}
 }
 
@@ -245,6 +249,16 @@ func (s *Service) SyncProduct(id int64) error {
 	}
 
 	return s.syncProductFromGithub(product, org)
+}
+
+// GetUnreadNotifications retrieves a list of unread notifications for the specified organization ID.
+func (s *Service) GetUnreadNotifications(orgID int64) ([]notifications.Notification, error) {
+	return s.notificationSvc.GetUnreadNotifications(s.ctx, orgID)
+}
+
+// MarkNotificationAsRead marks a notification as read based on the provided notification ID.
+func (s *Service) MarkNotificationAsRead(notificationID int64) error {
+	return s.notificationSvc.MarkNotificationAsRead(s.ctx, notificationID)
 }
 
 // syncProductFromGithub synchronizes product repository data from GitHub for the specified product and organization.

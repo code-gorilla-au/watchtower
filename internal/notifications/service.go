@@ -8,13 +8,11 @@ import (
 	"watchtower/internal/logging"
 )
 
-func NewService(db *database.Queries, txnDB *sql.DB) *Service {
+func New(db Store, txnDB *sql.DB, txnFunc func(tx *sql.Tx) Store) *Service {
 	return &Service{
-		store: db,
-		txnDB: txnDB,
-		txnFunc: func(tx *sql.Tx) Store {
-			return db.WithTx(tx)
-		},
+		store:   db,
+		txnDB:   txnDB,
+		txnFunc: txnFunc,
 	}
 }
 
