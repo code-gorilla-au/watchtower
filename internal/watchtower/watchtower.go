@@ -213,7 +213,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 		}
 	}
 
-	if err = s.orgSvc.UpdateSyncDateNow(s.ctx, org.ID); err != nil {
+	if err = s.productSvc.UpdateSyncDateNow(s.ctx, org.ID); err != nil {
 		logger.Error("Error updating organisation sync", "error", err)
 
 		return err

@@ -209,10 +209,6 @@ func (s Service) Update(ctx context.Context, params UpdateOrgParams) (Organisati
 	return ToOrganisationDTO(model), nil
 }
 
-func (s Service) UpdateSyncDateNow(ctx context.Context, id int64) error {
-	return s.store.UpdateProductSync(ctx, id)
-}
-
 func (s Service) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
 	logger := logging.FromContext(ctx)
 	logger.Debug("Associating product to organisation", "orgID", orgID, "productID", productID)
