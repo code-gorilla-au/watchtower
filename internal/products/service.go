@@ -270,9 +270,9 @@ func (s *Service) GetPullRequestByOrg(ctx context.Context, orgID int64) ([]PullR
 	return orgToPullRequestDTOs(models), nil
 }
 
-func (s *Service) BulkCreateRepos(ctx context.Context, paramsList []CreateRepoParams) error {
+func (s *Service) BulkUpsertRepos(ctx context.Context, paramsList []CreateRepoParams) error {
 	for _, params := range paramsList {
-		err := s.CreateRepo(ctx, params)
+		err := s.UpsertRepo(ctx, params)
 		if err != nil {
 			return err
 		}
@@ -381,7 +381,7 @@ func (s *Service) BulkCreateSecurity(ctx context.Context, paramsList []CreateSec
 func (s *Service) BulkInsertRepos(ctx context.Context, reposList []github.Node[github.Repository], tag string) error {
 	params := toCreateRepoFromGithub(reposList, tag)
 
-	return s.BulkCreateRepos(ctx, params)
+	return s.BulkUpsertRepos(ctx, params)
 }
 
 func (s *Service) BulkInsertRepoDetails(ctx context.Context, repoDetails github.QueryRepository) error {
