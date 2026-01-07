@@ -98,6 +98,6 @@ export function UpdateOrganisation(arg1) {
   return window['go']['watchtower']['Service']['UpdateOrganisation'](arg1);
 }
 
-export function UpdateProduct(arg1, arg2, arg3) {
-  return window['go']['watchtower']['Service']['UpdateProduct'](arg1, arg2, arg3);
+export function UpdateProduct(arg1, arg2, arg3, arg4) {
+  return window['go']['watchtower']['Service']['UpdateProduct'](arg1, arg2, arg3, arg4);
 }

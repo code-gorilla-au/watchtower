@@ -53,4 +53,4 @@ export function SyncProduct(arg1:number):Promise<void>;
 
 export function UpdateOrganisation(arg1:organisations.UpdateOrgParams):Promise<organisations.OrganisationDTO>;
 
-export function UpdateProduct(arg1:number,arg2:string,arg3:Array<string>):Promise<products.ProductDTO>;
+export function UpdateProduct(arg1:number,arg2:string,arg3:string,arg4:Array<string>):Promise<products.ProductDTO>;

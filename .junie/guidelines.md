@@ -80,10 +80,11 @@ review `taskfile.yaml` for list of commands available in repo.
 
 ### Testing:
 - Write **unit tests** using use [odize](https://github.com/code-gorilla-au/odize) as the test framework and parallel execution.
+- Think about edge cases, within reason.
 - **Mock external interfaces** cleanly using generated ([Moq](https://github.com/matryer/moq)) or handwritten mocks.
 - Separate **fast unit tests** from slower integration and E2E tests.
 - Ensure **test coverage** for every exported function, with behavioural checks.
-- Test coverage command is: `task go-cover`.
+- Test command with coverage is: `task go-cover`.
 
 
 #### Example odize framework
@@ -114,8 +115,7 @@ func TestQueries(t *testing.T) {
 				"owner",
 				"login",
 			}))
-
-			// Interpolated parameters
+			
 			odize.AssertTrue(t, containsAll(q, []string{
 				"owner:" + owner,
 				"topic:" + topic,
