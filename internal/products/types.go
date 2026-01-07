@@ -118,3 +118,14 @@ type CreateSecurityParams struct {
 	FixedAt        *time.Time
 	CreatedAt      time.Time
 }
+
+type UpdateSecurityParams struct {
+	ID             int64
+	ExternalID     string
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	FixedAt        *time.Time
+}

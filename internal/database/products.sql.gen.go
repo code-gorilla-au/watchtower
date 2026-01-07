@@ -182,13 +182,6 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
-                                        package_name    = excluded.package_name,
-                                        state           = excluded.state,
-                                        severity        = excluded.severity,
-                                        patched_version = excluded.patched_version,
-                                        fixed_at        = excluded.fixed_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
 `
 
@@ -587,6 +580,31 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetRepos
 	return items, nil
 }
 
+const getSecurityByExternalID = `-- name: GetSecurityByExternalID :one
+SELECT id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
+FROM securities
+WHERE external_id = ?
+LIMIT 1
+`
+
+func (q *Queries) GetSecurityByExternalID(ctx context.Context, externalID string) (Security, error) {
+	row := q.db.QueryRowContext(ctx, getSecurityByExternalID, externalID)
+	var i Security
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.RepositoryName,
+		&i.PackageName,
+		&i.State,
+		&i.Severity,
+		&i.PatchedVersion,
+		&i.FixedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getSecurityByOrganisationAndState = `-- name: GetSecurityByOrganisationAndState :many
 SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.fixed_at, s.created_at, s.updated_at, r.topic as tag, p.name as product_name
 FROM securities s
@@ -895,6 +913,55 @@ func (q *Queries) UpdateRepo(ctx context.Context, arg UpdateRepoParams) (Reposit
 		&i.Url,
 		&i.Topic,
 		&i.Owner,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateSecurity = `-- name: UpdateSecurity :one
+UPDATE securities
+SET repository_name = ?,
+    package_name    = ?,
+    state           = ?,
+    severity        = ?,
+    patched_version = ?,
+    fixed_at        = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE external_id = ?
+RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
+`
+
+type UpdateSecurityParams struct {
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	FixedAt        sql.NullInt64
+	ExternalID     string
+}
+
+func (q *Queries) UpdateSecurity(ctx context.Context, arg UpdateSecurityParams) (Security, error) {
+	row := q.db.QueryRowContext(ctx, updateSecurity,
+		arg.RepositoryName,
+		arg.PackageName,
+		arg.State,
+		arg.Severity,
+		arg.PatchedVersion,
+		arg.FixedAt,
+		arg.ExternalID,
+	)
+	var i Security
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.RepositoryName,
+		&i.PackageName,
+		&i.State,
+		&i.Severity,
+		&i.PatchedVersion,
+		&i.FixedAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

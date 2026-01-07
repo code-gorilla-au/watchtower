@@ -1,10 +1,11 @@
 
 
-## SQLC queries
+## SQLite queries
 
-When writing SQL queries ensure you annotate your queries
-
-following are examples of correct annotations
+- When writing sqlite queries use the tool [sqlc](https://sqlc.dev/)
+- When writing SQL queries ensure you annotate your queries
+- Following are examples of correct annotations
+- after you finished writing the queries, use the command `task gen` to generate the boilerplate go code
 
 ```sql
 -- name: GetAuthor :one

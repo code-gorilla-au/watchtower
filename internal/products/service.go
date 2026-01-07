@@ -427,28 +427,82 @@ func (s *Service) BulkCreateSecurity(ctx context.Context, paramsList []CreateSec
 	logger := logging.FromContext(ctx)
 
 	for _, params := range paramsList {
-		fixedAt := sql.NullInt64{}
-		if params.FixedAt != nil {
-			fixedAt.Int64 = params.FixedAt.Unix()
-			fixedAt.Valid = true
-		}
-
-		_, err := s.store.CreateSecurity(ctx, database.CreateSecurityParams{
-			ExternalID:     params.ExternalID,
-			RepositoryName: params.RepositoryName,
-			PackageName:    params.PackageName,
-			State:          params.State,
-			Severity:       params.Severity,
-			PatchedVersion: params.PatchedVersion,
-			FixedAt:        fixedAt,
-		})
-		if err != nil {
+		if err := s.UpsertSecurity(ctx, params); err != nil {
 			logger.Error("Error creating security", "error", err)
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (s *Service) UpdateSecurity(ctx context.Context, params UpdateSecurityParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Updating security")
+
+	var fixedAt sql.NullInt64
+	if params.FixedAt != nil {
+		fixedAt.Valid = true
+		fixedAt.Int64 = params.FixedAt.Unix()
+	}
+
+	_, err := s.store.UpdateSecurity(ctx, database.UpdateSecurityParams{
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        fixedAt,
+		ExternalID:     params.ExternalID,
+	})
+
+	if err != nil {
+		logger.Error("Error updating security", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpsertSecurity(ctx context.Context, params CreateSecurityParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	var fixedAt sql.NullInt64
+	if params.FixedAt != nil {
+		fixedAt.Int64 = params.FixedAt.Unix()
+		fixedAt.Valid = true
+	}
+
+	_, createErr := s.store.CreateSecurity(ctx, database.CreateSecurityParams{
+		ExternalID:     params.ExternalID,
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        fixedAt,
+		CreatedAt:      params.CreatedAt.Unix(),
+	})
+
+	if createErr == nil {
+		return nil
+	}
+
+	if !strings.Contains(createErr.Error(), "constraint failed: UNIQUE constraint failed") {
+		logger.Error("Error creating security", "error", createErr)
+		return createErr
+	}
+
+	return s.UpdateSecurity(ctx, UpdateSecurityParams{
+		ExternalID:     params.ExternalID,
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        params.FixedAt,
+	})
 }
 
 func (s *Service) BulkInsertRepos(ctx context.Context, reposList []github.Node[github.Repository], tag string) error {

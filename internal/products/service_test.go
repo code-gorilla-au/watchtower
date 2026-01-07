@@ -371,6 +371,68 @@ func TestService(t *testing.T) {
 			err := s.BulkInsertRepoDetails(ctx, repoDetails)
 			odize.AssertNoError(t, err)
 		}).
+		Test("UpdateSecurity should update an existing security alert", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "update-sec",
+				RepositoryName: "repo1",
+				PackageName:    "pkg1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			updateParams := UpdateSecurityParams{
+				ExternalID:     params.ExternalID,
+				RepositoryName: "repo1",
+				PackageName:    "pkg1-updated",
+				State:          "FIXED",
+				Severity:       "CRITICAL",
+				PatchedVersion: "1.2.3",
+			}
+
+			err = s.UpdateSecurity(ctx, updateParams)
+			odize.AssertNoError(t, err)
+
+			updated, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, updateParams.PackageName, updated.PackageName)
+			odize.AssertEqual(t, updateParams.State, updated.State)
+			odize.AssertEqual(t, updateParams.Severity, updated.Severity)
+			odize.AssertEqual(t, updateParams.PatchedVersion, updated.PatchedVersion)
+		}).
+		Test("UpsertSecurity should create when not exists and update when exists", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "upsert-sec",
+				RepositoryName: "repo1",
+				PackageName:    "pkg-upsert",
+				State:          "OPEN",
+				Severity:       "LOW",
+				CreatedAt:      time.Now(),
+			}
+
+			// Create
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			sec, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, params.PackageName, sec.PackageName)
+
+			// Update
+			params.PackageName = "pkg-upsert-updated"
+			params.Severity = "MEDIUM"
+			err = s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			updated, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, "pkg-upsert-updated", updated.PackageName)
+			odize.AssertEqual(t, "MEDIUM", updated.Severity)
+			odize.AssertEqual(t, sec.ID, updated.ID)
+		}).
 		Run()
 
 	odize.AssertNoError(t, err)

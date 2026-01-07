@@ -208,14 +208,25 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
-                                        package_name    = excluded.package_name,
-                                        state           = excluded.state,
-                                        severity        = excluded.severity,
-                                        patched_version = excluded.patched_version,
-                                        fixed_at        = excluded.fixed_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
+
+-- name: UpdateSecurity :one
+UPDATE securities
+SET repository_name = ?,
+    package_name    = ?,
+    state           = ?,
+    severity        = ?,
+    patched_version = ?,
+    fixed_at        = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE external_id = ?
+RETURNING *;
+
+-- name: GetSecurityByExternalID :one
+SELECT *
+FROM securities
+WHERE external_id = ?
+LIMIT 1;
 
 
 -- name: GetSecurityByProductIDAndState :many
