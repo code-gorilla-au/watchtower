@@ -80,13 +80,6 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
-                                        repository_name = excluded.repository_name,
-                                        url             = excluded.url,
-                                        state           = excluded.state,
-                                        author          = excluded.author,
-                                        merged_at       = excluded.merged_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
 `
 
@@ -348,6 +341,31 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 		&i.Name,
 		&i.Description,
 		&i.Tags,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getPullRequestByExternalID = `-- name: GetPullRequestByExternalID :one
+SELECT id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+FROM pull_requests
+WHERE external_id = ?
+LIMIT 1
+`
+
+func (q *Queries) GetPullRequestByExternalID(ctx context.Context, externalID string) (PullRequest, error) {
+	row := q.db.QueryRowContext(ctx, getPullRequestByExternalID, externalID)
+	var i PullRequest
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.Title,
+		&i.RepositoryName,
+		&i.Url,
+		&i.State,
+		&i.Author,
+		&i.MergedAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -792,6 +810,55 @@ WHERE id = ?
 func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, updateProductSync, id)
 	return err
+}
+
+const updatePullRequest = `-- name: UpdatePullRequest :one
+UPDATE pull_requests
+SET title           = ?,
+    repository_name = ?,
+    url             = ?,
+    state           = ?,
+    author          = ?,
+    merged_at       = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+`
+
+type UpdatePullRequestParams struct {
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       sql.NullInt64
+	ID             int64
+}
+
+func (q *Queries) UpdatePullRequest(ctx context.Context, arg UpdatePullRequestParams) (PullRequest, error) {
+	row := q.db.QueryRowContext(ctx, updatePullRequest,
+		arg.Title,
+		arg.RepositoryName,
+		arg.Url,
+		arg.State,
+		arg.Author,
+		arg.MergedAt,
+		arg.ID,
+	)
+	var i PullRequest
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.Title,
+		&i.RepositoryName,
+		&i.Url,
+		&i.State,
+		&i.Author,
+		&i.MergedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateRepo = `-- name: UpdateRepo :one

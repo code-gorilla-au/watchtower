@@ -24,6 +24,8 @@ type ProductStore interface {
 	GetPullRequestByProductIDAndState(ctx context.Context, arg database.GetPullRequestByProductIDAndStateParams) ([]database.GetPullRequestByProductIDAndStateRow, error)
 	GetPullRequestsByOrganisationAndState(ctx context.Context, arg database.GetPullRequestsByOrganisationAndStateParams) ([]database.GetPullRequestsByOrganisationAndStateRow, error)
 	CreatePullRequest(ctx context.Context, arg database.CreatePullRequestParams) (database.PullRequest, error)
+	UpdatePullRequest(ctx context.Context, arg database.UpdatePullRequestParams) (database.PullRequest, error)
+	GetPullRequestByExternalID(ctx context.Context, externalID string) (database.PullRequest, error)
 	GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error)
 	GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error)
 	CreateSecurity(ctx context.Context, arg database.CreateSecurityParams) (database.Security, error)

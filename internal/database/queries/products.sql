@@ -132,14 +132,25 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
-                                        repository_name = excluded.repository_name,
-                                        url             = excluded.url,
-                                        state           = excluded.state,
-                                        author          = excluded.author,
-                                        merged_at       = excluded.merged_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
+
+-- name: UpdatePullRequest :one
+UPDATE pull_requests
+SET title           = ?,
+    repository_name = ?,
+    url             = ?,
+    state           = ?,
+    author          = ?,
+    merged_at       = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING *;
+
+-- name: GetPullRequestByExternalID :one
+SELECT *
+FROM pull_requests
+WHERE external_id = ?
+LIMIT 1;
 
 -- name: GetPullRequestByProductIDAndState :many
 SELECT pr.*, r.topic as tag, p.name as product_name

@@ -281,34 +281,107 @@ func (s *Service) BulkUpsertRepos(ctx context.Context, paramsList []CreateRepoPa
 	return nil
 }
 
+// CreatePullRequest creates a new pull request entry in the database using the provided parameters.
+func (s *Service) CreatePullRequest(ctx context.Context, params CreatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Creating pull request")
+
+	var mergedAt sql.NullInt64
+	if params.MergedAt != nil {
+		mergedAt.Valid = true
+		mergedAt.Int64 = params.MergedAt.Unix()
+	}
+
+	_, err := s.store.CreatePullRequest(ctx, database.CreatePullRequestParams{
+		ExternalID:     params.ExternalID,
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       mergedAt,
+		CreatedAt:      params.CreatedAt.Unix(),
+	})
+
+	if err != nil {
+		logger.Error("Error creating pull request", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpdatePullRequest(ctx context.Context, params UpdatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Updating pull request")
+
+	var mergedAt sql.NullInt64
+	if params.MergedAt != nil {
+		mergedAt.Valid = true
+		mergedAt.Int64 = params.MergedAt.Unix()
+	}
+
+	_, err := s.store.UpdatePullRequest(ctx, database.UpdatePullRequestParams{
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       mergedAt,
+		ID:             params.ID,
+	})
+
+	if err != nil {
+		logger.Error("Error updating pull request", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpsertPullRequest(ctx context.Context, params CreatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	createErr := s.CreatePullRequest(ctx, params)
+	if createErr == nil {
+		return nil
+	}
+
+	if !strings.Contains(createErr.Error(), "constraint failed: UNIQUE constraint failed") {
+		logger.Error("Error creating pull request", "error", createErr)
+		return createErr
+	}
+
+	pr, getErr := s.store.GetPullRequestByExternalID(ctx, params.ExternalID)
+	if getErr != nil {
+		logger.Error("Error fetching pull request", "error", getErr)
+		return getErr
+	}
+
+	return s.UpdatePullRequest(ctx, UpdatePRParams{
+		ID:             pr.ID,
+		ExternalID:     pr.ExternalID,
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       params.MergedAt,
+	})
+}
+
 func (s *Service) BulkCreatePullRequest(ctx context.Context, paramsList []CreatePRParams) error {
 	logger := logging.FromContext(ctx)
 
 	for _, params := range paramsList {
-		mergedAt := sql.NullInt64{
-			Valid: false,
-			Int64: 0,
-		}
 
-		if params.MergedAt != nil {
-			mergedAt.Int64 = params.MergedAt.Unix()
-			mergedAt.Valid = true
-		}
-		_, err := s.store.CreatePullRequest(ctx, database.CreatePullRequestParams{
-			ExternalID:     params.ExternalID,
-			Title:          params.Title,
-			RepositoryName: params.RepositoryName,
-			Url:            params.Url,
-			State:          params.State,
-			Author:         params.Author,
-			MergedAt:       mergedAt,
-			CreatedAt:      params.CreatedAt.Unix(),
-		})
-		if err != nil {
+		if err := s.UpsertPullRequest(ctx, params); err != nil {
 			logger.Error("Error creating pull request", "error", err)
-
 			return err
 		}
+
 	}
 
 	return nil

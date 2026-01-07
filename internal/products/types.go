@@ -97,6 +97,17 @@ type CreatePRParams struct {
 	CreatedAt      time.Time
 }
 
+type UpdatePRParams struct {
+	ID             int64
+	ExternalID     string
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       *time.Time
+}
+
 type CreateSecurityParams struct {
 	ExternalID     string
 	RepositoryName string
