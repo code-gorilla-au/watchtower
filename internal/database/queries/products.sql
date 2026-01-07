@@ -18,15 +18,16 @@ VALUES (?,
         ?);
 
 -- name: DeleteProductOrganisationByOrgID :exec
-DELETE FROM product_organisations
+DELETE
+FROM product_organisations
 WHERE organisation_id = ?;
 
 -- name: UpdateProduct :one
 UPDATE products
-SET name       = ?,
-    tags       = ?,
+SET name        = ?,
+    tags        = ?,
     description = ?,
-    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+    updated_at  = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING *;
 
@@ -87,6 +88,12 @@ SET name       = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING *;
+
+-- name: GetRepoByName :one
+SELECT *
+FROM repositories
+WHERE name = ?
+LIMIT 1;
 
 -- name: GetReposByProductID :many
 SELECT r.*, p.name as product_name
@@ -227,7 +234,8 @@ WHERE po.organisation_id = ?
 ORDER BY s.created_at DESC;
 
 -- name: DeleteSecurityByProductID :exec
-DELETE FROM securities
+DELETE
+FROM securities
 WHERE external_id IN (SELECT s.external_id
                       FROM securities s
                                JOIN repositories r ON r.name = s.repository_name

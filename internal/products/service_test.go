@@ -124,6 +124,45 @@ func TestService(t *testing.T) {
 			odize.AssertTrue(t, len(repos) > 0)
 			odize.AssertEqual(t, "test-repo", repos[0].Name)
 		}).
+		Test("UpsertRepo should create a repo when it does not exist", func(t *testing.T) {
+			params := CreateRepoParams{
+				Name:  "upsert-create-repo",
+				Url:   "url1",
+				Topic: "topic1",
+				Owner: "owner1",
+			}
+
+			err := s.UpsertRepo(ctx, params)
+			odize.AssertNoError(t, err)
+
+			model, err := _testDB.GetRepoByName(ctx, params.Name)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, params.Url, model.Url)
+			odize.AssertEqual(t, params.Topic, model.Topic)
+		}).
+		Test("UpsertRepo should update a repo when it already exists", func(t *testing.T) {
+			params := CreateRepoParams{
+				Name:  "upsert-update-repo",
+				Url:   "url1",
+				Topic: "topic1",
+				Owner: "owner1",
+			}
+
+			// Initial creation
+			err := s.UpsertRepo(ctx, params)
+			odize.AssertNoError(t, err)
+
+			// Update
+			params.Url = "url2"
+			params.Topic = "topic2"
+			err = s.UpsertRepo(ctx, params)
+			odize.AssertNoError(t, err)
+
+			model, err := _testDB.GetRepoByName(ctx, params.Name)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, "url2", model.Url)
+			odize.AssertEqual(t, "topic2", model.Topic)
+		}).
 		Test("GetPullRequests and GetPullRequestByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("pr-tag-%d", time.Now().UnixNano())
 			prod, _ := s.Create(ctx, CreateProductParams{Name: "PR Product", Tags: []string{tag}})

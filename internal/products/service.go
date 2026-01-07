@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"strings"
 	"watchtower/internal/database"
 	"watchtower/internal/github"
 	"watchtower/internal/logging"
@@ -137,8 +138,6 @@ func (s *Service) DeleteProduct(ctx context.Context, id int64) error {
 	return s.store.DeleteProduct(ctx, id)
 }
 
-// Repo methods
-
 func (s *Service) CreateRepo(ctx context.Context, params CreateRepoParams) error {
 	logger := logging.FromContext(ctx).With("service", "products")
 
@@ -158,6 +157,58 @@ func (s *Service) CreateRepo(ctx context.Context, params CreateRepoParams) error
 	return nil
 }
 
+func (s *Service) UpdateRepo(ctx context.Context, params UpdateRepoParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Updating repo", "repo", params.Name)
+
+	_, err := s.store.UpdateRepo(ctx, database.UpdateRepoParams{
+		Name:  params.Name,
+		Url:   params.Url,
+		Topic: params.Topic,
+		Owner: params.Owner,
+		ID:    params.ID,
+	})
+	if err != nil {
+		logger.Error("Error updating repo", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpsertRepo(ctx context.Context, params CreateRepoParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	createErr := s.CreateRepo(ctx, params)
+	if createErr == nil {
+		return nil
+	}
+
+	if !strings.Contains(createErr.Error(), "constraint failed: UNIQUE constraint failed") {
+		logger.Error("Error creating repo", "error", createErr)
+		return createErr
+	}
+
+	model, getErr := s.store.GetRepoByName(ctx, params.Name)
+	if getErr != nil {
+		logger.Error("Error fetching repo", "error", getErr)
+		return getErr
+	}
+
+	if updateErr := s.UpdateRepo(ctx, UpdateRepoParams{
+		ID:    model.ID,
+		Name:  params.Name,
+		Url:   params.Url,
+		Topic: params.Topic,
+		Owner: params.Owner,
+	}); updateErr != nil {
+		logger.Error("Error updating repo", "error", updateErr)
+		return updateErr
+	}
+
+	return nil
+}
 func (s *Service) GetRepos(ctx context.Context, productID int64) ([]RepositoryDTO, error) {
 	logger := logging.FromContext(ctx).With("service", "products")
 

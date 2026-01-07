@@ -78,6 +78,14 @@ type CreateRepoParams struct {
 	Owner string
 }
 
+type UpdateRepoParams struct {
+	ID    int64
+	Name  string
+	Url   string
+	Topic string
+	Owner string
+}
+
 type CreatePRParams struct {
 	ExternalID     string
 	Title          string

@@ -249,7 +249,8 @@ func (q *Queries) DeleteProduct(ctx context.Context, id int64) error {
 }
 
 const deleteProductOrganisationByOrgID = `-- name: DeleteProductOrganisationByOrgID :exec
-DELETE FROM product_organisations
+DELETE
+FROM product_organisations
 WHERE organisation_id = ?
 `
 
@@ -291,7 +292,8 @@ func (q *Queries) DeleteReposByProductID(ctx context.Context, id int64) error {
 }
 
 const deleteSecurityByProductID = `-- name: DeleteSecurityByProductID :exec
-DELETE FROM securities
+DELETE
+FROM securities
 WHERE external_id IN (SELECT s.external_id
                       FROM securities s
                                JOIN repositories r ON r.name = s.repository_name
@@ -490,6 +492,28 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 		return nil, err
 	}
 	return items, nil
+}
+
+const getRepoByName = `-- name: GetRepoByName :one
+SELECT id, name, url, topic, owner, created_at, updated_at
+FROM repositories
+WHERE name = ?
+LIMIT 1
+`
+
+func (q *Queries) GetRepoByName(ctx context.Context, name string) (Repository, error) {
+	row := q.db.QueryRowContext(ctx, getRepoByName, name)
+	var i Repository
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Url,
+		&i.Topic,
+		&i.Owner,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getReposByProductID = `-- name: GetReposByProductID :many
@@ -725,10 +749,10 @@ func (q *Queries) ListProductsByOrganisation(ctx context.Context, organisationID
 
 const updateProduct = `-- name: UpdateProduct :one
 UPDATE products
-SET name       = ?,
-    tags       = ?,
+SET name        = ?,
+    tags        = ?,
     description = ?,
-    updated_at = CAST(strftime('%s', 'now') AS INTEGER)
+    updated_at  = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
 RETURNING id, name, description, tags, created_at, updated_at
 `
