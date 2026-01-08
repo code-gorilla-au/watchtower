@@ -509,6 +509,7 @@ const getRecentPullRequests = `-- name: GetRecentPullRequests :many
 SELECT external_id
 FROM pull_requests
 WHERE created_at >= unixepoch() - 300
+AND state = 'OPEN'
 ORDER BY created_at DESC
 `
 
@@ -539,6 +540,7 @@ const getRecentSecurity = `-- name: GetRecentSecurity :many
 SELECT external_id
 FROM securities
 WHERE created_at >= unixepoch() - 300
+and state = 'OPEN'
 ORDER BY created_at DESC
 `
 

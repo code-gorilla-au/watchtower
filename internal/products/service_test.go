@@ -279,6 +279,33 @@ func TestService(t *testing.T) {
 			odize.AssertNoError(t, err)
 			odize.AssertTrue(t, len(orgPrs) > 0)
 		}).
+		Test("GetRecentPullRequests should return external IDs of recent PRs", func(t *testing.T) {
+			params := CreatePRParams{
+				ExternalID:     "recent-pr-1",
+				Title:          "Recent PR",
+				RepositoryName: "repo1",
+				Url:            "url1",
+				State:          "OPEN",
+				Author:         "author1",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.CreatePullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			recent, err := s.GetRecentPullRequests(ctx)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(recent) > 0)
+
+			found := false
+			for _, id := range recent {
+				if id == params.ExternalID {
+					found = true
+					break
+				}
+			}
+			odize.AssertTrue(t, found)
+		}).
 		Test("GetSecurity and GetSecurityByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("sec-tag-%d", time.Now().UnixNano())
 			prod, _ := s.Create(ctx, CreateProductParams{Name: "Sec Product", Tags: []string{tag}})
@@ -310,6 +337,32 @@ func TestService(t *testing.T) {
 			orgSecs, err := s.GetSecurityByOrg(ctx, orgID)
 			odize.AssertNoError(t, err)
 			odize.AssertTrue(t, len(orgSecs) > 0)
+		}).
+		Test("GetRecentSecurity should return external IDs of recent security alerts", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "recent-sec-1",
+				RepositoryName: "repo1",
+				PackageName:    "pkg1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			recent, err := s.GetRecentSecurity(ctx)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(recent) > 0)
+
+			found := false
+			for _, id := range recent {
+				if id == params.ExternalID {
+					found = true
+					break
+				}
+			}
+			odize.AssertTrue(t, found)
 		}).
 		Test("BulkInsertRepos", func(t *testing.T) {
 			tag := "bulk-repo-tag"

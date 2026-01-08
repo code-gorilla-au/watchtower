@@ -349,7 +349,7 @@ func (s *Service) UpsertPullRequest(ctx context.Context, params CreatePRParams) 
 		return nil
 	}
 
-	if !strings.Contains(createErr.Error(), "constraint failed: UNIQUE constraint failed") {
+	if !database.IsErrUniqueConstraint(createErr) {
 		logger.Error("Error creating pull request", "error", createErr)
 		return createErr
 	}

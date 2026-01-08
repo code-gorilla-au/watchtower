@@ -32,8 +32,55 @@ func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
 
-func (s *Service) CreateUnreadPRNotification() {
+// CreateUnreadPRNotification generates unread notifications for recent pull requests by fetching their IDs and creating notifications.
+func (s *Service) CreateUnreadPRNotification() error {
+	logger := logging.FromContext(s.ctx)
 
+	prIDs, err := s.productSvc.GetRecentPullRequests(s.ctx)
+	if err != nil {
+		logging.FromContext(s.ctx).Error("Error fetching recent pull requests", "error", err)
+		return err
+	}
+
+	for _, id := range prIDs {
+		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
+			OrgID:            0,
+			ExternalID:       id,
+			NotificationType: "OPEN_PULL_REQUEST",
+			Content:          "New pull request",
+		}); notifyErr != nil {
+			logger.Error("Error creating notification", "error", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+// CreateUnreadSecurityNotification generates unread security notifications for recent security alerts.
+// It retrieves recent security-related IDs and creates notifications for each using the notification service.
+// Returns an error if fetching security IDs or creating notifications fails.
+func (s *Service) CreateUnreadSecurityNotification() error {
+	logger := logging.FromContext(s.ctx)
+	externalIDs, err := s.productSvc.GetRecentSecurity(s.ctx)
+	if err != nil {
+		logger.Error("Error fetching recent security", "error", err)
+		return err
+	}
+
+	for _, id := range externalIDs {
+		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
+			OrgID:            0,
+			ExternalID:       id,
+			NotificationType: "SECURITY_ALERT",
+			Content:          "New security alert",
+		}); notifyErr != nil {
+			logger.Error("Error creating notification", "error", err)
+			return err
+		}
+	}
+
+	return nil
 }
 
 // SyncOrgs synchronizes stale organisations by retrieving them and invoking the sync process for each.

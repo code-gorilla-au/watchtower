@@ -65,6 +65,28 @@ func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int
 	return err
 }
 
+const getNotificationByExternalID = `-- name: GetNotificationByExternalID :one
+SELECT id, organisation_id, external_id, type, content, status, created_at, updated_at
+FROM organisation_notifications
+WHERE external_id = ?
+`
+
+func (q *Queries) GetNotificationByExternalID(ctx context.Context, externalID string) (OrganisationNotification, error) {
+	row := q.db.QueryRowContext(ctx, getNotificationByExternalID, externalID)
+	var i OrganisationNotification
+	err := row.Scan(
+		&i.ID,
+		&i.OrganisationID,
+		&i.ExternalID,
+		&i.Type,
+		&i.Content,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getUnreadNotificationsByOrgID = `-- name: GetUnreadNotificationsByOrgID :many
 SELECT id, organisation_id, external_id, type, content, status, created_at, updated_at
 FROM organisation_notifications

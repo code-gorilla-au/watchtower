@@ -11,6 +11,7 @@ type Store interface {
 	CreateOrgNotification(ctx context.Context, arg database.CreateOrgNotificationParams) (database.OrganisationNotification, error)
 	UpdateOrgNotificationByID(ctx context.Context, arg database.UpdateOrgNotificationByIDParams) (database.OrganisationNotification, error)
 	UpdateOrgNotificationStatusByID(ctx context.Context, arg database.UpdateOrgNotificationStatusByIDParams) (database.OrganisationNotification, error)
+	GetNotificationByExternalID(ctx context.Context, externalID string) (database.OrganisationNotification, error)
 	GetUnreadNotificationsByOrgID(ctx context.Context, organisationID sql.NullInt64) ([]database.OrganisationNotification, error)
 	DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error
 }

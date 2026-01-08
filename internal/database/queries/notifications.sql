@@ -13,6 +13,11 @@ VALUES (?,
         CAST(strftime('%s', 'now') AS INTEGER))
 RETURNING *;
 
+-- name: GetNotificationByExternalID :one
+SELECT *
+FROM organisation_notifications
+WHERE external_id = ?;
+
 -- name: UpdateOrgNotificationByID :one
 UPDATE organisation_notifications
 SET type       = ?,

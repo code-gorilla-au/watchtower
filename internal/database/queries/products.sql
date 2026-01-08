@@ -195,6 +195,7 @@ WHERE external_id IN (SELECT pr.external_id
 SELECT external_id
 FROM pull_requests
 WHERE created_at >= unixepoch() - 300
+AND state = 'OPEN'
 ORDER BY created_at DESC;
 
 
@@ -202,6 +203,7 @@ ORDER BY created_at DESC;
 SELECT external_id
 FROM securities
 WHERE created_at >= unixepoch() - 300
+and state = 'OPEN'
 ORDER BY created_at DESC;
 
 -- name: CreateSecurity :one
