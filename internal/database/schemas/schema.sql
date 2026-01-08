@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS organisation_notifications
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     organisation_id INTEGER REFERENCES organisations (id),
+    external_id TEXT UNIQUE NOT NULL,
     type TEXT NOT NULL,
     content TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'unread',

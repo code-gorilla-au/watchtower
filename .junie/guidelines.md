@@ -1,4 +1,6 @@
 
+## Global rules
+- You must always ask before creating mocks
 
 ## SQLite queries
 
@@ -81,6 +83,7 @@ review `taskfile.yaml` for list of commands available in repo.
 
 ### Testing:
 - Write **unit tests** using use [odize](https://github.com/code-gorilla-au/odize) as the test framework and parallel execution.
+- Do not mock out the database, we're using sqlite and embedded db for tests.
 - Think about edge cases, within reason.
 - **Mock external interfaces** cleanly using generated ([Moq](https://github.com/matryer/moq)) or handwritten mocks.
 - Separate **fast unit tests** from slower integration and E2E tests.
