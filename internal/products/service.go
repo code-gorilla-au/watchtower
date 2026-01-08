@@ -372,16 +372,16 @@ func (s *Service) UpsertPullRequest(ctx context.Context, params CreatePRParams) 
 	})
 }
 
-func (s *Service) GetRecentPullRequests(ctx context.Context) ([]string, error) {
+func (s *Service) GetRecentPullRequests(ctx context.Context) ([]RecentlyChangedEntity, error) {
 	logger := logging.FromContext(ctx).With("service", "products")
 	logger.Debug("Getting recent pull requests")
-	externalIDs, err := s.store.GetRecentPullRequests(ctx)
+	recentPRs, err := s.store.GetRecentPullRequests(ctx)
 	if err != nil {
 		logger.Error("Error fetching recent pull requests", "error", err)
 		return nil, err
 	}
 
-	return externalIDs, nil
+	return fromRecentlyChangedPRModels(recentPRs), nil
 }
 
 func (s *Service) BulkCreatePullRequest(ctx context.Context, paramsList []CreatePRParams) error {
@@ -435,17 +435,17 @@ func (s *Service) GetSecurityByOrg(ctx context.Context, orgID int64) ([]Security
 	return orgToSecurityDTOs(model), nil
 }
 
-func (s *Service) GetRecentSecurity(ctx context.Context) ([]string, error) {
+func (s *Service) GetRecentSecurity(ctx context.Context) ([]RecentlyChangedEntity, error) {
 	logger := logging.FromContext(ctx).With("service", "products")
 	logger.Debug("Getting recent security")
 
-	externalIDs, err := s.store.GetRecentSecurity(ctx)
+	secList, err := s.store.GetRecentSecurity(ctx)
 	if err != nil {
 		logger.Error("Error fetching recent security", "error", err)
 		return nil, err
 	}
 
-	return externalIDs, nil
+	return fromRecentlyChangedSecurityModels(secList), nil
 }
 
 func (s *Service) BulkCreateSecurity(ctx context.Context, paramsList []CreateSecurityParams) error {

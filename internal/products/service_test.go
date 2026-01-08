@@ -10,6 +10,7 @@ import (
 	"watchtower/internal/github"
 
 	"github.com/code-gorilla-au/odize"
+	"github.com/google/uuid"
 )
 
 func TestService(t *testing.T) {
@@ -281,16 +282,37 @@ func TestService(t *testing.T) {
 		}).
 		Test("GetRecentPullRequests should return external IDs of recent PRs", func(t *testing.T) {
 			params := CreatePRParams{
-				ExternalID:     "recent-pr-1",
-				Title:          "Recent PR",
-				RepositoryName: "repo1",
+				ExternalID:     uuid.New().String(),
+				Title:          uuid.New().String(),
+				RepositoryName: uuid.New().String(),
 				Url:            "url1",
 				State:          "OPEN",
 				Author:         "author1",
 				CreatedAt:      time.Now(),
 			}
 
-			err := s.CreatePullRequest(ctx, params)
+			err := s.CreateRepo(ctx, CreateRepoParams{Name: params.RepositoryName, Topic: "tag", Owner: "owner"})
+			odize.AssertNoError(t, err)
+
+			prodID, err := s.Create(ctx, CreateProductParams{
+				Name: params.RepositoryName,
+				Desc: "",
+				Tags: []string{"tag"},
+			})
+			odize.AssertNoError(t, err)
+
+			_ = _testDB.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+				ProductID: sql.NullInt64{
+					Int64: prodID.ID,
+					Valid: true,
+				},
+				OrganisationID: sql.NullInt64{
+					Int64: 0,
+					Valid: true,
+				},
+			})
+
+			err = s.CreatePullRequest(ctx, params)
 			odize.AssertNoError(t, err)
 
 			recent, err := s.GetRecentPullRequests(ctx)
@@ -298,8 +320,8 @@ func TestService(t *testing.T) {
 			odize.AssertTrue(t, len(recent) > 0)
 
 			found := false
-			for _, id := range recent {
-				if id == params.ExternalID {
+			for _, entity := range recent {
+				if entity.ExternalID == params.ExternalID {
 					found = true
 					break
 				}
@@ -356,8 +378,8 @@ func TestService(t *testing.T) {
 			odize.AssertTrue(t, len(recent) > 0)
 
 			found := false
-			for _, id := range recent {
-				if id == params.ExternalID {
+			for _, entity := range recent {
+				if entity.ExternalID == params.ExternalID {
 					found = true
 					break
 				}

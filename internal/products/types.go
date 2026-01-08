@@ -129,3 +129,9 @@ type UpdateSecurityParams struct {
 	PatchedVersion string
 	FixedAt        *time.Time
 }
+
+type RecentlyChangedEntity struct {
+	ExternalID     string
+	RepositoryName string
+	OrganisationID int64
+}

@@ -207,3 +207,37 @@ func toSecParamsFromGithubVulnerabilities(secs github.RootNode[github.Vulnerabil
 
 	return result
 }
+
+func fromRecentlyChangedPRModel(model database.GetRecentPullRequestsRow) RecentlyChangedEntity {
+	return RecentlyChangedEntity{
+		ExternalID:     model.ExternalID,
+		OrganisationID: model.OrganisationID.Int64,
+		RepositoryName: model.RepositoryName,
+	}
+}
+
+func fromRecentlyChangedPRModels(models []database.GetRecentPullRequestsRow) []RecentlyChangedEntity {
+	result := make([]RecentlyChangedEntity, 0, len(models))
+	for _, m := range models {
+		result = append(result, fromRecentlyChangedPRModel(m))
+	}
+
+	return result
+}
+
+func fromRecentlyChangedSecurityModel(model database.GetRecentSecurityRow) RecentlyChangedEntity {
+	return RecentlyChangedEntity{
+		ExternalID:     model.ExternalID,
+		OrganisationID: model.OrganisationID.Int64,
+		RepositoryName: model.RepositoryName,
+	}
+}
+
+func fromRecentlyChangedSecurityModels(models []database.GetRecentSecurityRow) []RecentlyChangedEntity {
+	result := make([]RecentlyChangedEntity, 0, len(models))
+	for _, m := range models {
+		result = append(result, fromRecentlyChangedSecurityModel(m))
+	}
+
+	return result
+}

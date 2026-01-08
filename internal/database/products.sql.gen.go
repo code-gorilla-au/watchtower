@@ -506,26 +506,36 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 }
 
 const getRecentPullRequests = `-- name: GetRecentPullRequests :many
-SELECT external_id
-FROM pull_requests
-WHERE created_at >= unixepoch() - 300
-AND state = 'OPEN'
-ORDER BY created_at DESC
+SELECT pr.external_id, pr.repository_name, po.organisation_id
+FROM pull_requests pr
+         JOIN repositories r ON r.name = pr.repository_name
+         JOIN products p ON JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1 FROM JSON_EACH(p.tags) WHERE JSON_EACH.value = r.topic)
+         JOIN product_organisations po ON po.product_id = p.id
+WHERE pr.created_at >= unixepoch() - 300
+  AND pr.state = 'OPEN'
+ORDER BY pr.created_at DESC
 `
 
-func (q *Queries) GetRecentPullRequests(ctx context.Context) ([]string, error) {
+type GetRecentPullRequestsRow struct {
+	ExternalID     string
+	RepositoryName string
+	OrganisationID sql.NullInt64
+}
+
+func (q *Queries) GetRecentPullRequests(ctx context.Context) ([]GetRecentPullRequestsRow, error) {
 	rows, err := q.db.QueryContext(ctx, getRecentPullRequests)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetRecentPullRequestsRow
 	for rows.Next() {
-		var external_id string
-		if err := rows.Scan(&external_id); err != nil {
+		var i GetRecentPullRequestsRow
+		if err := rows.Scan(&i.ExternalID, &i.RepositoryName, &i.OrganisationID); err != nil {
 			return nil, err
 		}
-		items = append(items, external_id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -537,26 +547,36 @@ func (q *Queries) GetRecentPullRequests(ctx context.Context) ([]string, error) {
 }
 
 const getRecentSecurity = `-- name: GetRecentSecurity :many
-SELECT external_id
-FROM securities
-WHERE created_at >= unixepoch() - 300
-and state = 'OPEN'
-ORDER BY created_at DESC
+SELECT sec.external_id, sec.repository_name, po.organisation_id
+FROM securities sec
+         JOIN repositories r ON r.name = sec.repository_name
+         JOIN products p ON JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1 FROM JSON_EACH(p.tags) WHERE JSON_EACH.value = r.topic)
+         JOIN product_organisations po ON po.product_id = p.id
+WHERE sec.created_at >= unixepoch() - 300
+  and state = 'OPEN'
+ORDER BY sec.created_at DESC
 `
 
-func (q *Queries) GetRecentSecurity(ctx context.Context) ([]string, error) {
+type GetRecentSecurityRow struct {
+	ExternalID     string
+	RepositoryName string
+	OrganisationID sql.NullInt64
+}
+
+func (q *Queries) GetRecentSecurity(ctx context.Context) ([]GetRecentSecurityRow, error) {
 	rows, err := q.db.QueryContext(ctx, getRecentSecurity)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []GetRecentSecurityRow
 	for rows.Next() {
-		var external_id string
-		if err := rows.Scan(&external_id); err != nil {
+		var i GetRecentSecurityRow
+		if err := rows.Scan(&i.ExternalID, &i.RepositoryName, &i.OrganisationID); err != nil {
 			return nil, err
 		}
-		items = append(items, external_id)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
