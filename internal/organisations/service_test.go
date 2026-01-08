@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"testing"
+	"watchtower/internal/database"
 
 	"github.com/code-gorilla-au/odize"
 )
@@ -115,6 +116,33 @@ func TestService(t *testing.T) {
 			_, err := s.GetStaleOrgs(ctx)
 			odize.AssertNoError(t, err)
 
+		}).
+		Test("GetOrgAssociatedToProduct should return the organisation associated with a product", func(t *testing.T) {
+
+			org, err := s.Create(ctx, CreateOrgParams{
+				FriendlyName: "Associated Org",
+				Namespace:    "assoc-ns",
+			})
+			odize.AssertNoError(t, err)
+
+			prod, err := _testDB.CreateProduct(ctx, database.CreateProductParams{
+				Name:        "Test Product",
+				Description: "Test Description",
+			})
+			odize.AssertNoError(t, err)
+
+			err = _testDB.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+				ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
+				OrganisationID: sql.NullInt64{Int64: org.ID, Valid: true},
+			})
+			odize.AssertNoError(t, err)
+
+			fetchedOrg, err := s.GetOrgAssociatedToProduct(ctx, prod.ID)
+			odize.AssertNoError(t, err)
+
+			odize.AssertEqual(t, org.ID, fetchedOrg.ID)
+			odize.AssertEqual(t, org.FriendlyName, fetchedOrg.FriendlyName)
+			odize.AssertEqual(t, org.Namespace, fetchedOrg.Namespace)
 		}).
 		Run()
 
