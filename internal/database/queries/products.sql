@@ -132,14 +132,25 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
-                                        repository_name = excluded.repository_name,
-                                        url             = excluded.url,
-                                        state           = excluded.state,
-                                        author          = excluded.author,
-                                        merged_at       = excluded.merged_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
+
+-- name: UpdatePullRequest :one
+UPDATE pull_requests
+SET title           = ?,
+    repository_name = ?,
+    url             = ?,
+    state           = ?,
+    author          = ?,
+    merged_at       = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING *;
+
+-- name: GetPullRequestByExternalID :one
+SELECT *
+FROM pull_requests
+WHERE external_id = ?
+LIMIT 1;
 
 -- name: GetPullRequestByProductIDAndState :many
 SELECT pr.*, r.topic as tag, p.name as product_name
@@ -179,6 +190,22 @@ WHERE external_id IN (SELECT pr.external_id
                                       FROM JSON_EACH(p.tags)
                                       WHERE JSON_EACH.value = r.topic));
 
+
+-- name: GetRecentPullRequests :many
+SELECT external_id
+FROM pull_requests
+WHERE created_at >= unixepoch() - 300
+AND state = 'OPEN'
+ORDER BY created_at DESC;
+
+
+-- name: GetRecentSecurity :many
+SELECT external_id
+FROM securities
+WHERE created_at >= unixepoch() - 300
+and state = 'OPEN'
+ORDER BY created_at DESC;
+
 -- name: CreateSecurity :one
 INSERT INTO securities (external_id,
                         repository_name,
@@ -197,14 +224,25 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
-                                        package_name    = excluded.package_name,
-                                        state           = excluded.state,
-                                        severity        = excluded.severity,
-                                        patched_version = excluded.patched_version,
-                                        fixed_at        = excluded.fixed_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING *;
+
+-- name: UpdateSecurity :one
+UPDATE securities
+SET repository_name = ?,
+    package_name    = ?,
+    state           = ?,
+    severity        = ?,
+    patched_version = ?,
+    fixed_at        = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE external_id = ?
+RETURNING *;
+
+-- name: GetSecurityByExternalID :one
+SELECT *
+FROM securities
+WHERE external_id = ?
+LIMIT 1;
 
 
 -- name: GetSecurityByProductIDAndState :many

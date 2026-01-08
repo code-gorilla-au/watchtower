@@ -80,13 +80,6 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET title           = excluded.title,
-                                        repository_name = excluded.repository_name,
-                                        url             = excluded.url,
-                                        state           = excluded.state,
-                                        author          = excluded.author,
-                                        merged_at       = excluded.merged_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
 `
 
@@ -189,13 +182,6 @@ VALUES (?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER))
-ON CONFLICT (external_id) DO UPDATE SET repository_name = excluded.repository_name,
-                                        package_name    = excluded.package_name,
-                                        state           = excluded.state,
-                                        severity        = excluded.severity,
-                                        patched_version = excluded.patched_version,
-                                        fixed_at        = excluded.fixed_at,
-                                        updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
 RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
 `
 
@@ -354,6 +340,31 @@ func (q *Queries) GetProductByID(ctx context.Context, id int64) (Product, error)
 	return i, err
 }
 
+const getPullRequestByExternalID = `-- name: GetPullRequestByExternalID :one
+SELECT id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+FROM pull_requests
+WHERE external_id = ?
+LIMIT 1
+`
+
+func (q *Queries) GetPullRequestByExternalID(ctx context.Context, externalID string) (PullRequest, error) {
+	row := q.db.QueryRowContext(ctx, getPullRequestByExternalID, externalID)
+	var i PullRequest
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.Title,
+		&i.RepositoryName,
+		&i.Url,
+		&i.State,
+		&i.Author,
+		&i.MergedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const getPullRequestByProductIDAndState = `-- name: GetPullRequestByProductIDAndState :many
 SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at, r.topic as tag, p.name as product_name
 FROM pull_requests pr
@@ -494,6 +505,68 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 	return items, nil
 }
 
+const getRecentPullRequests = `-- name: GetRecentPullRequests :many
+SELECT external_id
+FROM pull_requests
+WHERE created_at >= unixepoch() - 300
+AND state = 'OPEN'
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetRecentPullRequests(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, getRecentPullRequests)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var external_id string
+		if err := rows.Scan(&external_id); err != nil {
+			return nil, err
+		}
+		items = append(items, external_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRecentSecurity = `-- name: GetRecentSecurity :many
+SELECT external_id
+FROM securities
+WHERE created_at >= unixepoch() - 300
+and state = 'OPEN'
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetRecentSecurity(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, getRecentSecurity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var external_id string
+		if err := rows.Scan(&external_id); err != nil {
+			return nil, err
+		}
+		items = append(items, external_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getRepoByName = `-- name: GetRepoByName :one
 SELECT id, name, url, topic, owner, created_at, updated_at
 FROM repositories
@@ -567,6 +640,31 @@ func (q *Queries) GetReposByProductID(ctx context.Context, id int64) ([]GetRepos
 		return nil, err
 	}
 	return items, nil
+}
+
+const getSecurityByExternalID = `-- name: GetSecurityByExternalID :one
+SELECT id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
+FROM securities
+WHERE external_id = ?
+LIMIT 1
+`
+
+func (q *Queries) GetSecurityByExternalID(ctx context.Context, externalID string) (Security, error) {
+	row := q.db.QueryRowContext(ctx, getSecurityByExternalID, externalID)
+	var i Security
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.RepositoryName,
+		&i.PackageName,
+		&i.State,
+		&i.Severity,
+		&i.PatchedVersion,
+		&i.FixedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const getSecurityByOrganisationAndState = `-- name: GetSecurityByOrganisationAndState :many
@@ -794,6 +892,55 @@ func (q *Queries) UpdateProductSync(ctx context.Context, id int64) error {
 	return err
 }
 
+const updatePullRequest = `-- name: UpdatePullRequest :one
+UPDATE pull_requests
+SET title           = ?,
+    repository_name = ?,
+    url             = ?,
+    state           = ?,
+    author          = ?,
+    merged_at       = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE id = ?
+RETURNING id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+`
+
+type UpdatePullRequestParams struct {
+	Title          string
+	RepositoryName string
+	Url            string
+	State          string
+	Author         string
+	MergedAt       sql.NullInt64
+	ID             int64
+}
+
+func (q *Queries) UpdatePullRequest(ctx context.Context, arg UpdatePullRequestParams) (PullRequest, error) {
+	row := q.db.QueryRowContext(ctx, updatePullRequest,
+		arg.Title,
+		arg.RepositoryName,
+		arg.Url,
+		arg.State,
+		arg.Author,
+		arg.MergedAt,
+		arg.ID,
+	)
+	var i PullRequest
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.Title,
+		&i.RepositoryName,
+		&i.Url,
+		&i.State,
+		&i.Author,
+		&i.MergedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updateRepo = `-- name: UpdateRepo :one
 UPDATE repositories
 SET name       = ?,
@@ -828,6 +975,55 @@ func (q *Queries) UpdateRepo(ctx context.Context, arg UpdateRepoParams) (Reposit
 		&i.Url,
 		&i.Topic,
 		&i.Owner,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const updateSecurity = `-- name: UpdateSecurity :one
+UPDATE securities
+SET repository_name = ?,
+    package_name    = ?,
+    state           = ?,
+    severity        = ?,
+    patched_version = ?,
+    fixed_at        = ?,
+    updated_at      = CAST(strftime('%s', 'now') AS INTEGER)
+WHERE external_id = ?
+RETURNING id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
+`
+
+type UpdateSecurityParams struct {
+	RepositoryName string
+	PackageName    string
+	State          string
+	Severity       string
+	PatchedVersion string
+	FixedAt        sql.NullInt64
+	ExternalID     string
+}
+
+func (q *Queries) UpdateSecurity(ctx context.Context, arg UpdateSecurityParams) (Security, error) {
+	row := q.db.QueryRowContext(ctx, updateSecurity,
+		arg.RepositoryName,
+		arg.PackageName,
+		arg.State,
+		arg.Severity,
+		arg.PatchedVersion,
+		arg.FixedAt,
+		arg.ExternalID,
+	)
+	var i Security
+	err := row.Scan(
+		&i.ID,
+		&i.ExternalID,
+		&i.RepositoryName,
+		&i.PackageName,
+		&i.State,
+		&i.Severity,
+		&i.PatchedVersion,
+		&i.FixedAt,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

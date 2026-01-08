@@ -163,6 +163,88 @@ func TestService(t *testing.T) {
 			odize.AssertEqual(t, "url2", model.Url)
 			odize.AssertEqual(t, "topic2", model.Topic)
 		}).
+		Test("CreatePullRequest should create a new pull request", func(t *testing.T) {
+			params := CreatePRParams{
+				ExternalID:     "new-pr",
+				Title:          "New PR",
+				RepositoryName: "repo1",
+				Url:            "url1",
+				State:          "OPEN",
+				Author:         "author1",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.CreatePullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			pr, err := _testDB.GetPullRequestByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, params.Title, pr.Title)
+			odize.AssertEqual(t, params.Author, pr.Author)
+		}).
+		Test("UpdatePullRequest should update an existing pull request", func(t *testing.T) {
+			params := CreatePRParams{
+				ExternalID:     "update-pr",
+				Title:          "Original Title",
+				RepositoryName: "repo1",
+				Url:            "url1",
+				State:          "OPEN",
+				Author:         "author1",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.CreatePullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			pr, _ := _testDB.GetPullRequestByExternalID(ctx, params.ExternalID)
+
+			updateParams := UpdatePRParams{
+				ID:             pr.ID,
+				Title:          "Updated Title",
+				RepositoryName: "repo1",
+				Url:            "url-updated",
+				State:          "CLOSED",
+				Author:         "author-updated",
+			}
+
+			err = s.UpdatePullRequest(ctx, updateParams)
+			odize.AssertNoError(t, err)
+
+			updatedPr, err := _testDB.GetPullRequestByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, updateParams.Title, updatedPr.Title)
+			odize.AssertEqual(t, updateParams.State, updatedPr.State)
+			odize.AssertEqual(t, updateParams.Author, updatedPr.Author)
+		}).
+		Test("UpsertPullRequest should create when not exists and update when exists", func(t *testing.T) {
+			params := CreatePRParams{
+				ExternalID:     "upsert-pr",
+				Title:          "Upsert Title",
+				RepositoryName: "repo1",
+				Url:            "url1",
+				State:          "OPEN",
+				Author:         "author1",
+				CreatedAt:      time.Now(),
+			}
+
+			// Create
+			err := s.UpsertPullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			pr, err := _testDB.GetPullRequestByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, params.Title, pr.Title)
+
+			// Update
+			params.Title = "Upsert Updated Title"
+			err = s.UpsertPullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			updatedPr, err := _testDB.GetPullRequestByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, "Upsert Updated Title", updatedPr.Title)
+			odize.AssertEqual(t, pr.ID, updatedPr.ID)
+		}).
 		Test("GetPullRequests and GetPullRequestByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("pr-tag-%d", time.Now().UnixNano())
 			prod, _ := s.Create(ctx, CreateProductParams{Name: "PR Product", Tags: []string{tag}})
@@ -197,6 +279,33 @@ func TestService(t *testing.T) {
 			odize.AssertNoError(t, err)
 			odize.AssertTrue(t, len(orgPrs) > 0)
 		}).
+		Test("GetRecentPullRequests should return external IDs of recent PRs", func(t *testing.T) {
+			params := CreatePRParams{
+				ExternalID:     "recent-pr-1",
+				Title:          "Recent PR",
+				RepositoryName: "repo1",
+				Url:            "url1",
+				State:          "OPEN",
+				Author:         "author1",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.CreatePullRequest(ctx, params)
+			odize.AssertNoError(t, err)
+
+			recent, err := s.GetRecentPullRequests(ctx)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(recent) > 0)
+
+			found := false
+			for _, id := range recent {
+				if id == params.ExternalID {
+					found = true
+					break
+				}
+			}
+			odize.AssertTrue(t, found)
+		}).
 		Test("GetSecurity and GetSecurityByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("sec-tag-%d", time.Now().UnixNano())
 			prod, _ := s.Create(ctx, CreateProductParams{Name: "Sec Product", Tags: []string{tag}})
@@ -228,6 +337,32 @@ func TestService(t *testing.T) {
 			orgSecs, err := s.GetSecurityByOrg(ctx, orgID)
 			odize.AssertNoError(t, err)
 			odize.AssertTrue(t, len(orgSecs) > 0)
+		}).
+		Test("GetRecentSecurity should return external IDs of recent security alerts", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "recent-sec-1",
+				RepositoryName: "repo1",
+				PackageName:    "pkg1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			recent, err := s.GetRecentSecurity(ctx)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(recent) > 0)
+
+			found := false
+			for _, id := range recent {
+				if id == params.ExternalID {
+					found = true
+					break
+				}
+			}
+			odize.AssertTrue(t, found)
 		}).
 		Test("BulkInsertRepos", func(t *testing.T) {
 			tag := "bulk-repo-tag"
@@ -288,6 +423,68 @@ func TestService(t *testing.T) {
 
 			err := s.BulkInsertRepoDetails(ctx, repoDetails)
 			odize.AssertNoError(t, err)
+		}).
+		Test("UpdateSecurity should update an existing security alert", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "update-sec",
+				RepositoryName: "repo1",
+				PackageName:    "pkg1",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				CreatedAt:      time.Now(),
+			}
+
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			updateParams := UpdateSecurityParams{
+				ExternalID:     params.ExternalID,
+				RepositoryName: "repo1",
+				PackageName:    "pkg1-updated",
+				State:          "FIXED",
+				Severity:       "CRITICAL",
+				PatchedVersion: "1.2.3",
+			}
+
+			err = s.UpdateSecurity(ctx, updateParams)
+			odize.AssertNoError(t, err)
+
+			updated, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, updateParams.PackageName, updated.PackageName)
+			odize.AssertEqual(t, updateParams.State, updated.State)
+			odize.AssertEqual(t, updateParams.Severity, updated.Severity)
+			odize.AssertEqual(t, updateParams.PatchedVersion, updated.PatchedVersion)
+		}).
+		Test("UpsertSecurity should create when not exists and update when exists", func(t *testing.T) {
+			params := CreateSecurityParams{
+				ExternalID:     "upsert-sec",
+				RepositoryName: "repo1",
+				PackageName:    "pkg-upsert",
+				State:          "OPEN",
+				Severity:       "LOW",
+				CreatedAt:      time.Now(),
+			}
+
+			// Create
+			err := s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			sec, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, params.PackageName, sec.PackageName)
+
+			// Update
+			params.PackageName = "pkg-upsert-updated"
+			params.Severity = "MEDIUM"
+			err = s.UpsertSecurity(ctx, params)
+			odize.AssertNoError(t, err)
+
+			updated, err := _testDB.GetSecurityByExternalID(ctx, params.ExternalID)
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, "pkg-upsert-updated", updated.PackageName)
+			odize.AssertEqual(t, "MEDIUM", updated.Severity)
+			odize.AssertEqual(t, sec.ID, updated.ID)
 		}).
 		Run()
 

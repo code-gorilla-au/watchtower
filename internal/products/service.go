@@ -281,34 +281,119 @@ func (s *Service) BulkUpsertRepos(ctx context.Context, paramsList []CreateRepoPa
 	return nil
 }
 
+// CreatePullRequest creates a new pull request entry in the database using the provided parameters.
+func (s *Service) CreatePullRequest(ctx context.Context, params CreatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Creating pull request")
+
+	var mergedAt sql.NullInt64
+	if params.MergedAt != nil {
+		mergedAt.Valid = true
+		mergedAt.Int64 = params.MergedAt.Unix()
+	}
+
+	_, err := s.store.CreatePullRequest(ctx, database.CreatePullRequestParams{
+		ExternalID:     params.ExternalID,
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       mergedAt,
+		CreatedAt:      params.CreatedAt.Unix(),
+	})
+
+	if err != nil {
+		logger.Error("Error creating pull request", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpdatePullRequest(ctx context.Context, params UpdatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Updating pull request")
+
+	var mergedAt sql.NullInt64
+	if params.MergedAt != nil {
+		mergedAt.Valid = true
+		mergedAt.Int64 = params.MergedAt.Unix()
+	}
+
+	_, err := s.store.UpdatePullRequest(ctx, database.UpdatePullRequestParams{
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       mergedAt,
+		ID:             params.ID,
+	})
+
+	if err != nil {
+		logger.Error("Error updating pull request", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpsertPullRequest(ctx context.Context, params CreatePRParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	createErr := s.CreatePullRequest(ctx, params)
+	if createErr == nil {
+		return nil
+	}
+
+	if !database.IsErrUniqueConstraint(createErr) {
+		logger.Error("Error creating pull request", "error", createErr)
+		return createErr
+	}
+
+	pr, getErr := s.store.GetPullRequestByExternalID(ctx, params.ExternalID)
+	if getErr != nil {
+		logger.Error("Error fetching pull request", "error", getErr)
+		return getErr
+	}
+
+	return s.UpdatePullRequest(ctx, UpdatePRParams{
+		ID:             pr.ID,
+		ExternalID:     pr.ExternalID,
+		Title:          params.Title,
+		RepositoryName: params.RepositoryName,
+		Url:            params.Url,
+		State:          params.State,
+		Author:         params.Author,
+		MergedAt:       params.MergedAt,
+	})
+}
+
+func (s *Service) GetRecentPullRequests(ctx context.Context) ([]string, error) {
+	logger := logging.FromContext(ctx).With("service", "products")
+	logger.Debug("Getting recent pull requests")
+	externalIDs, err := s.store.GetRecentPullRequests(ctx)
+	if err != nil {
+		logger.Error("Error fetching recent pull requests", "error", err)
+		return nil, err
+	}
+
+	return externalIDs, nil
+}
+
 func (s *Service) BulkCreatePullRequest(ctx context.Context, paramsList []CreatePRParams) error {
 	logger := logging.FromContext(ctx)
 
 	for _, params := range paramsList {
-		mergedAt := sql.NullInt64{
-			Valid: false,
-			Int64: 0,
-		}
 
-		if params.MergedAt != nil {
-			mergedAt.Int64 = params.MergedAt.Unix()
-			mergedAt.Valid = true
-		}
-		_, err := s.store.CreatePullRequest(ctx, database.CreatePullRequestParams{
-			ExternalID:     params.ExternalID,
-			Title:          params.Title,
-			RepositoryName: params.RepositoryName,
-			Url:            params.Url,
-			State:          params.State,
-			Author:         params.Author,
-			MergedAt:       mergedAt,
-			CreatedAt:      params.CreatedAt.Unix(),
-		})
-		if err != nil {
+		if err := s.UpsertPullRequest(ctx, params); err != nil {
 			logger.Error("Error creating pull request", "error", err)
-
 			return err
 		}
+
 	}
 
 	return nil
@@ -350,32 +435,99 @@ func (s *Service) GetSecurityByOrg(ctx context.Context, orgID int64) ([]Security
 	return orgToSecurityDTOs(model), nil
 }
 
+func (s *Service) GetRecentSecurity(ctx context.Context) ([]string, error) {
+	logger := logging.FromContext(ctx).With("service", "products")
+	logger.Debug("Getting recent security")
+
+	externalIDs, err := s.store.GetRecentSecurity(ctx)
+	if err != nil {
+		logger.Error("Error fetching recent security", "error", err)
+		return nil, err
+	}
+
+	return externalIDs, nil
+}
+
 func (s *Service) BulkCreateSecurity(ctx context.Context, paramsList []CreateSecurityParams) error {
 	logger := logging.FromContext(ctx)
 
 	for _, params := range paramsList {
-		fixedAt := sql.NullInt64{}
-		if params.FixedAt != nil {
-			fixedAt.Int64 = params.FixedAt.Unix()
-			fixedAt.Valid = true
-		}
-
-		_, err := s.store.CreateSecurity(ctx, database.CreateSecurityParams{
-			ExternalID:     params.ExternalID,
-			RepositoryName: params.RepositoryName,
-			PackageName:    params.PackageName,
-			State:          params.State,
-			Severity:       params.Severity,
-			PatchedVersion: params.PatchedVersion,
-			FixedAt:        fixedAt,
-		})
-		if err != nil {
+		if err := s.UpsertSecurity(ctx, params); err != nil {
 			logger.Error("Error creating security", "error", err)
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (s *Service) UpdateSecurity(ctx context.Context, params UpdateSecurityParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Updating security")
+
+	var fixedAt sql.NullInt64
+	if params.FixedAt != nil {
+		fixedAt.Valid = true
+		fixedAt.Int64 = params.FixedAt.Unix()
+	}
+
+	_, err := s.store.UpdateSecurity(ctx, database.UpdateSecurityParams{
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        fixedAt,
+		ExternalID:     params.ExternalID,
+	})
+
+	if err != nil {
+		logger.Error("Error updating security", "error", err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) UpsertSecurity(ctx context.Context, params CreateSecurityParams) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	var fixedAt sql.NullInt64
+	if params.FixedAt != nil {
+		fixedAt.Int64 = params.FixedAt.Unix()
+		fixedAt.Valid = true
+	}
+
+	_, createErr := s.store.CreateSecurity(ctx, database.CreateSecurityParams{
+		ExternalID:     params.ExternalID,
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        fixedAt,
+		CreatedAt:      params.CreatedAt.Unix(),
+	})
+
+	if createErr == nil {
+		return nil
+	}
+
+	if !strings.Contains(createErr.Error(), "constraint failed: UNIQUE constraint failed") {
+		logger.Error("Error creating security", "error", createErr)
+		return createErr
+	}
+
+	return s.UpdateSecurity(ctx, UpdateSecurityParams{
+		ExternalID:     params.ExternalID,
+		RepositoryName: params.RepositoryName,
+		PackageName:    params.PackageName,
+		State:          params.State,
+		Severity:       params.Severity,
+		PatchedVersion: params.PatchedVersion,
+		FixedAt:        params.FixedAt,
+	})
 }
 
 func (s *Service) BulkInsertRepos(ctx context.Context, reposList []github.Node[github.Repository], tag string) error {

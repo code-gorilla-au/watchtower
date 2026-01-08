@@ -25,7 +25,12 @@
 		try {
 			pageState.loading = true;
 			pageState.error = undefined;
-			await productSvc.update(product.id, formData.name, formData.tags.split(","));
+			await productSvc.update(
+				product.id,
+				formData.name,
+				formData.description,
+				formData.tags.split(",")
+			);
 		} catch (e) {
 			const err = e as Error;
 			pageState.error = err.message;

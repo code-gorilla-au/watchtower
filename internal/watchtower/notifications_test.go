@@ -7,6 +7,7 @@ import (
 	"watchtower/internal/notifications"
 
 	"github.com/code-gorilla-au/odize"
+	"github.com/google/uuid"
 )
 
 func TestService_Notifications(t *testing.T) {
@@ -21,36 +22,51 @@ func TestService_Notifications(t *testing.T) {
 
 	err := group.
 		Test("GetUnreadNotifications should return unread notifications", func(t *testing.T) {
-			orgID := int64(1001)
+			orgID := int64(0)
 
-			// Seed a notification using the internal notification service
-			notif, err := s.notificationSvc.CreateNotification(ctx, orgID, "test-type", "test-content")
+			err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "test-type",
+				Content:          "test-content",
+				ExternalID:       uuid.New().String(),
+			})
 			odize.AssertNoError(t, err)
 
-			// Fetch unread notifications
-			unread, err := s.GetUnreadNotifications(orgID)
+			unread, err := s.GetUnreadNotifications()
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, 1, len(unread))
-			odize.AssertEqual(t, notif.ID, unread[0].ID)
 			odize.AssertEqual(t, "test-content", unread[0].Content)
 			odize.AssertEqual(t, notifications.StatusUnread, unread[0].Status)
 		}).
 		Test("MarkNotificationAsRead should mark a notification as read", func(t *testing.T) {
 			orgID := int64(1002)
-			notif, err := s.notificationSvc.CreateNotification(ctx, orgID, "type", "content")
+			err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "test-external-id-2",
+			})
 			odize.AssertNoError(t, err)
 
-			err = s.MarkNotificationAsRead(notif.ID)
+			unread, err := s.GetUnreadNotifications()
 			odize.AssertNoError(t, err)
 
-			unread, err := s.GetUnreadNotifications(orgID)
+			err = s.MarkNotificationAsRead(unread[0].ID)
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, 0, len(unread))
+
+			verifyUnread, err := s.GetUnreadNotifications()
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, 0, len(verifyUnread))
 		}).
 		Test("DeleteOldNotifications should delete notifications", func(t *testing.T) {
 			orgID := int64(1003)
-			_, err := s.notificationSvc.CreateNotification(ctx, orgID, "type", "content")
+			err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "test-external-id-3",
+			})
 			odize.AssertNoError(t, err)
 
 			// DeleteOldNotifications uses time.Now() and the query uses created_at < ?.
@@ -61,7 +77,7 @@ func TestService_Notifications(t *testing.T) {
 			err = s.DeleteOldNotifications()
 			odize.AssertNoError(t, err)
 
-			unread, err := s.GetUnreadNotifications(orgID)
+			unread, err := s.GetUnreadNotifications()
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, 0, len(unread))

@@ -10,6 +10,14 @@ export function CreateProduct(arg1, arg2, arg3, arg4) {
   return window['go']['watchtower']['Service']['CreateProduct'](arg1, arg2, arg3, arg4);
 }
 
+export function CreateUnreadPRNotification() {
+  return window['go']['watchtower']['Service']['CreateUnreadPRNotification']();
+}
+
+export function CreateUnreadSecurityNotification() {
+  return window['go']['watchtower']['Service']['CreateUnreadSecurityNotification']();
+}
+
 export function DeleteAllOrgs() {
   return window['go']['watchtower']['Service']['DeleteAllOrgs']();
 }
@@ -66,8 +74,8 @@ export function GetSecurityByProductID(arg1) {
   return window['go']['watchtower']['Service']['GetSecurityByProductID'](arg1);
 }
 
-export function GetUnreadNotifications(arg1) {
-  return window['go']['watchtower']['Service']['GetUnreadNotifications'](arg1);
+export function GetUnreadNotifications() {
+  return window['go']['watchtower']['Service']['GetUnreadNotifications']();
 }
 
 export function MarkNotificationAsRead(arg1) {
@@ -98,6 +106,6 @@ export function UpdateOrganisation(arg1) {
   return window['go']['watchtower']['Service']['UpdateOrganisation'](arg1);
 }
 
-export function UpdateProduct(arg1, arg2, arg3) {
-  return window['go']['watchtower']['Service']['UpdateProduct'](arg1, arg2, arg3);
+export function UpdateProduct(arg1, arg2, arg3, arg4) {
+  return window['go']['watchtower']['Service']['UpdateProduct'](arg1, arg2, arg3, arg4);
 }

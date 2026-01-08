@@ -7,6 +7,7 @@ require (
 	github.com/code-gorilla-au/fetch v1.1.0
 	github.com/code-gorilla-au/odize v1.3.4
 	github.com/go-co-op/gocron/v2 v2.19.0
+	github.com/google/uuid v1.6.0
 	github.com/wailsapp/wails/v2 v2.11.0
 	modernc.org/sqlite v1.42.2
 )
@@ -16,7 +17,6 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/joho/godotenv v1.5.1 // indirect

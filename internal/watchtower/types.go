@@ -2,6 +2,7 @@ package watchtower
 
 import (
 	"context"
+	"log/slog"
 	"watchtower/internal/notifications"
 	"watchtower/internal/organisations"
 	"watchtower/internal/products"
@@ -13,4 +14,10 @@ type Service struct {
 	productSvc      *products.Service
 	notificationSvc *notifications.Service
 	ghClient        ghClient
+}
+
+type Config struct {
+	Env      string
+	AppDir   string
+	LogLevel slog.Level
 }

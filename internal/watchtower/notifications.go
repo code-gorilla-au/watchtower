@@ -6,8 +6,8 @@ import (
 )
 
 // GetUnreadNotifications retrieves a list of unread notifications for the specified organization ID.
-func (s *Service) GetUnreadNotifications(orgID int64) ([]notifications.Notification, error) {
-	return s.notificationSvc.GetUnreadNotifications(s.ctx, orgID)
+func (s *Service) GetUnreadNotifications() ([]notifications.Notification, error) {
+	return s.notificationSvc.GetUnreadNotifications(s.ctx)
 }
 
 // MarkNotificationAsRead marks a notification as read based on the provided notification ID.

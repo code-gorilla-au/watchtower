@@ -16,34 +16,42 @@ func New(db Store, txnDB *sql.DB, txnFunc func(tx *sql.Tx) Store) *Service {
 	}
 }
 
+type CreateNotificationParams struct {
+	OrgID            int64
+	ExternalID       string
+	NotificationType string
+	Content          string
+}
+
 // CreateNotification creates a new notification for a specific organisation with the given type and content.
-func (s *Service) CreateNotification(ctx context.Context, orgID int64, notificationType string, content string) (Notification, error) {
-	logger := logging.FromContext(ctx).With("orgID", orgID, "service", "notifications")
+func (s *Service) CreateNotification(ctx context.Context, params CreateNotificationParams) error {
+	logger := logging.FromContext(ctx).With("orgID", params.OrgID, "service", "notifications")
 	logger.Debug("Creating notification for org")
 
-	model, err := s.store.CreateOrgNotification(ctx, database.CreateOrgNotificationParams{
+	_, err := s.store.CreateOrgNotification(ctx, database.CreateOrgNotificationParams{
+		ExternalID: params.ExternalID,
 		OrganisationID: sql.NullInt64{
-			Int64: orgID,
+			Int64: params.OrgID,
 			Valid: true,
 		},
-		Type:    notificationType,
-		Content: content,
+		Type:    params.NotificationType,
+		Content: params.Content,
 	})
-	if err != nil {
-		logger.Error("Error creating notification", "error", err)
-		return Notification{}, err
+	if err == nil || database.IsErrUniqueConstraint(err) {
+		return nil
 	}
 
-	return fromNotificationModel(model), nil
+	logger.Error("Error creating notification", "error", err)
+	return err
 }
 
 // GetUnreadNotifications fetches all unread notifications for the specified organisation ID. Returns a list of notifications or an error.
-func (s *Service) GetUnreadNotifications(ctx context.Context, orgID int64) ([]Notification, error) {
-	logger := logging.FromContext(ctx).With("orgID", orgID, "service", "notifications")
+func (s *Service) GetUnreadNotifications(ctx context.Context) ([]Notification, error) {
+	logger := logging.FromContext(ctx).With("service", "notifications")
 	logger.Debug("Fetching unread notifications")
 
 	models, err := s.store.GetUnreadNotificationsByOrgID(ctx, sql.NullInt64{
-		Int64: orgID,
+		Int64: 0,
 		Valid: true,
 	})
 	if err != nil {
@@ -52,6 +60,19 @@ func (s *Service) GetUnreadNotifications(ctx context.Context, orgID int64) ([]No
 	}
 
 	return fromNotificationModels(models), nil
+}
+
+func (s *Service) GetNotificationByExternalID(ctx context.Context, externalID string) (Notification, error) {
+	logger := logging.FromContext(ctx).With("externalID", externalID, "service", "notifications")
+	logger.Debug("Fetching notification by external ID")
+
+	model, err := s.store.GetNotificationByExternalID(ctx, externalID)
+	if err != nil {
+		logger.Error("Error fetching notification by external ID", "error", err)
+		return Notification{}, err
+	}
+
+	return fromNotificationModel(model), nil
 }
 
 // MarkNotificationAsRead updates the status of a notification to "read" based on the provided notification ID.

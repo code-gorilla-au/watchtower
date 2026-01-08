@@ -1,10 +1,13 @@
 
+## Global rules
+- You must always ask before creating mocks
 
-## SQLC queries
+## SQLite queries
 
-When writing SQL queries ensure you annotate your queries
-
-following are examples of correct annotations
+- When writing sqlite queries use the tool [sqlc](https://sqlc.dev/)
+- When writing SQL queries ensure you annotate your queries
+- Following are examples of correct annotations
+- after you finished writing the queries, use the command `task gen` to generate the boilerplate go code
 
 ```sql
 -- name: GetAuthor :one
@@ -80,10 +83,12 @@ review `taskfile.yaml` for list of commands available in repo.
 
 ### Testing:
 - Write **unit tests** using use [odize](https://github.com/code-gorilla-au/odize) as the test framework and parallel execution.
+- Do not mock out the database, we're using sqlite and embedded db for tests.
+- Think about edge cases, within reason.
 - **Mock external interfaces** cleanly using generated ([Moq](https://github.com/matryer/moq)) or handwritten mocks.
 - Separate **fast unit tests** from slower integration and E2E tests.
 - Ensure **test coverage** for every exported function, with behavioural checks.
-- Test coverage command is: `task go-cover`.
+- Test command with coverage is: `task go-cover`.
 
 
 #### Example odize framework
@@ -114,8 +119,7 @@ func TestQueries(t *testing.T) {
 				"owner",
 				"login",
 			}))
-
-			// Interpolated parameters
+			
 			odize.AssertTrue(t, containsAll(q, []string{
 				"owner:" + owner,
 				"topic:" + topic,

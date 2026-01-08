@@ -9,6 +9,10 @@ export function CreateOrganisation(arg1:string,arg2:string,arg3:string,arg4:stri
 
 export function CreateProduct(arg1:string,arg2:string,arg3:Array<string>,arg4:number):Promise<products.ProductDTO>;
 
+export function CreateUnreadPRNotification():Promise<void>;
+
+export function CreateUnreadSecurityNotification():Promise<void>;
+
 export function DeleteAllOrgs():Promise<void>;
 
 export function DeleteOldNotifications():Promise<void>;
@@ -37,7 +41,7 @@ export function GetSecurityByOrganisation(arg1:number):Promise<Array<products.Se
 
 export function GetSecurityByProductID(arg1:number):Promise<Array<products.SecurityDTO>>;
 
-export function GetUnreadNotifications(arg1:number):Promise<Array<notifications.Notification>>;
+export function GetUnreadNotifications():Promise<Array<notifications.Notification>>;
 
 export function MarkNotificationAsRead(arg1:number):Promise<void>;
 
@@ -53,4 +57,4 @@ export function SyncProduct(arg1:number):Promise<void>;
 
 export function UpdateOrganisation(arg1:organisations.UpdateOrgParams):Promise<organisations.OrganisationDTO>;
 
-export function UpdateProduct(arg1:number,arg2:string,arg3:Array<string>):Promise<products.ProductDTO>;
+export function UpdateProduct(arg1:number,arg2:string,arg3:string,arg4:Array<string>):Promise<products.ProductDTO>;

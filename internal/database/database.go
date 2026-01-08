@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "embed"
 	"path"
+	"strings"
 
 	_ "modernc.org/sqlite"
 )
@@ -46,4 +47,8 @@ func resolveDBPath(filePath string) string {
 	}
 
 	return path.Join(filePath, dbName, "?_busy_timeout=5000")
+}
+
+func IsErrUniqueConstraint(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "constraint failed: UNIQUE constraint failed")
 }
