@@ -192,19 +192,27 @@ WHERE external_id IN (SELECT pr.external_id
 
 
 -- name: GetRecentPullRequests :many
-SELECT external_id
-FROM pull_requests
-WHERE created_at >= unixepoch() - 300
-AND state = 'OPEN'
-ORDER BY created_at DESC;
+SELECT pr.external_id, pr.repository_name, po.organisation_id
+FROM pull_requests pr
+         JOIN repositories r ON r.name = pr.repository_name
+         JOIN products p ON JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1 FROM JSON_EACH(p.tags) WHERE JSON_EACH.value = r.topic)
+         JOIN product_organisations po ON po.product_id = p.id
+WHERE pr.created_at >= unixepoch() - 300
+  AND pr.state = 'OPEN'
+ORDER BY pr.created_at DESC;
 
 
 -- name: GetRecentSecurity :many
-SELECT external_id
-FROM securities
-WHERE created_at >= unixepoch() - 300
-and state = 'OPEN'
-ORDER BY created_at DESC;
+SELECT sec.external_id, sec.repository_name, po.organisation_id
+FROM securities sec
+         JOIN repositories r ON r.name = sec.repository_name
+         JOIN products p ON JSON_VALID(p.tags)
+    AND EXISTS (SELECT 1 FROM JSON_EACH(p.tags) WHERE JSON_EACH.value = r.topic)
+         JOIN product_organisations po ON po.product_id = p.id
+WHERE sec.created_at >= unixepoch() - 300
+  and state = 'OPEN'
+ORDER BY sec.created_at DESC;
 
 -- name: CreateSecurity :one
 INSERT INTO securities (external_id,

@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"strings"
 	"watchtower/internal/database"
 	"watchtower/internal/notifications"
@@ -36,27 +37,13 @@ func (s *Service) Startup(ctx context.Context) {
 func (s *Service) CreateUnreadPRNotification() error {
 	logger := logging.FromContext(s.ctx)
 
-	prIDs, err := s.productSvc.GetRecentPullRequests(s.ctx)
+	prs, err := s.productSvc.GetRecentPullRequests(s.ctx)
 	if err != nil {
-		logging.FromContext(s.ctx).Error("Error fetching recent pull requests", "error", err)
+		logger.Error("Error fetching recent pull requests", "error", err)
 		return err
 	}
 
-	logger.Debug("Creating unread notifications for pull requests", "count", len(prIDs))
-
-	for _, id := range prIDs {
-		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
-			OrgID:            0,
-			ExternalID:       id,
-			NotificationType: "OPEN_PULL_REQUEST",
-			Content:          "New pull request",
-		}); notifyErr != nil {
-			logger.Error("Error creating notification", "error", err)
-			return err
-		}
-	}
-
-	return nil
+	return s.createNotification("OPEN_PULL_REQUEST", "New pull request", prs)
 }
 
 // CreateUnreadSecurityNotification generates unread security notifications for recent security alerts.
@@ -64,21 +51,26 @@ func (s *Service) CreateUnreadPRNotification() error {
 // Returns an error if fetching security IDs or creating notifications fails.
 func (s *Service) CreateUnreadSecurityNotification() error {
 	logger := logging.FromContext(s.ctx)
-	externalIDs, err := s.productSvc.GetRecentSecurity(s.ctx)
+	secList, err := s.productSvc.GetRecentSecurity(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching recent security", "error", err)
 		return err
 	}
 
-	logger.Debug("creating unread notifications for security alerts", "count", len(externalIDs))
+	return s.createNotification("OPEN_SECURITY_ALERT", "New security alert", secList)
+}
 
-	for _, id := range externalIDs {
-		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
-			OrgID:            0,
-			ExternalID:       id,
-			NotificationType: "SECURITY_ALERT",
-			Content:          "New security alert",
-		}); notifyErr != nil {
+func (s *Service) createNotification(notificationType string, content string, recentlyChanged []products.RecentlyChangedEntity) error {
+	logger := logging.FromContext(s.ctx)
+	logger.Debug("creating unread notifications", "count", len(recentlyChanged))
+
+	for _, entity := range recentlyChanged {
+		if err := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
+			OrgID:            entity.OrganisationID,
+			ExternalID:       entity.ExternalID,
+			NotificationType: notificationType,
+			Content:          fmt.Sprintf("%s: %s", entity.RepositoryName, content),
+		}); err != nil {
 			logger.Error("Error creating notification", "error", err)
 			return err
 		}

@@ -38,7 +38,7 @@ type PullRequestStore interface {
 	CreatePullRequest(ctx context.Context, arg database.CreatePullRequestParams) (database.PullRequest, error)
 	UpdatePullRequest(ctx context.Context, arg database.UpdatePullRequestParams) (database.PullRequest, error)
 	GetPullRequestByExternalID(ctx context.Context, externalID string) (database.PullRequest, error)
-	GetRecentPullRequests(ctx context.Context) ([]string, error)
+	GetRecentPullRequests(ctx context.Context) ([]database.GetRecentPullRequestsRow, error)
 	DeletePullRequestsByProductID(ctx context.Context, id int64) error
 }
 
@@ -46,7 +46,7 @@ type SecurityStore interface {
 	GetSecurityByProductIDAndState(ctx context.Context, arg database.GetSecurityByProductIDAndStateParams) ([]database.GetSecurityByProductIDAndStateRow, error)
 	GetSecurityByOrganisationAndState(ctx context.Context, arg database.GetSecurityByOrganisationAndStateParams) ([]database.GetSecurityByOrganisationAndStateRow, error)
 	CreateSecurity(ctx context.Context, arg database.CreateSecurityParams) (database.Security, error)
-	GetRecentSecurity(ctx context.Context) ([]string, error)
+	GetRecentSecurity(ctx context.Context) ([]database.GetRecentSecurityRow, error)
 	UpdateSecurity(ctx context.Context, arg database.UpdateSecurityParams) (database.Security, error)
 	GetSecurityByExternalID(ctx context.Context, externalID string) (database.Security, error)
 	DeleteSecurityByProductID(ctx context.Context, id int64) error
