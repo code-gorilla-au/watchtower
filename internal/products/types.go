@@ -59,9 +59,10 @@ type SecurityDTO struct {
 }
 
 type CreateProductParams struct {
-	Name string
-	Desc string
-	Tags []string
+	Name           string
+	Desc           string
+	Tags           []string
+	OrganisationID int64
 }
 
 type UpdateProductParams struct {

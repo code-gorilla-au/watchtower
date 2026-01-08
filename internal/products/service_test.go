@@ -24,11 +24,16 @@ func TestService(t *testing.T) {
 	})
 
 	err := group.
-		Test("Create should create a product", func(t *testing.T) {
+		Test("Create should create a product and associate it with an organisation", func(t *testing.T) {
+			org, _ := _testDB.CreateOrganisation(ctx, database.CreateOrganisationParams{
+				FriendlyName: "Test Org Create",
+				Namespace:    "test-ns-create",
+			})
 			params := CreateProductParams{
-				Name: "Test Product",
-				Desc: "Test Description",
-				Tags: []string{"tag1", "tag2"},
+				Name:           "Test Product",
+				Desc:           "Test Description",
+				Tags:           []string{"tag1", "tag2"},
+				OrganisationID: org.ID,
 			}
 
 			prod, err := s.Create(ctx, params)
@@ -38,6 +43,11 @@ func TestService(t *testing.T) {
 			odize.AssertEqual(t, params.Desc, prod.Description)
 			odize.AssertEqual(t, 2, len(prod.Tags))
 			odize.AssertTrue(t, prod.ID > 0)
+
+			// Verify association
+			fetchedOrg, err := _testDB.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: prod.ID, Valid: true})
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, org.ID, fetchedOrg.ID)
 		}).
 		Test("Get should return a product", func(t *testing.T) {
 			params := CreateProductParams{
@@ -248,11 +258,12 @@ func TestService(t *testing.T) {
 		}).
 		Test("GetPullRequests and GetPullRequestByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("pr-tag-%d", time.Now().UnixNano())
-			prod, _ := s.Create(ctx, CreateProductParams{Name: "PR Product", Tags: []string{tag}})
 			orgID := int64(456)
-			_ = _testDB.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
-				ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
-				OrganisationID: sql.NullInt64{Int64: orgID, Valid: true},
+
+			prod, _ := s.Create(ctx, CreateProductParams{
+				Name:           "PR Product",
+				Tags:           []string{tag},
+				OrganisationID: orgID,
 			})
 
 			repoName := "pr-repo"
@@ -281,6 +292,7 @@ func TestService(t *testing.T) {
 			odize.AssertTrue(t, len(orgPrs) > 0)
 		}).
 		Test("GetRecentPullRequests should return external IDs of recent PRs", func(t *testing.T) {
+
 			params := CreatePRParams{
 				ExternalID:     uuid.New().String(),
 				Title:          uuid.New().String(),
@@ -294,23 +306,13 @@ func TestService(t *testing.T) {
 			err := s.CreateRepo(ctx, CreateRepoParams{Name: params.RepositoryName, Topic: "tag", Owner: "owner"})
 			odize.AssertNoError(t, err)
 
-			prodID, err := s.Create(ctx, CreateProductParams{
-				Name: params.RepositoryName,
-				Desc: "",
-				Tags: []string{"tag"},
+			_, err = s.Create(ctx, CreateProductParams{
+				Name:           params.RepositoryName,
+				Desc:           "",
+				Tags:           []string{"tag"},
+				OrganisationID: 1,
 			})
 			odize.AssertNoError(t, err)
-
-			_ = _testDB.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
-				ProductID: sql.NullInt64{
-					Int64: prodID.ID,
-					Valid: true,
-				},
-				OrganisationID: sql.NullInt64{
-					Int64: 0,
-					Valid: true,
-				},
-			})
 
 			err = s.CreatePullRequest(ctx, params)
 			odize.AssertNoError(t, err)
@@ -330,11 +332,11 @@ func TestService(t *testing.T) {
 		}).
 		Test("GetSecurity and GetSecurityByOrg", func(t *testing.T) {
 			tag := fmt.Sprintf("sec-tag-%d", time.Now().UnixNano())
-			prod, _ := s.Create(ctx, CreateProductParams{Name: "Sec Product", Tags: []string{tag}})
 			orgID := int64(789)
-			_ = _testDB.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
-				ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
-				OrganisationID: sql.NullInt64{Int64: orgID, Valid: true},
+			prod, _ := s.Create(ctx, CreateProductParams{
+				Name:           "Sec Product",
+				Tags:           []string{tag},
+				OrganisationID: orgID,
 			})
 
 			repoName := "sec-repo"
@@ -507,20 +509,6 @@ func TestService(t *testing.T) {
 			odize.AssertEqual(t, "pkg-upsert-updated", updated.PackageName)
 			odize.AssertEqual(t, "MEDIUM", updated.Severity)
 			odize.AssertEqual(t, sec.ID, updated.ID)
-		}).
-		Test("AssociateProductToOrg should create link in product_organisations", func(t *testing.T) {
-			org, _ := _testDB.CreateOrganisation(ctx, database.CreateOrganisationParams{
-				FriendlyName: "Product Org",
-				Namespace:    "prod-ns",
-			})
-			productID := int64(123)
-
-			err := s.AssociateProductToOrg(ctx, org.ID, productID)
-			odize.AssertNoError(t, err)
-
-			fetchedOrg, err := _testDB.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
-			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, org.ID, fetchedOrg.ID)
 		}).
 		Run()
 

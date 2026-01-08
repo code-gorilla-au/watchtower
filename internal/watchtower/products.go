@@ -4,22 +4,12 @@ import "watchtower/internal/products"
 
 // CreateProduct creates a new product and associates it with an organisation.
 func (s *Service) CreateProduct(name string, description string, tags []string, organisationID int64) (products.ProductDTO, error) {
-
-	prod, err := s.productSvc.Create(s.ctx, products.CreateProductParams{
-		Name: name,
-		Tags: tags,
-		Desc: description,
+	return s.productSvc.Create(s.ctx, products.CreateProductParams{
+		Name:           name,
+		Tags:           tags,
+		Desc:           description,
+		OrganisationID: organisationID,
 	})
-	if err != nil {
-		return products.ProductDTO{}, err
-	}
-
-	err = s.productSvc.AssociateProductToOrg(s.ctx, organisationID, prod.ID)
-	if err != nil {
-		return products.ProductDTO{}, err
-	}
-
-	return prod, nil
 }
 
 // GetProductByID fetches a product by its ID.
