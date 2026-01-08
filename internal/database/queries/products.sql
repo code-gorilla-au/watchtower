@@ -192,14 +192,14 @@ WHERE external_id IN (SELECT pr.external_id
 
 
 -- name: GetRecentPullRequests :many
-SELECT *
+SELECT external_id
 FROM pull_requests
 WHERE created_at >= unixepoch() - 300
 ORDER BY created_at DESC;
 
 
 -- name: GetRecentSecurity :many
-SELECT *
+SELECT external_id
 FROM securities
 WHERE created_at >= unixepoch() - 300
 ORDER BY created_at DESC;

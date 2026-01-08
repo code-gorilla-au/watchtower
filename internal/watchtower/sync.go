@@ -32,6 +32,10 @@ func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
 
+func (s *Service) CreateUnreadPRNotification() {
+
+}
+
 // SyncOrgs synchronizes stale organisations by retrieving them and invoking the sync process for each.
 func (s *Service) SyncOrgs() error {
 	logger := logging.FromContext(s.ctx)
