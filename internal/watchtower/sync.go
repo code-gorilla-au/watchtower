@@ -42,6 +42,8 @@ func (s *Service) CreateUnreadPRNotification() error {
 		return err
 	}
 
+	logger.Debug("Creating unread notifications for pull requests", "count", len(prIDs))
+
 	for _, id := range prIDs {
 		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
 			OrgID:            0,
@@ -67,6 +69,8 @@ func (s *Service) CreateUnreadSecurityNotification() error {
 		logger.Error("Error fetching recent security", "error", err)
 		return err
 	}
+
+	logger.Debug("creating unread notifications for security alerts", "count", len(externalIDs))
 
 	for _, id := range externalIDs {
 		if notifyErr := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
