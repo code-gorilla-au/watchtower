@@ -23,7 +23,7 @@ var assets embed.FS
 
 func main() {
 	ctx := context.Background()
-	appConfig := LoadConfig()
+	appConfig := watchtower.LoadConfig()
 	logger := logging.New(appConfig.LogLevel)
 
 	logger.Debug("Starting watchtower", "config", appConfig)

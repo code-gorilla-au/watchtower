@@ -16,18 +16,26 @@ func New(db Store, txnDB *sql.DB, txnFunc func(tx *sql.Tx) Store) *Service {
 	}
 }
 
+type CreateNotificationParams struct {
+	OrgID            int64
+	ExternalID       string
+	NotificationType string
+	Content          string
+}
+
 // CreateNotification creates a new notification for a specific organisation with the given type and content.
-func (s *Service) CreateNotification(ctx context.Context, orgID int64, notificationType string, content string) (Notification, error) {
-	logger := logging.FromContext(ctx).With("orgID", orgID, "service", "notifications")
+func (s *Service) CreateNotification(ctx context.Context, params CreateNotificationParams) (Notification, error) {
+	logger := logging.FromContext(ctx).With("orgID", params.OrgID, "service", "notifications")
 	logger.Debug("Creating notification for org")
 
 	model, err := s.store.CreateOrgNotification(ctx, database.CreateOrgNotificationParams{
+		ExternalID: params.ExternalID,
 		OrganisationID: sql.NullInt64{
-			Int64: orgID,
+			Int64: params.OrgID,
 			Valid: true,
 		},
-		Type:    notificationType,
-		Content: content,
+		Type:    params.NotificationType,
+		Content: params.Content,
 	})
 	if err != nil {
 		logger.Error("Error creating notification", "error", err)

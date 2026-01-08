@@ -19,10 +19,16 @@ tasks:
     cmds:
       - wails dev
 
-  clean-db:
+  db-clean:
     desc: Clean the database.
     cmds:
       - rm -f $LOCAL_DEV_DIR/watchtower.db
+
+  db-migrate:
+    desc: Run database migrations.
+    deps: [gen]
+    cmds:
+      - go run ./cmd/local
 
   gen:
     desc: Generate go code.
@@ -141,7 +147,7 @@ tasks:
 
   reset:
     desc: Reset the application.
-    deps: [clean-db]
+    deps: [db-clean]
     cmds:
       - task: dev
 

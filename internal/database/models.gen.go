@@ -22,6 +22,7 @@ type Organisation struct {
 type OrganisationNotification struct {
 	ID             int64
 	OrganisationID sql.NullInt64
+	ExternalID     string
 	Type           string
 	Content        string
 	Status         string

@@ -190,6 +190,20 @@ WHERE external_id IN (SELECT pr.external_id
                                       FROM JSON_EACH(p.tags)
                                       WHERE JSON_EACH.value = r.topic));
 
+
+-- name: GetRecentPullRequests :many
+SELECT *
+FROM pull_requests
+WHERE created_at >= unixepoch() - 300
+ORDER BY created_at DESC;
+
+
+-- name: GetRecentSecurity :many
+SELECT *
+FROM securities
+WHERE created_at >= unixepoch() - 300
+ORDER BY created_at DESC;
+
 -- name: CreateSecurity :one
 INSERT INTO securities (external_id,
                         repository_name,

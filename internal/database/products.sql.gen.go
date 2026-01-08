@@ -505,6 +505,88 @@ func (q *Queries) GetPullRequestsByOrganisationAndState(ctx context.Context, arg
 	return items, nil
 }
 
+const getRecentPullRequests = `-- name: GetRecentPullRequests :many
+SELECT id, external_id, title, repository_name, url, state, author, merged_at, created_at, updated_at
+FROM pull_requests
+WHERE created_at >= unixepoch() - 300
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetRecentPullRequests(ctx context.Context) ([]PullRequest, error) {
+	rows, err := q.db.QueryContext(ctx, getRecentPullRequests)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PullRequest
+	for rows.Next() {
+		var i PullRequest
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.Title,
+			&i.RepositoryName,
+			&i.Url,
+			&i.State,
+			&i.Author,
+			&i.MergedAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getRecentSecurity = `-- name: GetRecentSecurity :many
+SELECT id, external_id, repository_name, package_name, state, severity, patched_version, fixed_at, created_at, updated_at
+FROM securities
+WHERE created_at >= unixepoch() - 300
+ORDER BY created_at DESC
+`
+
+func (q *Queries) GetRecentSecurity(ctx context.Context) ([]Security, error) {
+	rows, err := q.db.QueryContext(ctx, getRecentSecurity)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Security
+	for rows.Next() {
+		var i Security
+		if err := rows.Scan(
+			&i.ID,
+			&i.ExternalID,
+			&i.RepositoryName,
+			&i.PackageName,
+			&i.State,
+			&i.Severity,
+			&i.PatchedVersion,
+			&i.FixedAt,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getRepoByName = `-- name: GetRepoByName :one
 SELECT id, name, url, topic, owner, created_at, updated_at
 FROM repositories

@@ -1,10 +1,12 @@
 -- name: CreateOrgNotification :one
 INSERT INTO organisation_notifications (organisation_id,
+                                        external_id,
                                         type,
                                         content,
                                         created_at,
                                         updated_at)
 VALUES (?,
+        ?,
         ?,
         ?,
         CAST(strftime('%s', 'now') AS INTEGER),
@@ -28,8 +30,12 @@ WHERE id = ?
 RETURNING *;
 
 -- name: GetUnreadNotificationsByOrgID :many
-SELECT * FROM organisation_notifications WHERE organisation_id = ?
-AND status = 'unread';
+SELECT *
+FROM organisation_notifications
+WHERE organisation_id = ?
+  AND status = 'unread';
 
 -- name: DeleteOrgNotificationByDate :exec
-DELETE FROM organisation_notifications WHERE created_at < ?;
+DELETE
+FROM organisation_notifications
+WHERE created_at < ?;

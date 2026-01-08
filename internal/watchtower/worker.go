@@ -8,6 +8,7 @@ import (
 	"watchtower/internal/logging"
 
 	"github.com/go-co-op/gocron/v2"
+	"github.com/google/uuid"
 )
 
 type Workers struct {
@@ -32,23 +33,18 @@ func NewWorkers(wt *Service) (*Workers, error) {
 
 func (w *Workers) AddJobs() error {
 
-	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*2), gocron.NewTask(func() {
-		w.logger.Debug("Running syncing orgs worker")
-
-		if err := w.watchTower.SyncOrgs(); err != nil {
-			w.logger.Error("Error syncing orgs", "error", err)
-		}
-	}), gocron.WithEventListeners()); err != nil {
+	if _, err := w.cron.NewJob(
+		gocron.DurationJob(time.Minute*2),
+		gocron.NewTask(w.jobSyncOrgs),
+		gocron.WithEventListeners(gocron.AfterJobRuns(w.afterOrgSync)),
+	); err != nil {
 		return err
 	}
 
-	if _, err := w.cron.NewJob(gocron.DurationJob(time.Minute*10), gocron.NewTask(func() {
-		w.logger.Debug("Running remove old notifications worker")
-
-		if err := w.watchTower.DeleteOldNotifications(); err != nil {
-			w.logger.Error("Error syncing orgs", "error", err)
-		}
-	})); err != nil {
+	if _, err := w.cron.NewJob(
+		gocron.DurationJob(time.Minute*10),
+		gocron.NewTask(w.jobDeleteOldNotifications),
+	); err != nil {
 		return err
 	}
 
@@ -65,10 +61,30 @@ func (w *Workers) Stop() {
 	w.logger.Debug("Stopping workers")
 
 	if err := w.cron.StopJobs(); err != nil {
-		w.logger.Error("Error stopping org sync worker", "error", err)
+		w.logger.Error("Error stopping worker", "error", err)
 	}
 
 	if err := w.cron.Shutdown(); err != nil {
-		w.logger.Error("Error shutting down org sync worker", "error", err)
+		w.logger.Error("Error shutting down worker", "error", err)
 	}
+}
+
+func (w *Workers) jobSyncOrgs() {
+	w.logger.Debug("Running syncing orgs worker")
+
+	if err := w.watchTower.SyncOrgs(); err != nil {
+		w.logger.Error("Error syncing orgs", "error", err)
+	}
+}
+
+func (w *Workers) jobDeleteOldNotifications() {
+	w.logger.Debug("Running remove old notifications worker")
+
+	if err := w.watchTower.DeleteOldNotifications(); err != nil {
+		w.logger.Error("Error syncing orgs", "error", err)
+	}
+}
+
+func (w *Workers) afterOrgSync(jobID uuid.UUID, jobName string) {
+
 }

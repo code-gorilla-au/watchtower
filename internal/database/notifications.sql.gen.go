@@ -12,6 +12,7 @@ import (
 
 const createOrgNotification = `-- name: CreateOrgNotification :one
 INSERT INTO organisation_notifications (organisation_id,
+                                        external_id,
                                         type,
                                         content,
                                         created_at,
@@ -19,23 +20,31 @@ INSERT INTO organisation_notifications (organisation_id,
 VALUES (?,
         ?,
         ?,
+        ?,
         CAST(strftime('%s', 'now') AS INTEGER),
         CAST(strftime('%s', 'now') AS INTEGER))
-RETURNING id, organisation_id, type, content, status, created_at, updated_at
+RETURNING id, organisation_id, external_id, type, content, status, created_at, updated_at
 `
 
 type CreateOrgNotificationParams struct {
 	OrganisationID sql.NullInt64
+	ExternalID     string
 	Type           string
 	Content        string
 }
 
 func (q *Queries) CreateOrgNotification(ctx context.Context, arg CreateOrgNotificationParams) (OrganisationNotification, error) {
-	row := q.db.QueryRowContext(ctx, createOrgNotification, arg.OrganisationID, arg.Type, arg.Content)
+	row := q.db.QueryRowContext(ctx, createOrgNotification,
+		arg.OrganisationID,
+		arg.ExternalID,
+		arg.Type,
+		arg.Content,
+	)
 	var i OrganisationNotification
 	err := row.Scan(
 		&i.ID,
 		&i.OrganisationID,
+		&i.ExternalID,
 		&i.Type,
 		&i.Content,
 		&i.Status,
@@ -46,7 +55,9 @@ func (q *Queries) CreateOrgNotification(ctx context.Context, arg CreateOrgNotifi
 }
 
 const deleteOrgNotificationByDate = `-- name: DeleteOrgNotificationByDate :exec
-DELETE FROM organisation_notifications WHERE created_at < ?
+DELETE
+FROM organisation_notifications
+WHERE created_at < ?
 `
 
 func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error {
@@ -55,8 +66,10 @@ func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int
 }
 
 const getUnreadNotificationsByOrgID = `-- name: GetUnreadNotificationsByOrgID :many
-SELECT id, organisation_id, type, content, status, created_at, updated_at FROM organisation_notifications WHERE organisation_id = ?
-AND status = 'unread'
+SELECT id, organisation_id, external_id, type, content, status, created_at, updated_at
+FROM organisation_notifications
+WHERE organisation_id = ?
+  AND status = 'unread'
 `
 
 func (q *Queries) GetUnreadNotificationsByOrgID(ctx context.Context, organisationID sql.NullInt64) ([]OrganisationNotification, error) {
@@ -71,6 +84,7 @@ func (q *Queries) GetUnreadNotificationsByOrgID(ctx context.Context, organisatio
 		if err := rows.Scan(
 			&i.ID,
 			&i.OrganisationID,
+			&i.ExternalID,
 			&i.Type,
 			&i.Content,
 			&i.Status,
@@ -97,7 +111,7 @@ SET type       = ?,
     status     = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
-RETURNING id, organisation_id, type, content, status, created_at, updated_at
+RETURNING id, organisation_id, external_id, type, content, status, created_at, updated_at
 `
 
 type UpdateOrgNotificationByIDParams struct {
@@ -118,6 +132,7 @@ func (q *Queries) UpdateOrgNotificationByID(ctx context.Context, arg UpdateOrgNo
 	err := row.Scan(
 		&i.ID,
 		&i.OrganisationID,
+		&i.ExternalID,
 		&i.Type,
 		&i.Content,
 		&i.Status,
@@ -132,7 +147,7 @@ UPDATE organisation_notifications
 SET status     = ?,
     updated_at = CAST(strftime('%s', 'now') AS INTEGER)
 WHERE id = ?
-RETURNING id, organisation_id, type, content, status, created_at, updated_at
+RETURNING id, organisation_id, external_id, type, content, status, created_at, updated_at
 `
 
 type UpdateOrgNotificationStatusByIDParams struct {
@@ -146,6 +161,7 @@ func (q *Queries) UpdateOrgNotificationStatusByID(ctx context.Context, arg Updat
 	err := row.Scan(
 		&i.ID,
 		&i.OrganisationID,
+		&i.ExternalID,
 		&i.Type,
 		&i.Content,
 		&i.Status,

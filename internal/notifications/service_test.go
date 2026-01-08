@@ -27,7 +27,12 @@ func TestService(t *testing.T) {
 			notifType := "test-type"
 			content := "test-content"
 
-			notif, err := s.CreateNotification(ctx, orgID, notifType, content)
+			notif, err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: notifType,
+				Content:          content,
+				ExternalID:       "test-external-id",
+			})
 			odize.AssertNoError(t, err)
 
 			odize.AssertEqual(t, orgID, notif.OrganisationID)
@@ -41,10 +46,20 @@ func TestService(t *testing.T) {
 		Test("GetUnreadNotifications should return only unread notifications for an org", func(t *testing.T) {
 			orgID := int64(2)
 
-			_, err := s.CreateNotification(ctx, orgID, "type1", "content1")
+			_, err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type1",
+				Content:          "content1",
+				ExternalID:       "ext1",
+			})
 			odize.AssertNoError(t, err)
 
-			notif2, err := s.CreateNotification(ctx, orgID, "type2", "content2")
+			notif2, err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type2",
+				Content:          "content2",
+				ExternalID:       "ext2",
+			})
 			odize.AssertNoError(t, err)
 
 			err = s.MarkNotificationAsRead(ctx, notif2.ID)
@@ -59,7 +74,12 @@ func TestService(t *testing.T) {
 		}).
 		Test("MarkNotificationAsRead should update notification status", func(t *testing.T) {
 			orgID := int64(3)
-			notif, err := s.CreateNotification(ctx, orgID, "type", "content")
+			notif, err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "ext3",
+			})
 			odize.AssertNoError(t, err)
 			odize.AssertEqual(t, StatusUnread, notif.Status)
 
@@ -73,7 +93,12 @@ func TestService(t *testing.T) {
 		Test("DeleteNotificationsByDate should delete old notifications", func(t *testing.T) {
 			orgID := int64(4)
 
-			_, err := s.CreateNotification(ctx, orgID, "type", "content")
+			_, err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "ext4",
+			})
 			odize.AssertNoError(t, err)
 
 			cutoff := time.Now().Add(1 * time.Minute)

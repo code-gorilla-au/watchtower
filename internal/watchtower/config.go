@@ -1,4 +1,4 @@
-package main
+package watchtower
 
 import (
 	"fmt"
@@ -8,12 +8,6 @@ import (
 
 	"github.com/code-gorilla-au/env"
 )
-
-type Config struct {
-	Env      string
-	AppDir   string
-	LogLevel slog.Level
-}
 
 const appDirPath = "watchtower"
 

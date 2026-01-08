@@ -24,7 +24,12 @@ func TestService_Notifications(t *testing.T) {
 			orgID := int64(1001)
 
 			// Seed a notification using the internal notification service
-			notif, err := s.notificationSvc.CreateNotification(ctx, orgID, "test-type", "test-content")
+			notif, err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "test-type",
+				Content:          "test-content",
+				ExternalID:       "test-external-id-1",
+			})
 			odize.AssertNoError(t, err)
 
 			// Fetch unread notifications
@@ -38,7 +43,12 @@ func TestService_Notifications(t *testing.T) {
 		}).
 		Test("MarkNotificationAsRead should mark a notification as read", func(t *testing.T) {
 			orgID := int64(1002)
-			notif, err := s.notificationSvc.CreateNotification(ctx, orgID, "type", "content")
+			notif, err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "test-external-id-2",
+			})
 			odize.AssertNoError(t, err)
 
 			err = s.MarkNotificationAsRead(notif.ID)
@@ -50,7 +60,12 @@ func TestService_Notifications(t *testing.T) {
 		}).
 		Test("DeleteOldNotifications should delete notifications", func(t *testing.T) {
 			orgID := int64(1003)
-			_, err := s.notificationSvc.CreateNotification(ctx, orgID, "type", "content")
+			_, err := s.notificationSvc.CreateNotification(ctx, notifications.CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "type",
+				Content:          "content",
+				ExternalID:       "test-external-id-3",
+			})
 			odize.AssertNoError(t, err)
 
 			// DeleteOldNotifications uses time.Now() and the query uses created_at < ?.
