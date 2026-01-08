@@ -1,7 +1,7 @@
 package watchtower
 
 import (
-	"fmt"
+	"log"
 	"log/slog"
 	"os"
 	"path"
@@ -25,13 +25,13 @@ func LoadConfig() Config {
 
 	appDir := path.Join(homeDir, appDirPath)
 	if environment == "local" {
-		fmt.Print("LOCAL MODE")
+		log.Println("LOCAL MODE")
 		current, _ := os.Getwd()
 
 		appDir = path.Join(current, localDevDBPath)
 	} else {
 		// folder can already exist
-		_ = os.Mkdir(appDir, 0755)
+		_ = os.Mkdir(appDir, 0750)
 	}
 
 	return Config{

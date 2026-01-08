@@ -48,8 +48,8 @@ export class ProductsService {
 		return product;
 	}
 
-	async update(id: number, name: string, tags: string[]) {
-		const product = await UpdateProduct(id, name, tags);
+	async update(id: number, name: string, description: string, tags: string[]) {
+		const product = await UpdateProduct(id, name, description, tags);
 		this.internalUpdateProduct(product);
 
 		return product;
