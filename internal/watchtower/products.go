@@ -14,7 +14,7 @@ func (s *Service) CreateProduct(name string, description string, tags []string, 
 		return products.ProductDTO{}, err
 	}
 
-	err = s.orgSvc.AssociateProductToOrg(s.ctx, organisationID, prod.ID)
+	err = s.productSvc.AssociateProductToOrg(s.ctx, organisationID, prod.ID)
 	if err != nil {
 		return products.ProductDTO{}, err
 	}

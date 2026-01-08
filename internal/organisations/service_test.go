@@ -116,17 +116,6 @@ func TestService(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 		}).
-		Test("AssociateProductToOrg should create link in product_organisations", func(t *testing.T) {
-			org, _ := s.Create(ctx, CreateOrgParams{FriendlyName: "Product Org", Namespace: "prod-ns"})
-			productID := int64(123)
-
-			err := s.AssociateProductToOrg(ctx, org.ID, productID)
-			odize.AssertNoError(t, err)
-
-			fetchedOrg, err := s.GetOrgAssociatedToProduct(ctx, productID)
-			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, org.ID, fetchedOrg.ID)
-		}).
 		Run()
 
 	odize.AssertNoError(t, err)

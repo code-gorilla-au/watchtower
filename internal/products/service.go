@@ -554,3 +554,22 @@ func (s *Service) BulkInsertRepoDetails(ctx context.Context, repoDetails github.
 
 	return nil
 }
+
+// AssociateProductToOrg associates a product with an organisation based on the provided organisation and product IDs.
+func (s *Service) AssociateProductToOrg(ctx context.Context, orgID int64, productID int64) error {
+	logger := logging.FromContext(ctx).With("service", "products")
+
+	logger.Debug("Associating product to organisation", "orgID", orgID, "productID", productID)
+
+	err := s.store.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+		OrganisationID: sql.NullInt64{Int64: orgID, Valid: true},
+		ProductID:      sql.NullInt64{Int64: productID, Valid: true},
+	})
+
+	if err != nil {
+		logger.Error("Error associating product to organisation", "error", err)
+		return err
+	}
+
+	return nil
+}

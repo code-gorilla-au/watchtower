@@ -508,6 +508,20 @@ func TestService(t *testing.T) {
 			odize.AssertEqual(t, "MEDIUM", updated.Severity)
 			odize.AssertEqual(t, sec.ID, updated.ID)
 		}).
+		Test("AssociateProductToOrg should create link in product_organisations", func(t *testing.T) {
+			org, _ := _testDB.CreateOrganisation(ctx, database.CreateOrganisationParams{
+				FriendlyName: "Product Org",
+				Namespace:    "prod-ns",
+			})
+			productID := int64(123)
+
+			err := s.AssociateProductToOrg(ctx, org.ID, productID)
+			odize.AssertNoError(t, err)
+
+			fetchedOrg, err := _testDB.GetOrganisationForProduct(ctx, sql.NullInt64{Int64: productID, Valid: true})
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, org.ID, fetchedOrg.ID)
+		}).
 		Run()
 
 	odize.AssertNoError(t, err)

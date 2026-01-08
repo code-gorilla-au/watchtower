@@ -22,6 +22,7 @@ type ProductBaseStore interface {
 	UpdateProduct(ctx context.Context, arg database.UpdateProductParams) (database.Product, error)
 	UpdateProductSync(ctx context.Context, id int64) error
 	DeleteProduct(ctx context.Context, id int64) error
+	AddProductToOrganisation(ctx context.Context, arg database.AddProductToOrganisationParams) error
 }
 
 type RepoStore interface {
