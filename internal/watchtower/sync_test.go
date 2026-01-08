@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"testing"
 	"time"
@@ -1968,7 +1969,7 @@ func TestService_SyncProduct(t *testing.T) {
 		}).
 		Test("should return error if SearchRepos fails", func(t *testing.T) {
 			ghMock.SearchReposFunc = func(owner, topic, token string) (github.QuerySearch[github.Repository], error) {
-				return github.QuerySearch[github.Repository]{}, fmt.Errorf("api error")
+				return github.QuerySearch[github.Repository]{}, errors.New("api error")
 			}
 
 			err := s.SyncProduct(product.ID)
