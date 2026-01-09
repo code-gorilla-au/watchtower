@@ -21,6 +21,7 @@ const (
 type Notification struct {
 	ID             int64              `json:"id"`
 	OrganisationID int64              `json:"organisation_id"`
+	ExternalID     string             `json:"external_id"`
 	Status         NotificationStatus `json:"status"`
 	Content        string             `json:"content"`
 	Type           string             `json:"type"`

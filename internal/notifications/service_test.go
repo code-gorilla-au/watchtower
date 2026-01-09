@@ -179,18 +179,13 @@ func TestService(t *testing.T) {
 			unread, err := s.GetUnreadNotifications(ctx)
 			odize.AssertNoError(t, err)
 
-			// Verify only the unread one is returned
-			// Note: The database might contain notifications from previous tests if it's not cleared.
-			// However, based on the current implementation of GetUnreadNotifications, it doesn't take orgID.
-			// Let's check the service.go again.
-
 			foundUnread := false
 			foundRead := false
 			for _, n := range unread {
-				if n.Content == "unread-content" {
+				if n.ExternalID == "unread-ext" {
 					foundUnread = true
 				}
-				if n.Content == "read-content" {
+				if n.ExternalID == "read-ext" {
 					foundRead = true
 				}
 			}

@@ -13,6 +13,7 @@ func fromNotificationModel(model database.OrganisationNotification) Notification
 	return Notification{
 		ID:             model.ID,
 		OrganisationID: model.OrganisationID.Int64,
+		ExternalID:     model.ExternalID,
 		Status:         NotificationStatus(model.Status),
 		Content:        model.Content,
 		Type:           model.Type,
