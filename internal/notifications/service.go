@@ -45,6 +45,27 @@ func (s *Service) CreateNotification(ctx context.Context, params CreateNotificat
 	return err
 }
 
+// BulkCreateNotifications creates multiple notifications in a single operation and returns the count or an error if any fail.
+func (s *Service) BulkCreateNotifications(ctx context.Context, notifications []CreateNotificationParams) (int, error) {
+	logger := logging.FromContext(ctx).With("service", "notifications")
+	logger.Debug("Creating notifications in bulk")
+
+	for _, item := range notifications {
+		err := s.CreateNotification(ctx, CreateNotificationParams{
+			ExternalID:       item.ExternalID,
+			OrgID:            item.OrgID,
+			NotificationType: item.NotificationType,
+			Content:          item.Content,
+		})
+		if err != nil {
+			logger.Error("Error creating notification", "error", err)
+			return 0, err
+		}
+	}
+
+	return len(notifications), nil
+}
+
 // GetUnreadNotifications fetches all unread notifications for the specified organisation ID. Returns a list of notifications or an error.
 func (s *Service) GetUnreadNotifications(ctx context.Context) ([]Notification, error) {
 	logger := logging.FromContext(ctx).With("service", "notifications")
