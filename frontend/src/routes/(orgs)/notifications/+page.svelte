@@ -15,6 +15,7 @@
 	{:else}
 		{#each notifications as notification (notification.id)}
 			<div>
+				<p class="">{notification.type}</p>
 				<p>{notification.content}</p>
 				<p>{notification.created_at}</p>
 			</div>
