@@ -6,7 +6,8 @@
 		Castle,
 		LayoutDashboard,
 		PanelLeftClose,
-		PanelLeftOpen
+		PanelLeftOpen,
+		MessageSquare
 	} from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { NavItem, NavHeader } from "$components/nav/index.js";
@@ -57,6 +58,11 @@
 			<NavItem to="/organisations" {expand} label="Organisations">
 				{#snippet icon()}
 					<Castle size={24} />
+				{/snippet}
+			</NavItem>
+			<NavItem to="/notifications" {expand} label="Notifications">
+				{#snippet icon()}
+					<MessageSquare size={24} />
 				{/snippet}
 			</NavItem>
 		</div>
