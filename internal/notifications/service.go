@@ -48,7 +48,7 @@ func (s *Service) CreateNotification(ctx context.Context, params CreateNotificat
 // BulkCreateNotifications creates multiple notifications in a single operation and returns the count or an error if any fail.
 func (s *Service) BulkCreateNotifications(ctx context.Context, notifications []CreateNotificationParams) (int, error) {
 	logger := logging.FromContext(ctx).With("service", "notifications")
-	logger.Debug("Creating notifications in bulk")
+	logger.Debug("Creating notifications in bulk", "count", len(notifications))
 
 	for _, item := range notifications {
 		err := s.CreateNotification(ctx, CreateNotificationParams{

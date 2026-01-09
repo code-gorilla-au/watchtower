@@ -148,6 +148,56 @@ func TestService(t *testing.T) {
 			odize.AssertNoError(t, err)
 			odize.AssertEqual(t, "content-original", n.Content)
 		}).
+		Test("GetUnreadNotifications should return only unread notifications", func(t *testing.T) {
+			orgID := int64(5)
+
+			// Create an unread notification
+			err := s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "unread-type",
+				Content:          "unread-content",
+				ExternalID:       "unread-ext",
+			})
+			odize.AssertNoError(t, err)
+
+			// Create another notification and mark it as read
+			err = s.CreateNotification(ctx, CreateNotificationParams{
+				OrgID:            orgID,
+				NotificationType: "read-type",
+				Content:          "read-content",
+				ExternalID:       "read-ext",
+			})
+			odize.AssertNoError(t, err)
+
+			notif, err := s.GetNotificationByExternalID(ctx, "read-ext")
+			odize.AssertNoError(t, err)
+
+			err = s.MarkNotificationAsRead(ctx, notif.ID)
+			odize.AssertNoError(t, err)
+
+			// Fetch unread notifications
+			unread, err := s.GetUnreadNotifications(ctx)
+			odize.AssertNoError(t, err)
+
+			// Verify only the unread one is returned
+			// Note: The database might contain notifications from previous tests if it's not cleared.
+			// However, based on the current implementation of GetUnreadNotifications, it doesn't take orgID.
+			// Let's check the service.go again.
+
+			foundUnread := false
+			foundRead := false
+			for _, n := range unread {
+				if n.Content == "unread-content" {
+					foundUnread = true
+				}
+				if n.Content == "read-content" {
+					foundRead = true
+				}
+			}
+
+			odize.AssertTrue(t, foundUnread)
+			odize.AssertFalse(t, foundRead)
+		}).
 		Run()
 
 	odize.AssertNoError(t, err)

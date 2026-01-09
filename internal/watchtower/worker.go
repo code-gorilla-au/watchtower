@@ -88,11 +88,7 @@ func (w *Workers) jobDeleteOldNotifications() {
 func (w *Workers) afterOrgSync(jobID uuid.UUID, jobName string) {
 	w.logger.Debug("Running notification worker")
 
-	if err := w.watchTower.CreateUnreadPRNotification(); err != nil {
+	if err := w.watchTower.CreateUnreadNotification(); err != nil {
 		w.logger.Error("Error creating unread PR notification", "error", err)
-	}
-
-	if err := w.watchTower.CreateUnreadSecurityNotification(); err != nil {
-		w.logger.Error("Error creating unread security notification", "error", err)
 	}
 }

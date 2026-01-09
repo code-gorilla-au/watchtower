@@ -117,7 +117,7 @@ func TestService_Notifications(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			// Action
-			err = s.CreateUnreadPRNotification()
+			_, err = s.CreateUnreadPRNotification()
 			odize.AssertNoError(t, err)
 
 			// Verify
@@ -156,7 +156,7 @@ func TestService_Notifications(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			// Action
-			err = s.CreateUnreadSecurityNotification()
+			_, err = s.CreateUnreadSecurityNotification()
 			odize.AssertNoError(t, err)
 
 			// Verify
