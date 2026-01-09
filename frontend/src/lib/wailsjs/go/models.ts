@@ -1,11 +1,11 @@
 export namespace notifications {
 	
 	export class Notification {
-	    id?: number;
-	    organisation_id?: number;
-	    status?: string;
-	    content?: string;
-	    type?: string;
+	    id: number;
+	    organisation_id: number;
+	    status: string;
+	    content: string;
+	    type: string;
 	    // Go type: time
 	    created_at: any;
 	    // Go type: time

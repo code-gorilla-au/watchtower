@@ -50,10 +50,7 @@ func (s *Service) GetUnreadNotifications(ctx context.Context) ([]Notification, e
 	logger := logging.FromContext(ctx).With("service", "notifications")
 	logger.Debug("Fetching unread notifications")
 
-	models, err := s.store.GetUnreadNotificationsByOrgID(ctx, sql.NullInt64{
-		Int64: 0,
-		Valid: true,
-	})
+	models, err := s.store.GetUnreadNotifications(ctx)
 	if err != nil {
 		logger.Error("Error fetching unread notifications", "error", err)
 		return []Notification{}, err

@@ -58,6 +58,7 @@ const deleteOrgNotificationByDate = `-- name: DeleteOrgNotificationByDate :exec
 DELETE
 FROM organisation_notifications
 WHERE created_at < ?
+AND status = 'read'
 `
 
 func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error {
@@ -87,15 +88,15 @@ func (q *Queries) GetNotificationByExternalID(ctx context.Context, externalID st
 	return i, err
 }
 
-const getUnreadNotificationsByOrgID = `-- name: GetUnreadNotificationsByOrgID :many
+const getUnreadNotifications = `-- name: GetUnreadNotifications :many
 SELECT id, organisation_id, external_id, type, content, status, created_at, updated_at
 FROM organisation_notifications
-WHERE organisation_id = ?
-  AND status = 'unread'
+WHERE status = 'unread'
+ORDER BY created_at DESC
 `
 
-func (q *Queries) GetUnreadNotificationsByOrgID(ctx context.Context, organisationID sql.NullInt64) ([]OrganisationNotification, error) {
-	rows, err := q.db.QueryContext(ctx, getUnreadNotificationsByOrgID, organisationID)
+func (q *Queries) GetUnreadNotifications(ctx context.Context) ([]OrganisationNotification, error) {
+	rows, err := q.db.QueryContext(ctx, getUnreadNotifications)
 	if err != nil {
 		return nil, err
 	}

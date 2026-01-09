@@ -19,11 +19,11 @@ const (
 )
 
 type Notification struct {
-	ID             int64              `json:"id,omitempty"`
-	OrganisationID int64              `json:"organisation_id,omitempty"`
-	Status         NotificationStatus `json:"status,omitempty"`
-	Content        string             `json:"content,omitempty"`
-	Type           string             `json:"type,omitempty"`
+	ID             int64              `json:"id"`
+	OrganisationID int64              `json:"organisation_id"`
+	Status         NotificationStatus `json:"status"`
+	Content        string             `json:"content"`
+	Type           string             `json:"type"`
 	CreatedAt      time.Time          `json:"created_at"`
 	UpdatedAt      time.Time          `json:"updated_at"`
 }
