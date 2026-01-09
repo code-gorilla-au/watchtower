@@ -4,14 +4,24 @@
 	import * as Card from "$lib/components/ui/card";
 	import { Badge } from "$lib/components/ui/badge";
 	import { Button } from "$lib/components/ui/button";
-	import { Check, Bell, Inbox } from "@lucide/svelte";
+	import { Check, Bell, Inbox, Search } from "@lucide/svelte";
 	import { formatDate, toSentenceCase } from "$lib/hooks/formats";
-	import { notificationSvc } from "$lib/watchtower";
-	import { invalidateAll } from "$app/navigation";
+	import { notificationSvc, orgSvc } from "$lib/watchtower";
+	import { goto, invalidateAll } from "$app/navigation";
+	import { resolve } from "$app/paths";
+	import { SimpleFilter } from "$lib/hooks/filters.svelte";
+	import { BaseInput } from "$components/base_input";
 
 	const { data } = $props();
 
 	let notifications = $derived(data.notifications);
+
+	let searchState = $state("");
+	const searchFilter = $derived(
+		new SimpleFilter(notifications, (item) => {
+			return item.content.toLowerCase().includes(searchState.toLowerCase());
+		})
+	);
 
 	async function markAllAsRead() {
 		await notificationSvc.markAllAsRead();
@@ -22,9 +32,14 @@
 		await notificationSvc.markAsRead(id);
 		await invalidateAll();
 	}
+
+	async function routeToOrgDashboard(orgId: number) {
+		await orgSvc.setDefault(orgId);
+		await goto(resolve("/dashboard"));
+	}
 </script>
 
-<div class="page-container flex flex-col gap-6">
+<div class="page-container">
 	<div class="flex items-center justify-between">
 		<PageTitle title="Notifications" subtitle="Unread notifications across all orgs" />
 		{#if notifications.length > 0}
@@ -45,9 +60,22 @@
 			</div>
 		</EmptySlate>
 	{:else}
+		<div class="mb-2 flex w-full justify-end">
+			<div class="flex items-center gap-2">
+				<Search class="" />
+				<BaseInput bind:value={searchState} placeholder="Filter notifications" />
+			</div>
+		</div>
 		<div class="flex flex-col gap-2">
-			{#each notifications as notification (notification.id)}
-				<Card.Root class="overflow-hidden p-0">
+			{#each searchFilter.data as notification (notification.id)}
+				<Card.Root
+					onclick={(e) => {
+						e.preventDefault();
+
+						routeToOrgDashboard(notification.organisation_id);
+					}}
+					class="overflow-hidden p-0 hover:cursor-pointer"
+				>
 					<div class="flex items-center gap-4 p-4">
 						<div class="shrink-0">
 							<div
