@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"testing"
 	"time"
@@ -1850,6 +1851,129 @@ func TestService_GetSecurityByOrganisation(t *testing.T) {
 				}
 			}
 			odize.AssertTrue(t, specialSecurityFound)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
+
+func TestService_SyncProduct(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+	var ctx context.Context
+	var ghMock *ghClientMock
+	var orgID int64
+	var product products.ProductDTO
+
+	group.BeforeAll(func() {
+		ctx = context.Background()
+	})
+
+	group.BeforeEach(func() {
+		ghMock = &ghClientMock{
+			SearchReposFunc: func(owner string, topic string, token string) (github.QuerySearch[github.Repository], error) {
+				return github.QuerySearch[github.Repository]{
+					Data: github.QueryData[github.Repository]{
+						Search: github.Search[github.Repository]{
+							PageInfo: github.PageInfo{},
+							Edges: []github.Node[github.Repository]{
+								{
+									Node: github.Repository{
+										Url:  "http://github.com/test/repo",
+										Name: "test-repo",
+										Owner: github.Owner{
+											Login: owner,
+										},
+										VulnerabilityAlerts: github.RootNode[github.VulnerabilityAlerts]{},
+										PullRequests:        github.RootNode[github.PullRequest]{},
+									},
+								},
+							},
+						},
+					},
+				}, nil
+			},
+			GetRepoDetailsFunc: func(owner, repo, token string) (github.QueryRepository, error) {
+				return github.QueryRepository{
+					Data: github.RepositoryData{
+						Repository: github.Repository{
+							Url:  "http://github.com/test/repo",
+							Name: repo,
+							Owner: github.Owner{
+								Login: owner,
+							},
+							VulnerabilityAlerts: github.RootNode[github.VulnerabilityAlerts]{
+								Nodes: []github.VulnerabilityAlerts{
+									{
+										State: "OPEN",
+										ID:    "sec-1",
+										SecurityVulnerability: github.SecurityVulnerability{
+											Package:             github.Package{Name: "pkg-1"},
+											Advisory:            github.Advisory{Severity: "HIGH"},
+											FirstPatchedVersion: github.FirstPatchedVersion{Identifier: "1.0.1"},
+										},
+										CreatedAt: time.Now(),
+									},
+								},
+							},
+							PullRequests: github.RootNode[github.PullRequest]{
+								Nodes: []github.PullRequest{
+									{
+										ID:        "pr-1",
+										Title:     "PR 1",
+										State:     github.PrOpen,
+										Author:    github.Author{Login: "author-1"},
+										CreatedAt: time.Now(),
+									},
+								},
+							},
+						},
+					},
+				}, nil
+			},
+		}
+		s = &Service{
+			ctx:      ctx,
+			ghClient: ghMock,
+			orgSvc: organisations.New(_testDB, _testTxnDB, func(tx *sql.Tx) organisations.OrgStore {
+				return _testDB.WithTx(tx)
+			}),
+			productSvc: products.New(_testDB),
+		}
+
+		timestamp := time.Now().UnixNano()
+		org, err := s.CreateOrganisation(fmt.Sprintf("prod_sync_org_%d", timestamp), fmt.Sprintf("prod_sync_ns_%d", timestamp), "token", "desc")
+		odize.AssertNoError(t, err)
+		orgID = org.ID
+
+		product, err = s.CreateProduct(fmt.Sprintf("Sync Product %d", timestamp), "desc", []string{"tag1", "tag2"}, orgID)
+		odize.AssertNoError(t, err)
+	})
+
+	err := group.
+		Test("should successfully sync a product", func(t *testing.T) {
+			err := s.SyncProduct(product.ID)
+			odize.AssertNoError(t, err)
+
+			prs, err := s.productSvc.GetPullRequests(ctx, product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(prs) > 0)
+
+			sec, err := s.productSvc.GetSecurity(ctx, product.ID)
+			odize.AssertNoError(t, err)
+			odize.AssertTrue(t, len(sec) > 0)
+		}).
+		Test("should return error if product not found", func(t *testing.T) {
+			err := s.SyncProduct(-1)
+			odize.AssertError(t, err)
+		}).
+		Test("should return error if SearchRepos fails", func(t *testing.T) {
+			ghMock.SearchReposFunc = func(owner, topic, token string) (github.QuerySearch[github.Repository], error) {
+				return github.QuerySearch[github.Repository]{}, errors.New("api error")
+			}
+
+			err := s.SyncProduct(product.ID)
+			odize.AssertError(t, err)
 		}).
 		Run()
 	odize.AssertNoError(t, err)

@@ -47,6 +47,16 @@ func (s *Service) Create(ctx context.Context, params CreateProductParams) (Produ
 		return ProductDTO{}, err
 	}
 
+	err = s.store.AddProductToOrganisation(ctx, database.AddProductToOrganisationParams{
+		OrganisationID: sql.NullInt64{Int64: params.OrganisationID, Valid: true},
+		ProductID:      sql.NullInt64{Int64: prod.ID, Valid: true},
+	})
+	if err != nil {
+		logger.Error("Error associating product to organisation", "error", err)
+
+		return ProductDTO{}, err
+	}
+
 	return toProductDTO(prod), nil
 }
 
