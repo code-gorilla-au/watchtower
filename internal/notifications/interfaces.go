@@ -2,8 +2,6 @@ package notifications
 
 import (
 	"context"
-	"database/sql"
-
 	"watchtower/internal/database"
 )
 
@@ -12,7 +10,7 @@ type Store interface {
 	UpdateOrgNotificationByID(ctx context.Context, arg database.UpdateOrgNotificationByIDParams) (database.OrganisationNotification, error)
 	UpdateOrgNotificationStatusByID(ctx context.Context, arg database.UpdateOrgNotificationStatusByIDParams) (database.OrganisationNotification, error)
 	GetNotificationByExternalID(ctx context.Context, externalID string) (database.OrganisationNotification, error)
-	GetUnreadNotificationsByOrgID(ctx context.Context, organisationID sql.NullInt64) ([]database.OrganisationNotification, error)
+	GetUnreadNotifications(ctx context.Context) ([]database.OrganisationNotification, error)
 	DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error
 }
 

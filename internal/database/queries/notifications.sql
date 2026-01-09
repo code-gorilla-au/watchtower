@@ -34,11 +34,11 @@ SET status     = ?,
 WHERE id = ?
 RETURNING *;
 
--- name: GetUnreadNotificationsByOrgID :many
+-- name: GetUnreadNotifications :many
 SELECT *
 FROM organisation_notifications
-WHERE organisation_id = ?
-  AND status = 'unread';
+WHERE status = 'unread'
+ORDER BY created_at DESC;
 
 -- name: DeleteOrgNotificationByDate :exec
 DELETE

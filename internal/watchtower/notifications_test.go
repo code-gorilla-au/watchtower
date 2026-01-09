@@ -51,15 +51,15 @@ func TestService_Notifications(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
-			unread, err := s.GetUnreadNotifications()
+			unread, err := s.notificationSvc.GetNotificationByExternalID(ctx, "test-external-id-2")
 			odize.AssertNoError(t, err)
 
-			err = s.MarkNotificationAsRead(unread[0].ID)
+			err = s.MarkNotificationAsRead(unread.ID)
 			odize.AssertNoError(t, err)
 
-			verifyUnread, err := s.GetUnreadNotifications()
+			verifyUnread, err := s.notificationSvc.GetNotificationByExternalID(ctx, "test-external-id-2")
 			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, 0, len(verifyUnread))
+			odize.AssertEqual(t, notifications.StatusRead, verifyUnread.Status)
 		}).
 		Test("DeleteOldNotifications should delete notifications", func(t *testing.T) {
 			orgID := int64(1003)
