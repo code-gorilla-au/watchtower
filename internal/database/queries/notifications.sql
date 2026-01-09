@@ -43,4 +43,5 @@ ORDER BY created_at DESC;
 -- name: DeleteOrgNotificationByDate :exec
 DELETE
 FROM organisation_notifications
-WHERE created_at < ?;
+WHERE created_at < ?
+AND status = 'read';

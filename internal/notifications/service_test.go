@@ -77,14 +77,19 @@ func TestService(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
+			unread, err := s.GetNotificationByExternalID(ctx, "ext4")
+			odize.AssertNoError(t, err)
+
+			err = s.MarkNotificationAsRead(ctx, unread.ID)
+			odize.AssertNoError(t, err)
+
 			cutoff := time.Now().Add(1 * time.Minute)
 
 			err = s.DeleteNotificationsByDate(ctx, cutoff)
 			odize.AssertNoError(t, err)
 
-			unread, err := s.GetUnreadNotifications(ctx)
-			odize.AssertNoError(t, err)
-			odize.AssertEqual(t, 0, len(unread))
+			_, err = s.GetNotificationByExternalID(ctx, "ext4")
+			odize.AssertError(t, err)
 		}).
 		Run()
 

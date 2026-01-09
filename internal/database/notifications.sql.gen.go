@@ -58,6 +58,7 @@ const deleteOrgNotificationByDate = `-- name: DeleteOrgNotificationByDate :exec
 DELETE
 FROM organisation_notifications
 WHERE created_at < ?
+AND status = 'read'
 `
 
 func (q *Queries) DeleteOrgNotificationByDate(ctx context.Context, createdAt int64) error {

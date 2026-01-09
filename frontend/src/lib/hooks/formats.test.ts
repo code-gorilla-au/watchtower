@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { formatDate, truncate } from "$lib/hooks/formats";
+import { formatDate, truncate, toSentenceCase } from "$lib/hooks/formats";
 
 describe("Hooks: formats", () => {
 	beforeEach(() => {
@@ -121,5 +121,43 @@ describe("Hooks: formats", () => {
 			expect(result.endsWith("...")).toBe(true);
 			expect(result.length).toBe(103);
 		});
+	});
+});
+
+describe("toSentenceCase", () => {
+	it("should convert camelCase to Sentence case", () => {
+		expect(toSentenceCase("camelCase")).toBe("Camel case");
+	});
+
+	it("should convert PascalCase to Sentence case", () => {
+		expect(toSentenceCase("PascalCase")).toBe("Pascal case");
+	});
+
+	it("should convert snake_case to Sentence case", () => {
+		expect(toSentenceCase("snake_case")).toBe("Snake case");
+	});
+
+	it("should convert SCREAMING_SNAKE_CASE to Sentence case", () => {
+		expect(toSentenceCase("HELLO_WORLD")).toBe("Hello world");
+	});
+
+	it("should handle mixed formats and acronyms", () => {
+		expect(toSentenceCase("HTTPClient")).toBe("Http client");
+		expect(toSentenceCase("getUser_data")).toBe("Get user data");
+	});
+
+	it("should handle multiple underscores or hyphens", () => {
+		expect(toSentenceCase("multiple__underscores")).toBe("Multiple underscores");
+		expect(toSentenceCase("kebab-case-string")).toBe("Kebab case string");
+	});
+
+	it("should handle empty strings or null values", () => {
+		expect(toSentenceCase("")).toBe("");
+		// @ts-expect-error - testing runtime behavior for non-string
+		expect(toSentenceCase(null)).toBe(null);
+	});
+
+	it("should trim surrounding whitespace", () => {
+		expect(toSentenceCase("  padded_string  ")).toBe("Padded string");
 	});
 });

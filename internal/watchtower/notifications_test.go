@@ -71,6 +71,12 @@ func TestService_Notifications(t *testing.T) {
 			})
 			odize.AssertNoError(t, err)
 
+			unread, err := s.notificationSvc.GetNotificationByExternalID(ctx, "test-external-id-3")
+			odize.AssertNoError(t, err)
+
+			err = s.MarkNotificationAsRead(unread.ID)
+			odize.AssertNoError(t, err)
+
 			// DeleteOldNotifications uses time.Now() and the query uses created_at < ?.
 			// Since we just created it in the same second, it might not be deleted.
 			// Let's wait 1 second to ensure created_at < time.Now().
@@ -79,10 +85,8 @@ func TestService_Notifications(t *testing.T) {
 			err = s.DeleteOldNotifications()
 			odize.AssertNoError(t, err)
 
-			unread, err := s.GetUnreadNotifications()
-			odize.AssertNoError(t, err)
-
-			odize.AssertEqual(t, 0, len(unread))
+			_, err = s.notificationSvc.GetNotificationByExternalID(ctx, "test-external-id-3")
+			odize.AssertError(t, err)
 		}).
 		Test("CreateUnreadPRNotification should create notifications for recent PRs", func(t *testing.T) {
 			// Setup: Org, Product, Repo, PR
