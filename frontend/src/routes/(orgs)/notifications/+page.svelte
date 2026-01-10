@@ -11,17 +11,19 @@
 	import { resolve } from "$app/paths";
 	import { SimpleFilter } from "$lib/hooks/filters.svelte";
 	import { BaseInput } from "$components/base_input";
+	import { notifications } from "$lib/wailsjs/go/models";
 
 	const { data } = $props();
 
-	let notifications = $derived(data.notifications);
+	let unreadNotifications = $derived(data.notifications);
 
 	let searchState = $state("");
-	const searchFilter = $derived(
-		new SimpleFilter(notifications, (item) => {
-			return item.content.toLowerCase().includes(searchState.toLowerCase());
-		})
-	);
+
+	function applySearchFilter(notification: notifications.Notification) {
+		return notification.content.toLowerCase().includes(searchState.toLowerCase());
+	}
+
+	const searchFilter = $derived(new SimpleFilter(unreadNotifications, applySearchFilter));
 
 	async function markAllAsRead() {
 		await notificationSvc.markAllAsRead();
@@ -42,7 +44,7 @@
 <div class="page-container">
 	<div class="flex items-center justify-between">
 		<PageTitle title="Notifications" subtitle="Unread notifications across all orgs" />
-		{#if notifications.length > 0}
+		{#if searchFilter.data.length > 0}
 			<Button variant="outline" size="sm" onclick={markAllAsRead}>
 				<Check class="mr-2 h-4 w-4" />
 				Mark all read
@@ -50,7 +52,7 @@
 		{/if}
 	</div>
 
-	{#if notifications.length === 0}
+	{#if unreadNotifications.length === 0}
 		<EmptySlate
 			title="No new notifications"
 			description="You're all caught up! Check back later for updates."
