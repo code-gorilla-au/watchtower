@@ -9,9 +9,11 @@ export function CreateOrganisation(arg1:string,arg2:string,arg3:string,arg4:stri
 
 export function CreateProduct(arg1:string,arg2:string,arg3:Array<string>,arg4:number):Promise<products.ProductDTO>;
 
-export function CreateUnreadPRNotification():Promise<void>;
+export function CreateUnreadNotification():Promise<void>;
 
-export function CreateUnreadSecurityNotification():Promise<void>;
+export function CreateUnreadPRNotification():Promise<number>;
+
+export function CreateUnreadSecurityNotification():Promise<number>;
 
 export function DeleteAllOrgs():Promise<void>;
 

@@ -1,3 +1,5 @@
 export const STALE_TIMEOUT_MINUTES = 2;
 
 export const TIME_TWO_MINUTES = 1000 * 60 * 2;
+
+export const EVENT_UNREAD_NOTIFICATIONS = "UNREAD_NOTIFICATIONS";

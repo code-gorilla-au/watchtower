@@ -33,14 +33,32 @@ func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
 
+func (s *Service) CreateUnreadNotification() (int, error) {
+	logger := logging.FromContext(s.ctx)
+
+	prCount, err := s.CreateUnreadPRNotification()
+	if err != nil {
+		logger.Error("Error creating unread pull request notification", "error", err)
+		return 0, err
+	}
+
+	secCount, err := s.CreateUnreadSecurityNotification()
+	if err != nil {
+		logger.Error("Error creating unread security notification", "error", err)
+		return 0, err
+	}
+
+	return prCount + secCount, nil
+}
+
 // CreateUnreadPRNotification generates unread notifications for recent pull requests by fetching their IDs and creating notifications.
-func (s *Service) CreateUnreadPRNotification() error {
+func (s *Service) CreateUnreadPRNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 
 	prs, err := s.productSvc.GetRecentPullRequests(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching recent pull requests", "error", err)
-		return err
+		return 0, err
 	}
 
 	return s.createNotification("OPEN_PULL_REQUEST", "New pull request", prs)
@@ -49,34 +67,30 @@ func (s *Service) CreateUnreadPRNotification() error {
 // CreateUnreadSecurityNotification generates unread security notifications for recent security alerts.
 // It retrieves recent security-related IDs and creates notifications for each using the notification service.
 // Returns an error if fetching security IDs or creating notifications fails.
-func (s *Service) CreateUnreadSecurityNotification() error {
+func (s *Service) CreateUnreadSecurityNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 	secList, err := s.productSvc.GetRecentSecurity(s.ctx)
 	if err != nil {
 		logger.Error("Error fetching recent security", "error", err)
-		return err
+		return 0, err
 	}
 
 	return s.createNotification("OPEN_SECURITY_ALERT", "New security alert", secList)
 }
 
-func (s *Service) createNotification(notificationType string, content string, recentlyChanged []products.RecentlyChangedEntity) error {
-	logger := logging.FromContext(s.ctx)
-	logger.Debug("creating unread notifications", "count", len(recentlyChanged))
+func (s *Service) createNotification(notificationType string, content string, recentlyChanged []products.RecentlyChangedEntity) (int, error) {
 
-	for _, entity := range recentlyChanged {
-		if err := s.notificationSvc.CreateNotification(s.ctx, notifications.CreateNotificationParams{
+	notificationsList := make([]notifications.CreateNotificationParams, len(recentlyChanged))
+	for i, entity := range recentlyChanged {
+		notificationsList[i] = notifications.CreateNotificationParams{
 			OrgID:            entity.OrganisationID,
 			ExternalID:       entity.ExternalID,
 			NotificationType: notificationType,
 			Content:          fmt.Sprintf("%s: %s", entity.RepositoryName, content),
-		}); err != nil {
-			logger.Error("Error creating notification", "error", err)
-			return err
 		}
 	}
 
-	return nil
+	return s.notificationSvc.BulkCreateNotifications(s.ctx, notificationsList)
 }
 
 // SyncOrgs synchronizes stale organisations by retrieving them and invoking the sync process for each.

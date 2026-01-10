@@ -10,6 +10,10 @@ export function CreateProduct(arg1, arg2, arg3, arg4) {
   return window['go']['watchtower']['Service']['CreateProduct'](arg1, arg2, arg3, arg4);
 }
 
+export function CreateUnreadNotification() {
+  return window['go']['watchtower']['Service']['CreateUnreadNotification']();
+}
+
 export function CreateUnreadPRNotification() {
   return window['go']['watchtower']['Service']['CreateUnreadPRNotification']();
 }
