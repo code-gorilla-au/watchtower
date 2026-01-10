@@ -16,5 +16,6 @@ func (s *Service) MarkNotificationAsRead(notificationID int64) error {
 }
 
 func (s *Service) DeleteOldNotifications() error {
-	return s.notificationSvc.DeleteNotificationsByDate(s.ctx, time.Now())
+	nintyDaysAgo := time.Now().AddDate(0, 0, -90)
+	return s.notificationSvc.DeleteNotificationsByDate(s.ctx, nintyDaysAgo)
 }

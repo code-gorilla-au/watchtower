@@ -3,21 +3,21 @@ import { STALE_TIMEOUT_MINUTES } from "$lib/watchtower/types";
 import { GetUnreadNotifications, MarkNotificationAsRead } from "$lib/wailsjs/go/watchtower/Service";
 
 export class NotificationsService {
-	readonly #notifications: notifications.Notification[];
+	readonly #unread: notifications.Notification[];
 	#lastSync?: number;
 
 	constructor() {
-		this.#notifications = $state([]);
+		this.#unread = $state([]);
 	}
 	/**
 	 * Retrieves the unread notifications for the user.
 	 */
 	async getUnread() {
 		if (this.isStale()) {
-			await this.forceGetNotifications();
+			await this.forceGetUnread();
 		}
 
-		return this.#notifications;
+		return this.#unread;
 	}
 
 	/**
@@ -25,19 +25,12 @@ export class NotificationsService {
 	 */
 	async markAsRead(id: number) {
 		await MarkNotificationAsRead(id);
-		const idx = this.#notifications.findIndex((n) => n.id === id);
+		const idx = this.#unread.findIndex((n) => n.id === id);
 		if (idx < 0) {
 			return;
 		}
 
-		this.#notifications.splice(
-			idx,
-			1,
-			new notifications.Notification({
-				...this.#notifications[idx],
-				status: "read"
-			})
-		);
+		this.#unread.splice(idx, 1);
 	}
 
 	/**
@@ -49,22 +42,22 @@ export class NotificationsService {
 			await this.markAsRead(notification.id);
 		}
 
-		await this.forceGetNotifications();
+		await this.forceGetUnread();
 	}
 
 	/**
 	 * Forces the retrieval of unread notifications and updates the internal state with the fetched notifications.
 	 */
-	private async forceGetNotifications() {
+	private async forceGetUnread() {
 		const notifications = (await GetUnreadNotifications()) ?? [];
-		this.updateInternalNotifications(notifications);
+		this.updateInternalUnread(notifications);
 	}
 
 	/**
 	 * Updates the internal notifications by replacing the current list with the provided notifications array.
 	 */
-	private updateInternalNotifications(notifications: notifications.Notification[]) {
-		this.#notifications.splice(0, this.#notifications.length, ...notifications);
+	private updateInternalUnread(notifications: notifications.Notification[]) {
+		this.#unread.splice(0, this.#unread.length, ...notifications);
 		this.#lastSync = Date.now();
 	}
 
@@ -73,7 +66,7 @@ export class NotificationsService {
 	 * and the presence of notifications.
 	 */
 	private isStale() {
-		if (!this.#lastSync || this.#notifications.length === 0) {
+		if (!this.#lastSync || this.#unread.length === 0) {
 			return true;
 		}
 
