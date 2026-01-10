@@ -54,6 +54,17 @@ describe("NotificationsService", () => {
 			await notificationSvc.getUnread();
 			expect(spyGetUnread).toHaveBeenCalledTimes(2);
 		});
+		it("should get unread if force flag is passed", async () => {
+			const notificationSvc = new NotificationsService();
+			await notificationSvc.getUnread();
+			expect(spyGetUnread).toHaveBeenCalledTimes(1);
+
+			await notificationSvc.getUnread();
+			expect(spyGetUnread).toHaveBeenCalledTimes(1);
+
+			await notificationSvc.getUnread(true);
+			expect(spyGetUnread).toHaveBeenCalledTimes(2);
+		});
 	});
 
 	describe("markAsRead()", () => {

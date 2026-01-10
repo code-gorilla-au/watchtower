@@ -12,8 +12,8 @@ export class NotificationsService {
 	/**
 	 * Retrieves the unread notifications for the user.
 	 */
-	async getUnread() {
-		if (this.isStale()) {
+	async getUnread(force: boolean = false) {
+		if (this.isStale() || force) {
 			await this.forceGetUnread();
 		}
 
