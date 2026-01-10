@@ -9,9 +9,11 @@ import (
 
 	"github.com/go-co-op/gocron/v2"
 	"github.com/google/uuid"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type Workers struct {
+	ctx        context.Context
 	watchTower *Service
 	cron       gocron.Scheduler
 	logger     *slog.Logger
@@ -25,6 +27,7 @@ func NewWorkers(wt *Service) (*Workers, error) {
 	}
 
 	return &Workers{
+		ctx:        context.Background(),
 		watchTower: wt,
 		cron:       s,
 		logger:     logger,
@@ -52,6 +55,8 @@ func (w *Workers) AddJobs() error {
 }
 
 func (w *Workers) Start(ctx context.Context) {
+	w.ctx = ctx
+
 	w.logger.Debug("Starting workers")
 
 	w.cron.Start()
@@ -88,7 +93,12 @@ func (w *Workers) jobDeleteOldNotifications() {
 func (w *Workers) afterOrgSync(jobID uuid.UUID, jobName string) {
 	w.logger.Debug("Running notification worker")
 
-	if err := w.watchTower.CreateUnreadNotification(); err != nil {
+	totalUnread, err := w.watchTower.CreateUnreadNotification()
+	if err != nil {
 		w.logger.Error("Error creating unread PR notification", "error", err)
+	}
+
+	if totalUnread > 0 {
+		runtime.EventsEmit(w.ctx, "UNREAD_NOTIFICATIONS")
 	}
 }

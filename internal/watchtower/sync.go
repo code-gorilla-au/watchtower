@@ -12,8 +12,6 @@ import (
 
 	"watchtower/internal/github"
 	"watchtower/internal/logging"
-
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // NewService creates and returns a new Service instance with the provided database queries.
@@ -35,26 +33,22 @@ func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
 
-func (s *Service) CreateUnreadNotification() error {
+func (s *Service) CreateUnreadNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 
 	prCount, err := s.CreateUnreadPRNotification()
 	if err != nil {
 		logger.Error("Error creating unread pull request notification", "error", err)
-		return err
+		return 0, err
 	}
 
 	secCount, err := s.CreateUnreadSecurityNotification()
 	if err != nil {
 		logger.Error("Error creating unread security notification", "error", err)
-		return err
+		return 0, err
 	}
 
-	if (prCount + secCount) > 0 {
-		runtime.EventsEmit(s.ctx, "UNREAD_NOTIFICATIONS")
-	}
-
-	return nil
+	return prCount + secCount, nil
 }
 
 // CreateUnreadPRNotification generates unread notifications for recent pull requests by fetching their IDs and creating notifications.
