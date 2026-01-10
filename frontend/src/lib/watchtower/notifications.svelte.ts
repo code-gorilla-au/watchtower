@@ -6,8 +6,11 @@ export class NotificationsService {
 	readonly #unread: notifications.Notification[];
 	#lastSync?: number;
 
+	readonly hasUnread: boolean;
+
 	constructor() {
 		this.#unread = $state([]);
+		this.hasUnread = $derived(this.#unread.length > 0);
 	}
 	/**
 	 * Retrieves the unread notifications for the user.

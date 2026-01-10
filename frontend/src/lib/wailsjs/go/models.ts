@@ -3,6 +3,7 @@ export namespace notifications {
 	export class Notification {
 	    id: number;
 	    organisation_id: number;
+	    external_id: string;
 	    status: string;
 	    content: string;
 	    type: string;
@@ -19,6 +20,7 @@ export namespace notifications {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.organisation_id = source["organisation_id"];
+	        this.external_id = source["external_id"];
 	        this.status = source["status"];
 	        this.content = source["content"];
 	        this.type = source["type"];
