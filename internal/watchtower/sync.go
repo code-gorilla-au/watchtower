@@ -29,20 +29,22 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 	}
 }
 
+// Startup initialises the service with the provided context and sets it for further use.
 func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
 
+// CreateUnreadNotification generates notifications for unread pull requests and security alerts and returns the total count.
 func (s *Service) CreateUnreadNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 
-	prCount, err := s.CreateUnreadPRNotification()
+	prCount, err := s.createUnreadPRNotification()
 	if err != nil {
 		logger.Error("Error creating unread pull request notification", "error", err)
 		return 0, err
 	}
 
-	secCount, err := s.CreateUnreadSecurityNotification()
+	secCount, err := s.createUnreadSecurityNotification()
 	if err != nil {
 		logger.Error("Error creating unread security notification", "error", err)
 		return 0, err
@@ -51,8 +53,8 @@ func (s *Service) CreateUnreadNotification() (int, error) {
 	return prCount + secCount, nil
 }
 
-// CreateUnreadPRNotification generates unread notifications for recent pull requests by fetching their IDs and creating notifications.
-func (s *Service) CreateUnreadPRNotification() (int, error) {
+// createUnreadPRNotification generates unread notifications for recent pull requests by fetching their IDs and creating notifications.
+func (s *Service) createUnreadPRNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 
 	prs, err := s.productSvc.GetRecentPullRequests(s.ctx)
@@ -64,10 +66,10 @@ func (s *Service) CreateUnreadPRNotification() (int, error) {
 	return s.createNotification("OPEN_PULL_REQUEST", "New pull request", prs)
 }
 
-// CreateUnreadSecurityNotification generates unread security notifications for recent security alerts.
+// createUnreadSecurityNotification generates unread security notifications for recent security alerts.
 // It retrieves recent security-related IDs and creates notifications for each using the notification service.
 // Returns an error if fetching security IDs or creating notifications fails.
-func (s *Service) CreateUnreadSecurityNotification() (int, error) {
+func (s *Service) createUnreadSecurityNotification() (int, error) {
 	logger := logging.FromContext(s.ctx)
 	secList, err := s.productSvc.GetRecentSecurity(s.ctx)
 	if err != nil {
@@ -78,6 +80,8 @@ func (s *Service) CreateUnreadSecurityNotification() (int, error) {
 	return s.createNotification("OPEN_SECURITY_ALERT", "New security alert", secList)
 }
 
+// createNotification generates and dispatches notifications for a list of recently changed entities.
+// Returns the count of notifications created or an error if the operation fails.
 func (s *Service) createNotification(notificationType string, content string, recentlyChanged []products.RecentlyChangedEntity) (int, error) {
 
 	notificationsList := make([]notifications.CreateNotificationParams, len(recentlyChanged))

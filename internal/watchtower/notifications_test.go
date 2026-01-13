@@ -80,7 +80,7 @@ func TestService_Notifications(t *testing.T) {
 			err = s.DeleteOldNotifications()
 			odize.AssertNoError(t, err)
 		}).
-		Test("CreateUnreadPRNotification should create notifications for recent PRs", func(t *testing.T) {
+		Test("createUnreadPRNotification should create notifications for recent PRs", func(t *testing.T) {
 			// Setup: Org, Product, Repo, PR
 			org, err := s.CreateOrganisation("Test Org PR", "test-org-pr", "token", "desc")
 			odize.AssertNoError(t, err)
@@ -109,7 +109,7 @@ func TestService_Notifications(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			// Action
-			_, err = s.CreateUnreadPRNotification()
+			_, err = s.createUnreadPRNotification()
 			odize.AssertNoError(t, err)
 
 			// Verify
@@ -120,7 +120,7 @@ func TestService_Notifications(t *testing.T) {
 			odize.AssertTrue(t, strings.Contains(unreadNotification.Content, "repo-pr"))
 			odize.AssertTrue(t, strings.Contains(unreadNotification.Content, "New pull request"))
 		}).
-		Test("CreateUnreadSecurityNotification should create notifications for recent security alerts", func(t *testing.T) {
+		Test("createUnreadSecurityNotification should create notifications for recent security alerts", func(t *testing.T) {
 			// Setup: Org, Product, Repo, Security Alert
 			org, err := s.CreateOrganisation("Test Org Sec", "test-org-sec", "token", "desc")
 			odize.AssertNoError(t, err)
@@ -148,7 +148,7 @@ func TestService_Notifications(t *testing.T) {
 			odize.AssertNoError(t, err)
 
 			// Action
-			_, err = s.CreateUnreadSecurityNotification()
+			_, err = s.createUnreadSecurityNotification()
 			odize.AssertNoError(t, err)
 
 			// Verify
