@@ -2551,3 +2551,93 @@ func TestService_UpdateOrganisation(t *testing.T) {
 		Run()
 	odize.AssertNoError(t, err)
 }
+
+func TestService_CreateUnreadNotification(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	var s *Service
+
+	ctx := context.Background()
+
+	var orgID int64
+
+	group.BeforeAll(func() {
+		s = NewService(ctx, _testDB, _testTxnDB)
+		s.Startup(ctx)
+
+		org, err := s.CreateOrganisation("test_org_notifications", "test_org_namespace_notifications", "token", "test description")
+		if err != nil {
+			fmt.Print("create org error", err)
+		}
+		odize.AssertNoError(t, err)
+		orgID = org.ID
+
+		tags := []string{"web-app"}
+		_, err = s.CreateProduct("Web App Product", "A product for notifications", tags, orgID)
+		odize.AssertNoError(t, err)
+
+		err = s.productSvc.UpsertRepo(ctx, products.CreateRepoParams{
+			Name:  "my-repo",
+			Url:   "http://github.com/org/my-repo",
+			Topic: "web-app",
+			Owner: "org",
+		})
+		odize.AssertNoError(t, err)
+	})
+
+	group.BeforeEach(func() {
+		s = NewService(ctx, _testDB, _testTxnDB)
+		s.Startup(ctx)
+	})
+
+	err := group.
+		Test("should create unread notifications for PRs and Security alerts", func(t *testing.T) {
+
+			err := s.productSvc.UpsertPullRequest(ctx, products.CreatePRParams{
+				ExternalID:     "pr-1",
+				Title:          "Fix bug",
+				RepositoryName: "my-repo",
+				Url:            "http://github.com/org/my-repo/pull/1",
+				State:          "OPEN",
+				Author:         "user",
+				CreatedAt:      time.Now(),
+			})
+			odize.AssertNoError(t, err)
+
+			err = s.productSvc.UpsertSecurity(ctx, products.CreateSecurityParams{
+				ExternalID:     "sec-1",
+				RepositoryName: "my-repo",
+				PackageName:    "vulnerable-pkg",
+				State:          "OPEN",
+				Severity:       "HIGH",
+				PatchedVersion: "1.0.1",
+				CreatedAt:      time.Now(),
+			})
+			odize.AssertNoError(t, err)
+
+			count, err := s.CreateUnreadNotification()
+			odize.AssertNoError(t, err)
+			odize.AssertEqual(t, count, 2)
+
+			unread, err := s.notificationSvc.GetUnreadNotifications(ctx)
+			odize.AssertNoError(t, err)
+
+			foundPR := false
+			foundSec := false
+			for _, n := range unread {
+				if n.ExternalID == "pr-1" {
+					foundPR = true
+					odize.AssertEqual(t, n.Type, "OPEN_PULL_REQUEST")
+				}
+				if n.ExternalID == "sec-1" {
+					foundSec = true
+					odize.AssertEqual(t, n.Type, "OPEN_SECURITY_ALERT")
+				}
+			}
+
+			odize.AssertTrue(t, foundPR)
+			odize.AssertTrue(t, foundSec)
+		}).
+		Run()
+	odize.AssertNoError(t, err)
+}
