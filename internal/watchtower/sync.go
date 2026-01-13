@@ -29,6 +29,7 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 	}
 }
 
+// Startup initialises the service with the provided context and sets it for further use.
 func (s *Service) Startup(ctx context.Context) {
 	s.ctx = ctx
 }
