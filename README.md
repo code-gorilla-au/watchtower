@@ -16,6 +16,7 @@ Watch tower provides a lite weight approach to grouping information by product w
 | Group repositories by Product   | User github topics to group repos by products                                                                                                          |
 | Dashboard view                  | Quickly view the overall health of a group of products by viewing open PRs, security vulnerabilities and repositories                                  |
 | Product view                    | Focused view for open PRs, security vulnerabilities and repositories                                                                                   |
+| Notification on new PR / Issue  | Get notifications when new PRs or Issues are created in the watched repositories accross all orgs                                                      |                                                     |
 | Local only                      | Data will never leave your device, settings page includes a kill switch to remove all data from the device. GITHUB PAT token only required read access |
 
 ## Roadmap

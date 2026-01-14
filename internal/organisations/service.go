@@ -1,3 +1,4 @@
+// Package organisations provides a service for managing and retrieving GitHub organizations and their configurations.
 package organisations
 
 import (
@@ -8,12 +9,14 @@ import (
 	"watchtower/internal/logging"
 )
 
+// Service handles organization-related business logic.
 type Service struct {
 	store   OrgStore
 	txnDB   *sql.DB
 	txnFunc func(tx *sql.Tx) OrgStore
 }
 
+// New creates a new Service instance with the provided store, transaction database and transaction function.
 func New(store OrgStore, txnDB *sql.DB, txnFunc func(tx *sql.Tx) OrgStore) *Service {
 	return &Service{
 		store:   store,
@@ -22,7 +25,7 @@ func New(store OrgStore, txnDB *sql.DB, txnFunc func(tx *sql.Tx) OrgStore) *Serv
 	}
 }
 
-// Create creates a new organisation in the database with the given parameters and returns its DTO representation.
+// Create creates a new organization with the given parameters and returns the created organization or an error.
 func (s Service) Create(ctx context.Context, params CreateOrgParams) (OrganisationDTO, error) {
 	logger := logging.FromContext(ctx).With("service", "organisations")
 

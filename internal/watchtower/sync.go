@@ -163,7 +163,7 @@ func (s *Service) SyncOrg(orgId int64) error {
 	return nil
 }
 
-// SyncProduct synchronizes a product with the given ID by retrieving its details and associated organization data.
+// SyncProduct synchronizes a single product by its ID.
 func (s *Service) SyncProduct(id int64) error {
 	logger := logging.FromContext(s.ctx)
 

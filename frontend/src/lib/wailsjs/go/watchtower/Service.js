@@ -14,14 +14,6 @@ export function CreateUnreadNotification() {
   return window['go']['watchtower']['Service']['CreateUnreadNotification']();
 }
 
-export function CreateUnreadPRNotification() {
-  return window['go']['watchtower']['Service']['CreateUnreadPRNotification']();
-}
-
-export function CreateUnreadSecurityNotification() {
-  return window['go']['watchtower']['Service']['CreateUnreadSecurityNotification']();
-}
-
 export function DeleteAllOrgs() {
   return window['go']['watchtower']['Service']['DeleteAllOrgs']();
 }

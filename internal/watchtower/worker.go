@@ -1,3 +1,4 @@
+// Package watchtower provides the main application logic, including the service layer and background workers.
 package watchtower
 
 import (
@@ -12,6 +13,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// Workers manages background jobs for syncing data and cleaning up old records.
 type Workers struct {
 	ctx        context.Context
 	watchTower *Service
@@ -19,6 +21,7 @@ type Workers struct {
 	logger     *slog.Logger
 }
 
+// NewWorkers initializes and returns a new Workers instance with the provided service.
 func NewWorkers(wt *Service) (*Workers, error) {
 	logger := logging.FromContext(context.Background()).With("service", "workers")
 	s, err := gocron.NewScheduler()
@@ -34,6 +37,7 @@ func NewWorkers(wt *Service) (*Workers, error) {
 	}, nil
 }
 
+// AddJobs registers the background jobs to the scheduler.
 func (w *Workers) AddJobs() error {
 
 	if _, err := w.cron.NewJob(
@@ -54,6 +58,7 @@ func (w *Workers) AddJobs() error {
 	return nil
 }
 
+// Start begins the execution of scheduled jobs.
 func (w *Workers) Start(ctx context.Context) {
 	w.ctx = ctx
 
@@ -62,6 +67,7 @@ func (w *Workers) Start(ctx context.Context) {
 	w.cron.Start()
 }
 
+// Stop halts the execution of scheduled jobs and shuts down the scheduler.
 func (w *Workers) Stop() {
 	w.logger.Debug("Stopping workers")
 
