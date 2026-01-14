@@ -1,3 +1,4 @@
+// Package logging provides structured logging using slog and context-based logger propagation.
 package logging
 
 import (
@@ -5,9 +6,11 @@ import (
 	"os"
 )
 
+// LoggerType defines the available logger output formats.
 type LoggerType string
 
 const (
+	// LoggerText represents a text-based logger output format.
 	LoggerText LoggerType = "Text"
 )
 
@@ -18,7 +21,7 @@ func init() {
 	baseLogger = New(slog.LevelInfo)
 }
 
-// New logger
+// New initializes and returns a new text-based logger with the specified level.
 func New(level slog.Level) *slog.Logger {
 	baseLogger = textHandler(level)
 	return baseLogger

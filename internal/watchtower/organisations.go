@@ -18,10 +18,12 @@ func (s *Service) GetDefaultOrganisation() (organisations.OrganisationDTO, error
 	return s.orgSvc.GetDefault(s.ctx)
 }
 
+// SetDefaultOrg marks the organization with the specified ID as the default organization.
 func (s *Service) SetDefaultOrg(id int64) (organisations.OrganisationDTO, error) {
 	return s.orgSvc.SetDefault(s.ctx, id)
 }
 
+// GetOrganisationByID retrieves an organization's details by its ID.
 func (s *Service) GetOrganisationByID(id int64) (organisations.OrganisationDTO, error) {
 	return s.orgSvc.Get(s.ctx, id)
 }
@@ -31,6 +33,7 @@ func (s *Service) GetAllOrganisations() ([]organisations.OrganisationDTO, error)
 	return s.orgSvc.GetAll(s.ctx)
 }
 
+// DeleteAllOrgs deletes all organizations and their associated products.
 func (s *Service) DeleteAllOrgs() error {
 	list, err := s.orgSvc.GetAll(s.ctx)
 	if err != nil {

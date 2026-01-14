@@ -1,3 +1,4 @@
+// Package notifications provides a service for managing and retrieving organization notifications.
 package notifications
 
 import (
@@ -8,6 +9,7 @@ import (
 	"watchtower/internal/logging"
 )
 
+// New creates a new Service instance with the provided store and transaction database.
 func New(db Store, txnDB *sql.DB, txnFunc func(tx *sql.Tx) Store) *Service {
 	return &Service{
 		store:   db,
@@ -16,6 +18,7 @@ func New(db Store, txnDB *sql.DB, txnFunc func(tx *sql.Tx) Store) *Service {
 	}
 }
 
+// CreateNotificationParams holds the parameters for creating a new notification.
 type CreateNotificationParams struct {
 	OrgID            int64
 	ExternalID       string
@@ -80,6 +83,7 @@ func (s *Service) GetUnreadNotifications(ctx context.Context) ([]Notification, e
 	return fromNotificationModels(models), nil
 }
 
+// GetNotificationByExternalID fetches a single notification by its external ID.
 func (s *Service) GetNotificationByExternalID(ctx context.Context, externalID string) (Notification, error) {
 	logger := logging.FromContext(ctx).With("externalID", externalID, "service", "notifications")
 	logger.Debug("Fetching notification by external ID")

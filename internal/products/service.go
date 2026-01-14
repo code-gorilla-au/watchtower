@@ -1,3 +1,4 @@
+// Package products provides a service for managing products, repositories, pull requests, and security vulnerabilities.
 package products
 
 import (
@@ -10,16 +11,19 @@ import (
 	"watchtower/internal/logging"
 )
 
+// Service handles product-related business logic.
 type Service struct {
 	store ProductStore
 }
 
+// New creates a new Service instance with the provided product store.
 func New(store ProductStore) *Service {
 	return &Service{
 		store: store,
 	}
 }
 
+// Create creates a new product with the given parameters and returns the created product or an error.
 func (s *Service) Create(ctx context.Context, params CreateProductParams) (ProductDTO, error) {
 	logger := logging.FromContext(ctx).With("service", "products")
 

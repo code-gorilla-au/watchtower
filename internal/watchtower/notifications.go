@@ -15,6 +15,7 @@ func (s *Service) MarkNotificationAsRead(notificationID int64) error {
 	return s.notificationSvc.MarkNotificationAsRead(s.ctx, notificationID)
 }
 
+// DeleteOldNotifications deletes notifications that are older than 90 days.
 func (s *Service) DeleteOldNotifications() error {
 	nintyDaysAgo := time.Now().AddDate(0, 0, -90)
 	return s.notificationSvc.DeleteNotificationsByDate(s.ctx, nintyDaysAgo)
