@@ -1,3 +1,50 @@
+export namespace insights {
+	
+	export class PullRequestInsights {
+	    minDaysToMerge: number;
+	    maxDaysToMerge: number;
+	    avgDaysToMerge: number;
+	    merged: number;
+	    closed: number;
+	    open: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new PullRequestInsights(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.minDaysToMerge = source["minDaysToMerge"];
+	        this.maxDaysToMerge = source["maxDaysToMerge"];
+	        this.avgDaysToMerge = source["avgDaysToMerge"];
+	        this.merged = source["merged"];
+	        this.closed = source["closed"];
+	        this.open = source["open"];
+	    }
+	}
+	export class SecurityInsights {
+	    minDaysToFix: number;
+	    maxDaysToFix: number;
+	    avgDaysToFix: number;
+	    fixed: number;
+	    open: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new SecurityInsights(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.minDaysToFix = source["minDaysToFix"];
+	        this.maxDaysToFix = source["maxDaysToFix"];
+	        this.avgDaysToFix = source["avgDaysToFix"];
+	        this.fixed = source["fixed"];
+	        this.open = source["open"];
+	    }
+	}
+
+}
+
 export namespace notifications {
 	
 	export class Notification {
