@@ -8,7 +8,8 @@
 		PanelLeftClose,
 		PanelLeftOpen,
 		MessageSquare,
-		MessageSquareDot
+		MessageSquareDot,
+		ChartArea
 	} from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { NavItem, NavHeader } from "$components/nav/index.js";
@@ -63,11 +64,17 @@
 					<LayoutDashboard size={24} />
 				{/snippet}
 			</NavItem>
+			<NavItem to="/insights" {expand} label="Insights">
+				{#snippet icon()}
+					<ChartArea size={24} />
+				{/snippet}
+			</NavItem>
 			<NavItem to="/products" {expand} label="Products">
 				{#snippet icon()}
 					<Package size={24} />
 				{/snippet}
 			</NavItem>
+
 			<NavItem to="/organisations" {expand} label="Organisations">
 				{#snippet icon()}
 					<Castle size={24} />
