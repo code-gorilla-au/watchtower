@@ -1,5 +1,13 @@
 package insights
 
+type FilterDateDays = string
+
+const (
+	Last30Days  FilterDateDays = "30"
+	Last90Days  FilterDateDays = "90"
+	Last180Days FilterDateDays = "180"
+)
+
 type PullRequestInsights struct {
 	MinDaysToMerge float64 `json:"minDaysToMerge"`
 	MaxDaysToMerge float64 `json:"maxDaysToMerge"`

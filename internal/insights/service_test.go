@@ -23,7 +23,7 @@ func TestService_Insights(t *testing.T) {
 	err := group.
 		Test("should return empty insights when no data exists", func(t *testing.T) {
 			orgID := seedOrg(t, "test-org")
-			filterDate := "-30 days"
+			filterDate := Last30Days
 
 			prInsights, err := svc.GetPullRequestInsightsByOrg(ctx, orgID, filterDate)
 			odize.AssertNoError(t, err)
@@ -47,7 +47,7 @@ func TestService_Insights(t *testing.T) {
 			// Open PR
 			seedPullRequest(t, "pr-2", "repo-a", "OPEN", twoDaysAgo, 0)
 
-			filterDate := "-30 days"
+			filterDate := Last30Days
 			insights, err := svc.GetPullRequestInsightsByOrg(ctx, orgID, filterDate)
 			odize.AssertNoError(t, err)
 
@@ -69,13 +69,32 @@ func TestService_Insights(t *testing.T) {
 			// Open security issue
 			seedSecurity(t, "sec-2", "repo-s", "OPEN", threeDaysAgo, 0)
 
-			filterDate := "-30 days"
+			filterDate := Last30Days
 			insights, err := svc.GetSecurityInsightsByOrg(ctx, orgID, filterDate)
 			odize.AssertNoError(t, err)
 
 			odize.AssertTrue(t, insights.Fixed == 1)
 			odize.AssertTrue(t, insights.Open == 1)
 			odize.AssertTrue(t, insights.AvgDaysToFix == 3.0)
+		}).
+		Run()
+
+	odize.AssertNoError(t, err)
+}
+
+func TestValidateFilterDateDays(t *testing.T) {
+	group := odize.NewGroup(t, nil)
+
+	err := group.
+		Test("should return true for valid days", func(t *testing.T) {
+			odize.AssertTrue(t, validateFilterDateDays(Last30Days))
+			odize.AssertTrue(t, validateFilterDateDays(Last90Days))
+			odize.AssertTrue(t, validateFilterDateDays(Last180Days))
+		}).
+		Test("should return false for invalid days", func(t *testing.T) {
+			odize.AssertFalse(t, validateFilterDateDays("10"))
+			odize.AssertFalse(t, validateFilterDateDays(""))
+			odize.AssertFalse(t, validateFilterDateDays("random"))
 		}).
 		Run()
 
