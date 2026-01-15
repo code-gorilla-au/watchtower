@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 	"watchtower/internal/database"
+	"watchtower/internal/insights"
 	"watchtower/internal/notifications"
 	"watchtower/internal/organisations"
 	"watchtower/internal/products"
@@ -26,6 +27,7 @@ func NewService(ctx context.Context, db *database.Queries, txnDB *sql.DB) *Servi
 		notificationSvc: notifications.New(db, txnDB, func(tx *sql.Tx) notifications.Store {
 			return db.WithTx(tx)
 		}),
+		insightSvc: insights.New(db),
 	}
 }
 

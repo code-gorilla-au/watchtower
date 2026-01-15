@@ -3,6 +3,7 @@ package watchtower
 import (
 	"context"
 	"log/slog"
+	"watchtower/internal/insights"
 	"watchtower/internal/notifications"
 	"watchtower/internal/organisations"
 	"watchtower/internal/products"
@@ -13,6 +14,7 @@ type Service struct {
 	orgSvc          *organisations.Service
 	productSvc      *products.Service
 	notificationSvc *notifications.Service
+	insightSvc      *insights.Service
 	ghClient        ghClient
 }
 

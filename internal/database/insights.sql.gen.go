@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
 
 const getPullRequestInsights = `-- name: GetPullRequestInsights :one
@@ -55,6 +56,72 @@ func (q *Queries) GetPullRequestInsights(ctx context.Context, arg GetPullRequest
 	return i, err
 }
 
+const getPullRequestInsightsByOrg = `-- name: GetPullRequestInsightsByOrg :one
+WITH
+    pull_request_with_org AS (
+        SELECT pr.id, pr.external_id, pr.title, pr.repository_name, pr.url, pr.state, pr.author, pr.merged_at, pr.created_at, pr.updated_at, po.organisation_id as organisation_id, p.id as product_id
+        FROM pull_requests pr
+                 JOIN repositories r ON r.name = pr.repository_name
+                 JOIN product_organisations po
+                 JOIN products p ON p.id = po.product_id
+            AND JSON_VALID(p.tags)
+            AND EXISTS (SELECT 1
+                        FROM JSON_EACH(p.tags)
+                        WHERE JSON_EACH.value = r.topic)
+        WHERE po.organisation_id = ?
+        ORDER BY pr.created_at DESC
+    ),
+    average_days_to_merge AS (
+        SELECT ROUND((merged_at - created_at) / 86400.0, 2) AS avg_days_to_merge
+        FROM pull_request_with_org
+        WHERE state = 'MERGED'
+          AND created_at >= strftime('%s', 'now', ?)
+    )
+SELECT
+    ROUND(COALESCE(MIN(avg_days_to_merge), 0), 2) AS min_days_to_merge,
+    ROUND(COALESCE(MAX(avg_days_to_merge), 0), 2) AS max_days_to_merge,
+    ROUND(COALESCE(AVG(avg_days_to_merge), 0), 2) AS avg_days_to_merge,
+    COUNT(avg_days_to_merge) AS merged,
+    (SELECT COUNT(*) FROM pull_request_with_org WHERE state = 'CLOSED' AND created_at >= strftime('%s', 'now', ?)) AS closed,
+    (SELECT COUNT(*) FROM pull_request_with_org WHERE state = 'OPEN' AND created_at >= strftime('%s', 'now', ?)) AS open
+FROM average_days_to_merge
+`
+
+type GetPullRequestInsightsByOrgParams struct {
+	OrganisationID sql.NullInt64
+	Strftime       interface{}
+	Strftime_2     interface{}
+	Strftime_3     interface{}
+}
+
+type GetPullRequestInsightsByOrgRow struct {
+	MinDaysToMerge float64
+	MaxDaysToMerge float64
+	AvgDaysToMerge float64
+	Merged         int64
+	Closed         int64
+	Open           int64
+}
+
+func (q *Queries) GetPullRequestInsightsByOrg(ctx context.Context, arg GetPullRequestInsightsByOrgParams) (GetPullRequestInsightsByOrgRow, error) {
+	row := q.db.QueryRowContext(ctx, getPullRequestInsightsByOrg,
+		arg.OrganisationID,
+		arg.Strftime,
+		arg.Strftime_2,
+		arg.Strftime_3,
+	)
+	var i GetPullRequestInsightsByOrgRow
+	err := row.Scan(
+		&i.MinDaysToMerge,
+		&i.MaxDaysToMerge,
+		&i.AvgDaysToMerge,
+		&i.Merged,
+		&i.Closed,
+		&i.Open,
+	)
+	return i, err
+}
+
 const getSecuritiesInsights = `-- name: GetSecuritiesInsights :one
 WITH average_days_to_fix AS (
     SELECT ROUND((fixed_at - created_at) / 86400, 2) as days_to_fix
@@ -90,6 +157,70 @@ type GetSecuritiesInsightsRow struct {
 func (q *Queries) GetSecuritiesInsights(ctx context.Context, arg GetSecuritiesInsightsParams) (GetSecuritiesInsightsRow, error) {
 	row := q.db.QueryRowContext(ctx, getSecuritiesInsights, arg.Strftime, arg.Strftime_2, arg.Strftime_3)
 	var i GetSecuritiesInsightsRow
+	err := row.Scan(
+		&i.MinDaysToFix,
+		&i.MaxDaysToFix,
+		&i.AvgDaysToFix,
+		&i.Fixed,
+		&i.Open,
+	)
+	return i, err
+}
+
+const getSecuritiesInsightsByOrg = `-- name: GetSecuritiesInsightsByOrg :one
+WITH
+    securities_with_org AS (
+        SELECT s.id, s.external_id, s.repository_name, s.package_name, s.state, s.severity, s.patched_version, s.fixed_at, s.created_at, s.updated_at, po.organisation_id as organisation_id, p.id as product_id
+        FROM securities s
+                 JOIN repositories r ON r.name = s.repository_name
+                 JOIN product_organisations po
+                 JOIN products p ON p.id = po.product_id
+            AND JSON_VALID(p.tags)
+            AND EXISTS (SELECT 1
+                        FROM JSON_EACH(p.tags)
+                        WHERE JSON_EACH.value = r.topic)
+        WHERE po.organisation_id = ?
+        ORDER BY s.created_at DESC
+    ),
+    average_days_to_fix AS (
+        SELECT ROUND((fixed_at - created_at) / 86400.0, 2) as days_to_fix
+        FROM securities_with_org
+        WHERE state = 'FIXED'
+          AND fixed_at IS NOT NULL
+          AND created_at >= strftime('%s', 'now', ?)
+    )
+SELECT
+    ROUND(COALESCE(MIN(days_to_fix), 0), 2) AS min_days_to_fix,
+    ROUND(COALESCE(MAX(days_to_fix), 0), 2) AS max_days_to_fix,
+    ROUND(COALESCE(AVG(days_to_fix), 0), 2) AS avg_days_to_fix,
+    (SELECT COUNT(*) FROM securities_with_org WHERE state = 'FIXED' AND created_at >= strftime('%s', 'now', ?)) AS fixed,
+    (SELECT COUNT(*) FROM securities_with_org WHERE state = 'OPEN' AND created_at >= strftime('%s', 'now', ?)) AS open
+FROM average_days_to_fix
+`
+
+type GetSecuritiesInsightsByOrgParams struct {
+	OrganisationID sql.NullInt64
+	Strftime       interface{}
+	Strftime_2     interface{}
+	Strftime_3     interface{}
+}
+
+type GetSecuritiesInsightsByOrgRow struct {
+	MinDaysToFix float64
+	MaxDaysToFix float64
+	AvgDaysToFix float64
+	Fixed        int64
+	Open         int64
+}
+
+func (q *Queries) GetSecuritiesInsightsByOrg(ctx context.Context, arg GetSecuritiesInsightsByOrgParams) (GetSecuritiesInsightsByOrgRow, error) {
+	row := q.db.QueryRowContext(ctx, getSecuritiesInsightsByOrg,
+		arg.OrganisationID,
+		arg.Strftime,
+		arg.Strftime_2,
+		arg.Strftime_3,
+	)
+	var i GetSecuritiesInsightsByOrgRow
 	err := row.Scan(
 		&i.MinDaysToFix,
 		&i.MaxDaysToFix,
