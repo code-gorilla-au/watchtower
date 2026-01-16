@@ -84,9 +84,7 @@
 							await switchOrganisation(org.id);
 						}}
 					>
-						<a class="w-full" href={resolve(`/organisations/${org.id}`)}>
-							<span class="capitalize">{org.friendly_name}</span>
-						</a>
+						<span class="capitalize">{org.friendly_name}</span>
 					</DropdownMenu.Item>
 				{/each}
 			{/if}
