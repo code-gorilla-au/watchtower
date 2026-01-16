@@ -62,12 +62,20 @@ export function GetPullRequestByOrganisation(arg1) {
   return window['go']['watchtower']['Service']['GetPullRequestByOrganisation'](arg1);
 }
 
+export function GetPullRequestInsightsByOrg(arg1, arg2) {
+  return window['go']['watchtower']['Service']['GetPullRequestInsightsByOrg'](arg1, arg2);
+}
+
 export function GetSecurityByOrganisation(arg1) {
   return window['go']['watchtower']['Service']['GetSecurityByOrganisation'](arg1);
 }
 
 export function GetSecurityByProductID(arg1) {
   return window['go']['watchtower']['Service']['GetSecurityByProductID'](arg1);
+}
+
+export function GetSecurityInsightsByOrg(arg1, arg2) {
+  return window['go']['watchtower']['Service']['GetSecurityInsightsByOrg'](arg1, arg2);
 }
 
 export function GetUnreadNotifications() {

@@ -1,11 +1,15 @@
 # Watchtower
 
-**NOTE**: Alpha version, release pipelines are WIP, if you're keen on running it locally you'll need to install [wails](https://wails.io/).
+**NOTE**: Alpha version, release pipelines are WIP, if you're keen on running it locally you'll need to
+install [wails](https://wails.io/).
 
-Focused product view of your GitHub organisation. View repositories, pull requests, security vulnerabilities grouped by product.
+Focused product view of your GitHub organisation. View repositories, pull requests, security vulnerabilities grouped by
+product.
 
 ## Motivation
-Working in organisations looking after multiple teams, it was hard to view the health of the product with multiple microservices.
+
+Working in organisations looking after multiple teams, it was hard to view the health of the product with multiple
+microservices.
 Watch tower provides a lite weight approach to grouping information by product with additional filters.
 
 ## Features
@@ -15,6 +19,7 @@ Watch tower provides a lite weight approach to grouping information by product w
 | Group products by organisations | Add multiple organisations and group products within those organisations                                                                               |
 | Group repositories by Product   | User github topics to group repos by products                                                                                                          |
 | Dashboard view                  | Quickly view the overall health of a group of products by viewing open PRs, security vulnerabilities and repositories                                  |
+| Insights                        | Get insights at a org level on the for pull requests and security vulnerabilities                                                                      |
 | Product view                    | Focused view for open PRs, security vulnerabilities and repositories                                                                                   |
 | Notification on new PR / Issue  | Get notifications when new PRs or Issues are created in the watched repositories accross all orgs                                                      |                                                     |
 | Local only                      | Data will never leave your device, settings page includes a kill switch to remove all data from the device. GITHUB PAT token only required read access |
@@ -26,6 +31,7 @@ Issues, suggestions can be raised in the [issues tab](https://github.com/code-go
 ## Getting started
 
 ## List tasks
+
 List all available tasks
 
 ```bash
@@ -33,6 +39,7 @@ task
 ```
 
 ### Install
+
 Install all dependencies and tools
 
 ```bash
@@ -40,7 +47,7 @@ task go-install
 task frontend-install
 ```
 
-### Run 
+### Run
 
 - Generates sqlc code
 - Runs the generate command

@@ -47,7 +47,7 @@
 		<div class="flex items-center gap-2">
 			<p class="text-xs text-muted-foreground">Last sync: {timeSince.date}</p>
 			<Button
-				onclick={(e: Event) => {
+				onclick={(e) => {
 					e.preventDefault();
 					searchBarOpen = !searchBarOpen;
 				}}
