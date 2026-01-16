@@ -4,6 +4,8 @@
 	import { fade } from "svelte/transition";
 	import { transitionConfig } from "$components/nav/transitions";
 	import { organisations } from "$lib/wailsjs/go/models";
+	import { orgSvc } from "$lib/watchtower";
+	import { goto, invalidateAll } from "$app/navigation";
 	type Props = {
 		expand?: boolean;
 		currentOrg: organisations.OrganisationDTO;
@@ -33,6 +35,12 @@
 	let otherOrgs = $derived.by(() => {
 		return allOrgs.filter((o) => o.id !== currentOrg.id);
 	});
+
+	async function switchOrganisation(orgId: number) {
+		await orgSvc.setDefault(orgId);
+		await invalidateAll();
+		await goto(resolve("/dashboard"));
+	}
 </script>
 
 <div class="flex items-center py-2">
@@ -60,16 +68,22 @@
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content class="w-56" side="bottom" align="start">
 			<DropdownMenu.Label>Active Organisation</DropdownMenu.Label>
-			<DropdownMenu.Item>
-				<a class="w-full" href={resolve(`/organisations/${currentOrg.id}`)}>
-					<span class="capitalize">{currentOrg.friendly_name}</span>
-				</a>
+			<DropdownMenu.Item
+				onclick={async () => {
+					await switchOrganisation(currentOrg.id);
+				}}
+			>
+				<span class="capitalize">{currentOrg.friendly_name}</span>
 			</DropdownMenu.Item>
 			{#if otherOrgs.length > 0}
 				<DropdownMenu.Separator />
 				<DropdownMenu.Label>Other Organisations</DropdownMenu.Label>
 				{#each otherOrgs as org (org.id)}
-					<DropdownMenu.Item>
+					<DropdownMenu.Item
+						onclick={async () => {
+							await switchOrganisation(org.id);
+						}}
+					>
 						<a class="w-full" href={resolve(`/organisations/${org.id}`)}>
 							<span class="capitalize">{org.friendly_name}</span>
 						</a>
