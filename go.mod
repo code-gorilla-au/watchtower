@@ -1,6 +1,6 @@
 module watchtower
 
-go 1.25.5
+go 1.25.7
 
 require (
 	github.com/code-gorilla-au/env v1.1.1
