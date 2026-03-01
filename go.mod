@@ -5,11 +5,11 @@ go 1.25.7
 require (
 	github.com/code-gorilla-au/env v1.1.1
 	github.com/code-gorilla-au/fetch v1.1.0
-	github.com/code-gorilla-au/odize v1.3.4
+	github.com/code-gorilla-au/odize v1.3.5
 	github.com/go-co-op/gocron/v2 v2.19.1
 	github.com/google/uuid v1.6.0
 	github.com/wailsapp/wails/v2 v2.11.0
-	modernc.org/sqlite v1.44.3
+	modernc.org/sqlite v1.46.1
 )
 
 require (
