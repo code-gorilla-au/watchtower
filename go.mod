@@ -8,12 +8,11 @@ require (
 	github.com/code-gorilla-au/odize v1.3.5
 	github.com/go-co-op/gocron/v2 v2.21.0
 	github.com/google/uuid v1.6.0
-	github.com/wailsapp/wails/v2 v2.12.0
+	github.com/wailsapp/wails/v2 v2.11.0
 	modernc.org/sqlite v1.48.2
 )
 
 require (
-	git.sr.ht/~jackmordaunt/go-toast/v2 v2.0.3 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
