@@ -6,13 +6,14 @@ require (
 	github.com/code-gorilla-au/env v1.1.1
 	github.com/code-gorilla-au/fetch v1.1.0
 	github.com/code-gorilla-au/odize v1.3.5
-	github.com/go-co-op/gocron/v2 v2.21.0
+	github.com/go-co-op/gocron/v2 v2.21.1
 	github.com/google/uuid v1.6.0
-	github.com/wailsapp/wails/v2 v2.11.0
-	modernc.org/sqlite v1.48.2
+	github.com/wailsapp/wails/v2 v2.12.0
+	modernc.org/sqlite v1.50.0
 )
 
 require (
+	git.sr.ht/~jackmordaunt/go-toast/v2 v2.0.3 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
@@ -45,7 +46,7 @@ require (
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
-	modernc.org/libc v1.70.0 // indirect
+	modernc.org/libc v1.72.0 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 )
